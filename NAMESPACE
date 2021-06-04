@@ -1,0 +1,87 @@
+
+importFrom("stats", "na.omit", "na.fail", "na.exclude", "median")
+importFrom("utils", "head", "tail")
+importFrom("admisc", "possibleNumeric", "wholeNumeric", "asNumeric", "unlockEnvironment")
+
+export(
+    as_declared,
+    as_haven,
+    format_declared,
+    is_declared,
+    declared,
+    missing_values,
+    "missing_values<-",
+    missing_range,
+    "missing_range<-",
+    names_values,
+    order_declared,
+    to_labels,
+    undeclare,
+    value_labels,
+    "value_labels<-",
+    variable_label,
+    "variable_label<-"
+)
+
+S3method(head, declared)
+S3method(tail, declared)
+S3method(na.omit, declared)
+S3method(na.fail, declared)
+S3method(na.exclude, declared)
+S3method(mean, declared)
+S3method(median, declared)
+S3method(summary, declared)
+
+S3method(as_declared, default)
+S3method(as_declared, haven_labelled_spss)
+S3method(as_declared, data.frame)
+
+S3method(as_haven, default)
+S3method(as_haven, declared)
+S3method(as_haven, data.frame)
+
+S3method(undeclare, default)
+S3method(undeclare, data.frame)
+S3method(undeclare, declared)
+S3method(duplicated, declared)
+S3method(unique, declared)
+
+S3method(print, declared)
+S3method("[", declared)
+S3method("[<-", declared)
+
+S3method(missing_values, default)
+S3method(missing_values, haven_labelled_spss)
+S3method(missing_values, declared)
+S3method(missing_values, data.frame)
+S3method("missing_values<-", default)
+S3method("missing_values<-", declared)
+
+S3method(missing_range, default)
+S3method(missing_range, haven_labelled_spss)
+S3method(missing_range, declared)
+S3method(missing_range, data.frame)
+S3method("missing_range<-", default)
+S3method("missing_range<-", declared)
+
+S3method(value_labels, default)
+S3method(value_labels, haven_labelled_spss)
+S3method(value_labels, declared)
+S3method(value_labels, data.frame)
+S3method("value_labels<-", default)
+S3method("value_labels<-", declared)
+
+S3method(variable_label, default)
+S3method(variable_label, haven_labelled_spss)
+S3method(variable_label, declared)
+S3method(variable_label, data.frame)
+S3method("variable_label<-", default)
+S3method("variable_label<-", declared)
+
+S3method("names<-", declared)
+S3method("==", declared)
+S3method("!=", declared)
+S3method("<=", declared)
+S3method("<", declared)
+S3method(">=", declared)
+S3method(">", declared)

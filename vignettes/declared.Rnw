@@ -1,0 +1,6 @@
+\documentclass{article}
+\usepackage{pdfpages}
+% \VignetteIndexEntry{Why the package declared}
+\begin{document}
+\includepdf[pages=-, fitpaper=true]{why_the_package_declared.pdf}
+\end{document}
