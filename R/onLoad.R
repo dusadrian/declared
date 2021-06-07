@@ -10,6 +10,7 @@
     }
 
     suppressPackageStartupMessages(
+        # lapply(c("stats", "admisc"), load_library)
         load_library("stats")
     )
 
@@ -299,4 +300,60 @@
         }
     }
 
+    register_S3_method("labelled", "na_values", "declared")
+    register_S3_method("labelled", "na_values<-", "declared")
+    register_S3_method("labelled", "na_range", "declared")
+    register_S3_method("labelled", "na_range<-", "declared")
+    register_S3_method("labelled", "val_labels", "declared")
+    register_S3_method("labelled", "val_labels<-", "declared")
+    register_S3_method("labelled", "var_label", "declared")
+    register_S3_method("labelled", "var_label<-", "declared")
+    register_S3_method("labelled", "drop_unused_value_labels", "declared")
+    register_S3_method("labelled", "val_label", "declared")
+    register_S3_method("labelled", "val_label<-", "declared")
+    register_S3_method("labelled", "sort_val_labels", "declared")
+    register_S3_method("labelled", "nolabel_to_na", "declared")
+    register_S3_method("labelled", "val_labels_to_na", "declared")
+    register_S3_method("labelled", "remove_labels", "declared")
+    register_S3_method("labelled", "remove_user_na", "declared")
+    register_S3_method("labelled", "to_factor", "declared")
+    register_S3_method("labelled", "to_character", "declared")
+    register_S3_method("labelled", "copy_labels", "declared")
+
+    register_S3_method("haven", "as_factor", "declared")
+    register_S3_method("haven", "zap_labels", "declared")
+
+    register_S3_method("pillar", "pillar_shaft", "declared")
+
+    register_S3_method("vctrs", "vec_ptype_abbr", "declared")
+    register_S3_method("vctrs", "vec_ptype_full", "declared")
+    register_S3_method("vctrs", "vec_ptype2", "declared")
+
+    invisible()
+}
+
+# function copied from package haven
+`register_S3_method` <- function(pkg, generic, class, fun = NULL) {
+    stopifnot(is.character(pkg), length(pkg) == 1)
+    stopifnot(is.character(generic), length(generic) == 1)
+    stopifnot(is.character(class), length(class) == 1)
+
+    if (is.null(fun)) {
+        fun <- get(paste0(generic, ".", class), envir = parent.frame())
+    }
+    else {
+        stopifnot(is.function(fun))
+    }
+
+    if (pkg %in% loadedNamespaces()) {
+        registerS3method(generic, class, fun, envir = asNamespace(pkg))
+    }
+
+    # Always register hook in case package is later unloaded & reloaded
+    setHook(
+        packageEvent(pkg, "onLoad"),
+        function(...) {
+            registerS3method(generic, class, fun, envir = asNamespace(pkg))
+        }
+    )
 }
