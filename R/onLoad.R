@@ -10,8 +10,8 @@
     }
 
     suppressPackageStartupMessages(
-        # lapply(c("stats", "admisc"), load_library)
-        load_library("stats")
+        lapply(c("stats", "admisc", "utils"), load_library)
+        # load_library("stats")
     )
 
     if (admisc::unlockEnvironment(asNamespace("base"))) {
@@ -297,6 +297,42 @@
                 d <- c(1, n4, (n + 1)/2, n + 1 - n4, n)
                 0.5 * (x[floor(d)] + x[ceiling(d)])
             }
+        }
+    }
+
+    if (admisc::unlockEnvironment(asNamespace("utils"))) {
+        env <- as.environment("package:utils")
+
+        do.call("unlockBinding", list(sym = "write.csv", env = env))
+
+         env$write.csv <- function(...) {
+            Call <- as.list(match.call(expand.dots = TRUE))
+    
+            for (argname in c("append", "col.names", "sep", "dec", "qmethod")) {
+                if (!is.null(Call[[argname]])) {
+                    warning(gettextf("attempt to set '%s' ignored", argname), domain = NA)
+                }
+            }
+
+            rn <- eval.parent(Call$row.names)
+            
+            if (any(eval.parent(parse(text = paste0("unlist(lapply(", Call[[2]], ", is_declared))"))))) {
+                Call[[2L]] <- eval.parent(parse(text = paste0("undeclare(", Call[[2L]], ")")))
+                rn <- FALSE
+            }
+            Call$append <- NULL
+            Call$col.names <- if (is.logical(rn) && !rn) {
+                TRUE
+            }
+            else {
+                NA
+            }
+            Call$sep <- ","
+            Call$dec <- "."
+            Call$qmethod <- "double"
+            Call$na <- ""
+
+            do.call("write.table", Call[-1])
         }
     }
 
