@@ -49,22 +49,22 @@
     return(misvals)
 }
 
-# to be added in the namespace
+
 `is_declared` <- function(x) {
     inherits(x, "declared")
 }
 
-# to be added in the namespace
+
 `as_haven` <- function(x, ...) {
     UseMethod("as_haven")
 }
 
-# to be added in the namespace
+
 `as_haven.default` <- function(x, ...) {
     return(x)
 }
 
-# to be added in the namespace
+
 `as_haven.declared` <- function(x, ...) {
     na_index <- attr(x, "na_index")
     attrx <- attributes(x)
@@ -85,7 +85,7 @@
     return(x)
 }
 
-# to be added in the namespace
+
 `as_haven.data.frame` <- function(x, ..., only_declared = TRUE) {
     if (only_declared) {
         xdeclared <- vapply(x, is_declared, logical(1))
@@ -97,17 +97,17 @@
     return(x)
 }
 
-# to be added in the namespace
+
 `as_declared` <- function(x, ...) {
     UseMethod("as_declared")
 }
 
-# to be added in the namespace
+
 `as_declared.default` <- function(x, ...) {
     return(x)
 }
 
-# to be added in the namespace
+
 `as_declared.haven_labelled_spss` <- function(x, ...) {
     # TO DO: add functionality for tagged NAs in class haven_labelled
     
@@ -128,7 +128,12 @@
     return(x)
 }
 
-# to be added in the namespace
+`as_declared.factor` <- function(x, ...) {
+    # TO DO, but for the moment, do nothing
+    return(x)
+}
+
+
 `as_declared.data.frame` <- function(x, ..., only_declared = TRUE) {
     if (only_declared) {
         labelled_spss <- unlist(lapply(x, function(x) {
@@ -142,17 +147,17 @@
     return(x)
 }
 
-# to be added in the namespace
+
 `undeclare` <- function(x, ...) {
     UseMethod("undeclare")
 }
 
-# to be added in the namespace
+
 `undeclare.default` <- function(x, ...) {
     return(x)
 }
 
-# to be added in the namespace
+
 `undeclare.declared` <- function(x, ...) {
     na_index <- attr(x, "na_index")
     attrx <- attributes(x)
@@ -173,7 +178,7 @@
     return(x)
 }
 
-# to be added in the namespace
+
 `undeclare.data.frame` <- function(x, ...) {
     declared <- vapply(x, is_declared, logical(1))
     x[declared] <- lapply(x[declared], undeclare)
@@ -228,7 +233,7 @@
 }
 
 
-# to be added in the namespace
+
 `declared` <- function(x = double(), labels = NULL, na_values = NULL,
                           na_range = NULL, label = NULL, ...) {
     if (inherits(x, "haven_labelled")) {
@@ -389,8 +394,8 @@
     if (admisc::possibleNumeric(e1) && admisc::possibleNumeric(e2)) {
         e1 <- admisc::asNumeric(e1)
         e2 <- admisc::asNumeric(e2)
-        return(abs(unclass(undeclare(e1)) - unclass(undeclare(e2))) < .Machine$double.eps^0.5)
-        # return(admisc::aeqb(unclass(undeclare(e1)), unclass(undeclare(e2))))
+        return(abs(e1 - e2) < .Machine$double.eps^0.5)
+        # return(admisc::aeqb(e1, e2)
     }
     else {
         return(e1 == e2)
@@ -398,12 +403,13 @@
 }
 
 `!=.declared` <- function(e1, e2) {e1 <- unclass(undeclare(e1))
+    e1 <- unclass(undeclare(e1))
     e2 <- unclass(undeclare(e2))
     if (admisc::possibleNumeric(e1) && admisc::possibleNumeric(e2)) {
         e1 <- admisc::asNumeric(e1)
         e2 <- admisc::asNumeric(e2)
-        return(abs(unclass(undeclare(e1)) - unclass(undeclare(e2))) < .Machine$double.eps^0.5)
-        # return(admisc::aneqb(unclass(undeclare(e1)), unclass(undeclare(e2))))
+        return(abs(e1 - e2) > .Machine$double.eps^0.5)
+        # return(admisc::aneqb(e1, e2)
     }
     else {
         return(e1 != e2)
@@ -411,12 +417,13 @@
 }
 
 `<=.declared` <- function(e1, e2) {
+    e1 <- unclass(undeclare(e1))
     e2 <- unclass(undeclare(e2))
     if (admisc::possibleNumeric(e1) && admisc::possibleNumeric(e2)) {
         e1 <- admisc::asNumeric(e1)
         e2 <- admisc::asNumeric(e2)
-        return(unclass(undeclare(e1)) < (unclass(undeclare(e2)) + .Machine$double.eps^0.5))
-        # return(admisc::alteb(unclass(undeclare(e1)), unclass(undeclare(e2))))
+        return(e1 < (e2 + .Machine$double.eps^0.5))
+        # return(admisc::alteb(e1, e2)
     }
     else {
         return(e1 <= e2)
@@ -424,12 +431,13 @@
 }
 
 `<.declared` <- function(e1, e2) {
+    e1 <- unclass(undeclare(e1))
     e2 <- unclass(undeclare(e2))
     if (admisc::possibleNumeric(e1) && admisc::possibleNumeric(e2)) {
         e1 <- admisc::asNumeric(e1)
         e2 <- admisc::asNumeric(e2)
-        return(unclass(undeclare(e1)) < (unclass(undeclare(e2)) - .Machine$double.eps^0.5))
-        # return(admisc::altb(unclass(undeclare(e1)), unclass(undeclare(e2))))
+        return(e1 < (e2 - .Machine$double.eps^0.5))
+        # return(admisc::altb(e1, e2)
     }
     else {
         return(e1 < e2)
@@ -437,12 +445,13 @@
 }
 
 `>=.declared` <- function(e1, e2) {
+    e1 <- unclass(undeclare(e1))
     e2 <- unclass(undeclare(e2))
     if (admisc::possibleNumeric(e1) && admisc::possibleNumeric(e2)) {
         e1 <- admisc::asNumeric(e1)
         e2 <- admisc::asNumeric(e2)
-        return((unclass(undeclare(e1)) + .Machine$double.eps^0.5) > unclass(undeclare(e2)))
-        # return(admisc::agteb(unclass(undeclare(e1)), unclass(undeclare(e2))))
+        return((e1 + .Machine$double.eps^0.5) > e2)
+        # return(admisc::agteb(e1, e2)
     }
     else {
         return(e1 >= e2)
@@ -450,12 +459,13 @@
 }
 
 `>.declared` <- function(e1, e2) {
+    e1 <- unclass(undeclare(e1))
     e2 <- unclass(undeclare(e2))
     if (admisc::possibleNumeric(e1) && admisc::possibleNumeric(e2)) {
         e1 <- admisc::asNumeric(e1)
         e2 <- admisc::asNumeric(e2)
-        return((unclass(undeclare(e1)) - .Machine$double.eps^0.5) > unclass(undeclare(e2)))
-        # return(admisc::agtb(unclass(undeclare(e1)), unclass(undeclare(e2))))
+        return((e1 - .Machine$double.eps^0.5) > e2)
+        # return(admisc::agtb(e1, e2))
     }
     else {
         return(e1 > e2)
