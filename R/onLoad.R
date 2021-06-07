@@ -1,6 +1,6 @@
 `.onLoad` <- function(...) {
     load_library <- function(pkg) {
-        if (pkg %in% loadedNamespaces()) {
+        if (pkg %in% loadedNamespaces() && !is.element(pkg, .packages())) {
             loc <- dirname(getNamespaceInfo(pkg, "path"))
             do.call(
                 "library",
@@ -8,7 +8,7 @@
             )
         }
     }
-
+ 
     suppressPackageStartupMessages(
         lapply(c("stats", "admisc", "utils"), load_library)
         # load_library("stats")
