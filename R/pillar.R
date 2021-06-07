@@ -1,11 +1,16 @@
 # Dynamically exported, see onLoad.R
-# using eval(parse()) to avoid the dependency tree
+# using eval(parse()) to avoid the dependency tree of vctrs, haven, labelled and pillar
 
 `pillar_shaft.declared` <- function(
     x,
     show_labels = getOption("declared.show_pillar_labels", TRUE),
     ...
 ) {
+
+    if (eval(parse(text = "requireNamespace('haven', quietly = TRUE)"))) {
+        return(eval(parse(text = "pillar::pillar_shaft(as_haven(x))")))
+    }
+
     if (!isTRUE(show_labels) | !pillar_print_pkgs_available()) {
         return(eval(parse(text = "pillar::pillar_shaft(unclass(x))")))
     }
