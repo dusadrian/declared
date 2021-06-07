@@ -358,7 +358,7 @@
 `print.declared` <- function(x, ...) {
     label <- variable_label(x)
     if (!is.null(label)) {
-        label <- paste0(":", label)
+        label <- paste("", label)
     }
 
     cat(paste0("<declared", likely_type(x), "[", length(x), "]>", label, "\n"))
