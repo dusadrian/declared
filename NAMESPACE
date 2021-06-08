@@ -37,7 +37,7 @@ S3method(median, declared)
 S3method(summary, declared)
 
 S3method(as_declared, default)
-S3method(as_declared, haven_labelled_spss)
+S3method(as_declared, haven_labelled)
 # S3method(as_declared, factor) # TO DO
 S3method(as_declared, data.frame)
 

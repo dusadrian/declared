@@ -108,8 +108,22 @@
 }
 
 
-`as_declared.haven_labelled_spss` <- function(x, ...) {
-    # TO DO: add functionality for tagged NAs in class haven_labelled
+`as_declared.haven_labelled` <- function(x, ...) {
+    
+    dots <- list(...)
+    if (is.element("haven", names(dots))) {
+        haven <- dots$haven
+    }
+    else {
+        haven <- eval(parse(text = "requireNamespace('haven', quietly = TRUE)"))
+    }
+
+    if (haven) {
+        if (eval(parse(text = "any(haven::is_tagged_na(x))"))) {
+            cat("\n")
+            stop(simpleError("Tagged NAs are not supported.\n\n"))
+        }
+    }
     
     misvals <- all_missing_values(unclass(x))
 
@@ -117,6 +131,7 @@
     na_range <- attr(x, "na_range")
     labels <- attr(x, "labels", exact = TRUE)
     label <- attr(x, "label", exact = TRUE)
+
 
     attributes(x) <- NULL
     missingValues(x)[is.element(x, misvals)] <- x[is.element(x, misvals)]
@@ -135,13 +150,14 @@
 
 
 `as_declared.data.frame` <- function(x, ..., only_declared = TRUE) {
+    haven <- eval(parse(text = "requireNamespace('haven', quietly = TRUE)"))
     if (only_declared) {
         labelled_spss <- unlist(lapply(x, function(x) {
             inherits(x, "haven_labelled_spss")
         }))
-        x[labelled_spss] <- lapply(x[labelled_spss], as_declared, ...)
+        x[labelled_spss] <- lapply(x[labelled_spss], as_declared, haven = haven, ...)
     } else {
-        x[] <- lapply(x, as_declared, ...)
+        x[] <- lapply(x, as_declared, haven = haven, ...)
     }
 
     return(x)
