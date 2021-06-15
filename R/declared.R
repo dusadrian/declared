@@ -149,16 +149,9 @@
 }
 
 
-`as_declared.data.frame` <- function(x, ..., only_declared = TRUE) {
+`as_declared.data.frame` <- function(x, ...) {
     haven <- eval(parse(text = "requireNamespace('haven', quietly = TRUE)"))
-    if (only_declared) {
-        labelled_spss <- unlist(lapply(x, function(x) {
-            inherits(x, "haven_labelled_spss")
-        }))
-        x[labelled_spss] <- lapply(x[labelled_spss], as_declared, haven = haven, ...)
-    } else {
-        x[] <- lapply(x, as_declared, haven = haven, ...)
-    }
+    x[] <- lapply(x, as_declared, haven = haven, ...)
 
     return(x)
 }
