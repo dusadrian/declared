@@ -142,54 +142,94 @@
         }
 
         `strip_declared` <- function(x) {
-            lapply(x, function(x) {
+            # lapply(x, function(x) {
                 if (is_declared(x)) {
                     attributes(x) <- NULL
                 }
                 return(x)
-            })
+            # })
         }
 
         do.call("unlockBinding", list(sym = "+", env = env))
         
         env$`+` <- function(e1, e2) {
-            do.call(.Primitive("+"), strip_declared(list(e1, e2)))
+            callist <- list(e1 = strip_declared(e1))
+            if (!missing(e2)) {
+                callist$e2 <- strip_declared(e2)
+            }
+            do.call(.Primitive("+"), callist)
         }
 
         do.call("unlockBinding", list(sym = "-", env = env))
         
         env$`-` <- function(e1, e2) {
-            do.call(.Primitive("-"), strip_declared(list(e1, e2)))
+            callist <- list(e1 = strip_declared(e1))
+            if (!missing(e2)) {
+                callist$e2 <- strip_declared(e2)
+            }
+            do.call(.Primitive("-"), callist)
         }
 
         do.call("unlockBinding", list(sym = "*", env = env))
         
         env$`*` <- function(e1, e2) {
-            do.call(.Primitive("*"), strip_declared(list(e1, e2)))
+            callist <- list(e1 = strip_declared(e1))
+            if (!missing(e2)) {
+                callist$e2 <- strip_declared(e2)
+            }
+            do.call(.Primitive("*"), callist)
         }
 
         do.call("unlockBinding", list(sym = "/", env = env))
         
         env$`/` <- function(e1, e2) {
-            do.call(.Primitive("/"), strip_declared(list(e1, e2)))
+            callist <- list(e1 = strip_declared(e1))
+            if (!missing(e2)) {
+                callist$e2 <- strip_declared(e2)
+            }
+            do.call(.Primitive("/"), callist)
         }
 
         do.call("unlockBinding", list(sym = "^", env = env))
         
         env$`^` <- function(e1, e2) {
-            do.call(.Primitive("^"), strip_declared(list(e1, e2)))
+            callist <- list(e1 = strip_declared(e1))
+            if (!missing(e2)) {
+                callist$e2 <- strip_declared(e2)
+            }
+            do.call(.Primitive("^"), callist)
         }
 
         do.call("unlockBinding", list(sym = "%%", env = env))
         
         env$`%%` <- function(e1, e2) {
-            do.call(.Primitive("%%"), strip_declared(list(e1, e2)))
+            callist <- list(e1 = strip_declared(e1))
+            if (!missing(e2)) {
+                callist$e2 <- strip_declared(e2)
+            }
+            do.call(.Primitive("%%"), callist)
         }
 
         do.call("unlockBinding", list(sym = "%/%", env = env))
         
         env$`%/%` <- function(e1, e2) {
-            do.call(.Primitive("%/%"), strip_declared(list(e1, e2)))
+            callist <- list(e1 = strip_declared(e1))
+            if (!missing(e2)) {
+                callist$e2 <- strip_declared(e2)
+            }
+            do.call(.Primitive("%/%"), callist)
+        }
+
+        do.call("unlockBinding", list(sym = "sqrt", env = env))
+        
+        env$sqrt <- function(x) {
+            do.call(.Primitive("sqrt"), list(strip_declared(x)))
+        }
+
+        do.call("unlockBinding", list(sym = "abs", env = env))
+        
+        env$abs <- function(x) {
+            do.call(.Primitive("abs"), list(strip_declared(x)))
         }
 
         do.call("unlockBinding", list(sym = "order", env = env))
