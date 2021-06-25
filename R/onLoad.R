@@ -141,6 +141,57 @@
             }
         }
 
+        `strip_declared` <- function(x) {
+            lapply(x, function(x) {
+                if (is_declared(x)) {
+                    attributes(x) <- NULL
+                }
+                return(x)
+            })
+        }
+
+        do.call("unlockBinding", list(sym = "+", env = env))
+        
+        env$`+` <- function(e1, e2) {
+            do.call(.Primitive("+"), strip_declared(list(e1, e2)))
+        }
+
+        do.call("unlockBinding", list(sym = "-", env = env))
+        
+        env$`-` <- function(e1, e2) {
+            do.call(.Primitive("-"), strip_declared(list(e1, e2)))
+        }
+
+        do.call("unlockBinding", list(sym = "*", env = env))
+        
+        env$`*` <- function(e1, e2) {
+            do.call(.Primitive("*"), strip_declared(list(e1, e2)))
+        }
+
+        do.call("unlockBinding", list(sym = "/", env = env))
+        
+        env$`/` <- function(e1, e2) {
+            do.call(.Primitive("/"), strip_declared(list(e1, e2)))
+        }
+
+        do.call("unlockBinding", list(sym = "^", env = env))
+        
+        env$`^` <- function(e1, e2) {
+            do.call(.Primitive("^"), strip_declared(list(e1, e2)))
+        }
+
+        do.call("unlockBinding", list(sym = "%%", env = env))
+        
+        env$`%%` <- function(e1, e2) {
+            do.call(.Primitive("%%"), strip_declared(list(e1, e2)))
+        }
+
+        do.call("unlockBinding", list(sym = "%/%", env = env))
+        
+        env$`%/%` <- function(e1, e2) {
+            do.call(.Primitive("%/%"), strip_declared(list(e1, e2)))
+        }
+
         do.call("unlockBinding", list(sym = "order", env = env))
         
         env$order <- function (..., na.last = TRUE, decreasing = FALSE,
