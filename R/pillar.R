@@ -4,8 +4,7 @@
 `pillar_shaft.declared` <- function(
     x,
     show_labels = getOption("declared.show_pillar_labels", TRUE),
-    ...
-) {
+    ...) {
 
     if (eval(parse(text = "requireNamespace('haven', quietly = TRUE)"))) {
         return(eval(parse(text = "pillar::pillar_shaft(as_haven(x))")))

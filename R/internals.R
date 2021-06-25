@@ -1,4 +1,3 @@
-
 `c_declared` <- function(dots, recursive = FALSE, use.names = TRUE) {
     # dots <- list(...)
     declared <- unlist(lapply(dots, is_declared))
@@ -80,7 +79,6 @@
     )
 }
 
-
 `order_declared` <- function(x, na.last = NA, decreasing = FALSE, method = c("auto",
     "shell", "radix"), na_values.last = na.last) {
     
@@ -130,7 +128,6 @@
 
     return(res)
 }
-
 
 `names_values` <- function(x) {
 
@@ -190,8 +187,6 @@
     return(result)
 }
 
-
-
 `to_labels` <- function(x) {
 
     if (!inherits(x, "declared")) {
@@ -208,4 +203,8 @@
     result[is.element(result, labels)] <- names(labels)[match(result[is.element(result, labels)], labels)]
     
     return(result)
+}
+
+`plus_declared` <- function(e1, e2) {
+    
 }

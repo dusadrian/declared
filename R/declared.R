@@ -143,6 +143,7 @@
     return(x)
 }
 
+
 `as_declared.factor` <- function(x, ...) {
     # TO DO, but for the moment, do nothing
     return(x)
@@ -195,7 +196,7 @@
     return(x)
 }
 
-# no export
+
 `validate_declared` <- function(x = double(), labels = NULL, label = NULL,
                                 na_values = NULL, na_range = NULL, ...) {
     
@@ -242,7 +243,6 @@
 }
 
 
-
 `declared` <- function(x = double(), labels = NULL, na_values = NULL,
                           na_range = NULL, label = NULL, ...) {
     if (inherits(x, "haven_labelled")) {
@@ -268,6 +268,7 @@
     return(x)
 }
 
+
 `likely_mode` <- function(x) {
     if (admisc::possibleNumeric(x) || all(is.na(x))) {
         x <- admisc::asNumeric(x)
@@ -278,6 +279,7 @@
 
     return(x)
 }
+
 
 `likely_type` <- function(x) {
     type <- NULL
@@ -394,7 +396,6 @@
     print(data.frame(value = unname(labels), label = names(labels), row.names = NULL), row.names = FALSE)
     return(invisible(x))
 }
-
 
 
 `==.declared` <- function(e1, e2) {

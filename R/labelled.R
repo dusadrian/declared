@@ -64,7 +64,6 @@
     return(x)
 }
 
-
 `val_label.declared` <- function(x, v, prefixed = FALSE) {
     if (length(v) != 1) {
         stop("`v` should be a single value", call. = FALSE, domain = "R-labelled")

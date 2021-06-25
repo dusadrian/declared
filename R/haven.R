@@ -27,7 +27,6 @@
     structure(x, label = label)
 }
 
-
 `zap_labels.declared` <- function(x) {
     attr(x, "labels") <- NULL
     attr(x, "na_index") <- NULL
