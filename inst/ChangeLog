@@ -1,2 +1,6 @@
+Version 0.6
+    o improved treatment of arithmetic operations, attributes are no longer propagated
+      (thanks to Randall Pruim for the suggestion)
+
 Version 0.5
     o initial version
