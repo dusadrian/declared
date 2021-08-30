@@ -243,7 +243,7 @@ function(x, na_values = NULL, na_range = NULL, labels = NULL) {
 `validate_declared` <- function(x = double(), labels = NULL, label = NULL,
                                 na_values = NULL, na_range = NULL, ...) {
 
-    if (!is.numeric(x) && !is.character(x)) {
+    if (!is.numeric(x) && !is.character(x) && !all(is.na(x))) {
         admisc::stopError("`x` must be a numeric or a character vector.")
     }
 
@@ -292,15 +292,18 @@ function(x, na_values = NULL, na_range = NULL, labels = NULL) {
     }
 
     attributes(x) <- NULL
+    
     validate_declared(x, labels, label, na_values, na_range)
 
-    misvals <- all_missing_values(x, na_values, na_range, labels)
+    if (!all(is.na(x))) {
+        misvals <- all_missing_values(x, na_values, na_range, labels)
 
-    if (!is.null(na_range)) {
-        na_range <- sort(na_range)
+        if (!is.null(na_range)) {
+            na_range <- sort(na_range)
+        }
+
+        missingValues(x)[is.element(x, misvals)] <- x[is.element(x, misvals)]
     }
-
-    missingValues(x)[is.element(x, misvals)] <- x[is.element(x, misvals)]
 
     attr(x, "na_values") <- na_values
     attr(x, "na_range") <- na_range
