@@ -1,9 +1,11 @@
+Version 0.7
+    o bug fix saving declared data frames as .csv files
+
 Version 0.6
     o improved treatment of arithmetic operations, attributes are no longer propagated
       (thanks to Randall Pruim for the suggestion)
-    o modified as_haven() for objects of class 'declared', to avoid a bug
-      in package haven that prevents exporting missing values to SPSS for
-      integer variables
+    o modified as_haven() for objects of class 'declared', to avoid a bug in package
+      ReadStat that prevents exporting missing values to SPSS for integer variables
 
 Version 0.5
     o initial version

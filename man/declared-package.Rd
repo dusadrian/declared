@@ -17,8 +17,8 @@ labelled objects with existing values declared as missing.
     \tabular{ll}{
     Package: \tab declared\cr
     Type: \tab Package\cr
-    Version: \tab 0.5\cr
-    Date: \tab 2021-06-04\cr
+    Version: \tab 0.6\cr
+    Date: \tab 2021-08-30\cr
     License: \tab GPL-v3\cr
     }
 }

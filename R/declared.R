@@ -1,9 +1,11 @@
 # internal
-`all_missing_values` <- function(x, na_values = NULL, na_range = NULL, labels = NULL) {
+`all_missing_values` <-
+function(x, na_values = NULL, na_range = NULL, labels = NULL) {
 
     ##########
-    # Arguments na_values, na_range and labels can either be provided by the user or,
-    # if the input is a haven_labelled(_spss) objects they might already be in the attributes
+    # Arguments na_values, na_range and labels can either be provided
+    # by the user or, if the input is a haven_labelled(_spss) objects
+    # they might already be in the attributes
     if (is.null(na_values)) {
         na_values <- attr(x, "na_values")
     }
@@ -68,7 +70,7 @@
 `as_haven.declared` <- function(x, ...) {
     na_index <- attr(x, "na_index")
     attrx <- attributes(x)
-    
+
     # this is necessary to replace those values
     # (because of the "[<-.declared" method)
     attributes(x) <- NULL # or x <- unclass(x), but I find this cleaner
@@ -79,19 +81,19 @@
 
     if (!is.null(na_index)) {
         # x[na_index] <- likely_mode(names(na_index))
-        
-        #------------------------------------
-        # detour until haven accepts integers
+
+        #------------------------------------------
+        # detour until ReadStat deals with integers
         na_values <- names(na_index)
         if (is.numeric(x)) {
             na_values <- as.numeric(na_values)
         }
         x[na_index] <- na_values
-        #------------------------------------
+        #------------------------------------------
     }
 
-    #------------------------------------
-    # detour until haven accepts integers
+    #------------------------------------------
+    # detour until ReadStat deals with integers
     na_values <- attrx$na_values
     if (!is.null(na_values)) {
         if (is.numeric(x)) {
@@ -109,15 +111,19 @@
             attrx$labels <- labels
         }
     }
-    #------------------------------------
+    #------------------------------------------
 
     attrx$na_index <- NULL
     # attrx$class <- c("haven_labelled_spss", "haven_labelled", "vctrs_vctr", setdiff(attrx$class, "declared"))
-    
-    #------------------------------------
-    # detour until haven accepts integers
-    attrx$class <- unique(c("haven_labelled_spss", "haven_labelled", "vctrs_vctr", setdiff(attrx$class, c("declared", "double", "integer")), class(x)))
-    #------------------------------------
+
+    #------------------------------------------
+    # detour until ReadStat deals with integers
+    attrx$class <- unique(c(
+            "haven_labelled_spss", "haven_labelled", "vctrs_vctr",
+            setdiff(attrx$class, c("declared", "double", "integer")),
+            class(x)
+    ))
+    #------------------------------------------
 
     attributes(x) <- attrx
     return(x)
@@ -147,7 +153,7 @@
 
 
 `as_declared.haven_labelled` <- function(x, ...) {
-    
+
     dots <- list(...)
     if (is.element("haven", names(dots))) {
         haven <- dots$haven
@@ -158,11 +164,10 @@
 
     if (haven) {
         if (eval(parse(text = "any(haven::is_tagged_na(x))"))) {
-            cat("\n")
-            stop(simpleError("Tagged NAs are not supported.\n\n"))
+            admisc::stopError("Tagged NAs are not supported.")
         }
     }
-    
+
     misvals <- all_missing_values(unclass(x))
 
     na_values <- attr(x, "na_values")
@@ -237,45 +242,44 @@
 
 `validate_declared` <- function(x = double(), labels = NULL, label = NULL,
                                 na_values = NULL, na_range = NULL, ...) {
-    
+
     if (!is.numeric(x) && !is.character(x)) {
-        cat("\n")
-        stop(simpleError("`x` must be a numeric or a character vector.\n\n"))
+        admisc::stopError("`x` must be a numeric or a character vector.")
     }
-    
+
     if (!is.null(labels)) {
         if (is.null(names(labels))) {
-            stop(simpleError("`labels` must have names."))
+            admisc::stopError("`labels` must have names.")
         }
 
         if (any(duplicated(stats::na.omit(labels)))) {
-            stop(simpleError("`labels` must be unique."))
+            admisc::stopError("`labels` must be unique.")
         }
     }
 
-    if (!is.null(label) && (!is.atomic(label) || !is.character(label) || length(label) != 1)) {
-        cat("\n")
-        stop(simpleError("`label` must be a character vector of length one.\n\n"))
+    if (
+        !is.null(label) &&
+        (!is.atomic(label) || !is.character(label) || length(label) != 1)
+    ) {
+        admisc::stopError("`label` must be a character vector of length one.")
     }
-    
+
     if (!is.null(na_values)) {
         if (any(is.na(na_values))) {
-            cat("\n")
-            stop(simpleError("`na_values` should not contain NA values.\n\n"))
+            admisc::stopError("`na_values` should not contain NA values.")
         }
     }
 
     if (!is.null(na_range)) {
-        type_ok <- (is.character(x) && is.character(na_range)) || (is.numeric(x) && is.numeric(na_range))
-        
+        type_ok <-  (is.character(x) && is.character(na_range)) ||
+                    (is.numeric(x) && is.numeric(na_range))
+
         if (!type_ok || length(na_range) != 2) {
-            cat("\n")
-            stop(simpleError("`na_range` must be a vector of length two of the same type as `x`.\n\n"))
+            admisc::stopError("`na_range` must be a vector of length two of the same type as `x`.")
         }
-        
+
         if (any(is.na(na_range))) {
-            cat("\n")
-            stop(simpleError("`na_range` can not contain missing values.\n\n"))
+            admisc::stopError("`na_range` can not contain missing values.")
         }
     }
 }
@@ -295,7 +299,7 @@
     if (!is.null(na_range)) {
         na_range <- sort(na_range)
     }
-    
+
     missingValues(x)[is.element(x, misvals)] <- x[is.element(x, misvals)]
 
     attr(x, "na_values") <- na_values
@@ -390,13 +394,12 @@
 
 `format_declared` <- function(x, digits = getOption("digits")) {
     if (!is.atomic(x)) {
-        cat("\n")
-        stop("`x` has to be a vector.\n\n", call. = FALSE)
+        admisc::stopError("`x` has to be a vector.")
     }
-    
+
     out <- format(unclass(x), digits = digits)
     na_index <- attr(x, "na_index")
-    
+
     out[na_index] <- paste0("NA(", names(na_index), ")")
 
     # format again to make sure all elements have same width
@@ -420,7 +423,11 @@
 
     na_range <- attr(x, "na_range")
     if (!is.null(na_range)) {
-        cat(paste0("Missing range:  [", paste(na_range, collapse = ", "), "]\n"))
+        cat(paste0(
+            "Missing range:  [",
+            paste(na_range, collapse = ", "),
+            "]\n"
+        ))
     }
 
     labels <- attr(x, "labels", exact = TRUE)
@@ -431,7 +438,14 @@
 
     cat("\nLabels:", "\n", sep = "")
 
-    print(data.frame(value = unname(labels), label = names(labels), row.names = NULL), row.names = FALSE)
+    print(
+        data.frame(
+            value = unname(labels),
+            label = names(labels),
+            row.names = NULL
+        ),
+        row.names = FALSE
+    )
     return(invisible(x))
 }
 

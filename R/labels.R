@@ -73,8 +73,7 @@
 
 `variable_label<-.declared` <- function(x, value) {
     if (!is.null(value) && length(value) > 1) {
-        cat("\n")
-        stop(simpleError("`value` should be a single character string or NULL.\n\n"))
+        admisc::stopError("`value` should be a single character string or NULL.")
     }
 
     if (is.null(value)) {

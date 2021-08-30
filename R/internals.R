@@ -1,19 +1,22 @@
 `c_declared` <- function(dots, recursive = FALSE, use.names = TRUE) {
-    # dots <- list(...)
-    declared <- unlist(lapply(dots, is_declared))
-    na_values <- sort(unique(unlist(lapply(dots, function(x) attr(x, "na_values")))))
     
+    declared <- unlist(lapply(dots, is_declared))
+    na_values <- sort(unique(unlist(
+        lapply(dots, function(x) attr(x, "na_values"))
+    )))
+
     labels <- unlist(lapply(dots, function(x) {
         attr(x, "labels", exact = TRUE)
     }))
-    
+
     duplicates <- duplicated(labels)
 
     if (length(wduplicates <- which(duplicates)) > 0) {
         for (i in seq(length(wduplicates))) {
-            if (length(unique(names(labels[labels == labels[wduplicates[i]]]))) > 1) {
-                cat("\n")
-                stop(simpleError("Labels must be unique.\n\n"))
+            if (length(unique(names(
+                labels[labels == labels[wduplicates[i]]]
+            ))) > 1) {
+                admisc::stopError("Labels must be unique.")
             }
         }
     }
@@ -22,7 +25,7 @@
 
     na_range <- lapply(dots, function(x) attr(x, "na_range", exact = TRUE))
     nulls <- unlist(lapply(na_range, is.null))
-    
+
     if (all(nulls)) {
         na_range <- NULL
     }
@@ -56,8 +59,7 @@
             }
 
             if (any(!compatible)) {
-                cat("\n")
-                stop(simpleError("Incompatible NA ranges.\n\n"))
+                admisc::stopError("Incompatible NA ranges.")
             }
 
             na_range <- range(unlist(na_range))
