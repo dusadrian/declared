@@ -89,10 +89,10 @@ function(x, na_values = NULL, na_range = NULL, labels = NULL) {
     na_range <- attr(x, "na_range")
     labels <- attr(x, "labels", exact = TRUE)
     label <- attr(x, "label", exact = TRUE)
-    format_spss <- attr(x, "format.spss")
+    format_spss <- attr(x, "format.spss") # necessary for DDIwR::convert
+    # attrx <- attributes(x)
 
     attributes(x) <- NULL
-    # missingValues()<- also gives the class "declared"
     missingValues(x)[is.element(x, misvals)] <- x[is.element(x, misvals)]
 
     attr(x, "na_values") <- na_values
@@ -100,6 +100,9 @@ function(x, na_values = NULL, na_range = NULL, labels = NULL) {
     attr(x, "labels") <- labels
     attr(x, "label") <- label
     attr(x, "format.spss") <- format_spss
+
+    # attrx$class <- class(x)
+    # attributes(x) <- attrx
 
     return(x)
 }

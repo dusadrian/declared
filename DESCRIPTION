@@ -7,7 +7,7 @@ Authors@R: person(given = "Adrian", family = "Dusa",
                   email = "dusa.adrian@unibuc.ro",
                   comment = c(ORCID = "0000-0002-3525-9253"))
 Depends: R (>= 3.5.0)
-Imports: admisc (>= 0.17)
+Imports: admisc (> 0.17)
 License: GPL (>= 3)
 URL: https://github.com/dusadrian/declared
 BugReports: https://github.com/dusadrian/declared/issues
