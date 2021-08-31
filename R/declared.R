@@ -137,7 +137,8 @@ function(x, na_values = NULL, na_range = NULL, labels = NULL) {
     } else {
         x[] <- lapply(x, as_haven, ...)
     }
-
+    
+    class(x) <- c("tbl", "tbl_df", "data.frame")
     return(x)
 }
 
@@ -174,6 +175,7 @@ function(x, na_values = NULL, na_range = NULL, labels = NULL) {
     na_range <- attr(x, "na_range")
     labels <- attr(x, "labels", exact = TRUE)
     label <- attr(x, "label", exact = TRUE)
+    format_spss <- attr(x, "format.spss")
 
 
     attributes(x) <- NULL
@@ -183,6 +185,7 @@ function(x, na_values = NULL, na_range = NULL, labels = NULL) {
     attr(x, "na_range") <- na_range
     attr(x, "labels") <- labels
     attr(x, "label") <- label
+    attr(x, "format.spss") <- format_spss
     return(x)
 }
 
@@ -196,7 +199,7 @@ function(x, na_values = NULL, na_range = NULL, labels = NULL) {
 `as_declared.data.frame` <- function(x, ...) {
     haven <- eval(parse(text = "requireNamespace('haven', quietly = TRUE)"))
     x[] <- lapply(x, as_declared, haven = haven, ...)
-
+    class(x) <- "data.frame"
     return(x)
 }
 
