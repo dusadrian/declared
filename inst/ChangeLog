@@ -1,5 +1,6 @@
 Version 0.7
     o bug fix saving declared data frames as .csv files
+    o as_declared() now retains the "format.spss" attribute, if existing
 
 Version 0.6
     o improved treatment of arithmetic operations, attributes are no longer propagated
