@@ -133,9 +133,9 @@
 
 `names_values` <- function(x) {
 
-    if (!inherits(x, "declared")) {
+    if (!inherits(x, "declared") & !inherits(x, "haven_labelled_spss")) {
         cat("\n")
-        stop("The input should be a declared vector.\n\n", call. = FALSE)
+        stop("The input should be a declared / haven_labelled_spss vector.\n\n", call. = FALSE)
     }
 
     attrx <- attributes(x)
@@ -144,7 +144,7 @@
     
     # attrx[["labels"]] is the equivalent of attr(x, "labels", exact = TRUE)
     labels <- attrx[["labels"]]
-
+    x <- c(x, unname(labels))
     x <- x[!duplicated(x)]
     xmis <- logical(length(x))
 
@@ -176,15 +176,16 @@
 
     names(xnotmis) <- xnotmis
     if (length(xnotmis) > 0) {
+        nms <- names(labels)
         for (i in seq(length(xnotmis))) {
             if (any(isel <- labels == xnotmis[i])) {
-                names(xnotmis)[i] <- names(labels)[isel]
+                names(xnotmis)[i] <- ifelse(nms[isel] == "", xnotmis[i], nms[isel])
             }
         }
     }
 
     result <- c(xnotmis, xmis)
-    attr(result, 'missing') <- xmis
+    attr(result, 'missing') <- unname(xmis)
 
     return(result)
 }
@@ -197,14 +198,14 @@
     }
 
     labels <- names_values(x)
+
     x <- undeclare(x)
 
     attributes(x) <- NULL
-    result <- x
-    
-    result[is.element(result, labels)] <- names(labels)[match(result[is.element(result, labels)], labels)]
-    
-    return(result)
+
+    x[is.element(x, labels)] <- names(labels)[match(x[is.element(x, labels)], labels)]
+
+    return(x)
 }
 
 `plus_declared` <- function(e1, e2) {

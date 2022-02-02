@@ -1,12 +1,19 @@
+Version 0.8
+    o Improved treatment of equality and non-equality, now accepting labels as
+      well as values
+    o Reverted functionality to not dropping the attributes in arithmetic
+      operations, this should be left to the users' choice
+
 Version 0.7
-    o bug fix saving declared data frames as .csv files
+    o Bug fix saving declared data frames as .csv files
     o as_declared() now retains the "format.spss" attribute, if existing
 
 Version 0.6
-    o improved treatment of arithmetic operations, attributes are no longer propagated
-      (thanks to Randall Pruim for the suggestion)
-    o modified as_haven() for objects of class 'declared', to avoid a bug in package
-      ReadStat that prevents exporting missing values to SPSS for integer variables
+    o Improved treatment of arithmetic operations, attributes are no longer
+      propagated (thanks to Randall Pruim for the suggestion)
+    o Modified as_haven() for objects of class 'declared', to avoid a bug in
+      package ReadStat that prevents exporting missing values to SPSS for
+      integer variables
 
 Version 0.5
-    o initial version
+    o Initial version

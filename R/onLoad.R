@@ -11,7 +11,6 @@
  
     suppressPackageStartupMessages(
         lapply(c("stats", "admisc", "utils"), load_library)
-        # load_library("stats")
     )
 
     if (admisc::unlockEnvironment(asNamespace("base"))) {
@@ -121,115 +120,6 @@
             attr(y, "row.names") <- row.names(x)
 
             return(y)
-        }
-
-        do.call("unlockBinding", list(sym = "c", env = env))
-        
-        env$c <- function(..., recursive = FALSE, use.names = TRUE) {
-            dots <- list(...)
-            any_declared <- FALSE
-            
-            if (all(vapply(dots, is.atomic, logical(1L)))) {
-                any_declared <- any(vapply(dots, is_declared, logical(1L)))
-            }
-
-            if (any_declared) {
-                return(c_declared(dots))
-            }
-            else {
-                do.call(.Primitive("c"), c(dots, list(recursive = recursive, use.names = use.names)))
-            }
-        }
-
-        `strip_declared` <- function(x) {
-            # lapply(x, function(x) {
-                if (is_declared(x)) {
-                    attributes(x) <- NULL
-                }
-                return(x)
-            # })
-        }
-
-        do.call("unlockBinding", list(sym = "+", env = env))
-        
-        env$`+` <- function(e1, e2) {
-            callist <- list(e1 = strip_declared(e1))
-            if (!missing(e2)) {
-                callist$e2 <- strip_declared(e2)
-            }
-            do.call(.Primitive("+"), callist)
-        }
-
-        do.call("unlockBinding", list(sym = "-", env = env))
-        
-        env$`-` <- function(e1, e2) {
-            callist <- list(e1 = strip_declared(e1))
-            if (!missing(e2)) {
-                callist$e2 <- strip_declared(e2)
-            }
-            do.call(.Primitive("-"), callist)
-        }
-
-        do.call("unlockBinding", list(sym = "*", env = env))
-        
-        env$`*` <- function(e1, e2) {
-            callist <- list(e1 = strip_declared(e1))
-            if (!missing(e2)) {
-                callist$e2 <- strip_declared(e2)
-            }
-            do.call(.Primitive("*"), callist)
-        }
-
-        do.call("unlockBinding", list(sym = "/", env = env))
-        
-        env$`/` <- function(e1, e2) {
-            callist <- list(e1 = strip_declared(e1))
-            if (!missing(e2)) {
-                callist$e2 <- strip_declared(e2)
-            }
-            do.call(.Primitive("/"), callist)
-        }
-
-        do.call("unlockBinding", list(sym = "^", env = env))
-        
-        env$`^` <- function(e1, e2) {
-            callist <- list(e1 = strip_declared(e1))
-            if (!missing(e2)) {
-                callist$e2 <- strip_declared(e2)
-            }
-            do.call(.Primitive("^"), callist)
-        }
-
-        do.call("unlockBinding", list(sym = "%%", env = env))
-        
-        env$`%%` <- function(e1, e2) {
-            callist <- list(e1 = strip_declared(e1))
-            if (!missing(e2)) {
-                callist$e2 <- strip_declared(e2)
-            }
-            do.call(.Primitive("%%"), callist)
-        }
-
-        do.call("unlockBinding", list(sym = "%/%", env = env))
-        
-        env$`%/%` <- function(e1, e2) {
-            callist <- list(e1 = strip_declared(e1))
-            if (!missing(e2)) {
-                callist$e2 <- strip_declared(e2)
-            }
-            do.call(.Primitive("%/%"), callist)
-        }
-
-        do.call("unlockBinding", list(sym = "sqrt", env = env))
-        
-        env$sqrt <- function(x) {
-            do.call(.Primitive("sqrt"), list(strip_declared(x)))
-        }
-
-        do.call("unlockBinding", list(sym = "abs", env = env))
-        
-        env$abs <- function(x) {
-            do.call(.Primitive("abs"), list(strip_declared(x)))
         }
 
         do.call("unlockBinding", list(sym = "order", env = env))

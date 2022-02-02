@@ -1,6 +1,7 @@
 # internal
-`all_missing_values` <-
-function(x, na_values = NULL, na_range = NULL, labels = NULL) {
+`all_missing_values` <- function(
+    x, na_values = NULL, na_range = NULL, labels = NULL
+) {
 
     ##########
     # Arguments na_values, na_range and labels can either be provided
@@ -70,27 +71,39 @@ function(x, na_values = NULL, na_range = NULL, labels = NULL) {
 `as_declared.haven_labelled` <- function(x, ...) {
 
     dots <- list(...)
-    if (is.element("haven", names(dots))) {
-        haven <- dots$haven
-    }
-    else {
-        haven <- eval(parse(text = "requireNamespace('haven', quietly = TRUE)"))
-    }
-
-    if (haven) {
-        if (eval(parse(text = "any(haven::is_tagged_na(x))"))) {
-            admisc::stopError("Tagged NAs are not supported.")
-        }
-    }
-
-    misvals <- all_missing_values(unclass(x))
 
     na_values <- attr(x, "na_values")
     na_range <- attr(x, "na_range")
     labels <- attr(x, "labels", exact = TRUE)
     label <- attr(x, "label", exact = TRUE)
     format_spss <- attr(x, "format.spss") # necessary for DDIwR::convert
-    # attrx <- attributes(x)
+
+    if (!inherits(x, "haven_labelled_spss")) {
+        tagged <- admisc::hasTag(x)
+        attributes(x) <- NULL
+
+        if (any(tagged)) {
+            x[tagged] <- admisc::getTag(x[tagged])
+        }
+
+        if (!is.null(labels)) {
+            nms <- names(labels)
+            tagged <- admisc::hasTag(labels)
+
+            if (any(tagged)) {
+                labels[tagged] <- admisc::getTag(labels[tagged])
+                na_values <- sort(unname(labels[tagged]))
+            }
+
+            labels <- admisc::coerceMode(labels)
+            names(labels) <- nms
+        }
+
+        misvals <- na_values
+    }
+    else {
+        misvals <- all_missing_values(unclass(x))
+    }
 
     attributes(x) <- NULL
     missingValues(x)[is.element(x, misvals)] <- x[is.element(x, misvals)]
@@ -100,9 +113,6 @@ function(x, na_values = NULL, na_range = NULL, labels = NULL) {
     attr(x, "labels") <- labels
     attr(x, "label") <- label
     attr(x, "format.spss") <- format_spss
-
-    # attrx$class <- class(x)
-    # attributes(x) <- attrx
 
     return(x)
 }
@@ -115,8 +125,7 @@ function(x, na_values = NULL, na_range = NULL, labels = NULL) {
 
 
 `as_declared.data.frame` <- function(x, ...) {
-    haven <- eval(parse(text = "requireNamespace('haven', quietly = TRUE)"))
-    x[] <- lapply(x, as_declared, haven = haven, ...)
+    x[] <- lapply(x, as_declared, ...)
     class(x) <- "data.frame"
     return(x)
 }
@@ -141,8 +150,10 @@ function(x, na_values = NULL, na_range = NULL, labels = NULL) {
     attributes(x) <- NULL # or x <- unclass(x), but I find this cleaner
     if (!is.null(na_index)) {
         # x <- ifelse(!is.na(missingValues), missingValues, x)
-        x[na_index] <- likely_mode(names(na_index))
+        x[na_index] <- names(na_index)
     }
+    
+    x <- admisc::coerceMode(x)
     
     attrx$na_index <- NULL
     attrx$na_values <- NULL
@@ -235,18 +246,6 @@ function(x, na_values = NULL, na_range = NULL, labels = NULL) {
 }
 
 
-`likely_mode` <- function(x) {
-    if (admisc::possibleNumeric(x) || all(is.na(x))) {
-        x <- admisc::asNumeric(x)
-        if (admisc::wholeNumeric(x) & !is.integer(x)) {
-            x <- as.integer(x)
-        }
-    }
-
-    return(x)
-}
-
-
 `likely_type` <- function(x) {
     type <- NULL
     if (is.numeric(x)) {
@@ -283,14 +282,16 @@ function(x, na_values = NULL, na_range = NULL, labels = NULL) {
     class(x) <- setdiff(class(x), "declared")
     other_classes <- setdiff(class(x), c("integer", "double", "character", "numeric", "complex", "haven_labelled", "haven_labelled_spss", "vctrs_vctr"))
     
-    x <- likely_mode(x)
-
     if (any(!is.na(value))) {
         x[!is.na(value)] <- NA
+        x <- admisc::coerceMode(x)
         na_index <- which(!is.na(value))
         value <- value[!is.na(value)]
         names(na_index) <- value
         attr(x, "na_index") <- na_index
+    }
+    else {
+        x <- admisc::coerceMode(x)
     }
     
     structure(x, class = c("declared", other_classes, class(x)))
@@ -313,6 +314,89 @@ function(x, na_values = NULL, na_range = NULL, labels = NULL) {
     x <- undeclare(x)
     x <- NextMethod()
     declared(x, attrx[["labels"]], attrx$na_values, attrx$na_range, attrx[["label"]])
+}
+
+`c.declared` <- function(...) {
+    dots <- list(...)
+    declared <- unlist(lapply(dots, is_declared))
+    na_values <- sort(unique(unlist(
+        lapply(dots, function(x) attr(x, "na_values"))
+    )))
+
+    labels <- unlist(lapply(dots, function(x) {
+        attr(x, "labels", exact = TRUE)
+    }))
+
+    duplicates <- duplicated(labels)
+
+    if (length(wduplicates <- which(duplicates)) > 0) {
+        for (i in seq(length(wduplicates))) {
+            if (length(unique(names(
+                labels[labels == labels[wduplicates[i]]]
+            ))) > 1) {
+                admisc::stopError("Labels must be unique.")
+            }
+        }
+    }
+
+    labels <- sort(labels[!duplicates])
+
+    na_range <- lapply(dots, function(x) attr(x, "na_range", exact = TRUE))
+    nulls <- unlist(lapply(na_range, is.null))
+
+    if (all(nulls)) {
+        na_range <- NULL
+    }
+    else {
+        if (sum(nulls) == length(na_range) - 1) {
+            na_range <- unlist(na_range)
+        }
+        else {
+            compatible <- logical(length(na_range))
+            if (!is.null(na_range)) {
+                for (i in seq(1, length(na_range) - 1)) {
+                    nai <- na_range[[i]]
+                    if (is.null(nai)) {
+                        compatible[i] <- TRUE
+                    }
+                    else {
+                        for (j in seq(2, length(na_range))) {
+                            naj <- na_range[[j]]
+                            if (is.null(naj)) {
+                                compatible[j] <- TRUE
+                            }
+                            else {
+                                if (any(is.element(seq(nai[1], nai[2]), seq(naj[1], naj[2]))) > 0) {
+                                    compatible[i] <- TRUE
+                                    compatible[j] <- TRUE
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (any(!compatible)) {
+                admisc::stopError("Incompatible NA ranges.")
+            }
+
+            na_range <- range(unlist(na_range))
+        }
+    }
+
+    dots <- unlist(lapply(dots, function(x) {
+        if (is_declared(x)) x <- undeclare(x)
+        attributes(x) <- NULL
+        return(x)
+    }))
+
+    return(declared(
+        dots,
+        labels = labels,
+        na_values = na_values,
+        na_range = na_range,
+        label = attr(dots[[which(declared)[1]]], "label", exact = TRUE)
+    ))
 }
 
 
@@ -375,6 +459,7 @@ function(x, na_values = NULL, na_range = NULL, labels = NULL) {
 
 
 `==.declared` <- function(e1, e2) {
+    le1 <- attr(e1, "labels", exact = TRUE)
     e1 <- unclass(undeclare(e1))
     e2 <- unclass(undeclare(e2))
     if (admisc::possibleNumeric(e1) && admisc::possibleNumeric(e2)) {
@@ -384,11 +469,15 @@ function(x, na_values = NULL, na_range = NULL, labels = NULL) {
         # return(admisc::aeqb(e1, e2)
     }
     else {
+        if (length(e2) == 1 && is.element(e2, names(le1)) && !is.element(e2, e1)) {
+            e2 <- le1[names(le1) == e2]
+        }
         return(e1 == e2)
     }
 }
 
 `!=.declared` <- function(e1, e2) {e1 <- unclass(undeclare(e1))
+    le1 <- attr(e1, "labels", exact = TRUE)
     e1 <- unclass(undeclare(e1))
     e2 <- unclass(undeclare(e2))
     if (admisc::possibleNumeric(e1) && admisc::possibleNumeric(e2)) {
@@ -398,6 +487,9 @@ function(x, na_values = NULL, na_range = NULL, labels = NULL) {
         # return(admisc::aneqb(e1, e2)
     }
     else {
+        if (length(e2) == 1 && is.element(e2, names(le1)) && !is.element(e2, e1)) {
+            e2 <- le1[names(le1) == e2]
+        }
         return(e1 != e2)
     }
 }

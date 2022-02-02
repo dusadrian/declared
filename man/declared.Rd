@@ -48,28 +48,36 @@ open ended.}
 
 
 \details{
-The \code{declared} objects are very similar to the \code{haven_labelled_spss} objects
-from package \bold{haven}. It has exactly the same arguments, but it features a fundamental
-difference in the treatment of (declared) missing values.
+The \code{declared} objects are very similar to the \code{haven_labelled_spss}
+objects from package \bold{haven}. It has exactly the same arguments, but it
+features a fundamental difference in the treatment of (declared) missing values.
 
-In package \bold{haven}, existing values are treated as if they were missing. By contrast,
-in package \bold{declared} the NA values are treated as existing values.
+In package \bold{haven}, existing values are treated as if they were missing. By
+contrast, in package \bold{declared} the NA values are treated as existing values.
 
-This difference is fundamental and points to an inconsistency in package \bold{haven}:
-while existing values can be identified as missing using the function \code{is.na()}, they
-are in fact present in the vector and other packages (most importantly the core ones) will
-not know these values should be treated as missing.
+This difference is fundamental and points to an inconsistency in package
+\bold{haven}: while existing values can be identified as missing using the
+function \code{is.na()}, they are in fact present in the vector and other
+packages (most importantly the base ones) do not know these values should be
+treated as missing.
 
-Consequently, the existing values are interpreted as missing only by package \bold{haven}.
-Statistical procedures will use those values as just like they were valid values.
+Consequently, the existing values are interpreted as missing only by package
+\bold{haven}. Statistical procedures will use those values as if they were
+valid values.
 
-Package \bold{declared} approaches the problem in exactly the opposite way: instead of
-treating existing values as missing, it treats (certain) NA values as existing. This way,
-it does not run into the risk of using values which should not be used.
+Package \bold{declared} approaches the problem in exactly the opposite way:
+instead of treating existing values as missing, it treats (certain) NA values as
+existing. It does that by storing an attribute containing the indices of those
+NA values which are to be treated as declared missing values, and it refreshes
+this attribute each time the declared object is changed.
 
-The function \code{undeclare()} replaces the NA entries into their original numeric values, and
-drops all attributes related to missing values: \code{na_values}, \code{na_range} and
-\code{na_index}.
+This is a trade off and has important implications when subsetting datasets: all
+declared variables get this attribute refreshed, which consumes some time
+depending on the number of variables in the data.
+
+The function \code{undeclare()} replaces the NA entries into their original
+numeric values, and drops all attributes related to missing values:
+\code{na_values}, \code{na_range} and \code{na_index}.
 }
 
 \value{
@@ -77,8 +85,8 @@ drops all attributes related to missing values: \code{na_values}, \code{na_range
 
 \code{is_declared()} will return a logical scalar.
 
-\code{undeclare()} will return a an object of class \code{declared} without the declared
-missing values
+\code{undeclare()} will return a an object of class \code{declared} without the
+declared missing values
 
 \code{as_haven()} returns an object of class \code{haven_labelled_spss}
 }
@@ -96,11 +104,37 @@ x > 0
 
 x == -1
 
+# Values are actually placeholder for categories, so labels work as if they were factors:
+x == "DK"
+
 
 # when newly added values are already declared as missing, they are automatically coerced
 c(x, 2, -1)
 
 # switch NAs with their original values
 undeclare(x)
+
+
+set.seed(123)
+df <- data.frame(
+    Area = declared(
+        sample(1:2, 123, replace = TRUE),
+        labels = c(Urban = 1, Rural = 2)
+    ),
+    Gender = declared(
+        sample(c(1:2, -1), 123, replace = TRUE),
+        labels = c(Male = 1, Female = 2, Nonresponse = -1),
+        na_values = -1
+    ),
+    Age = sample(18:90, 123, replace = TRUE),
+    Children = sample(0:5, 123, replace = TRUE)
+)
+
+library(admisc)
+
+using(df, mean(Children), split.by = Area)
+
+using(df, mean(Age), split.by = Gender & Area)
+
 
 }

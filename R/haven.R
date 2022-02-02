@@ -21,7 +21,7 @@
     }
 
     if (!is.null(na_index)) {
-        # x[na_index] <- likely_mode(names(na_index))
+        # x[na_index] <- admisc::coerceMode(names(na_index))
 
         #------------------------------------------
         # detour until ReadStat deals with integers
@@ -134,7 +134,7 @@
 }
 
 
-# using eval(parse()) to avoid the dependency tree of vctrs, haven, labelled and pillar
+# using eval(parse()) to avoid the huge dependency tree of vctrs, haven, labelled and pillar
 
 `vec_ptype_abbr.declared` <- function(x, ...) {
     command <- "paste0(vctrs::vec_ptype_abbr(vctrs::vec_data(unclass(undeclare(x)))), '+lbl')"

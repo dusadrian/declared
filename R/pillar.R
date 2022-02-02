@@ -1,5 +1,5 @@
 # Dynamically exported, see onLoad.R
-# using eval(parse()) to avoid the dependency tree of vctrs, haven, labelled and pillar
+# using eval(parse()) to avoid the huge dependency tree of vctrs, haven, labelled and pillar
 
 `pillar_shaft.declared` <- function(
     x,

@@ -9,6 +9,7 @@ export(
     format_declared,
     is_declared,
     declared,
+    frtable,
     missing_values,
     "missing_values<-",
     missing_range,
@@ -24,9 +25,12 @@ export(
 )
 
 
+S3method(print, frtable)
+
 S3method(format, pillar_shaft_declared_chr)
 S3method(format, pillar_shaft_declared_num)
 
+S3method(c, declared)
 S3method(head, declared)
 S3method(tail, declared)
 S3method(na.omit, declared)
