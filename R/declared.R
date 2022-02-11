@@ -226,16 +226,17 @@
     attributes(x) <- NULL
     
     validate_declared(x, labels, label, na_values, na_range)
+    
+    misvals <- all_missing_values(x, na_values, na_range, labels)
 
-    if (!all(is.na(x))) {
-        misvals <- all_missing_values(x, na_values, na_range, labels)
-
-        if (!is.null(na_range)) {
-            na_range <- sort(na_range)
+    if (!is.null(na_range)) {
+        if (!is.atomic(na_range) || length(na_range) != 2 ) {
+            admisc::stopError("The 'na_range' argument should be an atomic vector of length 2.")
         }
-
-        missingValues(x)[is.element(x, misvals)] <- x[is.element(x, misvals)]
+        na_range <- sort(na_range)
     }
+
+    missingValues(x)[is.element(x, misvals)] <- x[is.element(x, misvals)]
 
     attr(x, "na_values") <- na_values
     attr(x, "na_range") <- na_range
@@ -282,16 +283,14 @@
     class(x) <- setdiff(class(x), "declared")
     other_classes <- setdiff(class(x), c("integer", "double", "character", "numeric", "complex", "haven_labelled", "haven_labelled_spss", "vctrs_vctr"))
     
-    if (any(!is.na(value))) {
-        x[!is.na(value)] <- NA
-        x <- admisc::coerceMode(x)
-        na_index <- which(!is.na(value))
-        value <- value[!is.na(value)]
-        names(na_index) <- value
+    notna <- !is.na(value)
+    x[notna] <- NA
+    x <- admisc::coerceMode(x)
+
+    if (any(notna)) {
+        na_index <- which(notna)
+        names(na_index) <- value[notna]
         attr(x, "na_index") <- na_index
-    }
-    else {
-        x <- admisc::coerceMode(x)
     }
     
     structure(x, class = c("declared", other_classes, class(x)))
