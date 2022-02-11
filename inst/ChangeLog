@@ -1,3 +1,7 @@
+Version 0.9
+    o New argument "weight" in function frtable()
+    o Fixed a bug in declared() when all values are completely missing
+
 Version 0.8
     o Improved treatment of equality and non-equality, now accepting labels as
       well as values
