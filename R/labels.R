@@ -46,8 +46,7 @@
 }
 
 `variable_label.default` <- function(x) {
-    # do nothing
-    x
+    attr(x, "label", exact = TRUE)
 }
 
 `variable_label.haven_labelled_spss` <- function(x) {
