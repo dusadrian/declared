@@ -1,4 +1,4 @@
-`frtable` <- function(x, values = TRUE, valid = TRUE) {
+`frtable` <- function(x, values = TRUE, valid = TRUE, weight = NULL) {
     
     if (inherits(x, "haven_labelled")) {
         x <- as_declared(x)
@@ -24,7 +24,13 @@
         names(vallab) <- levels(as.factor(x))
     }
 
-    tbl <- table(x)
+    if (is.null(weight)) {
+        weight <- rep(1, length(x))
+    }
+    tbl <- round(tapply(weight, x, sum, simplify = TRUE), 0)
+    tbl[is.na(tbl)] <- 0
+    # tbl <- table(x)
+
     labels <- names(tbl)
     if (any(is.na(x))) {
         tbl <- c(tbl, sum(is.na(x)))

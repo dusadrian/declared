@@ -9,13 +9,14 @@ valid from missing values.
 }
 
 \usage{
-frtable(x, values = TRUE, valid = TRUE)
+frtable(x, values = TRUE, valid = TRUE, weight = NULL)
 }
 
 \arguments{
   \item{x}{A categorical variable, either a factor or a \code{declared} variable}
   \item{values}{Logical, print the values in the table rows}
   \item{valid}{Logical, print the valid percentage distribution}
+  \item{weight}{Frequency weight variable}
 }
 
 \details{
