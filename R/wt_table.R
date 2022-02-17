@@ -1,37 +1,68 @@
-`frtable` <- function(x, values = TRUE, valid = TRUE, weight = NULL) {
+`wt_table` <- function(
+    x, wt = NULL, values = TRUE, valid = NA, observed = FALSE
+) {
     
     if (inherits(x, "haven_labelled")) {
         x <- as_declared(x)
     }
     
     if (!is.atomic(x)) {
-        admisc::stopError("The input should be an atomic vector.")
+        admisc::stopError("'x' should be an atomic vector.")
     }
 
     vals <- NULL
     vallab <- NULL
     na_values <- NULL
+
+    if (is.na(valid)) {
+        valid <- any(is.na(x))
+    }
     
     if (inherits(x, "declared")) {
         vallab <- names_values(x) # arranges missing values at the end
         na_values <- attr(vallab, "missing")
-        x <- factor(to_labels(x), levels = names(vallab))
+        # x <- factor(to_labels(x), levels = names(vallab))
+        # sometimes (e.g. ISCO codifications in ESS) there are identical labels
+        # with different values, and factor() complains with overlapping levels
+        x <- factor(
+            paste(to_labels(x), undeclare(x), sep = "_-_"),
+            levels = paste(names(vallab), vallab, sep = "_-_")
+        )
     }
     else {
         values <- FALSE
         lvls <- levels(as.factor(x))
         vallab <- seq(length(lvls))
-        names(vallab) <- levels(as.factor(x))
+        names(vallab) <- lvls
     }
 
-    if (is.null(weight)) {
-        weight <- rep(1, length(x))
+    if (is.null(wt)) {
+        wt <- rep(1, length(x))
     }
-    tbl <- round(tapply(weight, x, sum, simplify = TRUE), 0)
-    tbl[is.na(tbl)] <- 0
+
+    
+    if (!is.atomic(wt) || !is.finite(x)) {
+        admisc::stopError("'wt' should be an atomic vector with finite values.")
+    }
+
+    if (length(x) != length(wt)) {
+        admisc::stopError("Lengths of 'x' and 'wt' differ.")
+    }
+    
     # tbl <- table(x)
+    tbl <- round(tapply(wt, x, sum, simplify = TRUE), 0)
+    tblzero <- is.na(tbl)
+    
+    if (observed) {
+        tbl <- tbl[!tblzero]
+        vallab <- vallab[!tblzero]
+    }
+    else {
+        tbl[tblzero] <- 0
+    }
 
     labels <- names(tbl)
+    labels <- unlist(lapply(strsplit(labels, split = "_-_"), "[[", 1))
     if (any(is.na(x))) {
         tbl <- c(tbl, sum(is.na(x)))
         labels <- c(labels, NA)
@@ -44,9 +75,15 @@
 
     if (valid & (length(missing) > 0 | any(is.na(labels)))) {
         vld <- res$fre
-        vld[which(is.element(vallab, na_values))] <- NA
-        vld[is.na(labels)] <- NA
-        vld <- 100 * prop.table(na.omit(vld))
+        nalabels <- is.element(vallab, na_values)
+        vld[nalabels] <- NA
+
+        if (!observed) {
+            vld[!nalabels & res$fre == 0] <- 0
+        }
+
+        vld[!nalabels & res$fre != 0] <- 100 * prop.table(vld[!nalabels & res$fre != 0])
+        
         res$vld <- NA
         res$vld[seq(length(vld))] <- vld
         res$cpd <- NA
@@ -57,18 +94,18 @@
         res$cpd <- cumsum(res$per)
     }
 
-    attr(res, "show_values") <- values
-    attr(res, "valid") <- valid
-    attr(res, "values") <- as.vector(vallab)
     attr(res, "labels") <- labels
+    attr(res, "values") <- as.vector(vallab)
+    attr(res, "show_values") <- values
     attr(res, "na_values") <- na_values
-    class(res) <- c("frtable", "data.frame")
+    attr(res, "valid") <- valid
+    class(res) <- c("wt_table", "data.frame")
     return(res)
 }
 
 
 
-`print.frtable` <- function(x, force = FALSE, startend = TRUE, ...) {
+`print.wt_table` <- function(x, force = FALSE, startend = TRUE, ...) {
     
     irv <- c(194, 180)
     tick <- unlist(strsplit(rawToChar(as.raw(irv)), split = ""))
@@ -96,6 +133,7 @@
     rnms <- labels
     
     if (show_values) {
+        values <- formatC(as.character(values), digits = max(nchar(values)) - 1, flag = " ")
         labels[!is.na(labels)][values == labels[!is.na(labels)]] <- ""
         rnms[!is.na(labels)] <- paste(labels[!is.na(labels)], values, sep = " ")
     }
@@ -207,4 +245,12 @@
     )
 
     cat(ifelse(startend, "\n", ""))
+}
+
+
+
+
+`frtable` <- function(...) {
+    .Deprecated(msg = "Function frtable() is deprecated, and has been renamed to wt_table()\n")
+    wt_table(...)
 }

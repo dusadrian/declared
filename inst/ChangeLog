@@ -1,12 +1,24 @@
+Version 0.10
+    o New functions wt_var() and wt_sd() to obtain weighted variance and
+      standard deviation using frequency weights
+    o Function frtable() renamed to wt_table()
+    o Argument "weight" changed to "wt" in wt_table()
+    o New argument "observed" in function wt_table()
+    o Fixed a bug in as_haven.declared(), when all values are (declared) missing
+      and labels are not numeric
+
 Version 0.9
-    o New argument "weight" in function frtable()
+    o New argument "weight" in function frtable(), allowing to weight not only
+      valid but also missing values
+    o More robust function frtable() in treating declared values with
+      overlapping labels (e.g. hierarchical ISCO codes and categories)
     o Fixed a bug in declared() when all values are completely missing
 
 Version 0.8
     o Improved treatment of equality and non-equality, now accepting labels as
       well as values
     o Reverted functionality to not dropping the attributes in arithmetic
-      operations, this should be left to the users' choice
+      operations, this is now left to the users' preference
 
 Version 0.7
     o Bug fix saving declared data frames as .csv files

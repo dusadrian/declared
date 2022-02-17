@@ -25,33 +25,60 @@
 
         #------------------------------------------
         # detour until ReadStat deals with integers
-        na_values <- names(na_index)
+        all_na_values <- names(na_index)
         if (is.numeric(x)) {
-            na_values <- as.numeric(na_values)
+            all_na_values <- as.numeric(all_na_values)
         }
-        x[na_index] <- na_values
+        x[na_index] <- all_na_values
         #------------------------------------------
     }
 
     #------------------------------------------
     # detour until ReadStat deals with integers
     na_values <- attrx$na_values
+    pN_na_values <- admisc::possibleNumeric(na_values)
+    labels <- attrx$labels
+    pN_labels <- admisc::possibleNumeric(labels)
+    all_num <- is.numeric(x)
+
     if (!is.null(na_values)) {
-        if (is.numeric(x)) {
+        all_num <- all_num & pN_na_values
+    }
+
+    if (!is.null(labels)) {
+        all_num <- all_num & pN_labels
+    }
+
+    if (all_num) {
+
+        if (!is.null(na_values)) {
             na_values <- as.numeric(na_values)
             names(na_values) <- names(attrx$na_values)
             attrx$na_values <- na_values
         }
-    }
 
-    labels <- attrx$labels
-    if (!is.null(labels)) {
-        if (is.numeric(x)) {
+        if (!is.null(labels)) {
             labels <- as.numeric(labels)
             names(labels) <- names(attrx$labels)
             attrx$labels <- labels
         }
     }
+    else {
+        x <- as.character(x)
+
+        if (!is.null(na_values)) {
+            na_values <- as.character(na_values)
+            names(na_values) <- names(attrx$na_values)
+            attrx$na_values <- na_values
+        }
+
+        if (!is.null(labels)) {
+            labels <- as.character(labels)
+            names(labels) <- names(attrx$labels)
+            attrx$labels <- labels
+        }
+    }
+
     #------------------------------------------
 
     attrx$na_index <- NULL
