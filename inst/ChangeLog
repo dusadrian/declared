@@ -1,9 +1,9 @@
 Version 0.10
-    o New functions wt_var() and wt_sd() to obtain weighted variance and
+    o Function frtable() renamed to w_table() standing for weighted table
+    o New functions w_var() and w_sd() to obtain weighted variance and
       standard deviation using frequency weights
-    o Function frtable() renamed to wt_table()
-    o Argument "weight" changed to "wt" in wt_table()
-    o New argument "observed" in function wt_table()
+    o Argument "weight" changed to "wt" in w_table()
+    o New argument "observed" in function w_table()
     o Fixed a bug in as_haven.declared(), when all values are (declared) missing
       and labels are not numeric
 

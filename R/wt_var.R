@@ -1,4 +1,4 @@
-`wt_var` <- function (
+`w_var` <- function (
     x, wt = NULL, method = NULL, na.rm = TRUE
 ) {
     

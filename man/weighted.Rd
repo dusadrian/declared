@@ -1,7 +1,7 @@
 \name{Weighted summaries and objects}
-\alias{wt_table}
-\alias{wt_var}
-\alias{wt_sd}
+\alias{w_table}
+\alias{w_var}
+\alias{w_sd}
 \alias{frtable}
 
 \title{Compute weighted summaries for declared objects}
@@ -13,11 +13,11 @@ and \bold{\code{Hmisc}}, adapted to objects of class \code{"declared"}.
 }
 
 \usage{
-wt_table(x, wt = NULL, values = TRUE, valid = TRUE, observed = FALSE)
+w_table(x, wt = NULL, values = TRUE, valid = TRUE, observed = FALSE)
 
-wt_var(x, wt = NULL, method = NULL, na.rm = TRUE)
+w_var(x, wt = NULL, method = NULL, na.rm = TRUE)
 
-wt_sd(x, wt = NULL, method = NULL, na.rm = TRUE)
+w_sd(x, wt = NULL, method = NULL, na.rm = TRUE)
 }
 
 
@@ -87,22 +87,22 @@ set.seed(12345)
 
 # a pure categorical variable
 x <- factor(sample(letters[1:5], 215, replace = TRUE))
-wt_table(x)
+w_table(x)
 
 
 # simulate number of children
 x <- sample(0:4, 215, replace = TRUE)
-wt_table(x)
+w_table(x)
 
 # simulate a Likert type response scale from 1 to 7
 values <- sample(c(1:7, -91), 215, replace = TRUE)
 x <- declared(values, labels = c("Good" = 1, "Bad" = 7))
-wt_table(x)
+w_table(x)
 
 
 # Defining missing values
 missing_values(x) <- -91
-wt_table(x)
+w_table(x)
 
 
 # Defined missing values with labels
@@ -113,11 +113,11 @@ x <- declared(
     na_values = -91
 )
 
-wt_table(x)
+w_table(x)
 
 
 # Categories only (without values)
-wt_table(x, values = FALSE)
+w_table(x, values = FALSE)
 
 
 # An example involving multiple variables
@@ -134,9 +134,9 @@ df <- data.frame(
     Children = sample(0:5, 215, replace = TRUE)
 )
 
-using(df, wt_table(Gender), split.by = Area)
+using(df, w_table(Gender), split.by = Area)
 
-using(df, wt_sd(Age), split.by = Gender & Area)
+using(df, w_sd(Age), split.by = Gender & Area)
 
 
 # Weighting: observed frequencies
@@ -151,9 +151,9 @@ df$fweight <- recode(
 )
 
 
-using(df, wt_table(Gender, fweight), split.by = Area)
+using(df, w_table(Gender, fweight), split.by = Area)
 
-using(df, wt_sd(Age, fweight), split.by = Gender & Area)
+using(df, w_sd(Age, fweight), split.by = Gender & Area)
 }
 
 \keyword{functions}

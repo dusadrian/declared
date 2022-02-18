@@ -1,4 +1,4 @@
-`wt_table` <- function(
+`w_table` <- function(
     x, wt = NULL, values = TRUE, valid = NA, observed = FALSE
 ) {
     
@@ -99,13 +99,13 @@
     attr(res, "show_values") <- values
     attr(res, "na_values") <- na_values
     attr(res, "valid") <- valid
-    class(res) <- c("wt_table", "data.frame")
+    class(res) <- c("w_table", "data.frame")
     return(res)
 }
 
 
 
-`print.wt_table` <- function(x, force = FALSE, startend = TRUE, ...) {
+`print.w_table` <- function(x, force = FALSE, startend = TRUE, ...) {
     
     irv <- c(194, 180)
     tick <- unlist(strsplit(rawToChar(as.raw(irv)), split = ""))
@@ -251,6 +251,6 @@
 
 
 `frtable` <- function(...) {
-    .Deprecated(msg = "Function frtable() is deprecated, and has been renamed to wt_table()\n")
-    wt_table(...)
+    .Deprecated(msg = "Function frtable() is deprecated, and has been renamed to w_table()\n")
+    w_table(...)
 }
