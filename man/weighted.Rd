@@ -148,7 +148,7 @@ tp <- rep(c(0.53, 0.47), each = 2) * rep(0.5, 4) / prop.table(obs)
 df$fweight <- recode(
     10 * df$Area + df$Gender,
     sprintf(
-        "11 = %s; 12 = %s; 21 = %s; 22 = %s",
+        "11 = \%s; 12 = \%s; 21 = \%s; 22 = \%s",
         tp[1], tp[2], tp[3], tp[4]
     )
 )
