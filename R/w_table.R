@@ -1,5 +1,6 @@
 `w_table` <- function(
-    x, wt = NULL, values = TRUE, valid = NA, observed = FALSE
+    x, y = NULL, wt = NULL, values = TRUE, valid = TRUE, observed = FALSE,
+    margin = NULL
 ) {
     
     if (inherits(x, "haven_labelled")) {
@@ -10,30 +11,58 @@
         admisc::stopError("'x' should be an atomic vector.")
     }
 
-    vals <- NULL
-    vallab <- NULL
-    na_values <- NULL
+    xvallab <- yvallab <- NULL
+    xna_values <- yna_values <- NULL
+    xvalues <- yvalues <- TRUE
+    crosstab <- !is.null(y)
 
-    if (is.na(valid)) {
-        valid <- any(is.na(x))
-    }
+    valid <- valid && any(is.na(x))
     
     if (inherits(x, "declared")) {
-        vallab <- names_values(x) # arranges missing values at the end
-        na_values <- attr(vallab, "missing")
-        # x <- factor(to_labels(x), levels = names(vallab))
+        xvallab <- names_values(x) # arranges missing values at the end
+        xna_values <- attr(xvallab, "missing")
+        # x <- factor(to_labels(x), levels = names(xvallab))
         # sometimes (e.g. ISCO codifications in ESS) there are identical labels
         # with different values, and factor() complains with overlapping levels
         x <- factor(
             paste(to_labels(x), undeclare(x), sep = "_-_"),
-            levels = paste(names(vallab), vallab, sep = "_-_")
+            levels = paste(names(xvallab), xvallab, sep = "_-_")
         )
     }
     else {
-        values <- FALSE
+        xvalues <- FALSE
         lvls <- levels(as.factor(x))
-        vallab <- seq(length(lvls))
-        names(vallab) <- lvls
+        xvallab <- seq(length(lvls))
+        names(xvallab) <- lvls
+    }
+
+    xy <- list(x = x)
+
+    if (crosstab) {
+        if (!is.atomic(y)) {
+            admisc::stopError("'y' should be an atomic vector.")
+        }
+
+        if (length(x) != length(y)) {
+            admisc::stopError("Lengths of 'x' and 'y' differ.")
+        }
+
+        if (inherits(y, "declared")) {
+            yvallab <- names_values(y)
+            yna_values <- attr(yvallab, "missing")
+            y <- factor(
+                paste(to_labels(y), undeclare(y), sep = "_-_"),
+                levels = paste(names(yvallab), yvallab, sep = "_-_")
+            )
+        }
+        else {
+            yvalues <- FALSE
+            lvls <- levels(as.factor(y))
+            yvallab <- seq(length(lvls))
+            names(yvallab) <- lvls
+        }
+
+        xy$y <- y
     }
 
     if (is.null(wt)) {
@@ -41,65 +70,124 @@
     }
 
     
-    if (!is.atomic(wt) || !is.finite(x)) {
+    if (!is.atomic(wt) || !is.finite(wt)) {
         admisc::stopError("'wt' should be an atomic vector with finite values.")
     }
 
     if (length(x) != length(wt)) {
         admisc::stopError("Lengths of 'x' and 'wt' differ.")
     }
+
+    
     
     # tbl <- table(x)
-    tbl <- round(tapply(wt, x, sum, simplify = TRUE), 0)
-    tblzero <- is.na(tbl)
+    tbl <- as.matrix(tapply(wt, xy, sum))
+    dimnames(tbl) <- unname(dimnames(tbl))
+    
+    tbl[is.na(tbl)] <- 0
+    rs <- rowSums(tbl)
+    cs <- colSums(tbl)
     
     if (observed) {
-        tbl <- tbl[!tblzero]
-        vallab <- vallab[!tblzero]
+        if (crosstab) {
+            xvallab <- xvallab[rs > 0]
+            yvallab <- yvallab[cs > 0]
+            tbl <- tbl[rs > 0, , drop = FALSE]
+            tbl <- tbl[, cs > 0, drop = FALSE]
+            rs <- rs[rs > 0]
+            cs <- cs[cs > 0]
+        }
+        else {
+            tbl <- tbl[rs > 0]
+            xvallab <- xvallab[rs > 0]
+        }
     }
-    else {
-        tbl[tblzero] <- 0
-    }
 
-    labels <- names(tbl)
-    labels <- unlist(lapply(strsplit(labels, split = "_-_"), "[[", 1))
-    if (any(is.na(x))) {
-        tbl <- c(tbl, sum(is.na(x)))
-        labels <- c(labels, NA)
-    }
+    if (crosstab) {
+        res <- tbl
+        if (length(margin)) {
+            if (!is.numeric(margin) || !is.element(margin, 0:2)) {
+                admisc::stopError("'margin' should be an element between 0, 1 and 2.")
+            }
 
-    res <- data.frame(fre = as.vector(tbl))
-
-    res$rel <- prop.table(res$fre)
-    res$per <- res$rel * 100
-
-    if (valid & (length(missing) > 0 | any(is.na(labels)))) {
-        vld <- res$fre
-        nalabels <- is.element(vallab, na_values)
-        vld[nalabels] <- NA
-
-        if (!observed) {
-            vld[!nalabels & res$fre == 0] <- 0
+            res <- switch(margin + 1,
+                prop.table(tbl),
+                prop.table(tbl, 1),
+                prop.table(tbl, 2)
+            )
+        }
+        
+        if (!values) {
+            labels <- rownames(res)
+            labels <- unlist(lapply(strsplit(labels, split = "_-_"), "[[", 1))
+            rownames(res) <- labels
+            labels <- colnames(res)
+            labels <- unlist(lapply(strsplit(labels, split = "_-_"), "[[", 1))
+            colnames(res) <- labels
+        }
+        else {
+            rownames(res) <- gsub("_-_", " ", rownames(res))
+            colnames(res) <- gsub("_-_", " ", colnames(res))
+        }
+        
+        if (is.null(margin) || margin != 1) {
+            res <- rbind(res, Total = colSums(res))
         }
 
-        vld[!nalabels & res$fre != 0] <- 100 * prop.table(vld[!nalabels & res$fre != 0])
-        
-        res$vld <- NA
-        res$vld[seq(length(vld))] <- vld
-        res$cpd <- NA
-        res$cpd[seq(length(vld))] <- cumsum(vld)
+        if (is.null(margin) || margin != 2) {
+            res <- cbind(res, Total = rowSums(res))
+        }
+
+        if (length(margin)) {
+            res <- round(100 * res, 1)
+        }
+        else {
+            res <- round(res, 0)
+        }
     }
     else {
-        valid <- FALSE
-        res$cpd <- cumsum(res$per)
+        labels <- rownames(tbl)
+        labels <- unlist(lapply(strsplit(labels, split = "_-_"), "[[", 1))
+        if (any(is.na(x))) {
+            tbl <- c(tbl, sum(is.na(x)))
+            labels <- c(labels, NA)
+        }
+
+        res <- data.frame(fre = round(as.vector(tbl), 0))
+
+        res$rel <- prop.table(res$fre)
+        res$per <- res$rel * 100
+
+        if (valid & (length(missing) > 0 | any(is.na(labels)))) {
+            vld <- res$fre
+            nalabels <- is.element(xvallab, xna_values)
+            vld[nalabels] <- NA
+
+            if (!observed) {
+                vld[!nalabels & res$fre == 0] <- 0
+            }
+
+            vld[!nalabels & res$fre != 0] <- 100 * prop.table(vld[!nalabels & res$fre != 0])
+            
+            res$vld <- NA
+            res$vld[seq(length(vld))] <- vld
+            res$cpd <- NA
+            res$cpd[seq(length(vld))] <- cumsum(vld)
+        }
+        else {
+            valid <- FALSE
+            res$cpd <- cumsum(res$per)
+        }
+
+        attr(res, "crosstab") <- FALSE
+        attr(res, "labels") <- labels
+        attr(res, "values") <- as.vector(xvallab)
+        attr(res, "show_values") <- values & xvalues
+        attr(res, "na_values") <- xna_values
+        attr(res, "valid") <- valid
+        class(res) <- c("w_table", "data.frame")
     }
 
-    attr(res, "labels") <- labels
-    attr(res, "values") <- as.vector(vallab)
-    attr(res, "show_values") <- values
-    attr(res, "na_values") <- na_values
-    attr(res, "valid") <- valid
-    class(res) <- c("w_table", "data.frame")
     return(res)
 }
 

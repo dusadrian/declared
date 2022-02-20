@@ -1,28 +1,28 @@
-`w_var` <- function (
-    x, wt = NULL, method = NULL, na.rm = TRUE
+`w_mean` <- function (
+    x, wt = NULL, na.rm = TRUE
 ) {
     
     if (inherits(x, "haven_labelled")) {
         x <- as_declared(x)
     }
     
-    if (!(is.atomic(x) && all(is.finite(x)))) {
+    if (!is.atomic(x) || !is.finite(x)) {
         admisc::stopError("'x' should be an atomic vector with finite values.")
     }
 
     if (inherits(x, "declared")) {
         na_index <- attr(x, "na_index")
-        if (length(na_index)) {
+        if (!is.null(na_index)) {
+            wt <- wt[-na_index]
             x <- x[-na_index]
-            wt <- wt[-na_index] # if wt is NULL, the result is still NULL
         }
     }
 
     if (is.null(wt)) {
-        return(var(x, na.rm = na.rm))
+        return(mean(x, na.rm = na.rm))
     }
     
-    if (!(is.atomic(wt) && all(is.finite(wt)))) {
+    if (!is.atomic(wt) || !all(is.finite(wt))) {
         admisc::stopError("'wt' should be an atomic vector with finite values.")
     }
 
@@ -30,6 +30,7 @@
         admisc::stopError("Lengths of 'x' and 'wt' differ.")
     }
     
+
     ok <- !is.na(x + wt)
     
     if (na.rm) {
@@ -45,22 +46,6 @@
     if (any(wt < 0) || sumwt == 0) {
         admisc::stopError("'wt' must be non-negative and not all zero")
     }
-
-    wmean <- sum(wt * x/sumwt)
     
-    if (!is.null(method)) {
-        if (!is.element(method, c("unbiased", "ML"))) {
-            admisc::stopError("Method should be either 'unbiased' or 'ML'.")
-        }
-        
-        result <- sum((sqrt(wt / sumwt) * (x - wmean)) ^ 2)
-        
-        if (method == "unbiased") {
-            return(result / (1 - sum((wt/sumwt)^2)))
-        }
-        
-        return(result)
-    }
-
-    return(sum(wt * (x - wmean)^2)/(sumwt - 1))
+    return(sum(wt * x/sumwt))
 }
