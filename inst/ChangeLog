@@ -1,11 +1,14 @@
 Version 0.10
-    o Function frtable() renamed to w_table() standing for weighted table
-    o New functions w_var() and w_sd() to obtain weighted variance and
-      standard deviation using frequency weights
-    o Argument "weight" changed to "wt" in w_table()
-    o New argument "observed" in function w_table()
+    o New functions w_mean(), w_var() and w_sd(), w_quantile and w_median, to 
+      obtain weighted versions of mean, variance and standard deviation,
+      quantiles and median, respectively, adapted to declared objects
     o Fixed a bug in as_haven.declared(), when all values are (declared) missing
       and labels are not numeric
+    o Argument "weight" changed to "wt" in w_table()
+    o New arguments in function w_table(): "observed" to only print observed
+      values, and "margin" to calculate proportions in crosstabs
+    o Function w_table() now accepts a second argument "y" to create crosstabs
+    o Function frtable() renamed to w_table() standing for weighted table
 
 Version 0.9
     o New argument "weight" in function frtable(), allowing to weight not only

@@ -1,34 +1,50 @@
-\name{Weighted summaries and objects}
+\name{Weighted summaries}
 \alias{w_table}
+\alias{w_mean}
+\alias{w_median}
 \alias{w_var}
 \alias{w_sd}
+\alias{w_quantile}
 \alias{frtable}
 
 \title{Compute weighted summaries for declared objects}
 
 \description{
-Functions to compute weighted summaries, when a vector of frequency weights is
-provided, inspired by similar functions in packages \bold{\code{stats}} and
-and \bold{\code{Hmisc}}, adapted to objects of class \code{"declared"}.
+Functions to compute weighted tables or summaries, based on a vector of frequency
+weights, adapted to objects of class \code{"declared"}.
 }
 
 \usage{
-w_table(x, wt = NULL, values = TRUE, valid = TRUE, observed = FALSE)
+w_table(x, y = NULL, wt = NULL, values = TRUE, valid = TRUE,
+        observed = FALSE, margin = NULL)
+
+w_mean(x, wt = NULL, na.rm = TRUE)
+
+w_median(x, wt, na.rm = TRUE, ...)
 
 w_var(x, wt = NULL, method = NULL, na.rm = TRUE)
 
 w_sd(x, wt = NULL, method = NULL, na.rm = TRUE)
+
+w_quantile(x, wt = NULL, probs = seq(0, 1, 0.25), na.rm = TRUE, ...)
 }
 
 
 \arguments{
-  \item{x}{A numeric vector}
+  \item{x}{A numeric vector for summaries, or numeric / declared / factor for
+      frequency tables}
+  \item{y}{An optional variable, to create crosstabs; must have the same length as x}
   \item{wt}{A numeric vector of frequency weights}
   \item{values}{Logical, print the values in the table rows}
-  \item{valid}{Logical, print the percent distribution for non-missing values}
+  \item{valid}{Logical, print the percent distribution for non-missing values,
+      if any missing values are present}
   \item{observed}{Logical, print the observed categories only}
   \item{method}{Character, specifying how the result is scaled, see 'Details' below.}
+  \item{probs}{Numeric vector of probabilities with values in [0,1].}
   \item{na.rm}{Logical, should (undeclared) missing values be removed?}
+  \item{margin}{Numeric, indicating the margin to calculate crosstab proportions:
+      0 indicates total, 1 indicates rows and 2 indicates columns}
+  \item{...}{Further arguments passed to or from other methods.}
 }
 
 \value{
@@ -77,6 +93,20 @@ employed.
 
 If no frequency weights are provided, the result is identical to the
 corresponding base functions.
+
+The function \code{w_quantile()} extensively borrowed ideas from packages
+\bold{\code{stats}} and \bold{\code{Hmisc}}, to ensure a constant interpolation
+that would produce the same quantiles if no weights are provided or if all
+weights are equal to 1.
+
+Other arguments can be passed to the stats function \code{quantile()} via the
+three dots \code{...} argument, and their extensive explanation is found in the
+corresponding stats function's help page.
+
+For all functions, the argument \code{na.rm} refers to the undeclared missing
+values and its default is set to TRUE. The declared missing values are
+automatically eliminated from the summary statistics, even if this argument is
+deactivated.
 }
 
 \author{Adrian Dusa}
@@ -153,10 +183,11 @@ df$fweight <- recode(
     )
 )
 
+using(df, w_table(Gender, wt = fweight), split.by = Area)
 
-using(df, w_table(Gender, fweight), split.by = Area)
+using(df, w_mean(Age, wt = fweight), split.by = Gender & Area)
 
-using(df, w_sd(Age, fweight), split.by = Gender & Area)
+using(df, w_quantile(Age, wt = fweight), split.by = Area)
 }
 
 \keyword{functions}

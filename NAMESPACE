@@ -19,9 +19,12 @@ export(
     to_labels,
     undeclare,
     value_labels,
+    w_mean,
+    w_median,
     w_sd,
     w_table,
     w_var,
+    w_quantile,
     "value_labels<-",
     variable_label,
     "variable_label<-"
