@@ -169,17 +169,17 @@ using(df, w_table(Gender), split.by = Area)
 using(df, w_sd(Age), split.by = Gender & Area)
 
 
-# Weighting: observed frequencies
-obs <- with(df, table(Gender, Area))
+# Weighting: observed proportions
+obsp <- prop.table(with(df, table(Gender, Area)))
 
 # Theoretical proportions: 53% Rural, and 50% Males
-tp <- rep(c(0.53, 0.47), each = 2) * rep(0.5, 4) / prop.table(obs)
+thp <- rep(c(0.53, 0.47), each = 2) * rep(c(0.498, 0.502), 2) / obsp
 
 df$fweight <- recode(
     10 * df$Area + df$Gender,
     sprintf(
         "11 = \%s; 12 = \%s; 21 = \%s; 22 = \%s",
-        tp[1], tp[2], tp[3], tp[4]
+        thp[1], thp[2], thp[3], thp[4]
     )
 )
 

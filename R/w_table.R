@@ -16,7 +16,7 @@
     xvalues <- yvalues <- TRUE
     crosstab <- !is.null(y)
 
-    valid <- valid && any(is.na(x))
+    valid <- isTRUE(valid) && any(is.na(x))
     
     if (inherits(x, "declared")) {
         xvallab <- names_values(x) # arranges missing values at the end
@@ -80,7 +80,6 @@
 
     
     
-    # tbl <- table(x)
     tbl <- as.matrix(tapply(wt, xy, sum))
     dimnames(tbl) <- unname(dimnames(tbl))
     
@@ -88,7 +87,7 @@
     rs <- rowSums(tbl)
     cs <- colSums(tbl)
     
-    if (observed) {
+    if (isTRUE(observed)) {
         if (crosstab) {
             xvallab <- xvallab[rs > 0]
             yvallab <- yvallab[cs > 0]
@@ -98,36 +97,37 @@
             cs <- cs[cs > 0]
         }
         else {
-            tbl <- tbl[rs > 0]
+            tbl <- tbl[rs > 0, , drop = FALSE]
             xvallab <- xvallab[rs > 0]
         }
     }
 
     if (crosstab) {
-        res <- tbl
+        res <- round(tbl, 0)
+        
         if (length(margin)) {
             if (!is.numeric(margin) || !is.element(margin, 0:2)) {
-                admisc::stopError("'margin' should be an element between 0, 1 and 2.")
+                admisc::stopError("'margin' should be a number between 0, 1 and 2.")
             }
 
             res <- switch(margin + 1,
-                prop.table(tbl),
-                prop.table(tbl, 1),
-                prop.table(tbl, 2)
+                prop.table(res),
+                prop.table(res, 1),
+                prop.table(res, 2)
             )
         }
         
-        if (!values) {
+        if (isTRUE(values)) {
+            rownames(res) <- gsub("_-_", " ", rownames(res))
+            colnames(res) <- gsub("_-_", " ", colnames(res))
+        }
+        else {
             labels <- rownames(res)
             labels <- unlist(lapply(strsplit(labels, split = "_-_"), "[[", 1))
             rownames(res) <- labels
             labels <- colnames(res)
             labels <- unlist(lapply(strsplit(labels, split = "_-_"), "[[", 1))
             colnames(res) <- labels
-        }
-        else {
-            rownames(res) <- gsub("_-_", " ", rownames(res))
-            colnames(res) <- gsub("_-_", " ", colnames(res))
         }
         
         if (is.null(margin) || margin != 1) {
@@ -141,13 +141,11 @@
         if (length(margin)) {
             res <- round(100 * res, 1)
         }
-        else {
-            res <- round(res, 0)
-        }
     }
     else {
         labels <- rownames(tbl)
         labels <- unlist(lapply(strsplit(labels, split = "_-_"), "[[", 1))
+        
         if (any(is.na(x))) {
             tbl <- c(tbl, sum(is.na(x)))
             labels <- c(labels, NA)
@@ -179,7 +177,6 @@
             res$cpd <- cumsum(res$per)
         }
 
-        attr(res, "crosstab") <- FALSE
         attr(res, "labels") <- labels
         attr(res, "values") <- as.vector(xvallab)
         attr(res, "show_values") <- values & xvalues
