@@ -35,7 +35,7 @@
         xvallab <- seq(length(lvls))
         names(xvallab) <- lvls
     }
-return(xvallab)
+
     xy <- list(x = x)
 
     if (crosstab) {
