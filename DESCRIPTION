@@ -1,5 +1,5 @@
 Package: declared
-Version: 0.10
+Version: 0.10-5
 Date: 2022-02-22
 Title: Functions to Declare Missing Values
 Authors@R: person(given = "Adrian", family = "Dusa",
