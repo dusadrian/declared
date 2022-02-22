@@ -18,7 +18,7 @@ labelled objects with existing values declared as missing.
     Package: \tab declared\cr
     Type: \tab Package\cr
     Version: \tab 0.10\cr
-    Date: \tab 2022-02-11\cr
+    Date: \tab 2022-02-22\cr
     License: \tab GPL-v3\cr
     }
 }

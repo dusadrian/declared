@@ -35,7 +35,7 @@
         xvallab <- seq(length(lvls))
         names(xvallab) <- lvls
     }
-
+return(xvallab)
     xy <- list(x = x)
 
     if (crosstab) {
@@ -68,9 +68,9 @@
     if (is.null(wt)) {
         wt <- rep(1, length(x))
     }
-
     
-    if (!is.atomic(wt) || !is.finite(wt)) {
+    
+    if (!(is.atomic(wt) && all(is.finite(wt)))) {
         admisc::stopError("'wt' should be an atomic vector with finite values.")
     }
 

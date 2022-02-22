@@ -31,8 +31,8 @@ w_quantile(x, wt = NULL, probs = seq(0, 1, 0.25), na.rm = TRUE, ...)
 
 
 \arguments{
-  \item{x}{A numeric vector for summaries, or numeric / declared / factor for
-      frequency tables}
+  \item{x}{A numeric vector for summaries, or declared / factor for frequency
+      tables}
   \item{y}{An optional variable, to create crosstabs; must have the same length as x}
   \item{wt}{A numeric vector of frequency weights}
   \item{values}{Logical, print the values in the table rows}
@@ -43,7 +43,7 @@ w_quantile(x, wt = NULL, probs = seq(0, 1, 0.25), na.rm = TRUE, ...)
   \item{probs}{Numeric vector of probabilities with values in [0,1].}
   \item{na.rm}{Logical, should (undeclared) missing values be removed?}
   \item{margin}{Numeric, indicating the margin to calculate crosstab proportions:
-      0 indicates total, 1 indicates rows and 2 indicates columns}
+      0 from the total, 1 from row totals and 2 from column totals}
   \item{...}{Further arguments passed to or from other methods.}
 }
 
@@ -170,16 +170,16 @@ using(df, w_sd(Age), split.by = Gender & Area)
 
 
 # Weighting: observed proportions
-obsp <- prop.table(with(df, table(Gender, Area)))
+op <- prop.table(with(df, table(Gender, Area)))
 
-# Theoretical proportions: 53% Rural, and 50% Males
-thp <- rep(c(0.53, 0.47), each = 2) * rep(c(0.498, 0.502), 2) / obsp
+# Theoretical proportions: 53% Rural, and 50% Females
+tp <- rep(c(0.53, 0.47), each = 2) * rep(c(0.498, 0.502), 2) / op
 
 df$fweight <- recode(
     10 * df$Area + df$Gender,
     sprintf(
         "11 = \%s; 12 = \%s; 21 = \%s; 22 = \%s",
-        thp[1], thp[2], thp[3], thp[4]
+        tp[1], tp[2], tp[3], tp[4]
     )
 )
 
