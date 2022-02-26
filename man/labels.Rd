@@ -7,8 +7,8 @@
 \title{Get / Declare missing values}
 
 \description{
-Functions to extract information about the declared missing values, or to
-declare such values if they are present in the data.
+Functions to extract information about the declared variable / value labels, or
+to declare such values if they are present in the data.
 }
 
 \usage{
@@ -23,7 +23,7 @@ variable_label(x) <- value
 
 
 \arguments{
-\item{x}{A vector.}
+\item{x}{A declared vector.}
 
 \item{prefixed}{Logical, prefix labels with values.}
 
@@ -53,4 +53,6 @@ value_labels(x) <- c(Good = 1, Bad = 5, DK = -1, NotApplicable = -2)
 variable_label(x)
 
 variable_label(x) <- "This is a proper label"
+
+x
 }

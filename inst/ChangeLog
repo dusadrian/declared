@@ -1,3 +1,7 @@
+Version 0.11
+    o Fixed w_table(), an internal object was inadvertently returned.
+    o Improved printing of crosstables
+
 Version 0.10
     o New functions w_mean(), w_var() and w_sd(), w_quantile and w_median, to 
       obtain weighted versions of mean, variance and standard deviation,

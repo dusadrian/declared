@@ -113,7 +113,7 @@ deactivated.
 
 
 \examples{
-set.seed(12345)
+set.seed(215)
 
 # a pure categorical variable
 x <- factor(sample(letters[1:5], 215, replace = TRUE))
@@ -170,7 +170,7 @@ using(df, w_sd(Age), split.by = Gender & Area)
 
 
 # Weighting: observed proportions
-op <- prop.table(with(df, table(Gender, Area)))
+op <- prop.table(using(df, table(Gender, Area)))
 
 # Theoretical proportions: 53% Rural, and 50% Females
 tp <- rep(c(0.53, 0.47), each = 2) * rep(c(0.498, 0.502), 2) / op
