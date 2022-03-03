@@ -4,6 +4,7 @@
 \alias{w_median}
 \alias{w_var}
 \alias{w_sd}
+\alias{w_summary}
 \alias{w_quantile}
 \alias{frtable}
 
@@ -25,6 +26,8 @@ w_median(x, wt, na.rm = TRUE, ...)
 w_var(x, wt = NULL, method = NULL, na.rm = TRUE)
 
 w_sd(x, wt = NULL, method = NULL, na.rm = TRUE)
+
+w_summary(x, wt = NULL, ...)
 
 w_quantile(x, wt = NULL, probs = seq(0, 1, 0.25), na.rm = TRUE, ...)
 }

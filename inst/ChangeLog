@@ -1,5 +1,8 @@
+Version 0.12
+    o New function w_summary()
+
 Version 0.11
-    o Fixed w_table(), an internal object was inadvertently returned.
+    o Fixed w_table(), an internal object was inadvertently returned
     o Improved printing of crosstables
 
 Version 0.10
