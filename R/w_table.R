@@ -69,7 +69,7 @@
     }
     
     
-    if (!(is.atomic(wt) && all(is.finite(wt)))) {
+    if (!(is.atomic(wt) && all(is.finite(na.omit(wt))))) {
         admisc::stopError("'wt' should be an atomic vector with finite values.")
     }
 

@@ -6,7 +6,7 @@
         x <- as_declared(x)
     }
     
-    if (!(is.atomic(x) && all(is.finite(x)))) {
+    if (!(is.atomic(x) && all(is.finite(na.omit(x))))) {
         admisc::stopError("'x' should be an atomic vector with finite values.")
     }
 
@@ -22,7 +22,7 @@
         return(var(x, na.rm = na.rm))
     }
     
-    if (!(is.atomic(wt) && all(is.finite(wt)))) {
+    if (!(is.atomic(wt) && all(is.finite(na.omit(wt))))) {
         admisc::stopError("'wt' should be an atomic vector with finite values.")
     }
 
