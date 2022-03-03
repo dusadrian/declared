@@ -9,16 +9,17 @@ Functions to Declare Missing Values
 }
 
 \description{
-A set of functions that offer an alternative to package 'haven', to deal with
-labelled objects with existing values declared as missing.
+A set of functions to declare labels and missing values, coupled with associated
+functions to create (weighted) tables of frequencies and various other summary
+measures.
 }
 
 \details{
     \tabular{ll}{
     Package: \tab declared\cr
     Type: \tab Package\cr
-    Version: \tab 0.10\cr
-    Date: \tab 2022-02-22\cr
+    Version: \tab 0.11\cr
+    Date: \tab 2022-03-01\cr
     License: \tab GPL-v3\cr
     }
 }

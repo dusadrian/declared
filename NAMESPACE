@@ -32,6 +32,7 @@ export(
 
 
 S3method(print, w_table)
+S3method(print, w_quantile)
 
 S3method(format, pillar_shaft_declared_chr)
 S3method(format, pillar_shaft_declared_num)

@@ -1,5 +1,5 @@
 `w_table` <- function(
-    x, y = NULL, wt = NULL, values = TRUE, valid = TRUE, observed = FALSE,
+    x, y = NULL, wt = NULL, values = FALSE, valid = TRUE, observed = FALSE,
     margin = NULL
 ) {
     
@@ -37,7 +37,6 @@
     }
 
     xy <- list(x = x)
-
     if (crosstab) {
         if (!is.atomic(y)) {
             admisc::stopError("'y' should be an atomic vector.")
@@ -80,7 +79,7 @@
 
     
     
-    tbl <- as.matrix(tapply(wt, xy, sum))
+    tbl <- round(as.matrix(tapply(wt, xy, sum)), 0)
     dimnames(tbl) <- unname(dimnames(tbl))
     
     tbl[is.na(tbl)] <- 0
@@ -103,7 +102,7 @@
     }
 
     if (crosstab) {
-        res <- round(tbl, 0)
+        res <- tbl
         
         if (length(margin)) {
             if (!is.numeric(margin) || !is.element(margin, 0:2)) {
@@ -143,7 +142,11 @@
             labels <- c(labels, NA)
         }
 
-        res <- data.frame(fre = round(as.vector(tbl), 0))
+        if (isTRUE(observed)) {
+            tbl <- tbl[tbl > 0]
+        }
+
+        res <- data.frame(fre = tbl)
 
         res$rel <- prop.table(res$fre)
         res$per <- res$rel * 100
@@ -152,12 +155,13 @@
             vld <- res$fre
             nalabels <- is.element(xvallab, xna_values)
             vld[nalabels] <- NA
+            vld[is.na(labels)] <- NA
+            
+            lna <- seq(length(nalabels))
 
-            if (!observed) {
-                vld[!nalabels & res$fre == 0] <- 0
-            }
-
-            vld[!nalabels & res$fre != 0] <- 100 * prop.table(vld[!nalabels & res$fre != 0])
+            vld[seq(sum(!nalabels))] <- 100 * prop.table(
+                vld[seq(sum(!nalabels))]
+            )
             
             res$vld <- NA
             res$vld[seq(length(vld))] <- vld
@@ -229,7 +233,7 @@
             cnms <- unlist(lapply(strsplit(cnms, split = "_-_"), "[[", 1))
         }
 
-        max.nchar.cols <- max(nchar(encodeString(cnms)))
+        max.nchar.cols <- max(nchar(c(encodeString(cnms), x)))
         for (i in seq(length(cnms))) {
             if (nchar(cnms[i]) < max.nchar.cols) {
                 cnms[i] <- admisc::padBoth(cnms[i], max.nchar.cols - nchar(cnms[i]))
@@ -246,9 +250,9 @@
         class(x) <- setdiff(class(x), "w_table")
         attr(x, "xvalues") <- NULL
         attr(x, "yvalues") <- NULL
-        cat("\n")
+        cat(ifelse(startend, "\n", ""))
         print(noquote(x))
-        cat("\n")
+        cat(ifelse(startend, "\n", ""))
     }
     else {
         show_values <- attr(x, "show_values")

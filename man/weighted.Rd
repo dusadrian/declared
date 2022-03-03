@@ -15,7 +15,7 @@ weights, adapted to objects of class \code{"declared"}.
 }
 
 \usage{
-w_table(x, y = NULL, wt = NULL, values = TRUE, valid = TRUE,
+w_table(x, y = NULL, wt = NULL, values = FALSE, valid = TRUE,
         observed = FALSE, margin = NULL)
 
 w_mean(x, wt = NULL, na.rm = TRUE)
