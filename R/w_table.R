@@ -79,7 +79,7 @@
 
     
     
-    tbl <- round(as.matrix(tapply(wt, xy, sum)), 0)
+    tbl <- round(as.matrix(tapply(wt, xy, sum, na.rm = TRUE)), 0)
     dimnames(tbl) <- unname(dimnames(tbl))
     
     tbl[is.na(tbl)] <- 0
@@ -110,9 +110,9 @@
             }
 
             res <- switch(margin + 1,
-                prop.table(res),
-                prop.table(res, 1),
-                prop.table(res, 2)
+                proportions(res),
+                proportions(res, 1),
+                proportions(res, 2)
             )
         }
         
@@ -148,7 +148,7 @@
 
         res <- data.frame(fre = tbl)
 
-        res$rel <- prop.table(res$fre)
+        res$rel <- proportions(res$fre)
         res$per <- res$rel * 100
 
         if (valid & (length(missing) > 0 | any(is.na(labels)))) {
@@ -159,7 +159,7 @@
             
             lna <- seq(length(nalabels))
 
-            vld[seq(sum(!nalabels))] <- 100 * prop.table(
+            vld[seq(sum(!nalabels))] <- 100 * proportions(
                 vld[seq(sum(!nalabels))]
             )
             
