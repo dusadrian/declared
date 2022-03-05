@@ -116,7 +116,7 @@ undeclare(x)
 
 
 set.seed(123)
-df <- data.frame(
+DF <- data.frame(
     Area = declared(
         sample(1:2, 123, replace = TRUE),
         labels = c(Urban = 1, Rural = 2)
@@ -130,11 +130,8 @@ df <- data.frame(
     Children = sample(0:5, 123, replace = TRUE)
 )
 
-library(admisc)
+using(DF, mean(Children), split.by = Area)
 
-using(df, mean(Children), split.by = Area)
-
-using(df, mean(Age), split.by = Gender & Area)
-
+using(DF, mean(Age), split.by = Gender & Area)
 
 }
