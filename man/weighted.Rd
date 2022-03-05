@@ -19,7 +19,7 @@ weights, adapted to objects of class \code{"declared"}.
 w_table(x, y = NULL, wt = NULL, values = FALSE, valid = TRUE,
         observed = FALSE, margin = NULL)
 
-w_mean(x, wt = NULL, na.rm = TRUE)
+w_mean(x, wt = NULL, trim = 0, na.rm = TRUE)
 
 w_median(x, wt, na.rm = TRUE, ...)
 
@@ -36,14 +36,19 @@ w_quantile(x, wt = NULL, probs = seq(0, 1, 0.25), na.rm = TRUE, ...)
 \arguments{
   \item{x}{A numeric vector for summaries, or declared / factor for frequency
       tables}
-  \item{y}{An optional variable, to create crosstabs; must have the same length as x}
+  \item{y}{An optional variable, to create crosstabs; must have the same length
+      as x}
   \item{wt}{A numeric vector of frequency weights}
   \item{values}{Logical, print the values in the table rows}
   \item{valid}{Logical, print the percent distribution for non-missing values,
       if any missing values are present}
   \item{observed}{Logical, print the observed categories only}
-  \item{method}{Character, specifying how the result is scaled, see 'Details' below.}
+  \item{method}{Character, specifying how the result is scaled, see 'Details'
+      below.}
   \item{probs}{Numeric vector of probabilities with values in [0,1].}
+  \item{trim}{A fraction (0 to 0.5) of observations to be trimmed from each end
+      of x before the mean is computed. Values of trim outside that range are
+      taken as the nearest endpoint.}
   \item{na.rm}{Logical, should (undeclared) missing values be removed?}
   \item{margin}{Numeric, indicating the margin to calculate crosstab proportions:
       0 from the total, 1 from row totals and 2 from column totals}
@@ -154,7 +159,7 @@ w_table(x, values = FALSE)
 
 
 # An example involving multiple variables
-df <- data.frame(
+DF <- data.frame(
     Area = declared(
         sample(1:2, 215, replace = TRUE, prob = c(0.45, 0.55)),
         labels = c(Rural = 1, Urban = 2)
@@ -167,30 +172,30 @@ df <- data.frame(
     Children = sample(0:5, 215, replace = TRUE)
 )
 
-using(df, w_table(Gender), split.by = Area)
+using(DF, w_table(Gender), split.by = Area)
 
-using(df, w_sd(Age), split.by = Gender & Area)
+using(DF, w_sd(Age), split.by = Gender & Area)
 
 
 # Weighting: observed proportions
-op <- prop.table(using(df, table(Gender, Area)))
+op <- proportions(using(DF, table(Gender, Area)))
 
 # Theoretical proportions: 53% Rural, and 50% Females
 tp <- rep(c(0.53, 0.47), each = 2) * rep(c(0.498, 0.502), 2) / op
 
 df$fweight <- recode(
-    10 * df$Area + df$Gender,
+    10 * DF$Area + DF$Gender,
     sprintf(
         "11 = \%s; 12 = \%s; 21 = \%s; 22 = \%s",
         tp[1], tp[2], tp[3], tp[4]
     )
 )
 
-using(df, w_table(Gender, wt = fweight), split.by = Area)
+using(DF, w_table(Gender, wt = fweight), split.by = Area)
 
-using(df, w_mean(Age, wt = fweight), split.by = Gender & Area)
+using(DF, w_mean(Age, wt = fweight), split.by = Gender & Area)
 
-using(df, w_quantile(Age, wt = fweight), split.by = Area)
+using(DF, w_quantile(Age, wt = fweight), split.by = Area)
 }
 
 \keyword{functions}
