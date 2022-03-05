@@ -63,7 +63,8 @@
 
         # when this will be implemented in the base package:
         # ox <- sort.list(x, partial = unique(c(lo, hi)))
-        lohi <- order(x)[lo:hi]
+        lohi <- order(wt * x)[lo:hi]
+        
         x <- x[lohi]
         wt <- wt[lohi]
         sumwt <- sum(wt)
