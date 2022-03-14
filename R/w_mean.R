@@ -6,7 +6,7 @@
         x <- as_declared(x)
     }
 
-    if (!(is.atomic(x) && is.numeric(x) && is.complex(x) && is.logical(x))) {
+    if (!(is.atomic(x) && (is.numeric(x) || is.complex(x) || is.logical(x)))) {
         warning("'x' should be a numerical / logical vector: returning NA")
         return(NA_real_)
     }

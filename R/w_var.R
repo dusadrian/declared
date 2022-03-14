@@ -6,7 +6,7 @@
         x <- as_declared(x)
     }
     
-    if (!(is.atomic(x) && all(is.finite(na.omit(x))))) {
+    if (!(is.atomic(x) && (is.numeric(x) || is.complex(x) || is.logical(x)))) {
         admisc::stopError("'x' should be an atomic vector with finite values.")
     }
 
