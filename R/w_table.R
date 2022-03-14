@@ -78,8 +78,8 @@
     }
 
     
-    
-    tbl <- round(as.matrix(tapply(wt, xy, sum, na.rm = TRUE)), 0)
+    orig <- tapply(wt, xy, sum, na.rm = TRUE)
+    tbl <- round(as.matrix(orig), 0)
     dimnames(tbl) <- unname(dimnames(tbl))
     
     tbl[is.na(tbl)] <- 0
@@ -102,36 +102,36 @@
     }
 
     if (crosstab) {
-        res <- tbl
+        toprint <- tbl
         
         if (length(margin)) {
             if (!is.numeric(margin) || !is.element(margin, 0:2)) {
                 admisc::stopError("'margin' should be a number between 0, 1 and 2.")
             }
 
-            res <- switch(margin + 1,
-                proportions(res),
-                proportions(res, 1),
-                proportions(res, 2)
+            toprint <- switch(margin + 1,
+                proportions(toprint),
+                proportions(toprint, 1),
+                proportions(toprint, 2)
             )
         }
         
         if (is.null(margin) || margin != 1) {
-            res <- rbind(res, Total = colSums(res))
+            toprint <- rbind(toprint, Total = colSums(toprint))
         }
 
         if (is.null(margin) || margin != 2) {
-            res <- cbind(res, Total = rowSums(res))
+            toprint <- cbind(toprint, Total = rowSums(toprint))
         }
 
         if (length(margin)) {
-            res <- round(100 * res, 1)
+            toprint <- round(100 * toprint, 1)
         }
 
-        attr(res, "xvalues") <- isTRUE(values) & xvalues
-        attr(res, "yvalues") <- isTRUE(values) & yvalues
+        attr(toprint, "xvalues") <- isTRUE(values) & xvalues
+        attr(toprint, "yvalues") <- isTRUE(values) & yvalues
 
-        class(res) <- c("w_table", "matrix")
+        # class(toprint) <- c("w_table", "matrix")
     }
     else {
         labels <- rownames(tbl)
@@ -146,13 +146,13 @@
             tbl <- tbl[tbl > 0]
         }
 
-        res <- data.frame(fre = tbl)
+        toprint <- data.frame(fre = tbl)
 
-        res$rel <- proportions(res$fre)
-        res$per <- res$rel * 100
+        toprint$rel <- proportions(toprint$fre)
+        toprint$per <- toprint$rel * 100
 
         if (valid & (length(missing) > 0 | any(is.na(labels)))) {
-            vld <- res$fre
+            vld <- toprint$fre
             nalabels <- is.element(xvallab, xna_values)
             vld[nalabels] <- NA
             vld[is.na(labels)] <- NA
@@ -163,30 +163,41 @@
                 vld[seq(sum(!nalabels))]
             )
             
-            res$vld <- NA
-            res$vld[seq(length(vld))] <- vld
-            res$cpd <- NA
-            res$cpd[seq(length(vld))] <- cumsum(vld)
+            toprint$vld <- NA
+            toprint$vld[seq(length(vld))] <- vld
+            toprint$cpd <- NA
+            toprint$cpd[seq(length(vld))] <- cumsum(vld)
         }
         else {
             valid <- FALSE
-            res$cpd <- cumsum(res$per)
+            toprint$cpd <- cumsum(toprint$per)
         }
 
-        attr(res, "labels") <- labels
-        attr(res, "values") <- as.vector(xvallab)
-        attr(res, "show_values") <- values & xvalues
-        attr(res, "na_values") <- xna_values
-        attr(res, "valid") <- valid
-        class(res) <- c("w_table", "data.frame")
+        attr(toprint, "labels") <- labels
+        attr(toprint, "values") <- as.vector(xvallab)
+        attr(toprint, "show_values") <- values & xvalues
+        attr(toprint, "na_values") <- xna_values
+        attr(toprint, "valid") <- valid
+        # class(toprint) <- c("w_table", "data.frame")
     }
-
-    return(res)
+    
+    if (is.matrix(orig)) {
+        rownames(orig) <- names(xvallab)
+        colnames(orig) <- names(yvallab)
+    }
+    else {
+        names(orig) <- names(xvallab)
+    }
+    
+    attr(orig, "toprint") <- toprint
+    class(orig) <- c("w_table", class(orig))
+    return(orig)
 }
 
 
 
 `print.w_table` <- function(x, force = FALSE, startend = TRUE, ...) {
+    x <- attr(x, "toprint")
     
     irv <- c(194, 180)
     tick <- unlist(strsplit(rawToChar(as.raw(irv)), split = ""))
@@ -251,6 +262,7 @@
         attr(x, "xvalues") <- NULL
         attr(x, "yvalues") <- NULL
         cat(ifelse(startend, "\n", ""))
+        class(x) <- setdiff(class(x), "array")
         print(noquote(x))
         cat(ifelse(startend, "\n", ""))
     }
