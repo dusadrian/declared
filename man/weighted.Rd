@@ -183,7 +183,7 @@ op <- proportions(using(DF, table(Gender, Area)))
 # Theoretical proportions: 53% Rural, and 50% Females
 tp <- rep(c(0.53, 0.47), each = 2) * rep(c(0.498, 0.502), 2) / op
 
-df$fweight <- recode(
+DF$fweight <- recode(
     10 * DF$Area + DF$Gender,
     sprintf(
         "11 = \%s; 12 = \%s; 21 = \%s; 22 = \%s",
