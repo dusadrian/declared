@@ -18,8 +18,8 @@ measures.
     \tabular{ll}{
     Package: \tab declared\cr
     Type: \tab Package\cr
-    Version: \tab 0.11\cr
-    Date: \tab 2022-03-01\cr
+    Version: \tab 0.12\cr
+    Date: \tab 2022-03-14\cr
     License: \tab GPL-v3\cr
     }
 }
