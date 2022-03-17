@@ -8,6 +8,7 @@
 \alias{w_quantile}
 \alias{frtable}
 
+
 \title{Compute weighted summaries for declared objects}
 
 \description{
@@ -56,7 +57,7 @@ w_quantile(x, wt = NULL, probs = seq(0, 1, 0.25), na.rm = TRUE, ...)
 }
 
 \value{
-A weighted variance or standard deviation.
+A vector of (weighted) values.
 }
 
 \details{
@@ -64,14 +65,14 @@ A frequency table is usually performed for a categorical variable, displaying th
 frequencies of the respective categories. Note that general variables containing
 text are not necessarily factors, despite having a small number of characters.
 
-It is sometimes possible to perform a frequency table for numerical variables,
-if the number of values is very limited (an arbitrary and debatable upper limit
-of 15 is used). An example of such variable can be the number of children, where
-each value can be interpreted as a class, containing a single value (for
-instance 0 meaning the category of people with no children).
+It is also possible to perform a frequency table for numerical variables, if the
+number of values is limited (an arbitrary and debatable upper limit of 15 is used).
+An example of such variable can be the number of children, where each value can
+be interpreted as a class, containing a single value (for instance 0 meaning the
+category of people with no children).
 
 Objects of class \code{declared} are not pure categorical variables (R factors)
-but they are nevertheless interpreted as similar to factors, to allow producing
+but they are nevertheless interpreted similarly to factors, to allow producing
 frequency tables. Given the high similarity with package \bold{\code{haven}},
 objects of class \code{haven_labelled_spss} are automatically coerced to objects
 of class \code{declared} and treated accordingly.
