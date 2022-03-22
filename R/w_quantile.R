@@ -72,7 +72,7 @@
     lp <- length(probs)
     qs <- (1 - index) * both[seq(1, lp)] + index * both[-seq(1, lp)]
 
-    qs <- admisc::coerceMode(round(qs, 3))
+    qs <- admisc::coerceMode(qs)
 
     names(qs) <- paste0(format(100 * probs, trim = TRUE), "%")
 
