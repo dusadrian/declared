@@ -2,6 +2,7 @@
 \alias{w_table}
 \alias{w_mean}
 \alias{w_median}
+\alias{w_mode}
 \alias{w_var}
 \alias{w_sd}
 \alias{w_summary}
@@ -22,7 +23,9 @@ w_table(x, y = NULL, wt = NULL, values = FALSE, valid = TRUE,
 
 w_mean(x, wt = NULL, trim = 0, na.rm = TRUE)
 
-w_median(x, wt, na.rm = TRUE, ...)
+w_median(x, wt = NULL, na.rm = TRUE, ...)
+
+w_mode(x, wt = NULL)
 
 w_var(x, wt = NULL, method = NULL, na.rm = TRUE)
 
@@ -116,6 +119,11 @@ For all functions, the argument \code{na.rm} refers to the undeclared missing
 values and its default is set to TRUE. The declared missing values are
 automatically eliminated from the summary statistics, even if this argument is
 deactivated.
+
+The function \code{w_mode()} returns the weighted mode of a variable. Unlike the
+other functions where the prefix \code{w_} signals a weighted version of the
+base function with the same name, this has nothing to do with the base function
+\code{mode()} which refers to the storage mode / type of an R object.
 }
 
 \author{Adrian Dusa}
