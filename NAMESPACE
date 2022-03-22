@@ -21,11 +21,13 @@ export(
     value_labels,
     w_mean,
     w_median,
+    w_mode,
     w_sd,
     w_summary,
     w_table,
     w_var,
     w_quantile,
+    w_standardize,
     "value_labels<-",
     variable_label,
     "variable_label<-"

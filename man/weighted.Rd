@@ -7,6 +7,7 @@
 \alias{w_sd}
 \alias{w_summary}
 \alias{w_quantile}
+\alias{w_standardize}
 \alias{frtable}
 
 
@@ -34,6 +35,8 @@ w_sd(x, wt = NULL, method = NULL, na.rm = TRUE)
 w_summary(x, wt = NULL, ...)
 
 w_quantile(x, wt = NULL, probs = seq(0, 1, 0.25), na.rm = TRUE, ...)
+
+w_standardize(x, wt = NULL, na.rm = TRUE)
 }
 
 
