@@ -70,5 +70,5 @@
         sumwt <- sum(wt)
     }
 
-    return(sum(wt * x/sumwt))
+    return(sum(wt * x)/sumwt)
 }
