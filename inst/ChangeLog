@@ -1,6 +1,7 @@
 Version 0.13
-    o New function w_mode()
+    o New functions w_mode() and w_standardize()
     o Fixed x_summary(), summaries should not be rounded by default
+    o Fixed w_mean() to weight negative values
 
 Version 0.12
     o New function w_summary()
