@@ -1,3 +1,7 @@
+Version 0.13
+    o New function w_mode()
+    o Fixed x_summary(), summaries should not be rounded by default
+
 Version 0.12
     o New function w_summary()
     o Functions w_table() and w_quantile() now properly deal with missing weights
