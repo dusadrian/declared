@@ -58,13 +58,23 @@
 }
 
 
+`is.declared` <- function(x) {
+    inherits(x, "declared")
+}
+
+
 `as_declared` <- function(x, ...) {
     UseMethod("as_declared")
 }
 
 
+`as.declared` <- function(x, ...) {
+    UseMethod("as_declared")
+}
+
+
 `as_declared.default` <- function(x, ...) {
-    return(x)
+    return(declared(x))
 }
 
 
@@ -119,8 +129,7 @@
 
 
 `as_declared.factor` <- function(x, ...) {
-    # TO DO, but for the moment, do nothing
-    return(x)
+    return(declared(x, ... = ...))
 }
 
 
@@ -131,17 +140,21 @@
 }
 
 
-`undeclare` <- function(x, ...) {
+`undeclare` <- function(x, drop = FALSE, ...) {
     UseMethod("undeclare")
 }
 
 
-`undeclare.default` <- function(x, ...) {
+`undeclare.default` <- function(x, drop = FALSE, ...) {
+    if (isTRUE(drop)) {
+        attributes(x) <- NULL
+    }
+
     return(x)
 }
 
 
-`undeclare.declared` <- function(x, ...) {
+`undeclare.declared` <- function(x, drop = FALSE, ...) {
     na_index <- attr(x, "na_index")
     attrx <- attributes(x)
     
@@ -159,14 +172,16 @@
     attrx$na_values <- NULL
     attrx$na_range <- NULL
 
-    attributes(x) <- attrx
+    if (isFALSE(drop)) {
+        attributes(x) <- attrx
+    }
     return(x)
 }
 
 
-`undeclare.data.frame` <- function(x, ...) {
+`undeclare.data.frame` <- function(x, drop = FALSE, ...) {
     declared <- vapply(x, is_declared, logical(1))
-    x[declared] <- lapply(x[declared], undeclare)
+    x[declared] <- lapply(x[declared], undeclare, drop = drop)
     
     return(x)
 }
@@ -186,6 +201,12 @@
 
         if (any(duplicated(stats::na.omit(labels)))) {
             admisc::stopError("`labels` must be unique.")
+        }
+
+        if (is.factor(x)) {
+            if (!identical(labels, levels(x))) {
+                admisc::stopError("`x` is a factor, and `labels` are different its levels.")
+            }
         }
     }
 
@@ -223,9 +244,28 @@
         return(as_declared(x))
     }
 
+    if (is.factor(x)) {
+        nms <- levels(x)
+        if (is.null(labels)) {
+            labels <- seq(length(nms))
+            names(labels) <- nms
+        }
+
+        wnms <- which(is.element(na_values, nms))
+        if (length(wnms) > 0) {
+            for (i in wnms) {
+                na_values[i] <- which(nms == na_values[i])
+            }
+            if (admisc::possibleNumeric(na_values)) {
+                na_values <- admisc::asNumeric(na_values)
+            }
+        }
+    }
+
     attributes(x) <- NULL
     
     validate_declared(x, labels, label, na_values, na_range)
+
     
     misvals <- all_missing_values(x, na_values, na_range, labels)
 
@@ -421,39 +461,42 @@
     }
 
     cat(paste0("<declared", likely_type(x), "[", length(x), "]>", label, "\n"))
-    print(noquote(format_declared(x)), ...)
+    if (length(x) > 0) {
+        print(noquote(format_declared(x)), ...)
 
-    na_values <- attr(x, "na_values")
-    if (!is.null(na_values)) {
-        cat(paste0("Missing values: ", paste(na_values, collapse = ", "), "\n"))
-    }
+        na_values <- attr(x, "na_values")
+        if (!is.null(na_values)) {
+            cat(paste0("Missing values: ", paste(na_values, collapse = ", "), "\n"))
+        }
 
-    na_range <- attr(x, "na_range")
-    if (!is.null(na_range)) {
-        cat(paste0(
-            "Missing range:  [",
-            paste(na_range, collapse = ", "),
-            "]\n"
-        ))
-    }
+        na_range <- attr(x, "na_range")
+        if (!is.null(na_range)) {
+            cat(paste0(
+                "Missing range:  [",
+                paste(na_range, collapse = ", "),
+                "]\n"
+            ))
+        }
 
-    labels <- attr(x, "labels", exact = TRUE)
+        labels <- attr(x, "labels", exact = TRUE)
 
-    if (length(labels) == 0) {
+        if (length(labels) == 0) {
+            return(invisible(x))
+        }
+
+        cat("\nLabels:", "\n", sep = "")
+
+        print(
+            data.frame(
+                value = unname(labels),
+                label = names(labels),
+                row.names = NULL
+            ),
+            row.names = FALSE
+        )
+
         return(invisible(x))
     }
-
-    cat("\nLabels:", "\n", sep = "")
-
-    print(
-        data.frame(
-            value = unname(labels),
-            label = names(labels),
-            row.names = NULL
-        ),
-        row.names = FALSE
-    )
-    return(invisible(x))
 }
 
 
@@ -475,6 +518,7 @@
     }
 }
 
+
 `!=.declared` <- function(e1, e2) {e1 <- unclass(undeclare(e1))
     le1 <- attr(e1, "labels", exact = TRUE)
     e1 <- unclass(undeclare(e1))
@@ -493,6 +537,7 @@
     }
 }
 
+
 `<=.declared` <- function(e1, e2) {
     e1 <- unclass(undeclare(e1))
     e2 <- unclass(undeclare(e2))
@@ -506,6 +551,7 @@
         return(e1 <= e2)
     }
 }
+
 
 `<.declared` <- function(e1, e2) {
     e1 <- unclass(undeclare(e1))
@@ -521,6 +567,7 @@
     }
 }
 
+
 `>=.declared` <- function(e1, e2) {
     e1 <- unclass(undeclare(e1))
     e2 <- unclass(undeclare(e2))
@@ -534,6 +581,7 @@
         return(e1 >= e2)
     }
 }
+
 
 `>.declared` <- function(e1, e2) {
     e1 <- unclass(undeclare(e1))
@@ -549,28 +597,46 @@
     }
 }
 
+
 `names<-.declared` <- function(x, value) {
     attr(x, "names") <- value
     x
 }
+
 
 `duplicated.declared` <- function(x, incomparables = FALSE, ...) {
     x <- unclass(undeclare(x))
     NextMethod()
 }
 
+
 `unique.declared` <- function(x, incomparables = FALSE, ...) {
     x[!duplicated(x)]
 }
 
+
 `head.declared` <- function(x, n = 6L, ...) {
+    lx <- length(x)
+    if (n < 0) {
+        n <- lx - abs(n)
+    }
+    n <- min(n, length(x))
+    if (n < 1) {
+        return(x[0])
+    }
     x[seq(n)]
 }
 
+
 `tail.declared` <- function(x, n = 6L, ...) {
+    if (n < 1) {
+        n <- 6L
+    }
     lx <- length(x)
+    n <- min(n, lx)
     x[seq(lx - n + 1, lx)]
 }
+
 
 `na.omit.declared` <- function (object, ...)  {
     attrx <- attributes(object)
@@ -587,10 +653,12 @@
     return(object)
 }
 
+
 `na.fail.declared` <- function (object, ...)  {
     object <- unclass(object)
     NextMethod()
 }
+
 
 `na.exclude.declared` <- function (object, ...)  {
     attrx <- attributes(object)
@@ -607,6 +675,7 @@
     return(object)
 }
 
+
 `mean.declared` <- function(x, ...) {
     na_index <- attr(x, "na_index")
     if (!is.null(na_index)) {
@@ -615,6 +684,7 @@
     x <- unclass(x)
     NextMethod()
 }
+
 
 `median.declared` <- function(x, na.rm = FALSE, ...) {
     na_index <- attr(x, "na_index")
@@ -625,6 +695,7 @@
     NextMethod()
 }
 
+
 `summary.declared` <- function(object, ...) {
     na_index <- attr(object, "na_index")
     if (!is.null(na_index)) {
@@ -632,4 +703,108 @@
     }
     object <- unclass(object)
     NextMethod()
+}
+
+
+# Arithmetic operations
+`+.declared` <- function(e1, e2) {
+    attributes(e1) <- NULL
+    callist <- list(e1 = e1)
+    if (!missing(e2)) {
+        if (is_declared(e2)) {
+            attributes(e2) <- NULL
+        }
+        callist$e2 <- e2
+    }
+    do.call(.Primitive("+"), callist)
+}
+
+
+`-.declared` <- function(e1, e2) {
+    attributes(e1) <- NULL
+    callist <- list(e1 = e1)
+    if (!missing(e2)) {
+        if (is_declared(e2)) {
+            attributes(e2) <- NULL
+        }
+        callist$e2 <- e2
+    }
+    do.call(.Primitive("-"), callist)
+}
+
+
+`*.declared` <- function(e1, e2) {
+    attributes(e1) <- NULL
+    callist <- list(e1 = e1)
+    if (!missing(e2)) {
+        if (is_declared(e2)) {
+            attributes(e2) <- NULL
+        }
+        callist$e2 <- e2
+    }
+    do.call(.Primitive("*"), callist)
+}
+
+
+`/.declared` <- function(e1, e2) {
+    attributes(e1) <- NULL
+    callist <- list(e1 = e1)
+    if (!missing(e2)) {
+        if (is_declared(e2)) {
+            attributes(e2) <- NULL
+        }
+        callist$e2 <- e2
+    }
+    do.call(.Primitive("/"), callist)
+}
+
+
+`^.declared` <- function(e1, e2) {
+    attributes(e1) <- NULL
+    callist <- list(e1 = e1)
+    if (!missing(e2)) {
+        if (is_declared(e2)) {
+            attributes(e2) <- NULL
+        }
+        callist$e2 <- e2
+    }
+    do.call(.Primitive("^"), callist)
+}
+
+
+`%%.declared` <- function(e1, e2) {
+    attributes(e1) <- NULL
+    callist <- list(e1 = e1)
+    if (!missing(e2)) {
+        if (is_declared(e2)) {
+            attributes(e2) <- NULL
+        }
+        callist$e2 <- e2
+    }
+    do.call(.Primitive("%%"), callist)
+}
+
+
+`%/%.declared` <- function(e1, e2) {
+    attributes(e1) <- NULL
+    callist <- list(e1 = e1)
+    if (!missing(e2)) {
+        if (is_declared(e2)) {
+            attributes(e2) <- NULL
+        }
+        callist$e2 <- e2
+    }
+    do.call(.Primitive("%/%"), callist)
+}
+
+
+`sqrt.declared` <- function(x) {
+    attributes(x) <- NULL
+    do.call(.Primitive("sqrt"), list(x))
+}
+
+
+`abs.declared` <- function(x) {
+    attributes(x) <- NULL
+    do.call(.Primitive("abs"), list(x))
 }

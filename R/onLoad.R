@@ -192,6 +192,51 @@
             ans[ok[ans]]
         }
 
+        do.call("unlockBinding", list(sym = "as.factor", env = env))
+
+        env$as.factor <- function(x, levels = c("default", "labels", "values", "both"), ordered = FALSE, ...) {
+            if (is.declared(x)) {
+                levels <- match.arg(levels)
+                label <- attr(x, "label", exact = TRUE)
+                labels <- attr(x, "labels")
+
+                if (levels %in% c("default", "both")) {
+                    if (levels == "both") {
+                        names(labels) <- paste0("[", labels, "] ", names(labels))
+                        attr(x, "labels") <- labels
+                    }
+
+                    vals <- sort(unique(x), na.last = TRUE)
+                    x <- factor(to_labels(undeclare(x)), levels = to_labels(vals), ordered = ordered)
+                }
+                else if (levels == "labels") {
+                    levs <- unname(labels)
+                    labs <- names(labels)
+                    x <- factor(to_labels(undeclare(x)), levels = sort(unique(labs)), ordered = ordered)
+                }
+                else if (levels == "values") {
+                    levels <- unique(undeclare(sort(x, na.last = TRUE)))
+                    
+                    x <- factor(undeclare(x), levels, ordered = ordered)
+                }
+
+                return(structure(x, label = label))
+            }
+            else {
+                if (is.factor(x)) 
+                    x
+                else if (!is.object(x) && is.integer(x)) {
+                    levels <- sort.int(unique.default(x))
+                    f <- match(x, levels)
+                    levels(f) <- as.character(levels)
+                    if (!is.null(nx <- names(x))) 
+                        names(f) <- nx
+                    class(f) <- "factor"
+                    f
+                }
+                else factor(x)
+            }
+        }
     }
 
     if (admisc::unlockEnvironment(asNamespace("stats"))) {

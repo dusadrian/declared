@@ -2,6 +2,15 @@ Version 0.13
     o New functions w_mode() and w_standardize()
     o Fixed x_summary(), summaries should not be rounded by default
     o Fixed w_mean() to weight negative values
+    Thanks to an anonymous reviewer for reporting and suggesting the following:
+    o New argument "drop" in function undeclare()
+    o Bug fix in the class methods for head() and tail()
+    o Function declared now duly recognizes input factors
+    o Extended as.factor() for objects of class "declared"
+    o Added proper class methods for primitive arithmetic operations
+    o New functions as.declared(), is.declared()
+    o Added explanatory documentation (for instance in the DESCRIPTION file) to
+      explain the reasons for reimplementing some of the base functions
 
 Version 0.12
     o New function w_summary()

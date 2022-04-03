@@ -1,7 +1,9 @@
 \name{declared}
 \alias{declared}
 \alias{is_declared}
+\alias{is.declared}
 \alias{as_declared}
+\alias{as.declared}
 \alias{as_haven}
 \alias{undeclare}
 
@@ -21,11 +23,15 @@ declared(
 
 is_declared(x)
 
+is.declared(x)
+
 as_declared(x, ...)
+
+as.declared(x, ...)
 
 as_haven(x, ...)
 
-undeclare(x, ...)
+undeclare(x, drop = FALSE, ...)
 }
 
 \arguments{
@@ -42,6 +48,8 @@ of the range. Use \code{-Inf} and \code{Inf} if you want the range to be
 open ended.}
 
 \item{label}{A short, human-readable description of the vector.}
+
+\item{drop}{Logical, drop all attributes.}
 
 \item{...}{Other arguments used by various other methods.}
 }
@@ -77,13 +85,16 @@ depending on the number of variables in the data.
 
 The function \code{undeclare()} replaces the NA entries into their original
 numeric values, and drops all attributes related to missing values:
-\code{na_values}, \code{na_range} and \code{na_index}.
+\code{na_values}, \code{na_range} and \code{na_index}. The result can be a
+regular vector (thus dropping all attributes, including the class "declared")
+by activating the argument \code{drop}.
 }
 
 \value{
-\code{declared()} and \code{as_declared()} will return a labelled vector.
+\code{declared()}, \code{as_declared()} and \code{is_declared()} will return a
+labelled vector.
 
-\code{is_declared()} will return a logical scalar.
+\code{is_declared()} and \code{is.declared()} will return a logical scalar.
 
 \code{undeclare()} will return a an object of class \code{declared} without the
 declared missing values
@@ -93,9 +104,12 @@ declared missing values
 
 \examples{
 
-x <- declared(c(1:5, -1),
-            labels = c(Good = 1, Bad = 5, DK = -1),
-            na_values = -1)
+x <- declared(
+    c(1:5, -1),
+    labels = c(Good = 1, Bad = 5, DK = -1),
+    na_values = -1
+)
+
 x
 
 is.na(x)

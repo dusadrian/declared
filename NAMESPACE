@@ -5,9 +5,11 @@ importFrom("admisc", "possibleNumeric", "wholeNumeric", "asNumeric", "unlockEnvi
 
 export(
     as_declared,
+    as.declared,
     as_haven,
     format_declared,
     is_declared,
+    is.declared,
     declared,
     frtable,
     missing_values,
@@ -51,7 +53,7 @@ S3method(summary, declared)
 
 S3method(as_declared, default)
 S3method(as_declared, haven_labelled)
-# S3method(as_declared, factor) # TO DO
+S3method(as_declared, factor)
 S3method(as_declared, data.frame)
 
 S3method(as_haven, default)
@@ -63,9 +65,18 @@ S3method(undeclare, data.frame)
 S3method(undeclare, declared)
 S3method(duplicated, declared)
 S3method(unique, declared)
-
+S3method(sqrt, declared)
+S3method(abs, declared)
 S3method(print, declared)
+
 S3method("[", declared)
+S3method("+", declared)
+S3method("-", declared)
+S3method("*", declared)
+S3method("/", declared)
+S3method("^", declared)
+S3method("%%", declared)
+S3method("%/%", declared)
 S3method("[<-", declared)
 
 S3method(missing_values, default)

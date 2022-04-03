@@ -15,7 +15,8 @@
 
 \description{
 Functions to compute weighted tables or summaries, based on a vector of frequency
-weights, adapted to objects of class \code{"declared"}.
+weights. These are reimplementations of variously existing functions, but adapted
+to objects of class \code{"declared"} (see Details below)
 }
 
 \usage{
@@ -71,11 +72,17 @@ A frequency table is usually performed for a categorical variable, displaying th
 frequencies of the respective categories. Note that general variables containing
 text are not necessarily factors, despite having a small number of characters.
 
+A general table of frequencies, using the base function \code{table()}, ignores
+the defined missing values (which are all stored as NAs). The reimplementation
+of this function in \code{w_table()} takes care of this detail, and presents
+frequencies for each separately defined missing values. Similar reimplementations
+for the other functions have the same underlying objective.
+
 It is also possible to perform a frequency table for numerical variables, if the
-number of values is limited (an arbitrary and debatable upper limit of 15 is used).
-An example of such variable can be the number of children, where each value can
-be interpreted as a class, containing a single value (for instance 0 meaning the
-category of people with no children).
+number of values is limited (an arbitrary and debatable upper limit of 15 is
+used). An example of such variable can be the number of children, where each
+value can be interpreted as a class, containing a single value (for instance 0
+meaning the category of people with no children).
 
 Objects of class \code{declared} are not pure categorical variables (R factors)
 but they are nevertheless interpreted similarly to factors, to allow producing
@@ -165,9 +172,8 @@ x <- declared(
 
 w_table(x)
 
-
-# Categories only (without values)
-w_table(x, values = FALSE)
+# Including the values in the table of frequencies
+w_table(x, values = TRUE)
 
 
 # An example involving multiple variables
