@@ -893,6 +893,17 @@
 }
 
 
+`%*%.declared` <- function(x, y) {
+    attributes(x) <- NULL
+    if (!missing(y)) {
+        if (is_declared(y)) {
+            attributes(y) <- NULL
+        }
+    }
+    .Primitive("%*%")(x, y)
+}
+
+
 `&.declared` <- function(e1, e2) {
     attributes(e1) <- NULL
     if (!missing(e2)) {
@@ -1054,16 +1065,6 @@
 
 
 # TO DO:
-# rep()
-# range(), and check if the input is numeric
-# split()
-# toString()
-# ceiling()
-# floor()
-# trunc()
-# round()
-# signif()
-# anyDuplicated
+# anyDuplicated() ?
 # cut() ?
 # diff() ?
-# all groups of functions from ?Summary
