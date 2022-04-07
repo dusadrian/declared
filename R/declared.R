@@ -500,104 +500,6 @@
 }
 
 
-`==.declared` <- function(e1, e2) {
-    le1 <- attr(e1, "labels", exact = TRUE)
-    e1 <- unclass(undeclare(e1))
-    e2 <- unclass(undeclare(e2))
-    if (admisc::possibleNumeric(e1) && admisc::possibleNumeric(e2)) {
-        e1 <- admisc::asNumeric(e1)
-        e2 <- admisc::asNumeric(e2)
-        return(abs(e1 - e2) < .Machine$double.eps^0.5)
-        # return(admisc::aeqb(e1, e2)
-    }
-    else {
-        if (length(e2) == 1 && is.element(e2, names(le1)) && !is.element(e2, e1)) {
-            e2 <- le1[names(le1) == e2]
-        }
-        return(e1 == e2)
-    }
-}
-
-
-`!=.declared` <- function(e1, e2) {e1 <- unclass(undeclare(e1))
-    le1 <- attr(e1, "labels", exact = TRUE)
-    e1 <- unclass(undeclare(e1))
-    e2 <- unclass(undeclare(e2))
-    if (admisc::possibleNumeric(e1) && admisc::possibleNumeric(e2)) {
-        e1 <- admisc::asNumeric(e1)
-        e2 <- admisc::asNumeric(e2)
-        return(abs(e1 - e2) > .Machine$double.eps^0.5)
-        # return(admisc::aneqb(e1, e2)
-    }
-    else {
-        if (length(e2) == 1 && is.element(e2, names(le1)) && !is.element(e2, e1)) {
-            e2 <- le1[names(le1) == e2]
-        }
-        return(e1 != e2)
-    }
-}
-
-
-`<=.declared` <- function(e1, e2) {
-    e1 <- unclass(undeclare(e1))
-    e2 <- unclass(undeclare(e2))
-    if (admisc::possibleNumeric(e1) && admisc::possibleNumeric(e2)) {
-        e1 <- admisc::asNumeric(e1)
-        e2 <- admisc::asNumeric(e2)
-        return(e1 < (e2 + .Machine$double.eps^0.5))
-        # return(admisc::alteb(e1, e2)
-    }
-    else {
-        return(e1 <= e2)
-    }
-}
-
-
-`<.declared` <- function(e1, e2) {
-    e1 <- unclass(undeclare(e1))
-    e2 <- unclass(undeclare(e2))
-    if (admisc::possibleNumeric(e1) && admisc::possibleNumeric(e2)) {
-        e1 <- admisc::asNumeric(e1)
-        e2 <- admisc::asNumeric(e2)
-        return(e1 < (e2 - .Machine$double.eps^0.5))
-        # return(admisc::altb(e1, e2)
-    }
-    else {
-        return(e1 < e2)
-    }
-}
-
-
-`>=.declared` <- function(e1, e2) {
-    e1 <- unclass(undeclare(e1))
-    e2 <- unclass(undeclare(e2))
-    if (admisc::possibleNumeric(e1) && admisc::possibleNumeric(e2)) {
-        e1 <- admisc::asNumeric(e1)
-        e2 <- admisc::asNumeric(e2)
-        return((e1 + .Machine$double.eps^0.5) > e2)
-        # return(admisc::agteb(e1, e2)
-    }
-    else {
-        return(e1 >= e2)
-    }
-}
-
-
-`>.declared` <- function(e1, e2) {
-    e1 <- unclass(undeclare(e1))
-    e2 <- unclass(undeclare(e2))
-    if (admisc::possibleNumeric(e1) && admisc::possibleNumeric(e2)) {
-        e1 <- admisc::asNumeric(e1)
-        e2 <- admisc::asNumeric(e2)
-        return((e1 - .Machine$double.eps^0.5) > e2)
-        # return(admisc::agtb(e1, e2))
-    }
-    else {
-        return(e1 > e2)
-    }
-}
-
-
 `names<-.declared` <- function(x, value) {
     attr(x, "names") <- value
     x
@@ -706,105 +608,450 @@
 }
 
 
-# Arithmetic operations
-`+.declared` <- function(e1, e2) {
-    attributes(e1) <- NULL
-    callist <- list(e1 = e1)
-    if (!missing(e2)) {
-        if (is_declared(e2)) {
-            attributes(e2) <- NULL
-        }
-        callist$e2 <- e2
+`all.equal.declared` <- function(target, current, ...) {
+    na_index <- attr(target, "na_index")
+    target <- undeclare(target, drop = TRUE)
+    if (is.declared(current)) {
+        current <- undeclare(current, drop = TRUE)
     }
-    do.call(.Primitive("+"), callist)
+
+    allna <- TRUE
+
+    if (!is.null(na_index)) {
+        allna <- all.equal(target[na_index], current[na_index])
+        target <- target[-na_index]
+        current <- current[-na_index]
+    }
+    
+    allv <- all.equal(target, current)
+
+    if (isTRUE(allv)) {
+        if (isTRUE(allna)) {
+            return(TRUE)
+        }
+        return(paste("Declared mising values", tolower(allna)))
+    }
+
+    return(allv)
 }
 
 
-`-.declared` <- function(e1, e2) {
-    attributes(e1) <- NULL
-    callist <- list(e1 = e1)
-    if (!missing(e2)) {
-        if (is_declared(e2)) {
-            attributes(e2) <- NULL
-        }
-        callist$e2 <- e2
-    }
-    do.call(.Primitive("-"), callist)
+
+# Math operations
+
+`abs.declared` <- function(x) {
+    attributes(x) <- NULL
+    .Primitive("abs")(x)
 }
 
 
-`*.declared` <- function(e1, e2) {
-    attributes(e1) <- NULL
-    callist <- list(e1 = e1)
-    if (!missing(e2)) {
-        if (is_declared(e2)) {
-            attributes(e2) <- NULL
-        }
-        callist$e2 <- e2
-    }
-    do.call(.Primitive("*"), callist)
-}
-
-
-`/.declared` <- function(e1, e2) {
-    attributes(e1) <- NULL
-    callist <- list(e1 = e1)
-    if (!missing(e2)) {
-        if (is_declared(e2)) {
-            attributes(e2) <- NULL
-        }
-        callist$e2 <- e2
-    }
-    do.call(.Primitive("/"), callist)
-}
-
-
-`^.declared` <- function(e1, e2) {
-    attributes(e1) <- NULL
-    callist <- list(e1 = e1)
-    if (!missing(e2)) {
-        if (is_declared(e2)) {
-            attributes(e2) <- NULL
-        }
-        callist$e2 <- e2
-    }
-    do.call(.Primitive("^"), callist)
-}
-
-
-`%%.declared` <- function(e1, e2) {
-    attributes(e1) <- NULL
-    callist <- list(e1 = e1)
-    if (!missing(e2)) {
-        if (is_declared(e2)) {
-            attributes(e2) <- NULL
-        }
-        callist$e2 <- e2
-    }
-    do.call(.Primitive("%%"), callist)
-}
-
-
-`%/%.declared` <- function(e1, e2) {
-    attributes(e1) <- NULL
-    callist <- list(e1 = e1)
-    if (!missing(e2)) {
-        if (is_declared(e2)) {
-            attributes(e2) <- NULL
-        }
-        callist$e2 <- e2
-    }
-    do.call(.Primitive("%/%"), callist)
+`sign.declared` <- function(x) {
+    attributes(x) <- NULL
+    .Primitive("sign")(x)
 }
 
 
 `sqrt.declared` <- function(x) {
     attributes(x) <- NULL
-    do.call(.Primitive("sqrt"), list(x))
+    .Primitive("sqrt")(x)
 }
 
 
-`abs.declared` <- function(x) {
+`floor.declared` <- function(x) {
     attributes(x) <- NULL
-    do.call(.Primitive("abs"), list(x))
+    .Primitive("floor")(x)
 }
+
+
+`ceiling.declared` <- function(x) {
+    attributes(x) <- NULL
+    .Primitive("ceiling")(x)
+}
+
+
+`trunc.declared` <- function(x, ...) {
+    attributes(x) <- NULL
+    .Primitive("trunc")(x, ...)
+}
+
+
+`round.declared` <- function(x, digits = 0) {
+    attributes(x) <- NULL
+    .Primitive("round")(x, digits)
+}
+
+
+`signif.declared` <- function(x, digits = 0) {
+    attributes(x) <- NULL
+    .Primitive("signif")(x, digits)
+}
+
+
+`exp.declared` <- function(x) {
+    attributes(x) <- NULL
+    .Primitive("exp")(x)
+}
+
+
+`log.declared` <- function(x, base = exp(1)) {
+    attributes(x) <- NULL
+    .Primitive("log")(x, base)
+}
+
+
+`expm1.declared` <- function(x) {
+    attributes(x) <- NULL
+    .Primitive("expm1")(x)
+}
+
+
+`log1p.declared` <- function(x) {
+    attributes(x) <- NULL
+    .Primitive("log1p")(x)
+}
+
+
+`cos.declared` <- function(x) {
+    attributes(x) <- NULL
+    .Primitive("cos")(x)
+}
+
+
+`sin.declared` <- function(x) {
+    attributes(x) <- NULL
+    .Primitive("sin")(x)
+}
+
+
+`tan.declared` <- function(x) {
+    attributes(x) <- NULL
+    .Primitive("tan")(x)
+}
+
+
+`cospi.declared` <- function(x) {
+    attributes(x) <- NULL
+    .Primitive("cospi")(x)
+}
+
+
+`sinpi.declared` <- function(x) {
+    attributes(x) <- NULL
+    .Primitive("sinpi")(x)
+}
+
+
+`tanpi.declared` <- function(x) {
+    attributes(x) <- NULL
+    .Primitive("tanpi")(x)
+}
+
+
+`acos.declared` <- function(x) {
+    attributes(x) <- NULL
+    .Primitive("acos")(x)
+}
+
+
+`asin.declared` <- function(x) {
+    attributes(x) <- NULL
+    .Primitive("asin")(x)
+}
+
+
+`atan.declared` <- function(x) {
+    attributes(x) <- NULL
+    .Primitive("atan")(x)
+}
+
+
+`lgamma.declared` <- function(x) {
+    attributes(x) <- NULL
+    .Primitive("lgamma")(x)
+}
+
+
+`gamma.declared` <- function(x) {
+    attributes(x) <- NULL
+    .Primitive("gamma")(x)
+}
+
+
+`digamma.declared` <- function(x) {
+    attributes(x) <- NULL
+    .Primitive("digamma")(x)
+}
+
+
+`trigamma.declared` <- function(x) {
+    attributes(x) <- NULL
+    .Primitive("trigamma")(x)
+}
+
+
+`cumsum.declared` <- function(x) {
+    attributes(x) <- NULL
+    .Primitive("cumsum")(x)
+}
+
+
+`cumprod.declared` <- function(x) {
+    attributes(x) <- NULL
+    .Primitive("cumprod")(x)
+}
+
+
+`cummax.declared` <- function(x) {
+    attributes(x) <- NULL
+    .Primitive("cummax")(x)
+}
+
+
+`cummin.declared` <- function(x) {
+    attributes(x) <- NULL
+    .Primitive("cummin")(x)
+}
+
+
+
+# Arithmetic operations
+
+`+.declared` <- function(e1, e2) {
+    attributes(e1) <- NULL
+    if (!missing(e2)) {
+        if (is_declared(e2)) {
+            attributes(e2) <- NULL
+        }
+    }
+    .Primitive("+")(e1, e2)
+}
+
+
+`-.declared` <- function(e1, e2) {
+    attributes(e1) <- NULL
+    if (!missing(e2)) {
+        if (is_declared(e2)) {
+            attributes(e2) <- NULL
+        }
+    }
+    .Primitive("-")(e1, e2)
+}
+
+
+`*.declared` <- function(e1, e2) {
+    attributes(e1) <- NULL
+    if (!missing(e2)) {
+        if (is_declared(e2)) {
+            attributes(e2) <- NULL
+        }
+    }
+    .Primitive("*")(e1, e2)
+}
+
+
+`/.declared` <- function(e1, e2) {
+    attributes(e1) <- NULL
+    if (!missing(e2)) {
+        if (is_declared(e2)) {
+            attributes(e2) <- NULL
+        }
+    }
+    .Primitive("/")(e1, e2)
+}
+
+
+`^.declared` <- function(e1, e2) {
+    attributes(e1) <- NULL
+    if (!missing(e2)) {
+        if (is_declared(e2)) {
+            attributes(e2) <- NULL
+        }
+    }
+    .Primitive("^")(e1, e2)
+}
+
+
+`%%.declared` <- function(e1, e2) {
+    attributes(e1) <- NULL
+    if (!missing(e2)) {
+        if (is_declared(e2)) {
+            attributes(e2) <- NULL
+        }
+    }
+    .Primitive("%%")(e1, e2)
+}
+
+
+`%/%.declared` <- function(e1, e2) {
+    attributes(e1) <- NULL
+    if (!missing(e2)) {
+        if (is_declared(e2)) {
+            attributes(e2) <- NULL
+        }
+    }
+    .Primitive("%/%")(e1, e2)
+}
+
+
+`&.declared` <- function(e1, e2) {
+    attributes(e1) <- NULL
+    if (!missing(e2)) {
+        if (is_declared(e2)) {
+            attributes(e2) <- NULL
+        }
+    }
+    .Primitive("&")(e1, e2)
+}
+
+
+`|.declared` <- function(e1, e2) {
+    attributes(e1) <- NULL
+    if (!missing(e2)) {
+        if (is_declared(e2)) {
+            attributes(e2) <- NULL
+        }
+    }
+    .Primitive("|")(e1, e2)
+}
+
+
+`!.declared` <- function(x) {
+    attributes(x) <- NULL
+    .Primitive("!")(x)
+}
+
+
+`==.declared` <- function(e1, e2) {
+    le1 <- attr(e1, "labels", exact = TRUE)
+    e1 <- undeclare(e1)
+    attributes(e1) <- NULL
+    
+    if (!missing(e2)) {
+        e2 <- undeclare(e2)
+        attributes(e2) <- NULL
+    
+        if (length(e2) == 1 && is.element(e2, names(le1)) && !is.element(e2, e1)) {
+            e2 <- le1[names(le1) == e2]
+        }
+    }
+
+    .Primitive("==")(e1, e2)
+}
+
+
+`!=.declared` <- function(e1, e2) {e1 <- unclass(undeclare(e1))
+    le1 <- attr(e1, "labels", exact = TRUE)
+    e1 <- undeclare(e1)
+    attributes(e1) <- NULL
+    
+    if (!missing(e2)) {
+        e2 <- undeclare(e2)
+        attributes(e2) <- NULL
+    
+        if (length(e2) == 1 && is.element(e2, names(le1)) && !is.element(e2, e1)) {
+            e2 <- le1[names(le1) == e2]
+        }
+    }
+
+    .Primitive("!=")(e1, e2)
+}
+
+
+`<.declared` <- function(e1, e2) {
+    e1 <- undeclare(e1)
+    attributes(e1) <- NULL
+    
+    if (!missing(e2)) {
+        e2 <- undeclare(e2)
+        attributes(e2) <- NULL
+    }
+
+    .Primitive("<")(e1, e2)
+}
+
+
+`<=.declared` <- function(e1, e2) {
+    e1 <- undeclare(e1)
+    attributes(e1) <- NULL
+    
+    if (!missing(e2)) {
+        e2 <- undeclare(e2)
+        attributes(e2) <- NULL
+    }
+
+    .Primitive("<=")(e1, e2)
+}
+
+
+`>=.declared` <- function(e1, e2) {
+    e1 <- undeclare(e1)
+    attributes(e1) <- NULL
+    
+    if (!missing(e2)) {
+        e2 <- undeclare(e2)
+        attributes(e2) <- NULL
+    }
+
+    .Primitive(">=")(e1, e2)
+}
+
+
+`>.declared` <- function(e1, e2) {
+    e1 <- undeclare(e1)
+    attributes(e1) <- NULL
+    
+    if (!missing(e2)) {
+        e2 <- undeclare(e2)
+        attributes(e2) <- NULL
+    }
+
+    .Primitive(">")(e1, e2)
+}
+
+
+`Arg.declared` <- function(z) {
+    attributes(z) <- NULL
+    .Primitive("Arg")(z)
+}
+
+
+`Conj.declared` <- function(z) {
+    attributes(z) <- NULL
+    .Primitive("Conj")(z)
+}
+
+
+`Im.declared` <- function(z) {
+    attributes(z) <- NULL
+    .Primitive("Im")(z)
+}
+
+
+`Mod.declared` <- function(z) {
+    attributes(z) <- NULL
+    .Primitive("Mod")(z)
+}
+
+
+`Re.declared` <- function(z) {
+    attributes(z) <- NULL
+    .Primitive("Re")(z)
+}
+
+
+
+
+# TO DO:
+# rep()
+# range(), and check if the input is numeric
+# split()
+# toString()
+# ceiling()
+# floor()
+# trunc()
+# round()
+# signif()
+# anyDuplicated
+# cut() ?
+# diff() ?
+# all groups of functions from ?Summary
