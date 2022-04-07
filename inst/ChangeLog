@@ -1,3 +1,7 @@
+Version 0.14
+    o Class method for many / most primitive functions, with declared objects
+    o Bug fix in w_table() affecting zero frequency categories
+
 Version 0.13
     o New functions w_mode() and w_standardize()
     o Fixed x_summary(), summaries should not be rounded by default
