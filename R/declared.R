@@ -927,8 +927,10 @@
     attributes(e1) <- NULL
     
     if (!missing(e2)) {
-        e2 <- undeclare(e2)
-        attributes(e2) <- NULL
+        if (is.declared(e2)) {
+            e2 <- undeclare(e2)
+            attributes(e2) <- NULL
+        }
     
         if (length(e2) == 1 && is.element(e2, names(le1)) && !is.element(e2, e1)) {
             e2 <- le1[names(le1) == e2]
@@ -945,8 +947,10 @@
     attributes(e1) <- NULL
     
     if (!missing(e2)) {
-        e2 <- undeclare(e2)
-        attributes(e2) <- NULL
+        if (is.declared(e2)) {
+            e2 <- undeclare(e2)
+            attributes(e2) <- NULL
+        }
     
         if (length(e2) == 1 && is.element(e2, names(le1)) && !is.element(e2, e1)) {
             e2 <- le1[names(le1) == e2]
@@ -962,8 +966,10 @@
     attributes(e1) <- NULL
     
     if (!missing(e2)) {
-        e2 <- undeclare(e2)
-        attributes(e2) <- NULL
+        if (is.declared(e2)) {
+            e2 <- undeclare(e2)
+            attributes(e2) <- NULL
+        }
     }
 
     .Primitive("<")(e1, e2)
@@ -975,8 +981,10 @@
     attributes(e1) <- NULL
     
     if (!missing(e2)) {
-        e2 <- undeclare(e2)
-        attributes(e2) <- NULL
+        if (is.declared(e2)) {
+            e2 <- undeclare(e2)
+            attributes(e2) <- NULL
+        }
     }
 
     .Primitive("<=")(e1, e2)
@@ -988,8 +996,10 @@
     attributes(e1) <- NULL
     
     if (!missing(e2)) {
-        e2 <- undeclare(e2)
-        attributes(e2) <- NULL
+        if (is.declared(e2)) {
+            e2 <- undeclare(e2)
+            attributes(e2) <- NULL
+        }
     }
 
     .Primitive(">=")(e1, e2)
@@ -1001,8 +1011,10 @@
     attributes(e1) <- NULL
     
     if (!missing(e2)) {
-        e2 <- undeclare(e2)
-        attributes(e2) <- NULL
+        if (is.declared(e2)) {
+            e2 <- undeclare(e2)
+            attributes(e2) <- NULL
+        }
     }
 
     .Primitive(">")(e1, e2)
