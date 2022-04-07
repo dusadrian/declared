@@ -188,6 +188,8 @@
     else {
         names(orig) <- names(xvallab)
     }
+
+    orig <- orig[!is.na(orig)]
     
     attr(orig, "toprint") <- toprint
     class(orig) <- c("w_table", class(orig))
