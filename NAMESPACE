@@ -7,6 +7,7 @@ export(
     as_declared,
     as.declared,
     as_haven,
+    as.haven,
     format_declared,
     is_declared,
     is.declared,
