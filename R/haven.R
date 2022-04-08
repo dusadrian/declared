@@ -3,6 +3,11 @@
 }
 
 
+`as.haven` <- function(x, ...) {
+    UseMethod("as_haven")
+}
+
+
 `as_haven.default` <- function(x, ...) {
     return(x)
 }

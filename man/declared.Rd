@@ -5,6 +5,7 @@
 \alias{as_declared}
 \alias{as.declared}
 \alias{as_haven}
+\alias{as.haven}
 \alias{undeclare}
 
 \title{Labelled vectors with declared missing values}
@@ -21,15 +22,11 @@ declared(
     ...
 )
 
-is_declared(x)
-
 is.declared(x)
-
-as_declared(x, ...)
 
 as.declared(x, ...)
 
-as_haven(x, ...)
+as.haven(x, ...)
 
 undeclare(x, drop = FALSE, ...)
 }
