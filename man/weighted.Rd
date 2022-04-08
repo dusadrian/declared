@@ -8,7 +8,6 @@
 \alias{w_summary}
 \alias{w_quantile}
 \alias{w_standardize}
-\alias{frtable}
 
 
 \title{Compute weighted summaries for declared objects}

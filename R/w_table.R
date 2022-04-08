@@ -407,11 +407,3 @@
         cat(ifelse(startend, "\n", ""))
     }
 }
-
-
-
-
-`frtable` <- function(...) {
-    .Deprecated(msg = "Function frtable() is deprecated, and has been renamed to w_table()\n")
-    w_table(...)
-}
