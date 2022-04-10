@@ -1,7 +1,10 @@
 Version 0.14
     o Class method for many / most primitive functions, with declared objects
     o Bug fix in w_table() affecting zero frequency categories
-    o Dropped alias frtable(), the only valid function name is now w_table()
+    o Dropped alias frtable() from function w_table()
+    o New function is_empty(), testing the presence of undeclared missing values
+    o Removed dependency on package admisc, by incorporating the necessary
+      functionality as internal functions
 
 Version 0.13
     o New functions w_mode() and w_standardize()

@@ -21,12 +21,12 @@
     # (because of the "[<-.declared" method)
     attributes(x) <- NULL # or x <- unclass(x), but I find this cleaner
 
-    if (admisc::possibleNumeric(x) || all(is.na(x))) {
+    if (possibleNumeric_(x) || all(is.na(x))) {
         x <- as.numeric(x)
     }
 
     if (!is.null(na_index)) {
-        # x[na_index] <- admisc::coerceMode(names(na_index))
+        # x[na_index] <- coerceMode_(names(na_index))
 
         #------------------------------------------
         # detour until ReadStat deals with integers
@@ -41,9 +41,9 @@
     #------------------------------------------
     # detour until ReadStat deals with integers
     na_values <- attrx$na_values
-    pN_na_values <- admisc::possibleNumeric(na_values)
+    pN_na_values <- possibleNumeric_(na_values)
     labels <- attrx$labels
-    pN_labels <- admisc::possibleNumeric(labels)
+    pN_labels <- possibleNumeric_(labels)
     all_num <- is.numeric(x)
 
     if (!is.null(na_values)) {

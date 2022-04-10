@@ -16,7 +16,7 @@
             if (length(unique(names(
                 labels[labels == labels[wduplicates[i]]]
             ))) > 1) {
-                admisc::stopError("Labels must be unique.")
+                stopError_("Labels must be unique.")
             }
         }
     }
@@ -59,7 +59,7 @@
             }
 
             if (any(!compatible)) {
-                admisc::stopError("Incompatible NA ranges.")
+                stopError_("Incompatible NA ranges.")
             }
 
             na_range <- range(unlist(na_range))
@@ -82,11 +82,14 @@
 }
 
 `order_declared` <- function(x, na.last = NA, decreasing = FALSE, method = c("auto",
-    "shell", "radix"), na_values.last = na.last) {
+    "shell", "radix"), empty.last = na.last) {
     
     if (!is_declared(x)) {
-        cat("\n")
-        stop("`x` has to be a vector of class `declared`.\n\n", call. = FALSE)
+        stopError_("`x` has to be a vector of class `declared`.")
+    }
+
+    if (!(isTRUE(empty.last) | isFALSE(empty.last))) {
+        stopError_("Argument `empty.last` should be either TRUE or FALSE.")
     }
 
     method <- match.arg(method)
@@ -94,38 +97,49 @@
     x_indexes <- seq_along(x)
 
     na_index <- attr(x, "na_index")
-    declared <- logical(length(x))
-    declared[na_index] <- TRUE
-    truena <- x_indexes[is.na(x) & !declared]
+    na_declared <- logical(length(x))
+    na_declared[na_index] <- TRUE
+    na_empty <- is.empty(x)
     
     declared_indexes <- c()
 
-    if (any(declared)) {
+    if (any(na_declared)) {
         x <- undeclare(x)
-        declared_indexes <- unname(na_index[order(names(na_index), decreasing = decreasing, method = method)])
+        nms <- names(na_index)
+        if (possibleNumeric_(nms)) {
+            nms <- asNumeric_(nms)
+        }
+        declared_indexes <- unname(na_index[order(nms, decreasing = decreasing, method = method)])
     }
 
     attributes(x) <- NULL
-    x_indexes <- x_indexes[!(is.na(x) | declared)]
-    x <- x[!(is.na(x) | declared)]
+    x_indexes <- x_indexes[!(is.na(x) | na_declared)]
+    x <- x[!(is.na(x) | na_declared)]
 
     res <- c()
+
     if (isFALSE(na.last)) {
-        res <- truena
+        if (isFALSE(empty.last)) {
+            res <- c(which(na_empty), declared_indexes)
+        }
+
+        if (isTRUE(empty.last)) {
+            res <- c(declared_indexes, which(na_empty))
+        }
     }
 
-    if (isFALSE(na_values.last)) {
-        res <- c(res, declared_indexes)
-    }
 
     res <- c(res, x_indexes[order(unclass(x), decreasing = decreasing, method = method)])
     
-    if (isTRUE(na_values.last)) {
-        res <- c(res, declared_indexes)
-    }
     
     if (isTRUE(na.last)) {
-        res <- c(res, truena)
+        if (isTRUE(empty.last)) {
+            res <- c(res, declared_indexes, which(na_empty))
+        }
+
+        if (isFALSE(empty.last)) {
+            res <- c(res, which(na_empty), declared_indexes)
+        }
     }
 
     return(res)

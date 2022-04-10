@@ -1,7 +1,7 @@
 
 importFrom("stats", "na.omit", "na.fail", "na.exclude", "median")
 importFrom("utils", "head", "tail")
-importFrom("admisc", "possibleNumeric", "wholeNumeric", "asNumeric", "unlockEnvironment")
+useDynLib(declared, .registration = TRUE)
 
 export(
     as_declared,
@@ -11,6 +11,8 @@ export(
     format_declared,
     is_declared,
     is.declared,
+    is_empty,
+    is.empty,
     declared,
     missing_values,
     "missing_values<-",
@@ -37,6 +39,7 @@ export(
 
 
 S3method(print, w_table)
+S3method(print, fobject)
 
 S3method(format, pillar_shaft_declared_chr)
 S3method(format, pillar_shaft_declared_num)
@@ -51,6 +54,7 @@ S3method(mean, declared)
 S3method(median, declared)
 S3method(summary, declared)
 S3method(all.equal, declared)
+S3method(sort, declared)
 
 S3method(as_declared, default)
 S3method(as_declared, haven_labelled)

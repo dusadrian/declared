@@ -189,30 +189,24 @@ DF <- data.frame(
     Children = sample(0:5, 215, replace = TRUE)
 )
 
-using(DF, w_table(Gender), split.by = Area)
+w_table(DF$Gender)
 
-using(DF, w_sd(Age), split.by = Gender & Area)
+w_sd(DF$Age)
 
 
 # Weighting: observed proportions
-op <- proportions(using(DF, table(Gender, Area)))
+op <- proportions(with(DF, table(Gender, Area)))
 
 # Theoretical proportions: 53% Rural, and 50% Females
 tp <- rep(c(0.53, 0.47), each = 2) * rep(c(0.498, 0.502), 2) / op
 
-DF$fweight <- recode(
-    10 * DF$Area + DF$Gender,
-    sprintf(
-        "11 = \%s; 12 = \%s; 21 = \%s; 22 = \%s",
-        tp[1], tp[2], tp[3], tp[4]
-    )
-)
+DF$fweight <- tp[match(10 * DF$Area + DF$Gender, c(11, 12, 21, 22))]
 
-using(DF, w_table(Gender, wt = fweight), split.by = Area)
+with(DF, w_table(Gender, wt = fweight))
 
-using(DF, w_mean(Age, wt = fweight), split.by = Gender & Area)
+with(DF, w_mean(Age, wt = fweight))
 
-using(DF, w_quantile(Age, wt = fweight), split.by = Area)
+with(DF, w_quantile(Age, wt = fweight))
 }
 
 \keyword{functions}

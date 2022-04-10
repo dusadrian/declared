@@ -10,10 +10,10 @@
     }
  
     suppressPackageStartupMessages(
-        lapply(c("stats", "admisc", "utils"), load_library)
+        lapply(c("stats", "utils"), load_library)
     )
 
-    if (admisc::unlockEnvironment(asNamespace("base"))) {
+    if (unlockEnvironment_(asNamespace("base"))) {
 
         env <- as.environment("package:base")
         do.call("unlockBinding", list(sym = "print.data.frame", env = env))
@@ -125,7 +125,7 @@
         do.call("unlockBinding", list(sym = "order", env = env))
         
         env$order <- function (..., na.last = TRUE, decreasing = FALSE,
-            method = c("auto", "shell", "radix")) {
+            method = c("auto", "shell", "radix"), empty.last = na.last) {
             
             z <- list(...)
             decreasing <- as.logical(decreasing)
@@ -139,7 +139,7 @@
             method <- match.arg(method)
             
             if (any(vapply(z, function(x) {
-                    is.object(x) && !is_declared(x)
+                    is.object(x) && !is.declared(x)
                 }, logical(1L)))) {
                 z <- lapply(z, function(x) if (is.object(x)) 
                     as.vector(xtfrm(x))
@@ -155,8 +155,9 @@
                 method <- ifelse (useRadix, "radix", "shell")
             }
 
-            if (length(z) == 1L && is_declared(x)) {
-                return(order_declared(x, na.last = na.last, decreasing = decreasing, method = method, na_values.last = na.last))
+            
+            if (length(z) == 1L && is.declared(x)) {
+                return(order_declared(x, na.last = na.last, decreasing = decreasing, method = method, empty.last = empty.last))
             }
 
             if (method != "radix" && !is.na(na.last)) {
@@ -239,7 +240,7 @@
         }
     }
 
-    if (admisc::unlockEnvironment(asNamespace("stats"))) {
+    if (unlockEnvironment_(asNamespace("stats"))) {
 
         env <- as.environment("package:stats")
 
@@ -326,7 +327,7 @@
         }
     }
 
-    if (admisc::unlockEnvironment(asNamespace("utils"))) {
+    if (unlockEnvironment_(asNamespace("utils"))) {
         env <- as.environment("package:utils")
 
         do.call("unlockBinding", list(sym = "write.csv", env = env))

@@ -24,11 +24,11 @@
     }
 
     if (!(is.atomic(wt) && all(is.finite(na.omit(wt))))) {
-        admisc::stopError("'wt' should be an atomic vector with finite values.")
+        stopError_("'wt' should be an atomic vector with finite values.")
     }
 
     if (length(x) != length(wt)) {
-        admisc::stopError("Lengths of 'x' and 'wt' differ.")
+        stopError_("Lengths of 'x' and 'wt' differ.")
     }
 
     ok <- !is.na(x + wt)
@@ -44,14 +44,14 @@
     sumwt <- sum(wt)
 
     if (any(wt < 0) || sumwt == 0) {
-        admisc::stopError("'wt' must be non-negative and not all zero")
+        stopError_("'wt' must be non-negative and not all zero")
     }
 
     n <- length(x)
 
     if (trim > 0 & n) {
         if (is.complex(x)) {
-            admisc::stopError("Trimmed means are not defined for complex data")
+            stopError_("Trimmed means are not defined for complex data")
         }
 
         if (trim >= 0.5) {

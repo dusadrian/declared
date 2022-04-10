@@ -9,7 +9,7 @@
     }
     
     if (!(is.atomic(x) && is.numeric(x))) {
-        admisc::stopError("'x' should be an atomic numerical vector.")
+        stopError_("'x' should be an atomic numerical vector.")
     }
 
     if (inherits(x, "declared")) {
@@ -27,11 +27,11 @@
     }
     
     if (!(is.atomic(wt) && all(is.finite(na.omit(wt))))) {
-        admisc::stopError("'wt' should be an atomic vector with finite values.")
+        stopError_("'wt' should be an atomic vector with finite values.")
     }
 
     if (length(x) != length(wt)) {
-        admisc::stopError("Lengths of 'x' and 'wt' differ.")
+        stopError_("Lengths of 'x' and 'wt' differ.")
     }
 
     ok <- !is.na(x + wt)
@@ -41,11 +41,11 @@
         wt <- wt[ok]
     }
     else if (any(!ok)) {
-        admisc::stopError("Missing values and NaN's not allowed if `na.rm' is FALSE")
+        stopError_("Missing values and NaN's not allowed if `na.rm' is FALSE")
     }
     
     if (any((p.ok <- !is.na(probs)) & (probs < 0 | probs > 1))) {
-        admisc::stopError("probs outside [0,1]")
+        stopError_("probs outside [0,1]")
     }
 
     if (na.p <- any(!p.ok)) {
@@ -72,10 +72,10 @@
     lp <- length(probs)
     qs <- (1 - index) * both[seq(1, lp)] + index * both[-seq(1, lp)]
 
-    qs <- admisc::coerceMode(qs)
+    qs <- coerceMode_(qs)
 
     names(qs) <- paste0(format(100 * probs, trim = TRUE), "%")
 
-    class(qs) <- c("admisc_fobject", class(qs))
+    class(qs) <- c("fobject", class(qs))
     return(qs)
 }

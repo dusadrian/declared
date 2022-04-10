@@ -124,25 +124,4 @@ c(x, 2, -1)
 
 # switch NAs with their original values
 undeclare(x)
-
-
-set.seed(123)
-DF <- data.frame(
-    Area = declared(
-        sample(1:2, 123, replace = TRUE),
-        labels = c(Urban = 1, Rural = 2)
-    ),
-    Gender = declared(
-        sample(c(1:2, -1), 123, replace = TRUE),
-        labels = c(Male = 1, Female = 2, Nonresponse = -1),
-        na_values = -1
-    ),
-    Age = sample(18:90, 123, replace = TRUE),
-    Children = sample(0:5, 123, replace = TRUE)
-)
-
-using(DF, mean(Children), split.by = Area)
-
-using(DF, mean(Age), split.by = Gender & Area)
-
 }

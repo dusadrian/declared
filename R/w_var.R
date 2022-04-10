@@ -7,7 +7,7 @@
     }
     
     if (!(is.atomic(x) && (is.numeric(x) || is.complex(x) || is.logical(x)))) {
-        admisc::stopError("'x' should be an atomic vector with finite values.")
+        stopError_("'x' should be an atomic vector with finite values.")
     }
 
     if (inherits(x, "declared")) {
@@ -23,11 +23,11 @@
     }
     
     if (!(is.atomic(wt) && all(is.finite(na.omit(wt))))) {
-        admisc::stopError("'wt' should be an atomic vector with finite values.")
+        stopError_("'wt' should be an atomic vector with finite values.")
     }
 
     if (length(x) != length(wt)) {
-        admisc::stopError("Lengths of 'x' and 'wt' differ.")
+        stopError_("Lengths of 'x' and 'wt' differ.")
     }
     
     ok <- !is.na(x + wt)
@@ -43,14 +43,14 @@
     sumwt <- sum(wt)
 
     if (any(wt < 0) || sumwt == 0) {
-        admisc::stopError("'wt' must be non-negative and not all zero")
+        stopError_("'wt' must be non-negative and not all zero")
     }
 
     wmean <- sum(wt * x/sumwt)
     
     if (!is.null(method)) {
         if (!is.element(method, c("unbiased", "ML"))) {
-            admisc::stopError("Method should be either 'unbiased' or 'ML'.")
+            stopError_("Method should be either 'unbiased' or 'ML'.")
         }
         
         result <- sum((sqrt(wt / sumwt) * (x - wmean)) ^ 2)

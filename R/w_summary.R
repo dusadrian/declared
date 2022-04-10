@@ -19,6 +19,6 @@
         wsum <- c(wsum, "NA's" = nas$fre[2])
     }
 
-    class(wsum) <- c("admisc_fobject", class(wsum))
+    class(wsum) <- c("fobject", class(wsum))
     return(wsum)
 }

@@ -89,23 +89,23 @@
     format_spss <- attr(x, "format.spss") # necessary for DDIwR::convert
 
     if (!inherits(x, "haven_labelled_spss")) {
-        tagged <- admisc::hasTag(x)
+        tagged <- hasTag_(x)
         attributes(x) <- NULL
 
         if (any(tagged)) {
-            x[tagged] <- admisc::getTag(x[tagged])
+            x[tagged] <- getTag_(x[tagged])
         }
 
         if (!is.null(labels)) {
             nms <- names(labels)
-            tagged <- admisc::hasTag(labels)
+            tagged <- hasTag_(labels)
 
             if (any(tagged)) {
-                labels[tagged] <- admisc::getTag(labels[tagged])
+                labels[tagged] <- getTag_(labels[tagged])
                 na_values <- sort(unname(labels[tagged]))
             }
 
-            labels <- admisc::coerceMode(labels)
+            labels <- coerceMode_(labels)
             names(labels) <- nms
         }
 
@@ -166,7 +166,7 @@
         x[na_index] <- names(na_index)
     }
     
-    x <- admisc::coerceMode(x)
+    x <- coerceMode_(x)
     
     attrx$na_index <- NULL
     attrx$na_values <- NULL
@@ -191,21 +191,21 @@
                                 na_values = NULL, na_range = NULL, ...) {
 
     if (!is.numeric(x) && !is.character(x) && !all(is.na(x))) {
-        admisc::stopError("`x` must be a numeric or a character vector.")
+        stopError_("`x` must be a numeric or a character vector.")
     }
 
     if (!is.null(labels)) {
         if (is.null(names(labels))) {
-            admisc::stopError("`labels` must have names.")
+            stopError_("`labels` must have names.")
         }
 
         if (any(duplicated(stats::na.omit(labels)))) {
-            admisc::stopError("`labels` must be unique.")
+            stopError_("`labels` must be unique.")
         }
 
         if (is.factor(x)) {
             if (!identical(labels, levels(x))) {
-                admisc::stopError("`x` is a factor, and `labels` are different its levels.")
+                stopError_("`x` is a factor, and `labels` are different its levels.")
             }
         }
     }
@@ -214,12 +214,12 @@
         !is.null(label) &&
         (!is.atomic(label) || !is.character(label) || length(label) != 1)
     ) {
-        admisc::stopError("`label` must be a character vector of length one.")
+        stopError_("`label` must be a character vector of length one.")
     }
 
     if (!is.null(na_values)) {
         if (any(is.na(na_values))) {
-            admisc::stopError("`na_values` should not contain NA values.")
+            stopError_("`na_values` should not contain NA values.")
         }
     }
 
@@ -228,11 +228,11 @@
                     (is.numeric(x) && is.numeric(na_range))
 
         if (!type_ok || length(na_range) != 2) {
-            admisc::stopError("`na_range` must be a vector of length two of the same type as `x`.")
+            stopError_("`na_range` must be a vector of length two of the same type as `x`.")
         }
 
         if (any(is.na(na_range))) {
-            admisc::stopError("`na_range` can not contain missing values.")
+            stopError_("`na_range` can not contain missing values.")
         }
     }
 }
@@ -240,10 +240,6 @@
 
 `declared` <- function(x = double(), labels = NULL, na_values = NULL,
                           na_range = NULL, label = NULL, ...) {
-    if (inherits(x, "haven_labelled")) {
-        return(as_declared(x))
-    }
-
     if (is.factor(x)) {
         nms <- levels(x)
         if (is.null(labels)) {
@@ -256,8 +252,8 @@
             for (i in wnms) {
                 na_values[i] <- which(nms == na_values[i])
             }
-            if (admisc::possibleNumeric(na_values)) {
-                na_values <- admisc::asNumeric(na_values)
+            if (possibleNumeric_(na_values)) {
+                na_values <- asNumeric_(na_values)
             }
         }
     }
@@ -271,7 +267,7 @@
 
     if (!is.null(na_range)) {
         if (!is.atomic(na_range) || length(na_range) != 2 ) {
-            admisc::stopError("The 'na_range' argument should be an atomic vector of length 2.")
+            stopError_("The 'na_range' argument should be an atomic vector of length 2.")
         }
         na_range <- sort(na_range)
     }
@@ -325,7 +321,7 @@
     
     notna <- !is.na(value)
     x[notna] <- NA
-    x <- admisc::coerceMode(x)
+    x <- coerceMode_(x)
 
     if (any(notna)) {
         na_index <- which(notna)
@@ -373,7 +369,7 @@
             if (length(unique(names(
                 labels[labels == labels[wduplicates[i]]]
             ))) > 1) {
-                admisc::stopError("Labels must be unique.")
+                stopError_("Labels must be unique.")
             }
         }
     }
@@ -416,7 +412,7 @@
             }
 
             if (any(!compatible)) {
-                admisc::stopError("Incompatible NA ranges.")
+                stopError_("Incompatible NA ranges.")
             }
 
             na_range <- range(unlist(na_range))
@@ -441,7 +437,7 @@
 
 `format_declared` <- function(x, digits = getOption("digits")) {
     if (!is.atomic(x)) {
-        admisc::stopError("`x` has to be a vector.")
+        stopError_("`x` has to be a vector.")
     }
 
     out <- format(unclass(x), digits = digits)
@@ -454,55 +450,32 @@
 }
 
 
-`print.declared` <- function(x, ...) {
-    label <- variable_label(x)
-    if (!is.null(label)) {
-        label <- paste("", label)
-    }
-
-    cat(paste0("<declared", likely_type(x), "[", length(x), "]>", label, "\n"))
-    if (length(x) > 0) {
-        print(noquote(format_declared(x)), ...)
-
-        na_values <- attr(x, "na_values")
-        if (!is.null(na_values)) {
-            cat(paste0("Missing values: ", paste(na_values, collapse = ", "), "\n"))
-        }
-
-        na_range <- attr(x, "na_range")
-        if (!is.null(na_range)) {
-            cat(paste0(
-                "Missing range:  [",
-                paste(na_range, collapse = ", "),
-                "]\n"
-            ))
-        }
-
-        labels <- attr(x, "labels", exact = TRUE)
-
-        if (length(labels) == 0) {
-            return(invisible(x))
-        }
-
-        cat("\nLabels:", "\n", sep = "")
-
-        print(
-            data.frame(
-                value = unname(labels),
-                label = names(labels),
-                row.names = NULL
-            ),
-            row.names = FALSE
-        )
-
-        return(invisible(x))
-    }
-}
-
-
 `names<-.declared` <- function(x, value) {
     attr(x, "names") <- value
     x
+}
+
+
+`sort.declared` <- function(x, decreasing = FALSE, ...) {
+
+    dots <- list(...)
+    callist <- list(x = x, decreasing = decreasing)
+
+    if (is.element("na.last", names(dots))) {
+        callist$na.last <-  dots$na.last
+    }
+
+    if (is.element("method", names(dots))) {
+        callist$method <-  dots$method
+    }
+
+    if (is.element("empty.last", names(dots))) {
+        callist$empty.last <-  dots$empty.last
+    }
+
+    xorder <- do.call("order_declared", callist)
+
+    return(x[xorder])
 }
 
 
