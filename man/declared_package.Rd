@@ -1,6 +1,6 @@
-\name{declared-package}
+\name{About the declared package}
 
-\alias{declared-package}
+\alias{declared_package}
 
 \docType{package}
 
