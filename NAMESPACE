@@ -4,23 +4,17 @@ importFrom("utils", "head", "tail")
 useDynLib(declared, .registration = TRUE)
 
 export(
-    as_declared,
     as.declared,
-    as_haven,
     as.haven,
     format_declared,
-    is_declared,
     is.declared,
-    is_empty,
     is.empty,
     declared,
     missing_values,
     "missing_values<-",
     missing_range,
     "missing_range<-",
-    names_values,
     order_declared,
-    to_labels,
     undeclare,
     value_labels,
     w_mean,
@@ -44,26 +38,27 @@ S3method(print, fobject)
 S3method(format, pillar_shaft_declared_chr)
 S3method(format, pillar_shaft_declared_num)
 
+S3method(all.equal, declared)
+S3method(as.character, declared)
 S3method(c, declared)
 S3method(head, declared)
-S3method(tail, declared)
-S3method(na.omit, declared)
-S3method(na.fail, declared)
-S3method(na.exclude, declared)
 S3method(mean, declared)
 S3method(median, declared)
-S3method(summary, declared)
-S3method(all.equal, declared)
+S3method(na.exclude, declared)
+S3method(na.fail, declared)
+S3method(na.omit, declared)
+S3method(tail, declared)
 S3method(sort, declared)
+S3method(summary, declared)
 
-S3method(as_declared, default)
-S3method(as_declared, haven_labelled)
-S3method(as_declared, factor)
-S3method(as_declared, data.frame)
-
-S3method(as_haven, default)
-S3method(as_haven, declared)
-S3method(as_haven, data.frame)
+S3method(declared, default)
+S3method(as.declared, default)
+S3method(as.declared, haven_labelled)
+S3method(as.declared, factor)
+S3method(as.declared, data.frame)
+S3method(as.haven, default)
+S3method(as.haven, declared)
+S3method(as.haven, data.frame)
 
 S3method(undeclare, default)
 S3method(undeclare, data.frame)
