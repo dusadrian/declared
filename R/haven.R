@@ -1,19 +1,14 @@
-`as_haven` <- function(x, ...) {
-    UseMethod("as_haven")
-}
-
-
 `as.haven` <- function(x, ...) {
-    UseMethod("as_haven")
+    UseMethod("as.haven")
 }
 
 
-`as_haven.default` <- function(x, ...) {
+`as.haven.default` <- function(x, ...) {
     return(x)
 }
 
 
-`as_haven.declared` <- function(x, ...) {
+`as.haven.declared` <- function(x, ...) {
     na_index <- attr(x, "na_index")
     attrx <- attributes(x)
 
@@ -103,12 +98,12 @@
 }
 
 
-`as_haven.data.frame` <- function(x, ..., only_declared = TRUE) {
+`as.haven.data.frame` <- function(x, ..., only_declared = TRUE) {
     if (only_declared) {
-        xdeclared <- vapply(x, is_declared, logical(1))
-        x[xdeclared] <- lapply(x[xdeclared], as_haven, ...)
+        xdeclared <- vapply(x, is.declared, logical(1))
+        x[xdeclared] <- lapply(x[xdeclared], as.haven, ...)
     } else {
-        x[] <- lapply(x, as_haven, ...)
+        x[] <- lapply(x, as.haven, ...)
     }
     
     class(x) <- c("tbl", "tbl_df", "data.frame")

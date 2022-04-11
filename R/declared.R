@@ -1,30 +1,20 @@
 # internal
-`is_declared` <- function(x) {
-    inherits(x, "declared")
-}
-
-
 `is.declared` <- function(x) {
     inherits(x, "declared")
 }
 
 
-`as_declared` <- function(x, ...) {
-    UseMethod("as_declared")
-}
-
-
 `as.declared` <- function(x, ...) {
-    UseMethod("as_declared")
+    UseMethod("as.declared")
 }
 
 
-`as_declared.default` <- function(x, ...) {
+`as.declared.default` <- function(x, ...) {
     return(declared(x))
 }
 
 
-`as_declared.haven_labelled` <- function(x, ...) {
+`as.declared.haven_labelled` <- function(x, ...) {
 
     dots <- list(...)
 
@@ -74,13 +64,13 @@
 }
 
 
-`as_declared.factor` <- function(x, ...) {
+`as.declared.factor` <- function(x, ...) {
     return(declared(x, ... = ...))
 }
 
 
-`as_declared.data.frame` <- function(x, ...) {
-    x[] <- lapply(x, as_declared, ...)
+`as.declared.data.frame` <- function(x, ...) {
+    x[] <- lapply(x, as.declared, ...)
     class(x) <- "data.frame"
     return(x)
 }
@@ -126,7 +116,7 @@
 
 
 `undeclare.data.frame` <- function(x, drop = FALSE, ...) {
-    declared <- vapply(x, is_declared, logical(1))
+    declared <- vapply(x, is.declared, logical(1))
     x[declared] <- lapply(x[declared], undeclare, drop = drop)
     
     return(x)
@@ -184,8 +174,16 @@
 }
 
 
-`declared` <- function(x = double(), labels = NULL, na_values = NULL,
-                          na_range = NULL, label = NULL, ...) {
+`declared` <- function(
+    x, labels = NULL, na_values = NULL, na_range = NULL, label = NULL, ...
+) {
+    UseMethod("declared")
+}
+
+
+`declared.default` <- function(
+    x, labels = NULL, na_values = NULL, na_range = NULL, label = NULL, ...
+) {
     if (is.factor(x)) {
         nms <- levels(x)
         if (is.null(labels)) {
@@ -229,29 +227,11 @@
 }
 
 
-`likely_type` <- function(x) {
-    type <- NULL
-    if (is.numeric(x)) {
-        type <- "numeric"
-        if (is.integer(x)) {
-            type <- "integer"
-        }
-    }
-    else if (is.character(x)) {
-        type <- "character"
-    }
-
-    if (!is.null(type)) {
-        return(paste0("<", type, ">"))
-    }
-}
-
-
 `missingValues` <- function(x) {
     
     mv <- rep(NA, length(x))
     
-    if (is_declared(x)) {
+    if (is.declared(x)) {
         misvals <- attr(x, "na_index")
         mv[as.numeric(names(misvals))] <- misvals
     }
@@ -276,6 +256,18 @@
     }
     
     structure(x, class = c("declared", other_classes, class(x)))
+}
+
+`as.character.declared` <- function(x, ...) {
+    labels <- names_values(x)
+
+    x <- undeclare(x)
+
+    attributes(x) <- NULL
+
+    x[is.element(x, labels)] <- names(labels)[match(x[is.element(x, labels)], labels)]
+
+    return(x)
 }
 
 
@@ -366,7 +358,7 @@
     }
 
     dots <- unlist(lapply(dots, function(x) {
-        if (is_declared(x)) x <- undeclare(x)
+        if (is.declared(x)) x <- undeclare(x)
         attributes(x) <- NULL
         return(x)
     }))
@@ -723,7 +715,7 @@
 `+.declared` <- function(e1, e2) {
     attributes(e1) <- NULL
     if (!missing(e2)) {
-        if (is_declared(e2)) {
+        if (is.declared(e2)) {
             attributes(e2) <- NULL
         }
     }
@@ -734,7 +726,7 @@
 `-.declared` <- function(e1, e2) {
     attributes(e1) <- NULL
     if (!missing(e2)) {
-        if (is_declared(e2)) {
+        if (is.declared(e2)) {
             attributes(e2) <- NULL
         }
     }
@@ -745,7 +737,7 @@
 `*.declared` <- function(e1, e2) {
     attributes(e1) <- NULL
     if (!missing(e2)) {
-        if (is_declared(e2)) {
+        if (is.declared(e2)) {
             attributes(e2) <- NULL
         }
     }
@@ -756,7 +748,7 @@
 `/.declared` <- function(e1, e2) {
     attributes(e1) <- NULL
     if (!missing(e2)) {
-        if (is_declared(e2)) {
+        if (is.declared(e2)) {
             attributes(e2) <- NULL
         }
     }
@@ -767,7 +759,7 @@
 `^.declared` <- function(e1, e2) {
     attributes(e1) <- NULL
     if (!missing(e2)) {
-        if (is_declared(e2)) {
+        if (is.declared(e2)) {
             attributes(e2) <- NULL
         }
     }
@@ -778,7 +770,7 @@
 `%%.declared` <- function(e1, e2) {
     attributes(e1) <- NULL
     if (!missing(e2)) {
-        if (is_declared(e2)) {
+        if (is.declared(e2)) {
             attributes(e2) <- NULL
         }
     }
@@ -789,7 +781,7 @@
 `%/%.declared` <- function(e1, e2) {
     attributes(e1) <- NULL
     if (!missing(e2)) {
-        if (is_declared(e2)) {
+        if (is.declared(e2)) {
             attributes(e2) <- NULL
         }
     }
@@ -800,7 +792,7 @@
 `%*%.declared` <- function(x, y) {
     attributes(x) <- NULL
     if (!missing(y)) {
-        if (is_declared(y)) {
+        if (is.declared(y)) {
             attributes(y) <- NULL
         }
     }
@@ -811,7 +803,7 @@
 `&.declared` <- function(e1, e2) {
     attributes(e1) <- NULL
     if (!missing(e2)) {
-        if (is_declared(e2)) {
+        if (is.declared(e2)) {
             attributes(e2) <- NULL
         }
     }
@@ -822,7 +814,7 @@
 `|.declared` <- function(e1, e2) {
     attributes(e1) <- NULL
     if (!missing(e2)) {
-        if (is_declared(e2)) {
+        if (is.declared(e2)) {
             attributes(e2) <- NULL
         }
     }

@@ -1,10 +1,7 @@
 \name{declared}
 \alias{declared}
-\alias{is_declared}
 \alias{is.declared}
-\alias{as_declared}
 \alias{as.declared}
-\alias{as_haven}
 \alias{as.haven}
 \alias{undeclare}
 
@@ -14,7 +11,7 @@ and the missing values declaration is an important step in the analysis.}
 
 \usage{
 declared(
-    x = double(),
+    x,
     labels = NULL,
     na_values = NULL,
     na_range = NULL,
@@ -58,7 +55,8 @@ objects from package \bold{haven}. It has exactly the same arguments, but it
 features a fundamental difference in the treatment of (declared) missing values.
 
 In package \bold{haven}, existing values are treated as if they were missing. By
-contrast, in package \bold{declared} the NA values are treated as existing values.
+contrast, in package \bold{declared} the NA values are treated as if they were
+existing values.
 
 This difference is fundamental and points to an inconsistency in package
 \bold{haven}: while existing values can be identified as missing using the
@@ -88,10 +86,10 @@ by activating the argument \code{drop}.
 }
 
 \value{
-\code{declared()}, \code{as_declared()} and \code{is_declared()} will return a
+\code{declared()}, \code{as.declared()} and \code{is.declared()} will return a
 labelled vector.
 
-\code{is_declared()} and \code{is.declared()} will return a logical scalar.
+\code{is.declared()} and \code{is.declared()} will return a logical scalar.
 
 \code{undeclare()} will return a an object of class \code{declared} without the
 declared missing values

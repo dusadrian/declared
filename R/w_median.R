@@ -3,7 +3,7 @@
     metacall <- as.list(match.call())
     
     if (inherits(x, "haven_labelled")) {
-        x <- as_declared(x)
+        x <- as.declared(x)
     }
 
     if (inherits(x, "declared")) {

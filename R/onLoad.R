@@ -78,7 +78,7 @@
             # -----------------------------------------------------
             # this function is also unchanged, except for this part:
             for (i in seq_len(nc)) {
-                if (is_declared(x[[i]]) && any(is.na(x[[i]]))) {
+                if (is.declared(x[[i]]) && any(is.na(x[[i]]))) {
                     # any(is.na()) is necessary to guard against na.omit(), for instance
                     rval[[i]] <- format_declared(x[[i]])
                 }
@@ -195,7 +195,12 @@
 
         do.call("unlockBinding", list(sym = "as.factor", env = env))
 
-        env$as.factor <- function(x, levels = c("default", "labels", "values", "both"), ordered = FALSE, ...) {
+        env$as.factor <- function(
+            x,
+            levels = c("default", "labels", "values", "both"),
+            ordered = FALSE,
+            ...
+        ) {
             if (is.declared(x)) {
                 levels <- match.arg(levels)
                 label <- attr(x, "label", exact = TRUE)
@@ -247,7 +252,7 @@
         do.call("unlockBinding", list(sym = "sd", env = env))
         
         env$sd <- function(x, na.rm = FALSE) {
-            if (is_declared(x)) {
+            if (is.declared(x)) {
                 na_index <- attr(x, "na_index")
                 if (!is.null(na_index)) {
                     x <- x[-na_index]
@@ -261,7 +266,7 @@
         do.call("unlockBinding", list(sym = "var", env = env))
         
         env$var <- function(x, y = NULL, na.rm = FALSE, use) {
-            if (is_declared(x)) {
+            if (is.declared(x)) {
                 na_index <- attr(x, "na_index")
                 if (!is.null(na_index)) {
                     x <- x[-na_index]
@@ -301,7 +306,7 @@
         do.call("unlockBinding", list(sym = "fivenum", env = env))
         
         env$fivenum <- function(x, na.rm = FALSE) {
-            if (is_declared(x)) {
+            if (is.declared(x)) {
                 na_index <- attr(x, "na_index")
                 if (!is.null(na_index)) {
                     x <- x[-na_index]

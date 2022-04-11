@@ -1,7 +1,7 @@
 `w_standardize` <- function(x, wt = NULL, na.rm = TRUE) {
 
     if (inherits(x, "haven_labelled")) {
-        x <- as_declared(x)
+        x <- as.declared(x)
     }
 
     if (!(is.atomic(x) && (is.numeric(x) || is.complex(x) || is.logical(x)))) {

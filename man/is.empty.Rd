@@ -1,5 +1,4 @@
 \name{Test empty missing values}
-\alias{is_empty}
 \alias{is.empty}
 
 \title{Test the presence of empty (undeclared) missing values}
@@ -10,8 +9,6 @@ contrast to declared missing values.
 }
 
 \usage{
-is_empty(x)
-
 is.empty(x)
 }
 

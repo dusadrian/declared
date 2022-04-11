@@ -4,7 +4,7 @@
 ) {
     
     if (inherits(x, "haven_labelled")) {
-        x <- as_declared(x)
+        x <- as.declared(x)
     }
     
     if (!is.atomic(x)) {

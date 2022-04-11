@@ -1,3 +1,20 @@
+`likely_type` <- function(x) {
+    type <- NULL
+    if (is.numeric(x)) {
+        type <- "numeric"
+        if (is.integer(x)) {
+            type <- "integer"
+        }
+    }
+    else if (is.character(x)) {
+        type <- "character"
+    }
+
+    if (!is.null(type)) {
+        return(paste0("<", type, ">"))
+    }
+}
+
 `all_missing_values` <- function(
     x, na_values = NULL, na_range = NULL, labels = NULL
 ) {
@@ -68,12 +85,14 @@
 `order_declared` <- function(x, na.last = NA, decreasing = FALSE, method = c("auto",
     "shell", "radix"), empty.last = na.last) {
     
-    if (!is_declared(x)) {
+    if (!is.declared(x)) {
         stopError_("`x` has to be a vector of class `declared`.")
     }
 
-    if (!(isTRUE(empty.last) | isFALSE(empty.last))) {
-        stopError_("Argument `empty.last` should be either TRUE or FALSE.")
+    if (!identical(empty.last, NA)) {
+        if (!(isTRUE(empty.last) | isFALSE(empty.last))) {
+            stopError_("Argument `empty.last` should be either TRUE or FALSE.")
+        }
     }
 
     method <- match.arg(method)
@@ -429,7 +448,6 @@
 `unlockEnvironment_` <- function(env) {
      .Call("_unlockEnvironment", env, PACKAGE = "declared")
 }
-
 
 `makeTag_` <- function(...) {
     x <- as.character(c(...))

@@ -7,7 +7,7 @@
     wsum <- c(wsum[1:3], wmean, wsum[4:5])
 
     if (inherits(x, "haven_labelled")) {
-        x <- as_declared(x)
+        x <- as.declared(x)
     }
 
     nas <- w_table(is.na(undeclare(x)), wt = wt)
