@@ -1,58 +1,4 @@
 # internal
-`all_missing_values` <- function(
-    x, na_values = NULL, na_range = NULL, labels = NULL
-) {
-
-    ##########
-    # Arguments na_values, na_range and labels can either be provided
-    # by the user or, if the input is a haven_labelled(_spss) objects
-    # they might already be in the attributes
-    if (is.null(na_values)) {
-        na_values <- attr(x, "na_values")
-    }
-
-    if (is.null(na_range)) {
-        na_range <- attr(x, "na_range")
-    }
-
-    if (is.null(labels)) {
-        labels <- attr(x, "labels", exact = TRUE)
-    }
-    ##########
-
-
-    misvals <- c()
-
-    if (is.null(na_values) & is.null(na_range)) {
-        return(misvals)
-    }
-
-    if (!is.null(na_values)) {
-        misvals <- sort(na_values)
-    }
-
-    if (is.numeric(x)) {
-        if (!is.null(labels)) {
-            x <- c(x, unname(unclass(labels)))
-        }
-
-        if (!is.null(na_range)) {
-            uniques <- sort(unique(x[x >= na_range[1] & x <= na_range[2]]))
-            if (length(uniques) == 0) {
-                uniques <- na_range
-            }
-            else {
-                uniques <- sort(unique(c(uniques, na_range)))
-            }
-
-            misvals <- sort(unique(c(misvals, uniques)))
-        }
-    }
-
-    return(misvals)
-}
-
-
 `is_declared` <- function(x) {
     inherits(x, "declared")
 }
@@ -353,7 +299,7 @@
 
 `c.declared` <- function(...) {
     dots <- list(...)
-    declared <- unlist(lapply(dots, is_declared))
+    declared <- unlist(lapply(dots, is.declared))
     na_values <- sort(unique(unlist(
         lapply(dots, function(x) attr(x, "na_values"))
     )))
@@ -432,21 +378,6 @@
         na_range = na_range,
         label = attr(dots[[which(declared)[1]]], "label", exact = TRUE)
     ))
-}
-
-
-`format_declared` <- function(x, digits = getOption("digits")) {
-    if (!is.atomic(x)) {
-        stopError_("`x` has to be a vector.")
-    }
-
-    out <- format(unclass(x), digits = digits)
-    na_index <- attr(x, "na_index")
-
-    out[na_index] <- paste0("NA(", names(na_index), ")")
-
-    # format again to make sure all elements have same width
-    return(format(out, justify = "right"))
 }
 
 
