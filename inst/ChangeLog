@@ -2,7 +2,9 @@ Version 0.14
     o Class method for many / most primitive functions, with declared objects
     o Bug fix in w_table() affecting zero frequency categories
     o Dropped alias frtable() from function w_table()
-    o New function is_empty(), testing the presence of undeclared missing values
+    o New function is.empty(), testing the presence of undeclared missing values
+    o Main function declare() is now generic, allowing flexibility to create
+      custom methods for any other classes of objects
     o Removed dependency on package admisc, by incorporating the necessary
       functionality as internal functions
 
@@ -56,7 +58,7 @@ Version 0.8
 
 Version 0.7
     o Bug fix saving declared data frames as .csv files
-    o as_declared() now retains the "format.spss" attribute, if existing
+    o as.declared() now retains the "format.spss" attribute, if existing
 
 Version 0.6
     o Improved treatment of arithmetic operations, attributes are no longer
