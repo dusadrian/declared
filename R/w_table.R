@@ -82,11 +82,11 @@
     }
 
     
-    orig <- tapply(wt, xy, sum, na.rm = TRUE)
-    tbl <- round(as.matrix(orig), 0)
+    orig <- round(tapply(wt, xy, sum, na.rm = TRUE), 0)
+    orig[is.na(orig)] <- 0
+    tbl <- as.matrix(orig)
     dimnames(tbl) <- unname(dimnames(tbl))
     
-    tbl[is.na(tbl)] <- 0
     rs <- rowSums(tbl)
     cs <- colSums(tbl)
     
@@ -196,7 +196,7 @@
         names(orig) <- names(xvallab)
     }
 
-    orig[is.na(orig)] <- 0
+    
     
     attr(orig, "toprint") <- toprint
     class(orig) <- c("w_table", class(orig))
