@@ -206,23 +206,6 @@
     return(result)
 }
 
-`to_labels` <- function(x) {
-
-    if (!inherits(x, "declared")) {
-        stopError_("The input should be a declared vector.")
-    }
-
-    labels <- names_values(x)
-
-    x <- undeclare(x)
-
-    attributes(x) <- NULL
-
-    x[is.element(x, labels)] <- names(labels)[match(x[is.element(x, labels)], labels)]
-
-    return(x)
-}
-
 
 # the following functions are copied from package admisc
 # to achieve zero dependency

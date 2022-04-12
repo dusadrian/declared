@@ -1,5 +1,5 @@
 `w_table` <- function(
-    x, y = NULL, wt = NULL, values = FALSE, valid = TRUE, observed = FALSE,
+    x, y = NULL, wt = NULL, values = FALSE, valid = TRUE, observed = TRUE,
     margin = NULL
 ) {
     
@@ -21,11 +21,15 @@
     if (inherits(x, "declared")) {
         xvallab <- names_values(x) # arranges missing values at the end
         xna_values <- attr(xvallab, "missing")
-        # x <- factor(to_labels(x), levels = names(xvallab))
+        # x <- factor(as.character(x), levels = names(xvallab))
         # sometimes (e.g. ISCO codifications in ESS) there are identical labels
         # with different values, and factor() complains with overlapping levels
+        
+        xvalues <- !identical(names(xvallab), as.character(xvallab))
+        # print(head(paste(as.character(x), undeclare(x), sep = "_-_")))
+        
         x <- factor(
-            paste(to_labels(x), undeclare(x), sep = "_-_"),
+            paste(as.character(x), undeclare(x, drop = TRUE), sep = "_-_"),
             levels = paste(names(xvallab), xvallab, sep = "_-_")
         )
     }
@@ -50,7 +54,7 @@
             yvallab <- names_values(y)
             yna_values <- attr(yvallab, "missing")
             y <- factor(
-                paste(to_labels(y), undeclare(y), sep = "_-_"),
+                paste(as.character(y), undeclare(y, drop = TRUE), sep = "_-_"),
                 levels = paste(names(yvallab), yvallab, sep = "_-_")
             )
         }
@@ -90,12 +94,15 @@
         if (crosstab) {
             xvallab <- xvallab[rs > 0]
             yvallab <- yvallab[cs > 0]
+            orig <- orig[rs > 0, , drop = FALSE]
+            orig <- orig[, cs > 0, drop = FALSE]
             tbl <- tbl[rs > 0, , drop = FALSE]
             tbl <- tbl[, cs > 0, drop = FALSE]
             rs <- rs[rs > 0]
             cs <- cs[cs > 0]
         }
         else {
+            orig <- orig[rs > 0]
             tbl <- tbl[rs > 0, , drop = FALSE]
             xvallab <- xvallab[rs > 0]
         }

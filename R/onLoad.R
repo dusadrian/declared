@@ -213,12 +213,12 @@
                     }
 
                     vals <- sort(unique(x), na.last = TRUE)
-                    x <- factor(to_labels(undeclare(x)), levels = to_labels(vals), ordered = ordered)
+                    x <- factor(as.character(undeclare(x)), levels = as.character(vals), ordered = ordered)
                 }
                 else if (levels == "labels") {
                     levs <- unname(labels)
                     labs <- names(labels)
-                    x <- factor(to_labels(undeclare(x)), levels = sort(unique(labs)), ordered = ordered)
+                    x <- factor(as.character(undeclare(x)), levels = sort(unique(labs)), ordered = ordered)
                 }
                 else if (levels == "values") {
                     levels <- unique(undeclare(sort(x, na.last = TRUE)))

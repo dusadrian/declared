@@ -20,7 +20,7 @@ to objects of class \code{"declared"} (see Details below)
 
 \usage{
 w_table(x, y = NULL, wt = NULL, values = FALSE, valid = TRUE,
-        observed = FALSE, margin = NULL)
+        observed = TRUE, margin = NULL)
 
 w_mean(x, wt = NULL, trim = 0, na.rm = TRUE)
 
