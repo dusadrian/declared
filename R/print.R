@@ -45,7 +45,17 @@
 
 
 `print.w_table` <- function(x, force = FALSE, startend = TRUE, ...) {
-    x <- attr(x, "toprint")
+    toprint <- attr(x, "toprint")
+    if (x[1] != toprint[1]) {
+        # this means the original table was altered. e.g. proportions(tbl)
+        class(x) <- setdiff(class(x), c("w_table", "array"))
+        names(dimnames(x)) <- NULL
+        attr(x, "toprint") <- NULL
+        print(x)
+        return(invisible())
+    }
+
+    x <- toprint
     
     irv <- c(194, 180)
     tick <- unlist(strsplit(rawToChar(as.raw(irv)), split = ""))
