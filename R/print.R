@@ -46,18 +46,21 @@
 
 `print.w_table` <- function(x, force = FALSE, startend = TRUE, ...) {
     toprint <- attr(x, "toprint")
+    irv <- c(194, 180)
+    tick <- unlist(strsplit(rawToChar(as.raw(irv)), split = ""))
+    tick <- c(paste0(rawToChar(as.raw(c(195, 130))), tick), tick)
+
     if (x[1] != as.matrix(toprint)[1]) {
         # this means the original table was altered. e.g. proportions(tbl)
         class(x) <- setdiff(class(x), c("w_table", "array"))
         names(dimnames(x)) <- NULL
         attr(x, "toprint") <- NULL
+        rownames(x) <- gsub(paste(tick, collapse = "|"), "'", rownames(x))
+        colnames(x) <- gsub(paste(tick, collapse = "|"), "'", colnames(x))
         print(x)
     }
     else {
         x <- toprint
-        
-        irv <- c(194, 180)
-        tick <- unlist(strsplit(rawToChar(as.raw(irv)), split = ""))
 
         if (is.matrix(x)) { # crosstab
 
@@ -115,11 +118,12 @@
                 }
             }
             
-            class(x) <- setdiff(class(x), "w_table")
+            class(x) <- setdiff(class(x), c("w_table", "array"))
             attr(x, "xvalues") <- NULL
             attr(x, "yvalues") <- NULL
+            rownames(x) <- gsub(paste(tick, collapse = "|"), "'", rownames(x))
+            colnames(x) <- gsub(paste(tick, collapse = "|"), "'", colnames(x))
             cat(ifelse(startend, "\n", ""))
-            class(x) <- setdiff(class(x), "array")
             print(noquote(x))
             cat(ifelse(startend, "\n", ""))
         }
