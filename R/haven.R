@@ -3,7 +3,30 @@
 }
 
 
+`as_haven` <- function(x, ...) {
+    UseMethod("as.haven")
+}
+
+
 `as.haven.default` <- function(x, ...) {
+    interactive <- TRUE
+
+    dots <- list(...)
+    if (!is.null(dots$interactive)) {
+        interactive <- dots$interactive
+    }
+
+    if (isTRUE(interactive)) {
+        msg <- "There is no automatic class method conversion for this type of"
+        if (!is.null(dots$vname_)) {
+            msg <- paste0(dots$vname_, ": ", msg, " variable.")
+        }
+        else {
+            msg <- paste(msg, "object.")
+        }
+        message(msg)
+    }
+    
     return(x)
 }
 
@@ -98,12 +121,28 @@
 }
 
 
-`as.haven.data.frame` <- function(x, ..., only_declared = TRUE) {
+`as.haven.data.frame` <- function(x, ..., only_declared = TRUE, interactive = FALSE) {
     if (only_declared) {
         xdeclared <- vapply(x, is.declared, logical(1))
-        x[xdeclared] <- lapply(x[xdeclared], as.haven, ...)
+        if (isFALSE(interactive)) {
+            x[xdeclared] <- lapply(x[xdeclared], as.haven, interactive = FALSE, ... = ...)
+        }
+        else {
+            nms <- names(x)[xdeclared]
+            for (i in seq(length(nms))) {
+                x[[nms[i]]] <- as.haven(x[[nms[i]]], vname_ = nms[i], ... = ...)
+            }
+        }
     } else {
-        x[] <- lapply(x, as.haven, ...)
+        if (isFALSE(interactive)) {
+            x[] <- lapply(x, as.haven, interactive = FALSE, ... = ...)
+        }
+        else {
+            nms <- names(x)
+            for (i in seq(length(nms))) {
+                x[[i]] <- as.haven(x[[i]], vname_ = nms[i], ... = ...)
+            }
+        }
     }
     
     class(x) <- c("tbl", "tbl_df", "data.frame")
@@ -114,7 +153,7 @@
 `as_factor.declared` <- function(
     x, levels = c("default", "labels", "values", "both"), ordered = FALSE, ...
 ) {
-    as.factor(x, levels = levels, ordered = ordered, ... = ...)
+    as.factor(undeclare(x), levels = levels, ordered = ordered, ... = ...)
 }
 
 `zap_labels.declared` <- function(x) {

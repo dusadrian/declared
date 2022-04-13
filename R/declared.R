@@ -4,13 +4,36 @@
 }
 
 
+`as_declared` <- function(x, ...) {
+    UseMethod("as.declared")
+}
+
+
 `as.declared` <- function(x, ...) {
     UseMethod("as.declared")
 }
 
 
 `as.declared.default` <- function(x, ...) {
-    return(declared(x))
+    interactive <- TRUE
+
+    dots <- list(...)
+    if (!is.null(dots$interactive)) {
+        interactive <- dots$interactive
+    }
+
+    if (isTRUE(interactive)) {
+        msg <- "There is no automatic class method conversion for this type of"
+        if (!is.null(dots$vname_)) {
+            msg <- paste0(dots$vname_, ": ", msg, " variable.")
+        }
+        else {
+            msg <- paste(msg, "object.")
+        }
+        message(msg)
+    }
+    
+    return(x)
 }
 
 
@@ -69,8 +92,16 @@
 }
 
 
-`as.declared.data.frame` <- function(x, ...) {
-    x[] <- lapply(x, as.declared, ...)
+`as.declared.data.frame` <- function(x, ..., interactive = FALSE) {
+    if (isFALSE(interactive)) {
+        x[] <- lapply(x, as.declared, interactive = FALSE, ... = ...)
+    }
+    else {
+        nms <- names(x)
+        for (i in seq(length(nms))) {
+            x[[i]] <- as.declared(x[[i]], vname_ = nms[i], ... = ...)
+        }
+    }
     class(x) <- "data.frame"
     return(x)
 }
