@@ -2,12 +2,17 @@
 \alias{declared}
 \alias{is.declared}
 \alias{as.declared}
+\alias{as_declared}
 \alias{as.haven}
+\alias{as_haven}
 \alias{undeclare}
 
 \title{Labelled vectors with declared missing values}
-\description{The labelled vectors are mainly used to analyse social science data,
-and the missing values declaration is an important step in the analysis.}
+
+\description{
+The labelled vectors are mainly used to analyse social science data,
+and the missing values declaration is an important step in the analysis.
+}
 
 \usage{
 declared(
@@ -78,6 +83,12 @@ This is a trade off and has important implications when subsetting datasets: all
 declared variables get this attribute refreshed, which consumes some time
 depending on the number of variables in the data.
 
+The generic function \code{as.declared()} attempts to coerce only the compatible
+types of objects, namely \code{haven_labelled} and \code{factor}s. Dedicated
+class methods can be written for any other type of object, and users are free to
+write their own. To end of with a declared object, additional metadata is needed
+such as value labels, which values should be treated as missing etc.
+
 The function \code{undeclare()} replaces the NA entries into their original
 numeric values, and drops all attributes related to missing values:
 \code{na_values}, \code{na_range} and \code{na_index}. The result can be a
@@ -94,7 +105,7 @@ labelled vector.
 \code{undeclare()} will return a an object of class \code{declared} without the
 declared missing values
 
-\code{as_haven()} returns an object of class \code{haven_labelled_spss}
+\code{as.haven()} returns an object of class \code{haven_labelled_spss}
 }
 
 \examples{
