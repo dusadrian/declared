@@ -206,19 +206,26 @@
                 label <- attr(x, "label", exact = TRUE)
                 labels <- attr(x, "labels")
 
-                if (levels %in% c("default", "both")) {
-                    if (levels == "both") {
-                        names(labels) <- paste0("[", labels, "] ", names(labels))
-                        attr(x, "labels") <- labels
-                    }
+                if (levels == "both") {
+                    names(labels) <- paste0("[", labels, "] ", names(labels))
+                    attr(x, "labels") <- labels
 
                     vals <- sort(unique(x), na.last = TRUE)
-                    x <- factor(as.character(undeclare(x)), levels = as.character(vals), ordered = ordered)
+                    
+                    x <- factor(
+                        as.character(undeclare(x), categories = TRUE),
+                        levels = as.character(undeclare(vals), categories = TRUE),
+                        ordered = ordered
+                    )
                 }
-                else if (levels == "labels") {
+                else if (levels %in% c("default", "labels")) {
                     levs <- unname(labels)
                     labs <- names(labels)
-                    x <- factor(as.character(undeclare(x)), levels = sort(unique(labs)), ordered = ordered)
+                    x <- factor(
+                        as.character(undeclare(x), categories = TRUE),
+                        levels = sort(unique(labs)),
+                        ordered = ordered
+                    )
                 }
                 else if (levels == "values") {
                     levels <- unique(undeclare(sort(x, na.last = TRUE)))
