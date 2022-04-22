@@ -2,9 +2,7 @@
 \alias{declared}
 \alias{is.declared}
 \alias{as.declared}
-\alias{as_declared}
 \alias{as.haven}
-\alias{as_haven}
 \alias{undeclare}
 
 \title{Labelled vectors with declared missing values}
@@ -38,19 +36,19 @@ undeclare(x, drop = FALSE, ...)
 
 \item{labels}{A named vector or \code{NULL}. The vector should be the same type
 as \code{x}. Unlike factors, labels don't need to be exhaustive: only a fraction
-of the values might be labelled.}
+of the values might be labelled}
 
 \item{na_values}{A vector of values that should also be considered as missing.}
 
 \item{na_range}{A numeric vector of length two giving the (inclusive) extents
 of the range. Use \code{-Inf} and \code{Inf} if you want the range to be
-open ended.}
+open ended}
 
-\item{label}{A short, human-readable description of the vector.}
+\item{label}{A short, human-readable description of the vector}
 
-\item{drop}{Logical, drop all attributes.}
+\item{drop}{Logical, drop all attributes}
 
-\item{...}{Other arguments used by various other methods.}
+\item{...}{Other arguments used by various other methods}
 }
 
 
@@ -133,4 +131,9 @@ c(x, 2, -1)
 
 # switch NAs with their original values
 undeclare(x)
+
+as.character(x)
+
+# Returning values instead of categories
+as.character(x, values = TRUE)
 }

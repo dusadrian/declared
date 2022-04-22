@@ -1,4 +1,8 @@
-Version 0.14
+Version 0.16
+    o New logical argument "values" in the S3 method for as.character()
+    o Removed aliases as_declared() and as_haven() from the namespace
+
+Version 0.15
     o Class method for many / most primitive functions, with declared objects
     o Bug fix in w_table() affecting zero frequency categories
     o Dropped alias frtable() from function w_table()
@@ -35,7 +39,7 @@ Version 0.10
     o New functions w_mean(), w_var() and w_sd(), w_quantile and w_median, to 
       obtain weighted versions of mean, variance and standard deviation,
       quantiles and median, respectively, adapted to declared objects
-    o Fixed a bug in as_haven.declared(), when all values are (declared) missing
+    o Fixed a bug in as.haven.declared(), when all values are (declared) missing
       and labels are not numeric
     o Argument "weight" changed to "wt" in w_table()
     o New arguments in function w_table(): "observed" to only print observed
@@ -63,7 +67,7 @@ Version 0.7
 Version 0.6
     o Improved treatment of arithmetic operations, attributes are no longer
       propagated (thanks to Randall Pruim for the suggestion)
-    o Modified as_haven() for objects of class 'declared', to avoid a bug in
+    o Modified as.haven() for objects of class 'declared', to avoid a bug in
       package ReadStat that prevents exporting missing values to SPSS for
       integer variables
 

@@ -5,9 +5,7 @@ useDynLib(declared, .registration = TRUE)
 
 export(
     as.declared,
-    as_declared,
     as.haven,
-    as_haven,
     format_declared,
     is.declared,
     is.empty,
