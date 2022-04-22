@@ -213,8 +213,8 @@
                     vals <- sort(unique(x), na.last = TRUE)
                     
                     x <- factor(
-                        as.character(undeclare(x), categories = TRUE),
-                        levels = as.character(undeclare(vals), categories = TRUE),
+                        as.character(undeclare(x)),
+                        levels = as.character(undeclare(vals)),
                         ordered = ordered
                     )
                 }
@@ -222,7 +222,7 @@
                     levs <- unname(labels)
                     labs <- names(labels)
                     x <- factor(
-                        as.character(undeclare(x), categories = TRUE),
+                        as.character(undeclare(x)),
                         levels = sort(unique(labs)),
                         ordered = ordered
                     )
