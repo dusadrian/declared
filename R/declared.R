@@ -4,11 +4,6 @@
 }
 
 
-`as_declared` <- function(x, ...) {
-    UseMethod("as.declared")
-}
-
-
 `as.declared` <- function(x, ...) {
     UseMethod("as.declared")
 }
@@ -102,7 +97,7 @@
             x[[i]] <- as.declared(x[[i]], vname_ = nms[i], ... = ...)
         }
     }
-    class(x) <- "data.frame"
+
     return(x)
 }
 
@@ -289,16 +284,19 @@
     structure(x, class = c("declared", other_classes, class(x)))
 }
 
-`as.character.declared` <- function(x, ...) {
+`as.character.declared` <- function(x, values = FALSE, ...) {
+
     labels <- names_values(x)
-
     x <- undeclare(x)
-
     attributes(x) <- NULL
 
-    x[is.element(x, labels)] <- names(labels)[match(x[is.element(x, labels)], labels)]
+    if (isTRUE(values)) {
+        return(as.character(x))
+    }
 
+    x[is.element(x, labels)] <- names(labels)[match(x[is.element(x, labels)], labels)]
     return(x)
+    
 }
 
 
