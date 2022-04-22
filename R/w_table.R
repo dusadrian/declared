@@ -29,7 +29,11 @@
         # print(head(paste(as.character(x), undeclare(x), sep = "_-_")))
         
         x <- factor(
-            paste(as.character(x), undeclare(x, drop = TRUE), sep = "_-_"),
+            paste(
+                as.character(x),
+                undeclare(x, drop = TRUE),
+                sep = "_-_"
+            ),
             levels = paste(names(xvallab), xvallab, sep = "_-_")
         )
     }
@@ -54,7 +58,11 @@
             yvallab <- names_values(y)
             yna_values <- attr(yvallab, "missing")
             y <- factor(
-                paste(as.character(y), undeclare(y, drop = TRUE), sep = "_-_"),
+                paste(
+                    as.character(y),
+                    undeclare(y, drop = TRUE),
+                    sep = "_-_"
+                ),
                 levels = paste(names(yvallab), yvallab, sep = "_-_")
             )
         }
@@ -185,7 +193,6 @@
         attr(toprint, "show_values") <- values & xvalues
         attr(toprint, "na_values") <- xna_values
         attr(toprint, "valid") <- valid
-        # class(toprint) <- c("w_table", "data.frame")
     }
     
     if (is.matrix(orig)) {
