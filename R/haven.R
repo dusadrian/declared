@@ -3,11 +3,6 @@
 }
 
 
-`as_haven` <- function(x, ...) {
-    UseMethod("as.haven")
-}
-
-
 `as.haven.default` <- function(x, ...) {
     interactive <- TRUE
 
