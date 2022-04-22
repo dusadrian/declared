@@ -7,7 +7,7 @@
     ...) {
 
     if (eval(parse(text = "requireNamespace('haven', quietly = TRUE)"))) {
-        return(eval(parse(text = "pillar::pillar_shaft(as_haven(x))")))
+        return(eval(parse(text = "pillar::pillar_shaft(as.haven(x))")))
     }
 
     if (!isTRUE(show_labels) | !pillar_print_pkgs_available()) {
