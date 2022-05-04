@@ -46,9 +46,10 @@
 
 `print.w_table` <- function(x, force = FALSE, startend = TRUE, ...) {
     toprint <- attr(x, "toprint")
+    achar <- rawToChar(as.raw(c(195, 130)))
     irv <- c(194, 180)
     tick <- unlist(strsplit(rawToChar(as.raw(irv)), split = ""))
-    tick <- c(paste0(rawToChar(as.raw(c(195, 130))), tick), tick)
+    tick <- c(paste0(achar, "'"), paste0(achar, tick), tick)
 
     if (x[1] != as.matrix(toprint)[1]) {
         # this means the original table was altered. e.g. proportions(tbl)
