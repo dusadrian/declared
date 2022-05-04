@@ -402,6 +402,7 @@
     register_S3_method("vctrs", "vec_ptype_full", "declared")
     register_S3_method("vctrs", "vec_ptype2", "declared")
 
+    register_S3_method("vroom", "output_column", "declared")
     invisible()
 }
 
