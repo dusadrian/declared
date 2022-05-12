@@ -339,40 +339,6 @@
         }
     }
 
-    if (unlockEnvironment_(asNamespace("utils"))) {
-        env <- as.environment("package:utils")
-
-        do.call("unlockBinding", list(sym = "write.csv", env = env))
-
-         env$write.csv <- function(...) {
-            # Call <- as.list(match.call(expand.dots = TRUE))
-            dots <- list(...)
-            
-            for (argname in c("append", "col.names", "sep", "dec", "qmethod")) {
-                if (!is.null(dots[[argname]])) {
-                    warning(gettextf("attempt to set '%s' ignored", argname), domain = NA)
-                }
-            }
-            
-            dots[[1L]] <- undeclare(dots[[1L]])
-
-            dots$append <- NULL
-            rn <- dots$row.names
-            dots$col.names <- if (is.logical(rn) && !rn) {
-                TRUE
-            }
-            else {
-                NA
-            }
-            dots$sep <- ","
-            dots$dec <- "."
-            dots$qmethod <- "double"
-            dots$na <- ""
-
-            do.call("write.table", dots)
-        }
-    }
-
     register_S3_method("labelled", "na_values", "declared")
     register_S3_method("labelled", "na_values<-", "declared")
     register_S3_method("labelled", "na_range", "declared")
