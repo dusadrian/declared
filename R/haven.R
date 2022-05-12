@@ -35,7 +35,8 @@
     attributes(x) <- NULL # or x <- unclass(x), but I find this cleaner
 
     if (possibleNumeric_(x) || all(is.na(x))) {
-        x <- as.numeric(x)
+        x <- as.double(x)
+        attr(x, "class") <- "double"
     }
 
     if (!is.null(na_index)) {
@@ -96,7 +97,6 @@
             attrx$labels <- labels
         }
     }
-
     #------------------------------------------
 
     attrx$na_index <- NULL
