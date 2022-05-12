@@ -106,7 +106,7 @@
     # detour until ReadStat deals with integers
     attrx$class <- unique(c(
             "haven_labelled_spss", "haven_labelled", "vctrs_vctr",
-            setdiff(attrx$class, c("declared", "double", "integer")),
+            setdiff(attrx$class, c("declared", "double", "integer", "character")),
             class(x)
     ))
     #------------------------------------------
