@@ -1,6 +1,6 @@
 Package: declared
-Version: 0.15
-Date: 2022-04-13
+Version: 0.16
+Date: 2022-05-12
 Title: Functions to Declare Missing Values
 Authors@R: person(given = "Adrian", family = "Dusa",
                   role = c("aut", "cre", "cph"),

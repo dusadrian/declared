@@ -1,6 +1,7 @@
 Version 0.16
     o New logical argument "values" in the S3 method for as.character()
     o Removed aliases as_declared() and as_haven() from the namespace
+    o Fixed as.haven() which should return double objects
 
 Version 0.15
     o Class method for many / most primitive functions, with declared objects
