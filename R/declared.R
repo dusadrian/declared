@@ -233,11 +233,12 @@
     xchar <- FALSE
 
     if (!is.null(labels)) {
-        if (possibleNumeric_(labels)) {
+        if (possibleNumeric_(labels) && possibleNumeric_(x)) {
             labels <- asNumeric_(labels)
         }
         else {
             x <- as.character(x)
+            labels <- as.character(labels)
             xchar <- TRUE
             na_range <- NULL
         }
