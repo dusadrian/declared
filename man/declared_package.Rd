@@ -25,8 +25,8 @@ offer a complementary alternative for the objects of class "declared".
     \tabular{ll}{
     Package: \tab declared\cr
     Type: \tab Package\cr
-    Version: \tab 0.15\cr
-    Date: \tab 2022-04-13\cr
+    Version: \tab 0.16\cr
+    Date: \tab 2022-05-12\cr
     License: \tab GPL-v3\cr
     }
 }
