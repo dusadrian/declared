@@ -186,8 +186,9 @@
     }
 
     if (!is.null(na_range)) {
-        type_ok <-  (is.character(x) && is.character(na_range)) ||
-                    (is.numeric(x) && is.numeric(na_range))
+        type_ok <-  all(is.na(x)) ||
+            (is.character(x) && is.character(na_range)) ||
+            (is.numeric(x) && is.numeric(na_range))
 
         if (!type_ok || length(na_range) != 2) {
             stopError_("`na_range` must be a vector of length two of the same type as `x`.")
@@ -218,6 +219,7 @@
         }
 
         wnms <- which(is.element(na_values, nms))
+
         if (length(wnms) > 0) {
             for (i in wnms) {
                 na_values[i] <- which(nms == na_values[i])
@@ -228,10 +230,39 @@
         }
     }
 
+    xchar <- FALSE
+
+    if (!is.null(labels)) {
+        if (possibleNumeric_(labels)) {
+            labels <- asNumeric_(labels)
+        }
+        else {
+            x <- as.character(x)
+            xchar <- TRUE
+            na_range <- NULL
+        }
+    }
+
+    if (!is.null(na_values)) {
+        if (possibleNumeric_(na_values) & !xchar) {
+            na_values <- asNumeric_(na_values)
+        }
+        else {
+            na_values <- as.character(na_values)
+        }
+    }
+
+    if (possibleNumeric_(x) & !xchar) {
+        x <- asNumeric_(x)
+    }
+    else {
+        x <- as.character(x)
+    }
+
     attributes(x) <- NULL
+
     
     validate_declared(x, labels, label, na_values, na_range)
-
     
     misvals <- all_missing_values(x, na_values, na_range, labels)
 
@@ -273,7 +304,10 @@
     
     notna <- !is.na(value)
     x[notna] <- NA
-    x <- coerceMode_(x)
+
+    if (!all(is.na(x))) {
+        x <- coerceMode_(x)
+    }
 
     if (any(notna)) {
         na_index <- which(notna)
