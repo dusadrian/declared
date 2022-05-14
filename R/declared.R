@@ -238,7 +238,9 @@
         }
         else {
             x <- as.character(x)
+            nms <- names(labels)
             labels <- as.character(labels)
+            names(labels) <- nms
             xchar <- TRUE
             na_range <- NULL
         }
