@@ -1,6 +1,6 @@
 Package: declared
-Version: 0.16
-Date: 2022-05-12
+Version: 0.16-1
+Date: 2022-05-15
 Title: Functions to Declare Missing Values
 Authors@R: person(given = "Adrian", family = "Dusa",
                   role = c("aut", "cre", "cph"),
@@ -10,13 +10,13 @@ Depends: R (>= 3.5.0)
 License: GPL (>= 3)
 URL: https://github.com/dusadrian/declared
 BugReports: https://github.com/dusadrian/declared/issues
-Description: A set of functions to declare labels and missing values, coupled with
-    associated functions to create (weighted) tables of frequencies and various
-    other summary measures. 
-    Various base functions are rewritten to make use of the specific information
-    about the missing values, most importantly to distinguish between empty and
-    declared missing values.
-    Many functions have a similar functionality with the corresponding functions
-    from packages "haven" and "labelled". A lot of effort was spent to ensure as
-    much compatibility as possible with these packages, with the intention to
-    offer a complementary alternative for the objects of class "declared".
+Description: A set of functions to declare labels and missing values, coupled
+    with associated functions to create (weighted) tables of frequencies and
+    various other summary measures. 
+    Some of the base functions have been rewritten to make use of the specific 
+    information about the missing values, most importantly to distinguish
+    between empty and declared missing values.
+    Many functions have a similar functionality with the corresponding ones from
+    packages "haven" and "labelled". A lot of effort was spent to ensure as much
+    compatibility as possible with these packages, with the intention to offer
+    an alternative in the objects of class "declared".

@@ -12,21 +12,21 @@ Functions to Declare Missing Values
 A set of functions to declare labels and missing values, coupled with
 associated functions to create (weighted) tables of frequencies and various
 other summary measures. 
-Various base functions are rewritten to make use of the specific information
+Some of the base functions are rewritten to make use of the specific information
 about the missing values, most importantly to distinguish between empty and
 declared missing values.
-Many functions have a similar functionality with the corresponding functions
+Many functions have a similar functionality with the corresponding ones
 from packages "haven" and "labelled". A lot of effort was spent to ensure as
 much compatibility as possible with these packages, with the intention to
-offer a complementary alternative for the objects of class "declared".
+offer an alternative in the objects of class "declared".
 }
 
 \details{
     \tabular{ll}{
     Package: \tab declared\cr
     Type: \tab Package\cr
-    Version: \tab 0.16\cr
-    Date: \tab 2022-05-12\cr
+    Version: \tab 0.16-1\cr
+    Date: \tab 2022-05-15\cr
     License: \tab GPL-v3\cr
     }
 }
