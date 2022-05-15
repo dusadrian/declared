@@ -234,7 +234,7 @@
 
     if (!is.null(labels)) {
         nms <- names(labels)
-        if (possibleNumeric_(labels) && possibleNumeric_(x)) {
+        if (possibleNumeric_(labels) && (possibleNumeric_(x) | all(is.na(x)))) {
             labels <- asNumeric_(labels)
         }
         else {
@@ -255,7 +255,7 @@
         }
     }
 
-    if (possibleNumeric_(x) & !xchar) {
+    if ((possibleNumeric_(x) | all(is.na(x))) & !xchar) {
         x <- asNumeric_(x)
     }
     else {
