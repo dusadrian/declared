@@ -1,3 +1,7 @@
+Version 0.17
+    o correctly determine the object mode, function of both value labels and
+      input values (especially when all input values are empty missing NAs)
+
 Version 0.16
     o New logical argument "values" in the S3 method for as.character()
     o Removed aliases as_declared() and as_haven() from the namespace
