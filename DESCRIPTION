@@ -1,6 +1,6 @@
 Package: declared
-Version: 0.16.1
-Date: 2022-05-15
+Version: 0.16.2
+Date: 2022-06-10
 Title: Functions to Declare Missing Values
 Authors@R: person(given = "Adrian", family = "Dusa",
                   role = c("aut", "cre", "cph"),
@@ -17,6 +17,6 @@ Description: A set of functions to declare labels and missing values, coupled
     information about the missing values, most importantly to distinguish
     between empty and declared missing values.
     Many functions have a similar functionality with the corresponding ones from
-    packages "haven" and "labelled". A lot of effort was spent to ensure as much
-    compatibility as possible with these packages, with the intention to offer
-    an alternative in the objects of class "declared".
+    packages "haven" and "labelled". The aim is to ensure as much compatibility
+    as possible with these packages, while offering an alternative in the
+    objects of class "declared".
