@@ -57,7 +57,9 @@
         names(dimnames(x)) <- NULL
         attr(x, "toprint") <- NULL
         rownames(x) <- gsub(paste(tick, collapse = "|"), "'", rownames(x))
-        colnames(x) <- gsub(paste(tick, collapse = "|"), "'", colnames(x))
+        if (length(dimnames(x)) == 2) {
+            colnames(x) <- gsub(paste(tick, collapse = "|"), "'", colnames(x))
+        }
         print(x)
     }
     else {
