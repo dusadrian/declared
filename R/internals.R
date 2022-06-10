@@ -329,21 +329,22 @@
     return(!any(is.na(suppressWarnings(as.numeric(na.omit(x))))))
 }
 
-`asNumeric_` <- function(x) {
+`asNumeric_` <- function(x, levels = TRUE) {
     if (is.numeric(x)) {
         return(x)
     }
 
     if (is.factor(x)) {
-        return(suppressWarnings(as.numeric(levels(x)))[x])
+        if (isTRUE(levels)) {
+            return(suppressWarnings(as.numeric(levels(x)))[x])
+        }
+        return(as.numeric(x))
     }
 
     result <- rep(NA, length(x))
     multibyte <- grepl("[^!-~ ]", x)
 
-    if (inherits(x, "haven_labelled")) {
-        attributes(x) <- NULL
-    }
+    attributes(x) <- NULL
     
     result[!multibyte] <- suppressWarnings(as.numeric(x[!multibyte]))
     
@@ -482,6 +483,7 @@
 
     result <- rep(0, length(x))
     x <- asNumeric_(x)
+    attributes(x) <- NULL
     result[is.na(x)] <- NA
     hasdec <- (x %% 1) - .Machine$double.eps^0.5 > 0
 
