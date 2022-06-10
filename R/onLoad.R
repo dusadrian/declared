@@ -204,7 +204,7 @@
             if (is.declared(x)) {
                 levels <- match.arg(levels)
                 label <- attr(x, "label", exact = TRUE)
-                labels <- attr(x, "labels")
+                labels <- attr(x, "labels", exact = TRUE)
 
                 if (levels == "both") {
                     names(labels) <- paste0("[", labels, "] ", names(labels))
@@ -221,6 +221,7 @@
                 else if (levels %in% c("default", "labels")) {
                     levs <- unname(labels)
                     labs <- names(labels)
+                    
                     x <- factor(
                         as.character(undeclare(x)),
                         levels = sort(unique(labs)),
@@ -228,12 +229,21 @@
                     )
                 }
                 else if (levels == "values") {
-                    levels <- unique(undeclare(sort(x, na.last = TRUE)))
+                    levels <- unique(
+                        undeclare(
+                            sort(x, na.last = TRUE),
+                            drop = TRUE
+                        )
+                    )
                     
-                    x <- factor(undeclare(x), levels, ordered = ordered)
+                    x <- factor(
+                        undeclare(x, drop = TRUE),
+                        levels,
+                        ordered = ordered
+                    )
                 }
 
-                return(structure(x, label = label))
+                return(x)
             }
             else {
                 if (is.factor(x)) 
