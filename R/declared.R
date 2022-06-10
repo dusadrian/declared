@@ -324,16 +324,15 @@
 `as.character.declared` <- function(x, values = FALSE, ...) {
 
     labels <- names_values(x)
-    x <- undeclare(x)
-    attributes(x) <- NULL
+    x <- undeclare(x, drop = TRUE)
 
     if (isTRUE(values)) {
         return(as.character(x))
     }
 
     x[is.element(x, labels)] <- names(labels)[match(x[is.element(x, labels)], labels)]
+
     return(x)
-    
 }
 
 
@@ -1026,7 +1025,7 @@
 
 
 
-# TO DO:
+# TODO:
 # anyDuplicated() ?
 # cut() ?
 # diff() ?
