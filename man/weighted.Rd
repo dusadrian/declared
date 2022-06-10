@@ -14,8 +14,8 @@
 
 \description{
 Functions to compute weighted tables or summaries, based on a vector of frequency
-weights. These are reimplementations of variously existing functions, but adapted
-to objects of class \code{"declared"} (see Details below)
+weights. These are reimplementations of various existing functions, adapted to
+objects of class \code{"declared"} (see Details below)
 }
 
 \usage{
@@ -124,7 +124,7 @@ Other arguments can be passed to the stats function \code{quantile()} via the
 three dots \code{...} argument, and their extensive explanation is found in the
 corresponding stats function's help page.
 
-For all functions, the argument \code{na.rm} refers to the undeclared missing
+For all functions, the argument \code{na.rm} refers to the empty missing
 values and its default is set to TRUE. The declared missing values are
 automatically eliminated from the summary statistics, even if this argument is
 deactivated.

@@ -1,6 +1,6 @@
 Version 0.17
     o correctly determine the object mode, function of both value labels and
-      input values (especially when all input values are empty missing NAs)
+      input values (especially when all input values are empty NA values)
 
 Version 0.16
     o New logical argument "values" in the S3 method for as.character()
@@ -72,7 +72,7 @@ Version 0.7
 Version 0.6
     o Improved treatment of arithmetic operations, attributes are no longer
       propagated (thanks to Randall Pruim for the suggestion)
-    o Modified as.haven() for objects of class 'declared', to avoid a bug in
+    o Modified as.haven() for objects of class "declared", to avoid a bug in
       package ReadStat that prevents exporting missing values to SPSS for
       integer variables
 
