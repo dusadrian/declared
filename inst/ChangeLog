@@ -1,6 +1,8 @@
 Version 0.17
     o correctly determine the object mode, function of both value labels and
       input values (especially when all input values are empty NA values)
+    o new argument "measurement" in function declared()
+    o new function measurement(), to query and allocate measurement levels
 
 Version 0.16
     o New logical argument "values" in the S3 method for as.character()

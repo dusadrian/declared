@@ -13,7 +13,145 @@
     if (!is.null(type)) {
         return(paste0("<", type, ">"))
     }
+
+    return(type)
 }
+
+
+`check_measurement` <- function(x) {
+
+    if (is.null(x)) {
+        return(x)
+    }
+
+    x <- trimstr_(tolower(unlist(strsplit(x, split = ","))))
+
+    if (is.null(x)) {
+        return(x)
+    }
+
+    mlevels <- c(
+        "categorical", "nominal", "ordinal",
+        "quantitative", "interval", "ratio", "discrete", "continuous"
+    )
+
+    if (any(x == "qualitative")) {
+        x[x == "qualitative"] <- "categorical"
+    }
+
+    if (any(x == "metric")) {
+        x[x == "metric"] <- "quantitative"
+    }
+
+    if (any(x == "numeric")) {
+        x[x == "numeric"] <- "quantitative"
+    }
+
+    position <- pmatch(x, mlevels)
+    
+    if (any(is.na(position))) {
+        stopError_("Unknown measurement level.")
+    }
+
+    position <- sort(position)
+
+    first <- unique(ifelse(position < 4, 1, 4))
+
+    if (length(first) > 1) {
+        stopError_(
+            "Measurement can not be categorical and quantitative at the same time."
+        )
+    }
+
+    cpos <- setdiff(position, first)
+    if (length(cpos) > 1) {
+
+        if (first == 4) { # quantitative
+            # check for combinations of interval / ratio and discrete / continuous
+            if (any(cpos < 7)) {
+                ir <- cpos[cpos < 7]
+                if (length(ir) > 1) {
+                    stopError_(
+                        sprintf(
+                            "Measurement can not be both %s and %s at the same time.",
+                            mlevels[ir[1]],
+                            mlevels[ir[2]]
+                        )
+                    )
+                }
+            }
+
+            if (any(cpos > 6)) {
+                dc <- cpos[cpos > 6]
+                if (length(dc) > 1) {
+                    stopError_(
+                        sprintf(
+                            "Measurement can not be both %s and %s at the same time.",
+                            mlevels[dc[1]],
+                            mlevels[dc[2]]
+                        )
+                    )
+                }
+            }
+        }
+        else {
+            stopError_(
+                sprintf(
+                    "Measurement can not be both %s and %s at the same time.",
+                    mlevels[position[1]],
+                    mlevels[position[2]]
+                )
+            )
+        }
+
+        return(paste(mlevels[unique(sort(c(first, cpos)))], collapse = ", "))
+    }
+    else {
+        if (cpos == first) {
+            return(mlevels[first])
+        }
+        else {
+            return(paste(c(mlevels[first], mlevels[cpos]), collapse = ", "))
+        }
+    }
+}
+
+
+`likely_measurement` <- function(x) {
+
+    labels <- attr(x, "labels", exact = TRUE)
+    na_values <- attr(x, "na_values")
+    x <- undeclare(x, drop = TRUE)
+    
+    xnumeric <- possibleNumeric_(x)
+    uniquevals <- unique(x)
+    
+    if (length(labels) > 0) {
+        
+        # possibly a categorical variable
+        # but even numeric variables can have labels (for missing values)
+        # unique values excepting the missing values
+        except_na <- setdiff(uniquevals, na_values)
+        
+        if (all(is.element(labels, na_values))) {
+            if (xnumeric) {
+                return("quantitative")
+            }
+            else {
+                return("") # character, but cannot determine the measurement level
+            }
+        }
+        
+        return("categorical")
+    }
+
+    if (xnumeric) {
+        return("quantitative")
+    }
+    
+    return("") # character, but cannot determine the measurement level
+}
+
 
 `all_missing_values` <- function(
     x, na_values = NULL, na_range = NULL, labels = NULL
@@ -68,6 +206,7 @@
     return(misvals)
 }
 
+
 `format_declared` <- function(x, digits = getOption("digits")) {
     if (!is.atomic(x)) {
         stopError_("`x` has to be a vector.")
@@ -81,6 +220,7 @@
     # format again to make sure all elements have same width
     return(format(out, justify = "right"))
 }
+
 
 `order_declared` <- function(x, na.last = NA, decreasing = FALSE, method = c("auto",
     "shell", "radix"), empty.last = na.last) {
@@ -148,6 +288,7 @@
     return(res)
 }
 
+
 `names_values` <- function(x) {
 
     if (!inherits(x, "declared") & !inherits(x, "haven_labelled_spss")) {
@@ -207,6 +348,7 @@
 }
 
 
+
 # the following functions are copied from package admisc
 # to achieve zero dependency
 
@@ -242,6 +384,7 @@
     )
 }
 
+
 `coerceMode_` <- function(x) {
 
     if (!is.atomic(x)) {
@@ -268,6 +411,7 @@
 
     return(x)
 }
+
 
 `possibleNumeric_` <- function(x, each = FALSE) {
 
@@ -329,6 +473,7 @@
     return(!any(is.na(suppressWarnings(as.numeric(na.omit(x))))))
 }
 
+
 `asNumeric_` <- function(x, levels = TRUE) {
     if (is.numeric(x)) {
         return(x)
@@ -350,6 +495,7 @@
     
     return(result)
 }
+
 
 `wholeNumeric_` <- function(x, each = FALSE) {
     if (inherits(x, "haven_labelled") || inherits(x, "declared")) {
@@ -388,6 +534,7 @@
     return(all(result[!isna]))
 }
 
+
 `tryCatchWEM_` <- function(expr, capture = FALSE) {
     toreturn <- list()
     output <- withVisible(withCallingHandlers(
@@ -415,13 +562,16 @@
     }
 }
 
+
 `padLeft_` <- function(x, n) {
     paste(c(rep(" ", n), x), collapse = "", sep = "")
 }
 
+
 `padRight_` <- function(x, n) {
     paste(c(x, rep(" ", n)), collapse = "", sep = "")
 }
+
 
 `padBoth_` <- function(x, n) {
     n1 <- ceiling(n/2)
@@ -429,9 +579,11 @@
     paste(c(rep(" ", n1), x, rep(" ", n2)), collapse = "", sep = "")
 }
 
+
 `unlockEnvironment_` <- function(env) {
      .Call("_unlockEnvironment", env, PACKAGE = "declared")
 }
+
 
 `makeTag_` <- function(...) {
     x <- as.character(c(...))
@@ -441,6 +593,7 @@
 
     return(x)
 }
+
 
 `hasTag_` <- function(x, tag = NULL) {
     if (!is.double(x)) {
@@ -458,6 +611,7 @@
     return(.Call("_hasTag_", x, tag, PACKAGE = "declared"))
 }
 
+
 `getTag_` <- function(x) {
     if (is.double(x)) {
         x <- .Call("_getTag_", x, PACKAGE = "declared")
@@ -471,6 +625,7 @@
         return(rep(NA, length(x)))
     }
 }
+
 
 `numdec_` <- function(x, each = FALSE, na.rm = TRUE, maxdec = 15) {
 
@@ -501,13 +656,26 @@
     return(max(result, na.rm = na.rm))
 }
 
+
 `trimstr_` <- function(x, what = " ", side = "both") {
-    if (is.element(what, c("*", "+"))) what <- paste("\\", what, sep = "")
-    what <- ifelse(what == " ", "[[:space:]]", what)
-    pattern <- switch(side,
-    both = paste("^", what, "+|", what, "+$", sep = ""),
-    left = paste("^", what, "+", sep = ""),
-    right = paste(what, "+$", sep = "")
+    irv <- c(194, 160)
+    multibyte_space <- rawToChar(as.raw(irv))
+    
+    if (is.element(what, c("*", "+"))) {
+        what <- paste("\\", what, sep = "")
+    }
+    
+    what <- ifelse(
+        identical(what, " "),
+        paste0("[[:space:]|", multibyte_space, "]"),
+        what
     )
+    
+    pattern <- switch(side,
+        both = paste("^", what, "+|", what, "+$", sep = ""),
+        left = paste("^", what, "+", sep = ""),
+        right = paste(what, "+$", sep = "")
+    )
+
     gsub(pattern, "", x)
 }

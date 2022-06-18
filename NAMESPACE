@@ -10,6 +10,8 @@ export(
     is.declared,
     is.empty,
     declared,
+    measurement,
+    "measurement<-",
     missing_values,
     "missing_values<-",
     missing_range,
@@ -121,6 +123,10 @@ S3method("Im", declared)
 S3method("Mod", declared)
 S3method("Re", declared)
 
+S3method(measurement, default)
+S3method(measurement, declared)
+S3method("measurement<-", default)
+S3method("measurement<-", declared)
 S3method(missing_values, default)
 S3method(missing_values, haven_labelled_spss)
 S3method(missing_values, declared)
