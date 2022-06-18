@@ -19,6 +19,7 @@ declared(
     na_values = NULL,
     na_range = NULL,
     label = NULL,
+    measurement = NULL,
     ...
 )
 
@@ -47,6 +48,8 @@ open ended}
 \item{label}{A short, human-readable description of the vector}
 
 \item{drop}{Logical, drop all attributes}
+
+\item{measurement}{Optional, user specified measurement level}
 
 \item{...}{Other arguments used by various other methods}
 }
@@ -92,6 +95,17 @@ numeric values, and drops all attributes related to missing values:
 \code{na_values}, \code{na_range} and \code{na_index}. The result can be a
 regular vector (thus dropping all attributes, including the class "declared")
 by activating the argument \code{drop}.
+
+The measurement level is optional and, for the moment, purely aesthetic. It might
+however be useful to (automatically) determine if a declared object is suitable
+for a certain statistical analysis, for instance regression requires quantitative
+variables, while some declared objects are certainly categorical despite using
+numbers to denote categories.
+
+It distinguishes between \code{"categorial"} and \code{"quantitative"} types of
+variables, and additionally recognizes \code{"nominal"} and \code{"ordinal"} as
+categorical, and similarly recognizes \code{"interval"}, \code{"ratio"},
+\code{"discrete"} and \code{"continuous"} as quantitative.
 }
 
 \value{
