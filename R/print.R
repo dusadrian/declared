@@ -4,7 +4,20 @@
         label <- paste("", label)
     }
 
-    cat(paste0("<declared", likely_type(x), "[", length(x), "]>", label, "\n"))
+    measurement <- attr(x, "measurement")
+
+    # type <- likely_type(x)
+    cat(
+        paste0(
+            "<declared",
+            # ifelse(is.null(measurement), "", paste0(", ", measurement)),
+            # ifelse(is.null(type), "", paste0(", ", type)),
+            likely_type(x),
+            "[", length(x), "]>",
+            label,
+            "\n"
+        )
+    )
     if (length(x) > 0) {
         print(noquote(format_declared(x)), ...)
 
