@@ -1,3 +1,7 @@
+Version 0.18
+    o changed default for as.factor(), with values and (where available) levels
+      (thanks to Danial Antal for the report)
+
 Version 0.17
     o correctly determine the object mode, function of both value labels and
       input values (especially when all input values are empty NA values)
