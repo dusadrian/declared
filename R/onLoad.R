@@ -202,6 +202,11 @@
             ...
         ) {
             if (is.declared(x)) {
+                if (!keep_na_values) {
+                    attr(x, "na_index") <- NULL
+                    attr(x, "na_values") <- NULL
+                }
+
                 levels <- match.arg(levels)
                 label <- attr(x, "label", exact = TRUE)
                 labels <- attr(x, "labels", exact = TRUE)
