@@ -41,6 +41,7 @@ S3method(format, pillar_shaft_declared_chr)
 S3method(format, pillar_shaft_declared_num)
 
 S3method(all.equal, declared)
+S3method(as.double, declared)
 S3method(as.character, declared)
 S3method(c, declared)
 S3method(head, declared)

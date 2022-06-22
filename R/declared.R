@@ -290,8 +290,16 @@
     return(x)
 }
 
+`as.double.declared` <- function(x, drop_na = TRUE, ...) {
+    if (!drop_na) {
+        x <- undeclare(x)
+    }
 
-`as.character.declared` <- function(x, values = FALSE, drop_na = TRUE,...) {
+    attributes(x) <- NULL
+    as.numeric(x, ... = ...)
+}
+
+`as.character.declared` <- function(x, values = FALSE, drop_na = TRUE, ...) {
 
     labels <- names_values(x, drop_na = drop_na)
     if (drop_na) {

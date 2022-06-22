@@ -1,7 +1,8 @@
 Version 0.18
+    o new argument "drop_na" (defaulted to TRUE) in functions as.numeric(), 
+      as.character() and as.factor()
     o changed default for as.factor(), with values and (where available) levels
       (thanks to Danial Antal for the report)
-    o new argument "drop_na" in functions as.factor() and as.character()
 
 Version 0.17
     o correctly determine the object mode, function of both value labels and
