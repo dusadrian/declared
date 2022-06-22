@@ -289,15 +289,20 @@
 }
 
 
-`names_values` <- function(x) {
+`names_values` <- function(x, keep_na_values = TRUE) {
 
     if (!inherits(x, "declared") & !inherits(x, "haven_labelled_spss")) {
         stopError_("The input should be a declared / haven_labelled_spss vector.")
     }
 
     attrx <- attributes(x)
-    x <- undeclare(x)
-    attributes(x) <- NULL
+    
+    if (!keep_na_values) {
+        attr(x, "na_index") <- NULL
+        attr(x, "na_values") <- NULL
+    }
+
+    x <- undeclare(x, drop = TRUE)
     
     # attrx[["labels"]] is the equivalent of attr(x, "labels", exact = TRUE)
     labels <- attrx[["labels"]]

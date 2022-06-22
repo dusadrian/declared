@@ -291,9 +291,14 @@
 }
 
 
-`as.character.declared` <- function(x, values = FALSE, ...) {
+`as.character.declared` <- function(x, values = FALSE, keep_na_values = TRUE,...) {
 
-    labels <- names_values(x)
+    labels <- names_values(x, keep_na_values = keep_na_values)
+    if (!keep_na_values) {
+        attr(x, "na_index") <- NULL
+        attr(x, "na_values") <- NULL
+    }
+
     x <- undeclare(x, drop = TRUE)
 
     if (isTRUE(values)) {

@@ -198,7 +198,7 @@
         env$as.factor <- function(
             x,
             levels = c("default", "labels", "values", "both"),
-            ordered = FALSE,
+            ordered = FALSE, keep_na_values = TRUE,
             ...
         ) {
             if (is.declared(x)) {

@@ -1,6 +1,7 @@
 Version 0.18
     o changed default for as.factor(), with values and (where available) levels
       (thanks to Danial Antal for the report)
+    o new argument "keep_na_values" in functions as.factor() and as.character()
 
 Version 0.17
     o correctly determine the object mode, function of both value labels and
