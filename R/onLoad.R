@@ -198,11 +198,11 @@
         env$as.factor <- function(
             x,
             levels = c("default", "labels", "values", "both"),
-            ordered = FALSE, keep_na_values = TRUE,
+            ordered = FALSE, drop_na = TRUE,
             ...
         ) {
             if (is.declared(x)) {
-                if (!keep_na_values) {
+                if (drop_na) {
                     attr(x, "na_index") <- NULL
                     attr(x, "na_values") <- NULL
                 }

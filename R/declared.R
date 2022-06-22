@@ -291,10 +291,10 @@
 }
 
 
-`as.character.declared` <- function(x, values = FALSE, keep_na_values = TRUE,...) {
+`as.character.declared` <- function(x, values = FALSE, drop_na = TRUE,...) {
 
-    labels <- names_values(x, keep_na_values = keep_na_values)
-    if (!keep_na_values) {
+    labels <- names_values(x, drop_na = drop_na)
+    if (drop_na) {
         attr(x, "na_index") <- NULL
         attr(x, "na_values") <- NULL
     }

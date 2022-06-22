@@ -289,7 +289,7 @@
 }
 
 
-`names_values` <- function(x, keep_na_values = TRUE) {
+`names_values` <- function(x, drop_na = FALSE) {
 
     if (!inherits(x, "declared") & !inherits(x, "haven_labelled_spss")) {
         stopError_("The input should be a declared / haven_labelled_spss vector.")
@@ -297,7 +297,7 @@
 
     attrx <- attributes(x)
     
-    if (!keep_na_values) {
+    if (drop_na) {
         attr(x, "na_index") <- NULL
         attr(x, "na_values") <- NULL
     }
