@@ -1,5 +1,5 @@
 `print.declared` <- function(x, ...) {
-    label <- variable_label(x)
+    label <- label(x)
     if (!is.null(label)) {
         label <- paste("", label)
     }

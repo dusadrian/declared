@@ -10,6 +10,9 @@ export(
     is.declared,
     is.empty,
     declared,
+    label,
+    "label<-",
+    "labels<-",
     measurement,
     "measurement<-",
     missing_values,
@@ -27,10 +30,7 @@ export(
     w_table,
     w_var,
     w_quantile,
-    w_standardize,
-    "value_labels<-",
-    variable_label,
-    "variable_label<-"
+    w_standardize
 )
 
 
@@ -142,18 +142,17 @@ S3method(missing_range, data.frame)
 S3method("missing_range<-", default)
 S3method("missing_range<-", declared)
 
-S3method(value_labels, default)
-S3method(value_labels, haven_labelled_spss)
-S3method(value_labels, declared)
-S3method(value_labels, data.frame)
-S3method("value_labels<-", default)
-S3method("value_labels<-", declared)
+S3method(label, default)
+S3method(label, haven_labelled_spss)
+S3method(label, declared)
+S3method(label, data.frame)
+S3method("label<-", default)
+S3method("label<-", declared)
 
-S3method(variable_label, default)
-S3method(variable_label, haven_labelled_spss)
-S3method(variable_label, declared)
-S3method(variable_label, data.frame)
-S3method("variable_label<-", default)
-S3method("variable_label<-", declared)
+S3method(labels, declared)
+S3method(labels, data.frame)
+S3method(labels, haven_labelled_spss)
+S3method("labels<-", default)
+S3method("labels<-", declared)
 
 S3method("names<-", declared)

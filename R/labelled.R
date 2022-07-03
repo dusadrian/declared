@@ -58,8 +58,8 @@
 }
 
 `drop_unused_value_labels.declared` <- function(x) {
-    labels <- value_labels(x)
-    value_labels(x) <- labels[is.element(labels, unique(undeclare(x)))]
+    labels <- labels(x)
+    labels(x) <- labels[is.element(labels, unique(undeclare(x)))]
     return(x)
 }
 
@@ -68,7 +68,7 @@
         stop("`v` should be a single value", call. = FALSE, domain = "R-labelled")
     }
 
-    labels <- value_labels(x)
+    labels <- labels(x)
 
     if (v %in% labels) {
         if (prefixed) {
@@ -93,7 +93,7 @@
         call. = FALSE, domain = "R-labelled")
     }
 
-    labels <- value_labels(x)
+    labels <- labels(x)
 
     if (is.null(value)) {
         if (v %in% labels) {
@@ -113,7 +113,7 @@
     if (length(labels) == 0)
         labels <- NULL
 
-    value_labels(x) <- labels
+    labels(x) <- labels
     x
 }
 
@@ -122,7 +122,7 @@
 
     according_to <- match.arg(according_to)
     
-    labels <- value_labels(x)
+    labels <- labels(x)
     
     if (!is.null(labels)) {
         if (according_to == "values") {
@@ -133,7 +133,7 @@
             labels <- labels[order(names(labels), decreasing = decreasing)]
         }
 
-        value_labels(x) <- labels
+        labels(x) <- labels
     }
 
     return(x)
@@ -142,7 +142,7 @@
 `nolabel_to_na.declared` <- function(x) {
     allval <- unique(x)
     allval <- allval[!is.na(allval)]
-    nolabel <- allval[!allval %in% value_labels(x)]
+    nolabel <- allval[!allval %in% labels(x)]
     if (length(nolabel) > 0) {
         x[x %in% nolabel] <- NA
     }
@@ -150,22 +150,22 @@
 }
 
 `val_labels_to_na.declared` <- function(x) {
-    labels <- value_labels(x)
+    labels <- labels(x)
 
     if (length(labels) > 0) {
         x[is.element(x, labels)] <- NA
     }
 
-    value_labels(x) <- NULL
+    labels(x) <- NULL
     return(x)
 }
 
 `remove_labels.declared` <- function(x, user_na_to_na = FALSE, keep_var_label = FALSE) {
     if (!keep_var_label) {
-        variable_label(x) <- NULL
+        label(x) <- NULL
     }
 
-    value_labels(x) <- NULL
+    labels(x) <- NULL
     attr(x, "format.spss") <- NULL
     return(x)
 }
@@ -185,14 +185,14 @@
     ...) {
 
     x <- undeclare(x)
-    vl <- variable_label(x)
+    vl <- label(x)
     levels <- match.arg(levels)
     sort_levels <- match.arg(sort_levels)
     
     if (strict) {
         allval <- unique(x)
         allval <- allval[!is.na(allval)]
-        nolabel <- allval[!allval %in% value_labels(x)]
+        nolabel <- allval[!allval %in% labels(x)]
 
         if (length(nolabel) > 0) {
             if (unclass) {
@@ -202,7 +202,7 @@
         }
     }
 
-    labels <- value_labels(x)
+    labels <- labels(x)
     if (nolabel_to_na) {
         allval <- unique(x)
         allval <- allval[!is.na(allval)]
@@ -255,17 +255,17 @@
         x <- droplevels(x)
     }
 
-    variable_label(x) <- vl
+    label(x) <- vl
 
     return(x)
 }
 
 `to_character.declared` <- function(x, levels = c("labels", "values",
     "prefixed"), nolabel_to_na = FALSE, user_na_to_na = FALSE, ...) {
-    vl <- variable_label(x)
+    vl <- label(x)
     levels <- match.arg(levels)
     x <- as.character(eval(parse(text = "to_factor(x, levels = levels, nolabel_to_na = nolabel_to_na, user_na_to_na = FALSE)")))
-    variable_label(x) <- vl
+    label(x) <- vl
     x
 }
 
@@ -274,10 +274,10 @@
         stop("`from` and `to` should be of same type", call. = FALSE, domain = "R-labelled")
     }
 
-    variable_label(to) <- variable_label(from)
+    label(to) <- label(from)
 
     if (mode(from) == mode(to)) {
-        value_labels(to) <- value_labels(from)
+        labels(to) <- labels(from)
         missing_range(to) <- missing_range(from)
         missing_values(to) <- missing_values(from)
     }

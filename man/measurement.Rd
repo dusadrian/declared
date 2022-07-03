@@ -31,7 +31,7 @@ declared object is suitable for a certain statistical analysis, for instance
 regression requires quantitative variables, while some declared objects are
 certainly categorical despite using numbers to denote categories.
 
-It distinguishes between \code{"categorial"} and \code{"quantitative"} types of
+It distinguishes between \code{"categorical"} and \code{"quantitative"} types of
 variables, and additionally recognizes \code{"nominal"} and \code{"ordinal"} as
 categorical, and similarly recognizes \code{"interval"}, \code{"ratio"},
 \code{"discrete"} and \code{"continuous"} as quantitative.
@@ -64,7 +64,7 @@ measurement(x) <- "ordinal"
 measurement(x)
 
 # the same with
-variable_label(x) <- "categorical, ordinal"
+measurement(x) <- "categorical, ordinal"
 
 
 x <- declared(

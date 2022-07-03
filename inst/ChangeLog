@@ -1,4 +1,7 @@
 Version 0.18
+    o function value_labels() has been replaced with the generic base function
+      labels(), and the function variable_label() has been replaced with the
+      function label()
     o new argument "drop_na" (defaulted to TRUE) in functions as.numeric(), 
       as.character() and as.factor()
     o changed default for as.factor(), with values and (where available) levels
