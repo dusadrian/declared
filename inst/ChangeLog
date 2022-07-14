@@ -1,4 +1,5 @@
 Version 0.18
+    o improved method for rbind() data frames, taking care of declared variables
     o function value_labels() has been replaced with the generic base function
       labels(), and the function variable_label() has been replaced with the
       function label()
