@@ -1,10 +1,8 @@
 \name{Labels}
 \alias{labels}
 \alias{labels<-}
-\alias{value_labels}
 \alias{label}
 \alias{label<-}
-\alias{variable_label}
 
 \title{Get / Declare value labels}
 
