@@ -5,7 +5,7 @@
 \docType{package}
 
 \title{
-Functions to Declare Missing Values
+Functions for Declared Missing Values
 }
 
 \description{
@@ -26,7 +26,7 @@ class "declared".
     Package: \tab declared\cr
     Type: \tab Package\cr
     Version: \tab 0.17.3\cr
-    Date: \tab 2022-07-03\cr
+    Date: \tab 2022-07-15\cr
     License: \tab GPL-v3\cr
     }
 }
