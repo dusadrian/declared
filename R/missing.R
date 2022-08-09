@@ -63,7 +63,6 @@
     UseMethod("missing_range<-")
 }
 
-#' @export
 `missing_range<-.default` <- function(x, value) {
     # do nothing
     x
