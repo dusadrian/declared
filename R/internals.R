@@ -341,7 +341,8 @@
         nms <- names(labels)
         for (i in seq(length(xnotmis))) {
             if (any(isel <- labels == xnotmis[i])) {
-                names(xnotmis)[i] <- ifelse(nms[isel] == "", xnotmis[i], nms[isel])
+                # names(xnotmis)[i] <- ifelse(nms[isel] == "", xnotmis[i], nms[isel])
+                names(xnotmis)[i] <- ifelse(nzchar(nms[isel]), nms[isel], xnotmis[i])
             }
         }
     }
