@@ -1,7 +1,10 @@
+#' @rdname weighted
+#' @param ... Further arguments passed to or from other methods.
+#' @export
 `w_median` <- function (x, wt = NULL, na.rm = TRUE, ...)
 {
     metacall <- as.list(match.call())
-    
+
     if (inherits(x, "haven_labelled")) {
         x <- as.declared(x)
     }
@@ -18,7 +21,7 @@
     if (is.null(wt)) {
         return(median(x, na.rm = na.rm, ... = ...))
     }
-    
+
     return(unname(
         w_quantile(
             x, wt = wt, probs = 0.5, na.rm = na.rm, ... = ...

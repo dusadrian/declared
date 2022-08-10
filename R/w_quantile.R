@@ -1,13 +1,16 @@
+#' @rdname weighted
+#' @param probs Numeric vector of probabilities with values in \[0,1\]
+#' @export
 `w_quantile` <- function(
     x, wt = NULL, probs = seq(0, 1, 0.25), na.rm = TRUE, ...
 ) {
 
     metacall <- as.list(match.call())
-    
+
     if (inherits(x, "haven_labelled")) {
         x <- as.declared(x)
     }
-    
+
     if (!(is.atomic(x) && is.numeric(x))) {
         stopError_("'x' should be an atomic numerical vector.")
     }
@@ -25,7 +28,7 @@
         class(qs) <- c("w_quantile", class(qs))
         return(qs)
     }
-    
+
     if (!(is.atomic(wt) && all(is.finite(na.omit(wt))))) {
         stopError_("'wt' should be an atomic vector with finite values.")
     }
@@ -35,7 +38,7 @@
     }
 
     ok <- !is.na(x + wt)
-    
+
     if (na.rm) {
         x <- x[ok]
         wt <- wt[ok]
@@ -43,7 +46,7 @@
     else if (any(!ok)) {
         stopError_("Missing values and NaN's not allowed if `na.rm' is FALSE")
     }
-    
+
     if (any((p.ok <- !is.na(probs)) & (probs < 0 | probs > 1))) {
         stopError_("probs outside [0,1]")
     }

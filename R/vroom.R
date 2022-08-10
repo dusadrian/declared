@@ -1,3 +1,3 @@
-output_column.declared <- function(x) {
-    as.character(x, values = TRUE)
+`output_column.declared` <- function(x) {
+  as.character(undeclare(x), values = TRUE)
 }

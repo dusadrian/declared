@@ -1,13 +1,21 @@
 Package: declared
-Version: 0.17.3
-Date: 2022-07-15
-Title: Functions to Declare Missing Values
-Authors@R: person(given = "Adrian", family = "Dusa",
-                  role = c("aut", "cre", "cph"),
-                  email = "dusa.adrian@unibuc.ro",
-                  comment = c(ORCID = "0000-0002-3525-9253"))
-Depends: R (>= 3.5.0)
-License: GPL (>= 3)
+Title: Functions for Declared Missing Values
+Version: 0.17.6
+Authors@R: 
+    c(
+        person(
+            "Adrian", "Dusa",
+            email = "dusa.adrian@unibuc.ro",
+            role = c("aut", "cre", "cph"),
+            comment = c(ORCID = "0000-0002-3525-9253")
+        ),
+        person(
+            "Daniel", "Antal",
+            email = "daniel.antal@reprex.nl",
+            role = "ctb",
+            comment = c(ORCID = "0000-0001-7513-6760")
+        )
+    )
 URL: https://github.com/dusadrian/declared
 BugReports: https://github.com/dusadrian/declared/issues
 Description: A set of functions to declare labels and missing values, coupled
@@ -16,7 +24,19 @@ Description: A set of functions to declare labels and missing values, coupled
     Some of the base functions have been rewritten to make use of the specific 
     information about the missing values, most importantly to distinguish
     between empty and declared missing values.
-    Many functions have a similar functionality with the corresponding ones from
+    Some functions have similar functionality with the corresponding ones from
     packages "haven" and "labelled". The aim is to ensure as much compatibility
     as possible with these packages, while offering an alternative in the
     objects of class "declared".
+License: GPL (>= 3)
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.1
+Suggests: 
+    haven,
+    knitr,
+    labelled,
+    rmarkdown,
+    spelling
+VignetteBuilder: knitr
+Language: en-US

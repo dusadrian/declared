@@ -1,0 +1,54 @@
+url: ~
+template:
+  bootstrap: 5
+
+home:
+  links:
+  - text: https://github.com/dusadrian/declared
+    href: https://github.com/dusadrian/declared
+
+
+authors:
+  Adrian Dușa:
+    href: https://github.com/dusadrian
+
+
+articles:
+  - title: "Motivation"
+    desc: >
+     This package is in an early development phase. The current dataset S3 class is inherited
+         from the base R data.frame. Later versions may change to the modern
+         [tibble](https://tibble.tidyverse.org/), which carries a larger dependency footprint
+         but easier to work with. Easy interoperability with the
+         [DT](https://rstudio.github.io/DT/) package--which provides an Rinterface to the [DataTables](https://datatables.net/)
+         JavaScript library---remains a top development priority.
+    contents:
+      - intro
+
+reference:
+  - title: "The declared S3 class"
+    desc: >
+     Construct and coerce to declared.
+    contents:
+      - declared
+      - declared_package
+  - title: "Working with labels"
+    desc: >
+      Working with value labels and measurement labels.
+    contents:
+      - labels
+      - measurement
+  - title: "Working missing values"
+    desc: >
+      Declaring missing values.
+    contents:
+      - missing_range
+      - is.empty
+  - title: "Arithmetic methods"
+    desc: >
+      Correctly calculate statistical (weighted) statistical values when declared missing
+      values are present.
+    contents:
+      - w_mean
+      - w_median
+      - w_mode

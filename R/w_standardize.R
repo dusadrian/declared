@@ -1,3 +1,5 @@
+#' @rdname weighted
+#' @export
 `w_standardize` <- function(x, wt = NULL, na.rm = TRUE) {
 
     if (inherits(x, "haven_labelled")) {
@@ -25,7 +27,7 @@
     if (!(is.atomic(wt) && all(is.finite(na.omit(wt))))) {
         stopError_("'wt' should be an atomic vector with finite values.")
     }
-    
+
     return(
         (x - w_mean(x, wt = wt, na.rm = na.rm)) / w_sd(x, wt = wt, na.rm = na.rm)
     )

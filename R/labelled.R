@@ -121,14 +121,14 @@
     "labels"), decreasing = FALSE) {
 
     according_to <- match.arg(according_to)
-    
+
     labels <- labels(x)
-    
+
     if (!is.null(labels)) {
         if (according_to == "values") {
             labels <- sort(labels, decreasing = decreasing)
         }
-        
+
         if (according_to == "labels") {
             labels <- labels[order(names(labels), decreasing = decreasing)]
         }
@@ -188,7 +188,7 @@
     vl <- label(x)
     levels <- match.arg(levels)
     sort_levels <- match.arg(sort_levels)
-    
+
     if (strict) {
         allval <- unique(x)
         allval <- allval[!is.na(allval)]
@@ -250,7 +250,7 @@
 
     levs <- unname(levs)
     x <- factor(x, levels = levs, labels = labs, ordered = ordered, ...)
-    
+
     if (drop_unused_labels) {
         x <- droplevels(x)
     }

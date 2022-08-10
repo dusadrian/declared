@@ -1,0 +1,127 @@
+---
+title: "Motivation of the declared package"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Motivation of the declared package}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(declared)
+```
+
+The R ecosystem already has some very good packages that deal with labelled objects. In
+particular, the inter-connected packages [haven](https://haven.tidyverse.org/) and [labelled](http://larmarange.github.io/labelled/) provide all the functionality
+most users would ever need.
+
+As nice and useful as these packages are, it has become apparent they have some fundamental
+design features that run, in some situations, against the user’s expectations. This has a lot
+to do with the treatment of declared missing values, that are instrumental for the social
+sciences.
+
+The following minimal example (adapted from the vignette in package haven) illustrates
+the situation:
+
+```{r}
+library(haven)
+x1 <- labelled_spss(
+x = c(1:5, -91),
+labels = c(Missing = -91),
+na_value = -91
+)
+```
+
+The printed objects from this package nicely display some properties:
+
+```{r}
+x1
+```
+
+There are 5 normal (non-missing) values (supposedly they represent the number of children),
+and one declared missing value coded -91 This value acts as a missing value, but it is
+different from a regular missing value in R, coded `NA`. The latter stands for any missing
+information (something like an empty cell) regardless of the reason.
+
+Here, on the other hand, the cell is not empty, but the value -91 is not a valid value either.
+
+It cannot possibly represent -91 children in the household, but for instance it could have
+meant the respondent did not want to respond. It is properly identified as missing, with:
+
+```{r}
+is.na(x1)
+```
+
+```{r}
+mean(x1)
+```
+
+This means the value 99 did play an active role despite being identified as “missing”. In an
+ideal world, the expected mean would be 3, or at best employ the argument na.rm = TRUE
+if the result is NA because of the declared missing value.
+
+A solution to this problem is offered by package labelled, which has a function called
+`user_na_to_na()`:
+
+```{r}
+library(labelled)
+mean(
+user_na_to_na(x1),
+na.rm = TRUE
+)
+```
+## The declared solution
+
+While solving the problem, this above solution forces two additional operations:
+
+- converting the (already) declared user missing values, and
+- employing the na.rm argument.
+
+This should not be necessary, especially if (and it is extremely likely that) users may forget the declared missing values are not actually missing values. This scenario is quite possible, as many users previously using other software like SPSS or Stata where nothing else should be done after declaring the missing values, may not realize more is needed.
+To solve this situation, package declared creates a very similar object, where declared
+missing values are actually stored (hence interpreted as) regular `NA` missing values in R.
+
+```{r}
+library(declared)
+x2 <- declared(
+  x = c(1:5, -91),
+  labels = c(Missing = -91),
+  na_value = -91
+)
+
+x2
+```
+
+The `print` method makes it obvious the value -`91` is not a regular number, but an actual
+missing value. More importantly, this type of storage circumvents the need to convert user
+missing values to regular NAs since they are already stored as regular `NA` values. The average value is calculated simply as:
+
+```{r}
+mean(x2)
+```
+
+Notice that neither `user_na_to_na()`, nor employing `na.rm = TRUE` are necessary and,
+despite being stored as an NA value, the value `99` is not equivalent to an empty cell. The
+information still exists, but it is simply ignored in the calculations.
+
+At a first glance, providing a class method for this function seems unnecessary because
+activating the argument `na.rm` will anyway return the correct result. Explaining the
+importance of the class method requires a discussion about the base R decision to have this
+argument deactivated by default. This is most likely to alert users about possible problems
+in the data, since a default value of TRUE would obscure such problems, the mean being
+calculated irrespective of potentially problematic NA values.
+
+This is where differentiating between empty and declared missing values proves valuable.
+The declared missing values are neither problematic, nor do they signal potential problems
+in the data, given that once declaring a reason, it is already known why a particular value
+is missing.
+
+The truly problematic values are the empty NAs, and the custom class method still allows
+identifying such values if they exist:

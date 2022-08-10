@@ -5,8 +5,6 @@ Version 0.18
       function label()
     o Changed default for as.factor(), with values and (where available) levels
       (thanks to Danial Antal for the report)
-    o New logical argument "drop_na" (activated by default) in functions
-      as.numeric(), as.character() and as.factor()
 
 Version 0.17
     o Correctly determine the object mode, function of both value labels and

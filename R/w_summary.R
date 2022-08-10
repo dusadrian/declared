@@ -1,6 +1,6 @@
-`w_summary` <- function(
-    x, wt = NULL, ...
-) {
+#' @rdname weighted
+#' @export
+`w_summary` <- function(x, wt = NULL, ...) {
 
     wsum <- w_quantile(x, wt = wt, ... = ...)
     wmean <- w_mean(x, wt = wt, ... = ...)

@@ -1,3 +1,5 @@
+#' @rdname weighted
+#' @export
 `w_mode` <- function(x, wt = NULL) {
 
     if (inherits(x, "haven_labelled")) {
@@ -24,7 +26,7 @@
 
     tbl <- w_table(x, wt = wt)
     wm <- which.max(tbl)
-    
+
     fmode <- names(tbl[wm])
     if (possibleNumeric_(fmode)) {
         fmode <- asNumeric_(fmode)

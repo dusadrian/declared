@@ -1,3 +1,4 @@
+#' @export
 `print.declared` <- function(x, ...) {
     label <- label(x)
     if (!is.null(label)) {
@@ -57,6 +58,7 @@
 }
 
 
+#' @export
 `print.w_table` <- function(x, force = FALSE, startend = TRUE, ...) {
     toprint <- attr(x, "toprint")
     achar <- rawToChar(as.raw(c(195, 130)))
@@ -81,7 +83,7 @@
         if (is.matrix(x)) { # crosstab
 
             rnms <- strsplit(rownames(x), split = "_-_")
-            
+
             xlabels <- unlist(lapply(rnms, "[[", 1))
             max.nchar.xlabels <- max(nchar(encodeString(xlabels)))
             for (i in seq(length(xlabels))) {
@@ -133,7 +135,7 @@
                     x[i] <- padBoth_(x[i], max.nchar.cols - nchar(x[i]))
                 }
             }
-            
+
             class(x) <- setdiff(class(x), c("w_table", "array"))
             attr(x, "xvalues") <- NULL
             attr(x, "yvalues") <- NULL
@@ -163,9 +165,9 @@
             if (first_missing == Inf && is.na(labels[length(labels)])) {
                 first_missing <- length(labels)
             }
-            
+
             rnms <- labels
-            
+
             if (show_values) {
                 values <- formatC(as.character(values), digits = max(nchar(values)) - 1, flag = " ")
                 labels[!is.na(labels)][values == labels[!is.na(labels)]] <- ""
@@ -173,7 +175,7 @@
             }
 
             rnms[is.na(labels)] <- "NA"
-            
+
             max.nchar.cases <- max(nchar(encodeString(rnms)))
             # rnms <- sprintf(paste0("% ", max.nchar.cases, "s"), rnms)
             for (i in seq(length(rnms))) {
@@ -198,7 +200,7 @@
             per <- sprintf("% 5s", c(x$per, sums[3]))
             cpd <- formatC(x$cpd, digits = 1, format = "f")
             cpd <- sprintf(paste("% 5s", sep = ""), cpd)
-            
+
             miseparator <- paste(
                 c(
                     rep(" ", ifelse(max.nchar.cases > 5, max.nchar.cases - 5, 0)),
@@ -212,7 +214,7 @@
                     rep(" ", max.nchar.cases + 1),
                     rep("-", nchar(sums[1])),
                     ifelse(
-                        nchar(sums[1]) < 3, 
+                        nchar(sums[1]) < 3,
                         paste(
                             rep("-", 3 - nchar(sums[1])),
                             collapse = ""
@@ -285,6 +287,7 @@
 }
 
 
+#' @export
 `print.fobject` <- function(x, startend = TRUE, ...) {
 
     class(x) <- setdiff(class(x), "fobject")
@@ -298,7 +301,7 @@
         for (i in seq(length(x))) {
             cat(nms[i], "\n")
             cat(paste(c(rep("-", nchar(nms[i])), "\n"), collapse = ""))
-            
+
             if (is.null(x[[i]])) {
                 cat("No data.\n")
             }
@@ -309,7 +312,7 @@
                 class(x[[i]]) <- setdiff(class(x[[i]]), "fobject")
                 print(x[[i]], startend = FALSE)
             }
-            
+
             if (i < length(x)) {
                 cat("\n")
             }
@@ -320,7 +323,7 @@
         if (is.matrix(x)) {
             # for ex. via using() with split.by
             rnms <- rownames(x)
-            
+
             max.nchar.rnms <- max(nchar(encodeString(rnms)), na.rm = TRUE)
             for (i in seq(length(rnms))) {
                 if (nchar(rnms[i]) < max.nchar.rnms) {
@@ -349,7 +352,7 @@
             xc <- x[, c]
             max.nchar.nc <- max(nchar(xc), na.rm = TRUE)
             ndec <- 0
-            
+
             if (pN[c]) {
                 ndec <- min(numdec_(xc), 3)
                 x[, c] <- sprintf(
