@@ -19,7 +19,8 @@ library(declared)
 ```
 
 The R ecosystem already has some very good packages that deal with labelled objects. In
-particular, the inter-connected packages [haven](https://haven.tidyverse.org/) and [labelled](http://larmarange.github.io/labelled/) provide all the functionality
+particular, the inter-connected packages [haven](https://haven.tidyverse.org/) and
+[labelled](http://larmarange.github.io/labelled/) provide all the functionality
 most users would ever need.
 
 As nice and useful as these packages are, it has become apparent they have some fundamental
@@ -33,9 +34,9 @@ the situation:
 ```{r}
 library(haven)
 x1 <- labelled_spss(
-x = c(1:5, -91),
-labels = c(Missing = -91),
-na_value = -91
+  x = c(1:5, -91),
+  labels = c(Missing = -91),
+  na_value = -91
 )
 ```
 
@@ -73,8 +74,8 @@ A solution to this problem is offered by package labelled, which has a function 
 ```{r}
 library(labelled)
 mean(
-user_na_to_na(x1),
-na.rm = TRUE
+  user_na_to_na(x1),
+  na.rm = TRUE
 )
 ```
 ## The declared solution
@@ -101,7 +102,8 @@ x2
 
 The `print` method makes it obvious the value -`91` is not a regular number, but an actual
 missing value. More importantly, this type of storage circumvents the need to convert user
-missing values to regular NAs since they are already stored as regular `NA` values. The average value is calculated simply as:
+missing values to regular NAs since they are already stored as regular `NA` values.
+The average value is calculated simply as:
 
 ```{r}
 mean(x2)
