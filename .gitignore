@@ -12,3 +12,4 @@
 *.vscode
 docs
 inst/doc
+.Rproj.user
