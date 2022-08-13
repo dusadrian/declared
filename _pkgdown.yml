@@ -20,8 +20,8 @@ articles:
          from the base R data.frame, but it equally works with the modern
          [tibble](https://tibble.tidyverse.org/), which carries a larger dependency footprint
          but easier to work with. Easy interoperability with the
-         [DT](https://rstudio.github.io/DT/) package--which provides an Rinterface to the [DataTables](https://datatables.net/)
-         JavaScript library---remains a top development priority.
+         [DT](https://rstudio.github.io/DT/) package--which provides an R interface to the
+         [DataTables](https://datatables.net/) JavaScript library--is a development priority.
     contents:
       - intro
 
