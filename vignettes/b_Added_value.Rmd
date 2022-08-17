@@ -1,0 +1,227 @@
+---
+title: "Added value"
+output:
+  rmarkdown::html_vignette:
+    css: "declared.css"
+vignette: >
+  %\VignetteIndexEntry{b. Added value}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  markdown: 
+    wrap: 80
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+library(haven)
+```
+
+
+```{r}
+library(declared)
+
+x2 <- declared(
+  x = c(1:5, -91),
+  labels = c("Missing" = -91),
+  na_value = -91
+)
+x2
+```
+
+The proposed method to declare missing values is unique in the R ecosystem.
+Differentiating between empty and declared missing values opens the door to a
+new set of challenges for which base the R does not have built in functionality.
+
+For instance, the declared missing values can be compared against both the
+original values and their labels:
+
+```{r}
+x2 == -91
+x2 == "Missing"
+```
+
+Similar methods have been added to the primitive functions `"<"`{.R}, `">"`{.R} and
+`"!="`{.R} etc., to allow a fully functional collection of subsetting possibilities.
+
+Combining on this type of vector creates an object of the same class:
+
+```{r}
+x2 <- c(x2, -91)
+x2
+```
+
+Most functions are designed to be as similar as possible, for instance
+`labels()`{.R} to to retrieve, or add / change value labels:
+
+```{r}
+labels(x2) <- c("Does not know" = -92, "Not responded" = -91)
+x2
+```
+
+The value -92 is now properly labelled, and it can further be declared as
+missing. Such declarations do not necessarily have to use the main function
+`declared()`{.R}, due to the separate functions `missing_values()`{.R} and
+`missing_range()`{.R}:
+
+```{r}
+missing_values(x2) <- c(-91, -92)
+missing_range(x2) <- c(-91, -95)
+x2
+```
+
+To ease the smooth inter-operation with packages **haven** and **labelled**, the
+following functions are of interest: `undeclare()`{.R}, `as.haven()`{.R} and
+`as.declared()`{.R}.
+
+The function `undeclare()`{.R} replaces the NAs with their declared missing values.
+The result is still an object of class `"declared"`{.R}, but all missing values (and
+missing range) are stripped off the vector and values are presented as they have
+been collected. All other attributes of interest (variable and value labels) are
+retained and printed accordingly. Activating the argument `drop`{.R} eliminates all
+classes and attributes, returning a regular R object:
+
+```{r}
+undeclare(x2, drop = TRUE)
+```
+
+The function `as.haven()`{.R} coerces the resulting object to the class
+`"haven_labelled_spss"`{.R}, and the function `as.declared()`{.R} reverses the process:
+
+```{r}
+xh <- as.haven(x2)
+xh
+as.declared(xh)
+```
+
+The missing values are properly formatted, even inside the base data frame:
+
+```{r}
+dfm <- data.frame(x1 = letters[1:7], x2)
+dfm
+```
+
+If users prefer a tibble instead of a data frame, the objects of class
+"`declared"`{.R} are properly formatted in a similar way to those from package
+**haven**:
+
+```{r}
+library(tibble)
+as_tibble(dfm)
+```
+
+Special challenges are associated with sorting and ordering the declared
+objects, where not all missing values are treated the same.
+
+```{r}
+x3 <- declared(
+  x = c(1:5, -91, NA, -92, -91),
+  na_value = c(-92, -91)
+)
+sort(x3, na.last = TRUE)
+```
+
+Sorting in decreasing order applies the same order to the missing values:
+
+```{r}
+sort(x3, na.last = TRUE, decreasing = TRUE)
+```
+
+This custom function benefits from an additional argument `empty.last`{.R}
+(internally passed to the ordering function), to allow sorting within the
+missing values:
+
+```{r}
+sort(x3, na.last = TRUE, decreasing = TRUE,
+     empty.last = FALSE
+)
+```
+
+All types of variables (categorical and numerical) can have declared missing
+values. There are always situations values are not missing randomly, but with a
+specific reason. In social research, respondents often can not, or do not want
+to provide an answer for a certain question, be it categories of opinions of
+pure numerical answers like age, income etc.
+
+In base R there is a clear distinction between numerical and categorical
+variables. For the later, R provides a special type of object called `factor`{.R}.
+The following object simulates such a categorical variable, for instance
+political orientation:
+
+```{r}
+x4 <- declared(
+  x = c(1:3, -91),
+  labels = c("Left" = 1, "Middle" = 2, "Right" = 3, "Apolitic" = -91),
+  na_value = -91,
+  label = "Respondent's political orientation"
+)
+
+x4
+```
+
+Such a variable could in principle be constructed directly as a factor:
+
+```{r}
+x5 <- factor(c("Left", "Middle", "Right", "Apolitic"))
+x5
+```
+
+The base factor does not provide any possibility to assign specific values for
+the specific categories, and most importantly does not differentiate between
+valid values and (declared) missing values. To make the functionality consistent
+with the base treatment of NA values, coercing to factors defaults to dropping
+the declared missing values:
+
+```{r}
+as.factor(x4)
+```
+
+Coercing the declared missing values as factor levels is something for which the
+function `undeclare()`{.R} proves useful.
+
+Switching between factors and declared objects, preserving the declared missing
+values, is now straightforward:
+
+```{r}
+as.factor(undeclare(x4))
+
+as.declared(x5, na_values = 1)
+```
+
+When the declared objects are constructed as categorical variables to replace
+the base factors, the function `as.character()`{.R} extracts the categories
+in a similar way to factors, via a dedicated class method for declared objects:
+
+```{r}
+as.character(undeclare(x4))
+```
+
+The base factors store the categories using numbers, and this is also the most
+often scenario for the declared objects. But this is not at all mandatory, as the
+declared objects are also able to ingest character objects:
+
+```{r}
+x6 <- declared(
+  x = sample(
+    c("Left", "Middle", "Right", "Apolitic"),
+    20,
+    replace = TRUE
+  ),
+  na_values = "Apolitic"
+)
+x6
+```
+
+Either as character, numeric or categorical, it is possible to declare and use
+special types of missing values, employing this new object type of class
+`"declared"`{.R}.
+
+Factors and `haven`{.R} objects have default coercion methods, but not all types of
+objects can be automatically coerced to this class. To meet this possibility,
+the main functions `declared()`{.R}, `as.declared()`{.R} and `undeclare()`{.R} are all
+generic, allowing full flexibility for any other package to create custom
+(coercion) methods for different classes of objects, thus facilitating and
+encouraging a widespread use.

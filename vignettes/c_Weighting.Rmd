@@ -1,0 +1,135 @@
+---
+title: "Weighting (declared) values"
+output:
+  rmarkdown::html_vignette:
+    css: "declared.css"
+vignette: >
+  %\VignetteIndexEntry{c. Weighting (declared) values}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  markdown: 
+    wrap: 80
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+For the examples in this vignette, the following data frame is created:
+
+```{r}
+library(declared)
+
+n <- 1234
+set.seed(n)
+dfm <- data.frame(
+  Area = declared(
+    sample(1:2, n, replace = TRUE, prob = c(0.45, 0.55)),
+    labels = c("Rural" = 1, "Urban" = 2)
+  ),
+  Gender = declared(
+    sample(1:2, n, replace = TRUE, prob = c(0.55, 0.45)),
+    labels = c("Males" = 1, "Females" = 2)
+  ),
+  Opinion = declared(
+    sample(c(1:5, NA, -91), n, replace = TRUE),
+    labels = c(
+      "Very bad" = 1, "Bad" = 2, "Neither" = 3,
+      "Good" = 4, "Very good" = 5, "Don't know" = -91
+    ),
+    na_values = -91
+  ),
+  Age = sample(18:90, n, replace = TRUE),
+  Children = sample(0:5, n, replace = TRUE)
+)
+```
+
+One of the most interesting applications to make use of the declared missing
+values are the tables of frequencies. The base function `table()`{.R} ignores
+missing values by default, but they can be revealed by using the `useNA`{.R}
+argument:
+
+```{r}
+table(dfm$Opinion, useNA = "ifany")
+```
+
+However, it does not differentiate between empty and declared missing values.
+Since "Opinion" is the equivalent of a categorical variable, this can be
+improved through a custom built coercion to the base `factor`{.R} class:
+
+```{r}
+table(as.factor(undeclare(dfm$Opinion)), useNA = "ifany")
+```
+
+The dedicated function `w_table()`{.R} does the same thing by automatically
+recognizing objects of class `"declared"`{.R}, additionally printing more detailed
+information:
+
+```{r}
+w_table(dfm$Opinion, values = TRUE)
+```
+
+The prefix `w_`{.R} from the function name stands for "weighted", this being another
+example of functionality where the declared missing values play a different role
+than the empty, base NA missing values.
+
+It is important to differentiate between frequency weights, on one hand, and
+other probability based, post-stratification weights on one other, the later
+being thoroughly treated by the specialized package **survey**. The `w_`{.R} family
+of functions are solely dealing with frequency weights, to allow corrections in
+descriptive statistics, such as the tables of frequencies and other similar
+descriptive measures for both categorical and numeric variables.
+
+To exemplify, a frequency weights variable is constructed, to correct for the
+distributions of gender by males and females, as well as the theoretical
+distribution by residential areas differentiating between urban and rural
+settlements.
+
+```{r}
+# Observed proportions
+op <- proportions(with(dfm, table(Gender, Area)))
+
+# Theoretical / population proportions:
+# 53% Rural, and 50% Females
+weights <- rep(c(0.53, 0.47), each=2) * rep(0.5, 4) / op
+
+dfm$fweight <- weights[
+  match(10 * dfm$Area + dfm$Gender, c(11, 12, 21, 22))
+]
+```
+
+The updated frequency table, this time using the frequency weights, can be
+constructed by passing the weights to the argument `wt`{.R}:
+
+```{r}
+with(dfm, w_table(Opinion, wt = fweight, values = TRUE))
+```
+
+Except for the empty NA values, for which the weights cannot be applied, almost
+all other frequencies (including the one for the declared missing value -91) are
+now updated by applying the weights. This shows that, despite being interpreted
+as "missing" values, the declared ones can and should also be weighted, with a
+very useful result. Other versions of weighted frequencies do exist in R, but a
+custom one was needed to identify (and weight) the declared missing values.
+
+In the same spirit, many other similar functions are provided such as
+`w_mean()`{.R}, `w_var()`{.R}, `w_sd()`{.R} etc., and the list will likely grow
+in the future. They are similar to the base package counterparts, with a single
+difference: the argument `na.rm`{.R} is activated by default, with or without
+weighting. This is an informed decision about which users are alerted in the
+functions' respective help pages.
+
+The package **declared** was built with the specific intention to provide a
+lightweight, zero dependency resource in the R ecosystem. It contains an already
+extensive, robust and ready to use functionality that duly takes into account
+the difference between empty and declared missing values.
+
+It extends base R and opens up data analysis possibilities without precedent. By
+providing generic classes for all its objects and functions, package
+**declared** is easily extensible to any type of object, for both creation and
+coercion to class `"declared"`{.R}.
