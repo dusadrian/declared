@@ -21,11 +21,11 @@
 #'
 #' @details
 #' \tabular{ll}{
-#' Package: \tab declared\cr
-#' Type: \tab Package\cr
-#' Version: \tab 0.17.3\cr
-#' Date: \tab 2022-07-15\cr
-#' License: \tab GPL-v3\cr
+#'   Package: \tab declared\cr
+#'   Type: \tab Package\cr
+#'   Version: \tab 0.17.7\cr
+#'   Date: \tab 2022-08-18\cr
+#'   License: \tab GPL-v3\cr
 #' }
 #'
 #' @importFrom stats na.omit na.fail na.exclude median
