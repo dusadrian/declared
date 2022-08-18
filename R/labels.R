@@ -20,7 +20,7 @@
 #' @examples
 #' x <- declared(
 #'     c(-2, 1:5, -1),
-#'     labels = c(Good = 1, Bad = 5, DK = -1),
+#'     labels = c("Good" = 1, "Bad" = 5, "DK" = -1),
 #'     na_values = c(-1, -2),
 #'     label = "Test variable"
 #' )
@@ -30,7 +30,7 @@
 #'
 #' labels(x, prefixed = TRUE)
 #'
-#' labels(x) <- c(Good = 1, Bad = 5, DK = -1, NotApplicable = -2)
+#' labels(x) <- c("Good" = 1, "Bad" = 5, "DK" = -1, "Not applicable" = -2)
 #'
 #' label(x)
 #'

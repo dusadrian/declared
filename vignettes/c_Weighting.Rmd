@@ -96,7 +96,7 @@ op <- proportions(with(dfm, table(Gender, Area)))
 
 # Theoretical / population proportions:
 # 53% Rural, and 50% Females
-weights <- rep(c(0.53, 0.47), each=2) * rep(0.5, 4) / op
+weights <- rep(c(0.53, 0.47), each = 2) * rep(0.5, 4) / op
 
 dfm$fweight <- weights[
   match(10 * dfm$Area + dfm$Gender, c(11, 12, 21, 22))

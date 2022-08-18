@@ -94,6 +94,7 @@ The function `as.haven()`{.R} coerces the resulting object to the class
 ```{r}
 xh <- as.haven(x2)
 xh
+
 as.declared(xh)
 ```
 
@@ -109,8 +110,7 @@ If users prefer a tibble instead of a data frame, the objects of class
 **haven**:
 
 ```{r}
-library(tibble)
-as_tibble(dfm)
+tibble::as_tibble(dfm)
 ```
 
 Special challenges are associated with sorting and ordering the declared
@@ -135,9 +135,7 @@ This custom function benefits from an additional argument `empty.last`{.R}
 missing values:
 
 ```{r}
-sort(x3, na.last = TRUE, decreasing = TRUE,
-     empty.last = FALSE
-)
+sort(x3, na.last = TRUE, decreasing = TRUE, empty.last = FALSE)
 ```
 
 All types of variables (categorical and numerical) can have declared missing

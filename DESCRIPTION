@@ -37,6 +37,7 @@ Suggests:
     knitr,
     labelled,
     rmarkdown,
-    spelling
+    spelling,
+    tibble
 VignetteBuilder: knitr
 Language: en-US

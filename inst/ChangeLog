@@ -4,7 +4,7 @@ Version 0.18
       labels(), and the function variable_label() has been replaced with the
       function label()
     o Changed default for as.factor(), with values and (where available) levels
-      (thanks to Danial Antal for the report)
+      (thanks to Daniel Antal for the report)
 
 Version 0.17
     o Correctly determine the object mode, function of both value labels and
