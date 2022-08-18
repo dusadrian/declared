@@ -23,7 +23,7 @@ packages.
 You can install the development version of declared like so:
 
 ``` r
-remotes::install_github('dusadrian/declared')
+install.packages("declared", repos = "dusadrian.r-universe.dev")
 ```
 
 ## Example
@@ -31,10 +31,11 @@ remotes::install_github('dusadrian/declared')
 ``` r
 library(haven)
 x1 <- labelled_spss(
-x = c(1:5, -91),
-labels = c(Missing = -91),
-na_value = -91
+  x = c(1:5, -91),
+  labels = c("Missing" = -91),
+  na_value = -91
 )
+
 print(x1)
 #> <labelled_spss<double>[6]>
 #> [1]   1   2   3   4   5 -91
@@ -43,22 +44,24 @@ print(x1)
 #> Labels:
 #>  value   label
 #>    -91 Missing
+
 mean(x1)
 #> [1] -12.66667
 ```
 
 Instead of using the `labelled::labelled()` class or its inherited
 version in `haven`, the `declared` package offers a similar class that
-behaves more as it is expected–because it treats integer codes with a
-meaning of “missing” as the special `NA` (missing) value in R.
+behaves more as it is expected–because it interprets certain “missing”
+values `NA` codes as existing, declared missing values.
 
 ``` r
 library(declared)
 x2 <- declared(
-x = c(1:5, -91),
-labels = c(Missing = -91),
-na_value = -91
+  x = c(1:5, -91),
+  labels = c("Missing" = -91),
+  na_value = -91
 )
+
 print(x2)
 #> <declared<integer>[6]>
 #> [1]       1       2       3       4       5 NA(-91)
@@ -67,6 +70,7 @@ print(x2)
 #> Labels:
 #>  value   label
 #>    -91 Missing
+
 mean(x2)
 #> [1] 3
 ```
