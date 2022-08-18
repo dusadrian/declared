@@ -24,9 +24,6 @@ Version: \tab 0.17.3\cr
 Date: \tab 2022-07-15\cr
 License: \tab GPL-v3\cr
 }
-
-⁠@exportS3Method base::labels
-⁠@exportS3Method base::labels<-
 }
 \author{
 Adrian Dusa

@@ -28,11 +28,8 @@
 #' License: \tab GPL-v3\cr
 #' }
 #'
-#' ⁠@exportS3Method base::labels
-#' ⁠@exportS3Method base::labels<-
 #' @importFrom stats na.omit na.fail na.exclude median
 #' @importFrom utils head tail capture.output
 #' @useDynLib declared, .registration = TRUE
 #'
 NULL
-
