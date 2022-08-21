@@ -2,6 +2,7 @@
 title: "Added value"
 output:
   rmarkdown::html_vignette:
+    highlight: "declared.theme"
     css: "declared.css"
 vignette: >
   %\VignetteIndexEntry{b. Added value}
@@ -29,7 +30,6 @@ x2 <- declared(
   labels = c("Missing" = -91),
   na_value = -91
 )
-x2
 ```
 
 The proposed method to declare missing values is unique in the R ecosystem.
@@ -45,7 +45,7 @@ x2 == "Missing"
 ```
 
 Similar methods have been added to the primitive functions `"<"`{.R}, `">"`{.R} and
-`"!="`{.R} etc., to allow a fully functional collection of subsetting possibilities.
+`"!="`{.R} etc., to allow a fully functional collection of subseting possibilities.
 
 Combining on this type of vector creates an object of the same class:
 

@@ -2,6 +2,7 @@
 title: "Weighting (declared) values"
 output:
   rmarkdown::html_vignette:
+    highlight: "declared.theme"
     css: "declared.css"
 vignette: >
   %\VignetteIndexEntry{c. Weighting (declared) values}
