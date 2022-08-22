@@ -31,3 +31,17 @@ extents of the range of missing values (for \code{missing_range}).}
 Functions to extract information about the declared missing values, or to
 declare such values if they are present in the data.
 }
+\examples{
+x <- declared(c(-2, 1:5, -1),
+    labels = c(Good = 1, Bad = 5, DK = -1, NotApplicable = -2),
+    na_values = c(-1, -2)
+)
+x
+
+missing_values(x)
+
+missing_range(x) <- c(-10, -7)
+
+missing_range(x)
+
+}

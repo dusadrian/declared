@@ -1,5 +1,7 @@
 #' @rdname missing_values
 #'
+#' @inherit missing_values examples
+#'
 #' @export
 `missing_range` <- function(x) {
   UseMethod("missing_range")

@@ -11,6 +11,19 @@
 #'
 #' \code{missing_range()} will return a numeric vector of length 2.
 #'
+#' @examples
+#' x <- declared(c(-2, 1:5, -1),
+#'     labels = c(Good = 1, Bad = 5, DK = -1, NotApplicable = -2),
+#'     na_values = c(-1, -2)
+#' )
+#' x
+#'
+#' missing_values(x)
+#'
+#' missing_range(x) <- c(-10, -7)
+#'
+#' missing_range(x)
+#'
 #' @param x A vector.
 #'
 #' @param value Any vector of values that should be declared as missing
