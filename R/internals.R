@@ -563,29 +563,30 @@ NULL
 
 
 `tryCatchWEM_` <- function(expr, capture = FALSE) {
-    toreturn <- list()
+    env <- new.env()
+    env$toreturn <- list()
     output <- withVisible(withCallingHandlers(
         tryCatch(expr, error = function(e) {
-            toreturn$error <<- e$message
+            env$toreturn$error <- e$message
             NULL
         }),
         warning = function(w) {
-            toreturn$warning <<- c(toreturn$warning, w$message)
+            env$toreturn$warning <- c(env$toreturn$warning, w$message)
             invokeRestart("muffleWarning")
         },
         message = function(m) {
-            toreturn$message <<- paste(toreturn$message, m$message, sep = "")
+            env$toreturn$message <- paste(env$toreturn$message, m$message, sep = "")
             invokeRestart("muffleMessage")
         }
     ))
 
     if (capture && output$visible && !is.null(output$value)) {
-        toreturn$output <- capture.output(output$value)
-        toreturn$value <- output$value
+        env$toreturn$output <- capture.output(output$value)
+        env$toreturn$value <- output$value
     }
 
-    if (length(toreturn) > 0) {
-        return(toreturn)
+    if (length(env$toreturn) > 0) {
+        return(env$toreturn)
     }
 }
 
