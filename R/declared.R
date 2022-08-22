@@ -1,10 +1,7 @@
-#' @title
-#' Labelled vectors with declared missing values
-#'
+#' @title Labelled vectors with declared missing values
 #' @description
 #' The labelled vectors are mainly used to analyse social science data,
 #' and the missing values declaration is an important step in the analysis.
-#'
 #' @details
 #' The \code{declared} objects are very similar to the \code{haven_labelled_spss}
 #' objects from package \bold{haven}. It has exactly the same arguments, but it
@@ -56,13 +53,8 @@
 #' variables, and additionally recognizes \code{"nominal"} and \code{"ordinal"} as
 #' categorical, and similarly recognizes \code{"interval"}, \code{"ratio"},
 #' \code{"discrete"} and \code{"continuous"} as quantitative.
-#'
-#' @return
-#'
-#' \code{declared()}, \code{as.declared()} and \code{is.declared()} will return a
-#' labelled vector.
-#'
-#'
+#' @return A labelled vector of class "declared".
+#'   `is.declared()` returns a logical value.
 #' @examples
 #'
 #' x <- declared(
@@ -93,25 +85,22 @@
 #'
 #' # Returning values instead of categories
 #' as.character(x, values = TRUE)
-#'
 #' @param x A numeric vector to label, or a declared labelled vector (for \code{undeclare})
-#'
 #' @param labels A named vector or \code{NULL}. The vector should be the same type
 #' as \code{x}. Unlike factors, labels don't need to be exhaustive: only a fraction
 #' of the values might be labelled
-#'
 #' @param na_values A vector of values that should also be considered as missing.
-#'
 #' @param na_range A numeric vector of length two giving the (inclusive) extents
 #' of the range. Use \code{-Inf} and \code{Inf} if you want the range to be
 #' open ended
-#'
 #' @param label A short, human-readable description of the vector
-#'
 #' @param measurement Optional, user specified measurement level
-#'
 #' @param ... Other arguments used by various other methods
-#'
+#' @name declared
+NULL
+
+
+#' @rdname declared
 #' @export
 declared <- function(
     x, labels = NULL, na_values = NULL, na_range = NULL, label = NULL,

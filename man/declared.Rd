@@ -46,8 +46,8 @@ open ended}
 \item{drop}{Logical, drop all attributes}
 }
 \value{
-\code{declared()}, \code{as.declared()} and \code{is.declared()} will return a
-labelled vector.
+A labelled vector of class "declared".
+\code{is.declared()} returns a logical value.
 }
 \description{
 The labelled vectors are mainly used to analyse social science data,
@@ -135,5 +135,4 @@ as.character(x)
 
 # Returning values instead of categories
 as.character(x, values = TRUE)
-
 }
