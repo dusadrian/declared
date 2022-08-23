@@ -1,5 +1,5 @@
 #' @title declared internal functions
-#' @description Only to be used internally for developers and contributors.
+#' @description Functions to be used internally, only by developers and contributors.
 #' @name declared_internal
 NULL
 
@@ -313,20 +313,29 @@ NULL
 }
 
 
+#' @rdname declared_internal
+#' @export
 `names_values` <- function(x, drop_na = FALSE) {
 
     if (!inherits(x, "declared") & !inherits(x, "haven_labelled_spss")) {
         stopError_("The input should be a declared / haven_labelled_spss vector.")
     }
 
-    attrx <- attributes(x)
+    na_values <- attr(x, "na_values")
 
     if (drop_na) {
         attr(x, "na_index") <- NULL
         attr(x, "na_values") <- NULL
+        attrx <- attributes(x)
+        if (!is.null(attrx$labels)) {
+            attrx$labels <- attrx$labels[!is.element(attrx$labels, na_values)]
+        }
+        attributes(x) <- NULL
     }
-
-    x <- undeclare(x, drop = TRUE)
+    else {
+        attrx <- attributes(x)
+        x <- undeclare(x, drop = TRUE)
+    }
 
     # attrx[["labels"]] is the equivalent of attr(x, "labels", exact = TRUE)
     labels <- attrx[["labels"]]
@@ -376,6 +385,7 @@ NULL
 
     return(result)
 }
+
 
 
 # The following functions are copied from package admisc to achieve zero dependency.

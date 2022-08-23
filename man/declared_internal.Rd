@@ -7,6 +7,7 @@
 \alias{order_declared}
 \alias{value_labels}
 \alias{variable_label}
+\alias{names_values}
 \title{declared internal functions}
 \usage{
 as.haven(x, ...)
@@ -24,8 +25,10 @@ order_declared(
 value_labels(...)
 
 variable_label(...)
+
+names_values(x, drop_na = FALSE)
 }
 \description{
-Only to be used internally for developers and contributors.
+Functions to be used internally, only by developers and contributors.
 }
 \keyword{internal}
