@@ -1,18 +1,20 @@
 #' @export
-`as.character.declared` <- function(x, values = FALSE, ...) {
+`as.character.declared` <- function(x, values = FALSE, drop_na = TRUE, ...) {
 
-  labels <- names_values(x, drop_na = TRUE)
+  labels <- names_values(x, drop_na = drop_na)
 
   # x <- undeclare(x, drop = TRUE)
+  if (isFALSE(drop_na)) {
+    x <- undeclare(x)
+  }
+
   attributes(x) <- NULL
 
   if (isTRUE(values)) {
     return(as.character(x))
   }
 
-  x[is.element(x, labels)] <- names(labels)[match(x[is.element(x, labels)], labels)]
-
-  return(x)
+  return(names(labels)[match(x, labels)])
 }
 
 #' @export

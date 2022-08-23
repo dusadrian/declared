@@ -505,56 +505,45 @@
 
         env$as.factor <- function(
             x,
-            levels = c("default", "labels", "values", "both"),
+            levels = c("labels", "values", "both"),
+            drop_na = TRUE,
             ordered = FALSE,
             ...
         ) {
             if (is.declared(x)) {
                 levels <- match.arg(levels)
-                label <- attr(x, "label", exact = TRUE)
-                labels <- attr(x, "labels", exact = TRUE)
+                labels <- names_values(x, drop_na = drop_na)
 
-                if (levels == "default") {
-                    vals <- sort(unique(x), na.last = TRUE)
-
+                if (levels == "labels") {
                     x <- factor(
-                        as.character(x),
-                        levels = as.character(vals),
-                        ordered = ordered
-                    )
-                }
-                else if (levels == "labels") {
-                    levs <- unname(labels)
-                    labs <- names(labels)
-
-                    x <- factor(
-                        as.character(x),
-                        levels = sort(unique(labs)),
+                        as.character(x, drop_na = drop_na),
+                        levels = names(labels),
                         ordered = ordered
                     )
                 }
                 else if (levels == "values") {
-                    levels <- unique(
-                        sort(x, na.last = TRUE),
-                        drop = TRUE
+                    if (isFALSE(drop_na)) {
+                        x <- undeclare(x)
+                    }
 
-                    )
+                    attributes(x) <- NULL
 
                     x <- factor(
-                        undeclare(x, drop = TRUE),
-                        levels,
+                        x,
+                        unname(labels),
                         ordered = ordered
                     )
                 }
                 else if (levels == "both") {
-                    names(labels) <- paste0("[", labels, "] ", names(labels))
-                    attr(x, "labels") <- labels
+                    nms <- paste0("[", labels, "] ", names(labels))
 
-                    vals <- sort(unique(x), na.last = TRUE)
+                    if (isFALSE(drop_na)) {
+                        x <- undeclare(x)
+                    }
 
                     x <- factor(
-                        as.character(x),
-                        levels = as.character(vals),
+                        nms[match(x, labels)],
+                        levels = nms,
                         ordered = ordered
                     )
                 }
@@ -575,6 +564,17 @@
                 }
                 else factor(x)
             }
+        }
+
+        do.call("unlockBinding", list(sym = "drop", env = env))
+
+        env$drop <- function(x) {
+            if (is.declared(x)) {
+                attributes(x) <- NULL
+                return(x)
+            }
+            
+            eval(parse(text = ".Internal(drop(x))"))
         }
     }
 
