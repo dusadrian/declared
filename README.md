@@ -4,6 +4,11 @@
 # declared
 
 <!-- badges: start -->
+
+[![AppVeyor build
+status](https://ci.appveyor.com/api/projects/status/github/dusadrian/declared?branch=main&svg=true)](https://ci.appveyor.com/project/dusadrian/declared)
+[![Codecov test
+coverage](https://codecov.io/gh/dusadrian/declared/branch/main/graph/badge.svg)](https://app.codecov.io/gh/dusadrian/declared?branch=main)
 <!-- badges: end -->
 
 The goal of `declared` is to improve the functionality of imported
