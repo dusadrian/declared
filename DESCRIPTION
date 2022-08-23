@@ -38,6 +38,8 @@ Suggests:
     labelled,
     rmarkdown,
     spelling,
+    testthat (>= 3.0.0),
     tibble
 VignetteBuilder: knitr
 Language: en-US
+Config/testthat/edition: 3
