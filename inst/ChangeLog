@@ -5,6 +5,8 @@ Version 0.18
       function label()
     o Changed default for as.factor(), with values and (where available) levels
       (thanks to Daniel Antal for the report)
+    o New generic function drop_na() to drop information about the declared
+      missing values
 
 Version 0.17
     o Correctly determine the object mode, function of both value labels and
