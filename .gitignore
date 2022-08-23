@@ -3,6 +3,7 @@
 *.history
 *.o
 *.so
+*.dll
 *.Rproj
 *.Rproj.user
 *.Rhistory

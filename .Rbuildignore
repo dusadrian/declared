@@ -6,3 +6,6 @@
 ^pkgdown$
 ^README\.Rmd$
 ^not_included$
+^appveyor\.yml$
+^codecov\.yml$
+^\.covrignore$
