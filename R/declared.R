@@ -37,12 +37,6 @@
 #' write their own. To end of with a declared object, additional metadata is needed
 #' such as value labels, which values should be treated as missing etc.
 #'
-#' The function \code{undeclare()} replaces the NA entries into their original
-#' numeric values, and drops all attributes related to missing values:
-#' \code{na_values}, \code{na_range} and \code{na_index}. The result can be a
-#' regular vector (thus dropping all attributes, including the class "declared")
-#' by activating the argument \code{drop}.
-#'
 #' The measurement level is optional and, for the moment, purely aesthetic. It might
 #' however be useful to (automatically) determine if a declared object is suitable
 #' for a certain statistical analysis, for instance regression requires quantitative
