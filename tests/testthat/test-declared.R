@@ -13,7 +13,6 @@ test_that("declared() works", {
 test_that("declared() coercion methods works", {
   expect_equal(as.numeric(x), c(1:5, NA_real_))
   expect_equal(as.character(x), c("Good", "2", "3", "4", "Bad", NA_character_))
-  expect_true(is.numeric(undeclare(x)))
 })
 
 test_that("declared() other methods works", {
