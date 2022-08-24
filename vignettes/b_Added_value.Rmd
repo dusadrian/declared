@@ -163,43 +163,80 @@ x4
 Such a variable could in principle be constructed directly as a factor:
 
 ```{r}
-x5 <- factor(c("Left", "Middle", "Right", "Apolitic"))
+x5 <- factor(
+  c("Left", "Middle", "Right", "Apolitic"),
+  levels = c("Left", "Middle", "Right", "Apolitic")
+)
+
 x5
 ```
 
-The base factor does not provide any possibility to assign specific values for
-the specific categories, and most importantly does not differentiate between
-valid values and (declared) missing values. To make the functionality consistent
-with the base treatment of NA values, coercing to factors defaults to dropping
-the declared missing values:
+The base factors provide no possibility to assign specific values for the specific
+categories, and most importantly they do not differentiate between valid values
+and (declared) missing values. To make the functionality consistent with the base
+treatment of NA values, coercing to factors defaults to dropping the declared
+missing values because of the default value of the argument `drop_na`:
 
 ```{r}
 as.factor(x4)
+as.factor(x4, drop_na = TRUE)
+
+# essentially acting as:
+as.factor(drop_na(x4))
 ```
 
-Coercing the declared missing values as factor levels is something for which the
-function `undeclare()`{.R} proves useful.
-
-Switching between factors and declared objects, preserving the declared missing
-values, is now straightforward:
+Converting the declared missing values to factor levels is something for which the
+function `undeclare()`{.R} proves useful, and switching between factors and 
+declared objects, preserving the declared missing values, is now straightforward:
 
 ```{r}
 as.factor(undeclare(x4))
-
-as.declared(x5, na_values = 1)
 ```
+
+This is almost identical, but differs from `x5` with respect to the level orders.
+It happens because the missing value -91, coerced to a valid value, becomes the
+first in the order of the categories while normally, a categorial variable displays
+the valid values first, and the missing values last.
+
+If the original order is important, the argument `drop_na` can be deactivated:
+
+```{r}
+as.factor(x4, drop_na = FALSE)
+```
+
+
+
+The reverse process is also possible, to convert / coerce factors to declared
+labelled objects:
+
+
+```{r}
+as.declared(x5, na_values = 4)
+```
+
 
 When the declared objects are constructed as categorical variables to replace
 the base factors, the function `as.character()`{.R} extracts the categories
 in a similar way to factors, via a dedicated class method for declared objects:
 
 ```{r}
-as.character(undeclare(x4))
+as.character(x4)
 ```
 
-The base factors store the categories using numbers, and this is also the most
-often scenario for the declared objects. But this is not at all mandatory, as the
-declared objects are also able to ingest character objects:
+Similarly, the function `as.character()`{.R} drops the declared missing values
+by default, something that can be prevented by either of the following two
+commands:
+
+```{r}
+as.character(undeclare(x4))
+
+as.character(x4, drop_na = FALSE)
+```
+
+
+The base factors store the categories using numeric values, and this is also
+the most often scenario for the declared objects. But this is not at all
+mandatory, as the declared objects are also able to ingest character objects:
 
 ```{r}
 x6 <- declared(
@@ -217,9 +254,9 @@ Either as character, numeric or categorical, it is possible to declare and use
 special types of missing values, employing this new object type of class
 `"declared"`{.R}.
 
-Factors and `haven`{.R} objects have default coercion methods, but not all types of
-objects can be automatically coerced to this class. To meet this possibility,
-the main functions `declared()`{.R}, `as.declared()`{.R} and `undeclare()`{.R} are all
-generic, allowing full flexibility for any other package to create custom
-(coercion) methods for different classes of objects, thus facilitating and
-encouraging a widespread use.
+Factors and `haven`{.R} objects have default coercion methods, but not all types
+of objects can be automatically coerced to this class. To meet this possibility,
+the main functions `declared()`{.R}, `as.declared()`{.R}, `undeclare()`{.R} and
+`drop_na()`{.R} are all generic, allowing full flexibility for any other package
+to create custom (coercion) methods for different classes of objects, thus
+facilitating and encouraging a widespread use.
