@@ -8,21 +8,28 @@ x <- declared(
 test_that("as.factor.declared() works", {
   expect_true(inherits(as.factor(x), "factor"))
   expect_identical(as.factor(x), as.factor(drop_na(x)))
-  expect_identical(
-    levels(as.factor(x4, drop_na = FALSE)),
-    names(labels(x4))
+  expect_true(
+    all(is.element(
+      names(labels(x)),
+      levels(as.factor(x, drop_na = FALSE))
+    ))
   )
-  expect_setequal(as.factor(undeclare(x4)), names(labels(x4)))
+  expect_true(
+    all(is.element(
+      names(labels(x)),
+      levels(as.factor(undeclare(x)))
+    ))
+  )
   expect_setequal(
-    levels(as.factor(undeclare(x4))),
-    levels(as.factor(x4, drop_na = FALSE))
+    levels(as.factor(undeclare(x))),
+    levels(as.factor(x, drop_na = FALSE))
   )
 })
 
 
 test_that("as_factor.declared() works", {
   expect_identical(
-    haven::as_factor(x4),
-    as.factor(x4, drop_na = FALSE)
+    haven::as_factor(x),
+    as.factor(x, drop_na = FALSE)
   )
 })
