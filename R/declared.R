@@ -89,6 +89,7 @@
 #' open ended
 #' @param label A short, human-readable description of the vector
 #' @param measurement Optional, user specified measurement level
+#' @param llevels Logical, when `x` is a factor only use those levels that have labels
 #' @param ... Other arguments used by various other methods
 #' @name declared
 NULL
@@ -98,7 +99,7 @@ NULL
 #' @export
 declared <- function(
     x, labels = NULL, na_values = NULL, na_range = NULL, label = NULL,
-    measurement = NULL, ...
+    measurement = NULL, llevels = FALSE, ...
 ) {
   UseMethod("declared")
 }
@@ -107,13 +108,17 @@ declared <- function(
 #' @export
 declared.default <- function(
     x, labels = NULL, na_values = NULL, na_range = NULL, label = NULL,
-    measurement = NULL, ...
+    measurement = NULL, llevels = FALSE, ...
 ) {
   if (is.factor(x)) {
     nms <- levels(x)
     if (is.null(labels)) {
       labels <- seq(length(nms))
       names(labels) <- nms
+    }
+
+    if (isTRUE(llevels)) {
+      labels <- labels[!possibleNumeric_(names(labels), each = TRUE)]
     }
 
     wnms <- which(is.element(na_values, nms))
@@ -126,6 +131,8 @@ declared.default <- function(
         na_values <- asNumeric_(na_values)
       }
     }
+
+    x <- as.numeric(x)
   }
 
   xchar <- FALSE
