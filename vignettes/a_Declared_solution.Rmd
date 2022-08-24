@@ -1,11 +1,11 @@
 ---
-title: "Motivation for the declared package"
+title: "a. Motivation for the declared package"
 output: 
    rmarkdown::html_vignette:
 #     highlight: "declared.theme"
 #     css: "declared.css"
 vignette: >
-  %\VignetteIndexEntry{Motivation for the declared package}
+  %\VignetteIndexEntry{a. Motivation for the declared package}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 editor_options: 
