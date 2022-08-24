@@ -1,9 +1,9 @@
 ---
-title: "Added value"
+title: "b. Added value"
 output:
   rmarkdown::html_vignette:
-    highlight: "declared.theme"
-    css: "declared.css"
+#    highlight: "declared.theme"
+#    css: "declared.css"
 vignette: >
   %\VignetteIndexEntry{b. Added value}
   %\VignetteEncoding{UTF-8}
@@ -13,7 +13,7 @@ editor_options:
     wrap: 80
 ---
 
-```{r, include = FALSE}
+```{r vignettesetup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
@@ -84,14 +84,14 @@ been collected. All other attributes of interest (variable and value labels) are
 retained and printed accordingly. Activating the argument `drop`{.R} eliminates all
 classes and attributes, returning a regular R object:
 
-```{r}
+```{r undeclare}
 undeclare(x2, drop = TRUE)
 ```
 
 The function `as.haven()`{.R} coerces the resulting object to the class
 `"haven_labelled_spss"`{.R}, and the function `as.declared()`{.R} reverses the process:
 
-```{r}
+```{r haven}
 xh <- as.haven(x2)
 xh
 
@@ -100,7 +100,7 @@ as.declared(xh)
 
 The missing values are properly formatted, even inside the base data frame:
 
-```{r}
+```{r dataframe}
 dfm <- data.frame(x1 = letters[1:7], x2)
 dfm
 ```
@@ -109,14 +109,14 @@ If users prefer a tibble instead of a data frame, the objects of class
 "`declared"`{.R} are properly formatted in a similar way to those from package
 **haven**:
 
-```{r}
+```{r tibble}
 tibble::as_tibble(dfm)
 ```
 
 Special challenges are associated with sorting and ordering the declared
 objects, where not all missing values are treated the same.
 
-```{r}
+```{r sort}
 x3 <- declared(
   x = c(1:5, -91, NA, -92, -91),
   na_value = c(-92, -91)

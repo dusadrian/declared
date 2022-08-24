@@ -1,9 +1,9 @@
 ---
-title: "Weighting (declared) values"
+title: "c. Weighting (declared) values"
 output:
-  rmarkdown::html_vignette:
-    highlight: "declared.theme"
-    css: "declared.css"
+  rmarkdown::html_vignette
+#    highlight: "declared.theme"
+#    css: "declared.css"
 vignette: >
   %\VignetteIndexEntry{c. Weighting (declared) values}
   %\VignetteEncoding{UTF-8}

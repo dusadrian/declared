@@ -59,3 +59,9 @@ label(x) <- "This is a proper label"
 x
 
 }
+\seealso{
+Other labelling functions: 
+\code{\link{drop_undeclare}},
+\code{\link{measurement}()}
+}
+\concept{labelling functions}
