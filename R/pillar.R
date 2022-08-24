@@ -1,4 +1,5 @@
 # Dynamically exported, see onLoad.R
+# this functions will be registered when or if the package pillar is loaded
 # using eval(parse()) to avoid the huge dependency tree of vctrs, haven, labelled and pillar
 
 `pillar_shaft.declared` <- function(
