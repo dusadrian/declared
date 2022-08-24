@@ -20,7 +20,10 @@
 #' @param x A declared labelled vector
 #' @param ... Other arguments used by various methods
 #' @export
+
 #' @name as.haven
+#' @export
+# See https://stackoverflow.com/questions/18512528/how-to-export-s3-method-so-it-is-available-in-namespace
 `as.haven` <- function(x, ...) {
     UseMethod("as.haven")
 }

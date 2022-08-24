@@ -1,13 +1,13 @@
 ---
 title: "Motivation for the declared package"
-output:
-  rmarkdown::html_vignette:
-    highlight: "declared.theme"
-    css: "declared.css"
+output: 
+   rmarkdown::html_vignette:
+#     highlight: "declared.theme"
+#     css: "declared.css"
 vignette: >
-  %\VignetteIndexEntry{a. Motivation for the declared package}
-  %\VignetteEncoding{UTF-8}
+  %\VignetteIndexEntry{Motivation for the declared package}
   %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 editor_options: 
   markdown: 
     wrap: 80
@@ -20,6 +20,9 @@ knitr::opts_chunk$set(
 )
 ```
 
+```{r setup}
+library(declared)
+```
 
 The R ecosystem already has some very good packages that deal with labelled
 objects. In particular, the inter-connected packages **haven** and **labelled**

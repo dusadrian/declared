@@ -5,6 +5,10 @@
 
 <!-- badges: start -->
 
+[![Lifecycle:
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/declared)](https://CRAN.R-project.org/package=declared)
 [![AppVeyor build
 status](https://ci.appveyor.com/api/projects/status/github/dusadrian/declared?branch=main&svg=true)](https://ci.appveyor.com/project/dusadrian/declared)
 [![Codecov test

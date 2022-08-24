@@ -23,7 +23,12 @@ articles:
          [DT](https://rstudio.github.io/DT/) package--which provides an R interface to the
          [DataTables](https://datatables.net/) JavaScript library--is a development priority.
     contents:
-      - intro
+      - a_Declared_solution
+      - b_Added_value
+  - title: "Working with declared"
+    desc: "Case studies with arithmetic methods"
+    contents:
+       - c_Weighting
 
 reference:
   - title: "The declared S3 class"
@@ -32,13 +37,19 @@ reference:
     contents:
       - declared
       - declared_package
+  - title: "Coercion to other classes"
+    desc: >
+      Convert to other classes, remove declared attributes.
+    contents:
+        - drop_undeclare
+        - as.haven
   - title: "Working with labels"
     desc: >
       Working with value labels and measurement labels.
     contents:
       - labels
       - measurement
-  - title: "Working missing values"
+  - title: "Working with missing values"
     desc: >
       Declaring missing values.
     contents:

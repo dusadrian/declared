@@ -1,6 +1,6 @@
 #' @name labels
-#' @title
-#' Get / Declare value labels
+#' @family labelling functions
+#' @title Get / Declare value labels
 #'
 #' @description
 #' Functions to extract information about the declared variable / value labels, or

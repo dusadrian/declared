@@ -1,7 +1,6 @@
 #' @name measurement
-#'
-#' @title
-#' Get / Set measurement levels for declared objects
+#' @family labelling functions
+#' @title Get / Set measurement levels for declared objects
 #'
 #' @description
 #' Functions to extract information about the measurement levels of a variable

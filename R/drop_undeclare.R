@@ -16,6 +16,7 @@
 #' NAs, and the labels referring to the missing values are deleted by default.
 #'
 #' Function `drop()` deletes all attributes.
+#' @family labelling functions
 #' @return A declared labelled object.
 #' @examples
 #' x <- declared(

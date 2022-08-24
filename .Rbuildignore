@@ -9,3 +9,5 @@
 ^appveyor\.yml$
 ^codecov\.yml$
 ^\.covrignore$
+^doc$
+^Meta$
