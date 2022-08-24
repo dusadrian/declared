@@ -176,9 +176,10 @@
 # these functions will be registered when or if the package haven is loaded
 
 `as_factor.declared` <- function(
-    x, levels = c("default", "labels", "values", "both"), ordered = FALSE, ...
+    x, levels = c("labels", "values", "both"), ordered = FALSE, ...
 ) {
-    as.factor(x, drop_na = FALSE, levels = levels, ordered = ordered, ... = ...)
+  levels <- match.arg(levels)
+  as.factor(x, drop_na = FALSE, levels = levels, ordered = ordered, ... = ...)
 }
 
 `zap_labels.declared` <- function(x) {
