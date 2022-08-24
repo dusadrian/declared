@@ -1,5 +1,26 @@
-#' @rdname declared_internal
+#' @title Coerce to haven / labelled objects
+#' @description
+#' Convert declared labelled objects to haven labelled objects
+#' @details
+#' This is a function that reverses the process of `as.declared()`, making
+#' a round trip between `declared` and `haven_labelled_spss` classes.
+#'
+#' @return A labelled vector of class "haven_labelled_spss".
+#' @examples
+#'
+#' x <- declared(
+#'     c(1:5, -1),
+#'     labels = c(Good = 1, Bad = 5, DK = -1),
+#'     na_values = -1
+#' )
+#'
+#' x
+#'
+#' as.haven(x)
+#' @param x A declared labelled vector
+#' @param ... Other arguments used by various methods
 #' @export
+#' @name as.haven
 `as.haven` <- function(x, ...) {
     UseMethod("as.haven")
 }
@@ -146,10 +167,18 @@
     return(x)
 }
 
+
+
+
+
+# Dynamically exported, see onLoad.R
+# using eval(parse()) to avoid the huge dependency tree of vctrs, haven, labelled and pillar
+# these functions will be registered when or if the package haven is loaded
+
 `as_factor.declared` <- function(
     x, levels = c("default", "labels", "values", "both"), ordered = FALSE, ...
 ) {
-    as.factor(undeclare(x), levels = levels, ordered = ordered, ... = ...)
+    as.factor(x, drop_na = FALSE, levels = levels, ordered = ordered, ... = ...)
 }
 
 `zap_labels.declared` <- function(x) {
@@ -168,22 +197,4 @@
     attr(x, "na_range") <- NULL
 
     return(x)
-}
-
-
-# using eval(parse()) to avoid the huge dependency tree of vctrs, haven, labelled and pillar
-
-`vec_ptype_abbr.declared` <- function(x, ...) {
-    command <- "paste0(vctrs::vec_ptype_abbr(vctrs::vec_data(unclass(undeclare(x)))), '+lbl')"
-    eval(parse(text = command))
-}
-
-`vec_ptype_full.declared` <- function(x, ...) {
-    command <- "paste0('declared<', vctrs::vec_ptype_full(vctrs::vec_data(unclass(undeclare(x)))), '>')"
-    eval(parse(text = command))
-}
-
-`vec_ptype2.declared` <- function(x, y, ...) {
-    command <- "vctrs::vec_ptype2(unclass(undeclare(x)), vctrs::vec_data(unclass(undeclare(y))), ...)"
-    eval(parse(text = command))
 }
