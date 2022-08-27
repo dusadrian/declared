@@ -169,7 +169,7 @@ additional function to account for the difference:
 is.empty(c(x2, NA))
 ```
 
-All missing values, empty and declared, play natively with the NA oriented, base
+All missing values, empty and declared, play well with the NA oriented, base
 functions such as `na.omit()`{.R} or `na.exclude()`{.R}:
 
 ```{r}

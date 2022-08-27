@@ -30,6 +30,6 @@ test_that("as.factor.declared() works", {
 test_that("as_factor.declared() works", {
   expect_identical(
     haven::as_factor(x),
-    as.factor(x, drop_na = FALSE)
+    as.factor(x, drop_na = FALSE, nolabels = TRUE)
   )
 })

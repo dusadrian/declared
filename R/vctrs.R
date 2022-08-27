@@ -12,7 +12,7 @@
     eval(parse(text = command))
 }
 
-`vec_ptype2.declared` <- function(x, y, ...) {
-    command <- "vctrs::vec_ptype2(unclass(undeclare(x)), vctrs::vec_data(unclass(undeclare(y))), ...)"
-    eval(parse(text = command))
-}
+# `vec_ptype2.declared` <- function(x, y, ...) {
+#     command <- "vctrs::vec_ptype2(unclass(undeclare(x)), vctrs::vec_data(unclass(undeclare(y))), ...)"
+#     eval(parse(text = command))
+# }

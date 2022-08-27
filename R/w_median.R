@@ -22,9 +22,11 @@
         return(median(x, na.rm = na.rm, ... = ...))
     }
 
-    return(unname(
-        w_quantile(
-            x, wt = wt, probs = 0.5, na.rm = na.rm, ... = ...
-        )
-    ))
+    x <- w_quantile(
+      x, wt = wt, probs = 0.5, na.rm = na.rm, ... = ...
+    )
+
+    attributes(x) <- NULL
+
+    return(x)
 }

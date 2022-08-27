@@ -184,89 +184,23 @@
     unclass = FALSE,
     ...) {
 
-    x <- undeclare(x)
-    vl <- label(x)
+    x <- as.haven(x)
     levels <- match.arg(levels)
     sort_levels <- match.arg(sort_levels)
-
-    if (strict) {
-        allval <- unique(x)
-        allval <- allval[!is.na(allval)]
-        nolabel <- allval[!allval %in% labels(x)]
-
-        if (length(nolabel) > 0) {
-            if (unclass) {
-                x <- unclass(x)
-            }
-            return(x)
-        }
-    }
-
-    labels <- labels(x)
-    if (nolabel_to_na) {
-        allval <- unique(x)
-        allval <- allval[!is.na(allval)]
-        nolabel <- allval[!allval %in% labels]
-        if (length(nolabel) > 0) {
-            x[x %in% nolabel] <- NA
-        }
-    }
-
-    allval <- unique(x)
-    allval <- allval[!is.na(allval)]
-    nolabel <- sort(allval[!is.element(allval, labels)])
-    # if there are some values with no label
-    if (length(nolabel) > 0) {
-        names(nolabel) <- as.character(nolabel)
-        levs <- c(labels, nolabel)
-    }
-    else {
-        levs <- labels
-    }
-
-    if (sort_levels == "auto" & length(nolabel) > 0) {
-        sort_levels <- "values"
-    }
-
-    if (sort_levels == "labels") {
-        levs <- levs[order(names(levs), decreasing = decreasing)]
-    }
-
-    if (sort_levels == "values") {
-        levs <- sort(levs, decreasing = decreasing)
-    }
-
-    if (levels == "labels") {
-        labs <- names(levs)
-    }
-
-    if (levels == "values") {
-        labs <- unname(levs)
-    }
-
-    if (levels == "prefixed") {
-        labs <- eval(parse(text = "names_prefixed_by_values(levs)"))
-    }
-
-    levs <- unname(levs)
-    x <- factor(x, levels = levs, labels = labs, ordered = ordered, ...)
-
-    if (drop_unused_labels) {
-        x <- droplevels(x)
-    }
-
-    label(x) <- vl
-
-    return(x)
+    labelled::to_factor(
+      x, levels = levels, ordered = ordered, nolabel_to_na = nolabel_to_na,
+      sort_levels = sort_levels, decreasing = decreasing, drop_unused_labels = drop_unused_labels,
+      user_na_to_na = user_na_to_na, strict = strict, unclass = unclass, ... = ...
+    )
 }
 
 `to_character.declared` <- function(x, levels = c("labels", "values",
     "prefixed"), nolabel_to_na = FALSE, user_na_to_na = FALSE, ...) {
-    vl <- label(x)
+    x <- as.haven(x)
     levels <- match.arg(levels)
-    x <- as.character(eval(parse(text = "to_factor(x, levels = levels, nolabel_to_na = nolabel_to_na, user_na_to_na = FALSE)")))
-    label(x) <- vl
-    x
+    labelled::to_character(
+      x, levels = levels, nolabel_to_na = nolabel_to_na, user_na_to_na = user_na_to_na, ... = ...
+    )
 }
 
 `copy_labels.declared` <- function(from, to, .strict = TRUE) {

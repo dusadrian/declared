@@ -182,7 +182,8 @@
     x, levels = c("labels", "values", "both"), ordered = FALSE, ...
 ) {
   levels <- match.arg(levels)
-  as.factor(x, drop_na = FALSE, levels = levels, ordered = ordered, ... = ...)
+  x <- as.haven(x)
+  haven::as_factor(x, levels = levels, ordered = ordered, ... = ...)
 }
 
 `zap_labels.declared` <- function(x) {

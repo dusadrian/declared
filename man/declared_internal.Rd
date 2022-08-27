@@ -16,7 +16,8 @@ order_declared(
   na.last = NA,
   decreasing = FALSE,
   method = c("auto", "shell", "radix"),
-  empty.last = na.last
+  empty.last = na.last,
+  ...
 )
 
 value_labels(...)

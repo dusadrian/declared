@@ -45,7 +45,7 @@ x2 == "Missing"
 ```
 
 Similar methods have been added to the primitive functions `"<"`{.R}, `">"`{.R} and
-`"!="`{.R} etc., to allow a fully functional collection of subseting possibilities.
+`"!="`{.R} etc., to allow a fully functional collection of subsetting possibilities.
 
 Combining on this type of vector creates an object of the same class:
 
@@ -195,7 +195,7 @@ as.factor(undeclare(x4))
 
 This is almost identical, but differs from `x5` with respect to the level orders.
 It happens because the missing value -91, coerced to a valid value, becomes the
-first in the order of the categories while normally, a categorial variable displays
+first in the order of the categories while normally, a categorical variable displays
 the valid values first, and the missing values last.
 
 If the original order is important, the argument `drop_na` can be deactivated:
@@ -241,12 +241,14 @@ mandatory, as the declared objects are also able to ingest character objects:
 ```{r}
 x6 <- declared(
   x = sample(
-    c("Left", "Middle", "Right", "Apolitic"),
+    c("a", "b", "c", "z"),
     20,
     replace = TRUE
   ),
-  na_values = "Apolitic"
+  labels = c("Left" = "a", "Middle" = "b", "Right" = "c", "Apolitic" = "z"),
+  na_values = "z"
 )
+
 x6
 ```
 
@@ -260,3 +262,5 @@ the main functions `declared()`{.R}, `as.declared()`{.R}, `undeclare()`{.R} and
 `drop_na()`{.R} are all generic, allowing full flexibility for any other package
 to create custom (coercion) methods for different classes of objects, thus
 facilitating and encouraging a widespread use.
+
+

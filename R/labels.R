@@ -39,8 +39,8 @@
 #' x
 #'
 #' @param x Any vector of values that should be declared as missing
-#' (for \code{labels}) or a numeric vector of length two giving the (inclusive)
-#' extents of the range of missing values (for \code{label}).
+#' (for `labels`) or a numeric vector of length two giving the (inclusive)
+#' extents of the range of missing values (for `label`).
 #'
 #' @export
 label <- function(x) {
@@ -74,7 +74,7 @@ label.data.frame <- function(x) {
 
 #' @rdname labels
 #' @param ... Other arguments, for internal use.
-#' @param value The variable label, or a vector of (named) value labels
+#' @param value The variable label, or a list of (named) variable labels
 #' @export
 `label<-` <- function(x, ..., value) {
   UseMethod("label<-")
@@ -83,6 +83,23 @@ label.data.frame <- function(x) {
 
 #' @export
 `label<-.declared` <- function(x, ..., value) {
+  if (!is.null(value) && length(value) > 1) {
+    stopError_("`value` should be a single character string or NULL.")
+  }
+
+  if (is.null(value)) {
+    attr(x, "label") <- NULL
+  }
+  else {
+    attr(x, "label") <- as.character(value)
+  }
+
+  return(x)
+}
+
+
+#' @export
+`label<-.haven_labelled_spss` <- function(x, ..., value) {
   if (!is.null(value) && length(value) > 1) {
     stopError_("`value` should be a single character string or NULL.")
   }
@@ -108,7 +125,7 @@ label.data.frame <- function(x) {
     stopError_("cannot assign a list to be a object label")
   }
 
-  if (length(value) != 1L) {
+  if (!is.null(value) && length(value) != 1L) {
     stopError_("value must be character vector of length 1")
   }
 
@@ -123,7 +140,7 @@ label.data.frame <- function(x) {
 
 
 #' @export
-`label<-.data.frane` <- function(x, self = TRUE, ..., value) {
+`label<-.data.frame` <- function(x, self = TRUE, ..., value) {
   if (is.list(value)) {
     self <- FALSE
   }
@@ -157,6 +174,10 @@ label.data.frame <- function(x) {
 
   return(x)
 }
+
+
+
+
 
 
 #' @export
@@ -197,13 +218,19 @@ labels.data.frame <- function(object, prefixed = FALSE, ...) {
 #' @export
 `labels<-.default` <- function(x, value) {
   # do nothing
-  NULL
+  return(x)
 }
-
 
 
 #' @export
 `labels<-.declared` <- function(x, value) {
     attr(x, "labels") <- value
     return(x)
+}
+
+
+#' @export
+`labels<-.haven_labelled_spss` <- function(x, value) {
+  attr(x, "labels") <- value
+  return(x)
 }

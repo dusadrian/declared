@@ -5,6 +5,7 @@ NULL
 
 #' @rdname declared_internal
 #' @keywords internal
+#' @export
 `format_declared` <- function(x, digits = getOption("digits")) {
   if (!is.atomic(x)) {
     stopError_("`x` has to be a vector.")
@@ -21,9 +22,10 @@ NULL
 
 #' @rdname declared_internal
 #' @keywords internal
+#' @export
 `order_declared` <- function(
     x, na.last = NA, decreasing = FALSE, method = c("auto", "shell", "radix"),
-    empty.last = na.last) {
+    empty.last = na.last, ...) {
 
   if (!is.declared(x)) {
     stopError_("`x` has to be a vector of class `declared`.")
@@ -132,25 +134,21 @@ NULL
 
     x <- trimstr_(tolower(unlist(strsplit(x, split = ","))))
 
-    if (is.null(x)) {
-        return(x)
-    }
-
     mlevels <- c(
         "categorical", "nominal", "ordinal",
         "quantitative", "interval", "ratio", "discrete", "continuous"
     )
 
-    if (any(x == "qualitative")) {
-        x[x == "qualitative"] <- "categorical"
+    if (any(wx <- x == "qualitative")) {
+        x[wx] <- "categorical"
     }
 
-    if (any(x == "metric")) {
-        x[x == "metric"] <- "quantitative"
+    if (any(wx <- x == "metric")) {
+        x[wx] <- "quantitative"
     }
 
-    if (any(x == "numeric")) {
-        x[x == "numeric"] <- "quantitative"
+    if (any(wx <- x == "numeric")) {
+        x[wx] <- "quantitative"
     }
 
     position <- pmatch(x, mlevels)
@@ -168,8 +166,8 @@ NULL
             "Measurement can not be categorical and quantitative at the same time."
         )
     }
-
     cpos <- setdiff(position, first)
+
     if (length(cpos) > 1) {
 
         if (first == 4) { # quantitative
@@ -213,12 +211,7 @@ NULL
         return(paste(mlevels[unique(sort(c(first, cpos)))], collapse = ", "))
     }
     else {
-        if (cpos == first) {
-            return(mlevels[first])
-        }
-        else {
-            return(paste(c(mlevels[first], mlevels[cpos]), collapse = ", "))
-        }
+        return(paste(c(mlevels[first], mlevels[cpos]), collapse = ", "))
     }
 }
 
@@ -548,10 +541,8 @@ NULL
     result[isna] <- NA
 
     if (all(isna) || is.logical(x)) {
-        if (each) {
-            return(result)
-        }
-        return(FALSE)
+        # each is certainly TRUE
+        return(result)
     }
 
     x <- asNumeric_(x)
@@ -638,7 +629,7 @@ NULL
         return(logical(length(x)))
     }
 
-    if (!is.null(tag) && !is.atomic(tag) && (length(tag) > 1 || is.na(tag))) {
+    if (!is.null(tag) && (!is.atomic(tag) || length(tag) > 1 || is.na(tag))) {
         stopError_("`tag` should be a vector of length 1.")
     }
 

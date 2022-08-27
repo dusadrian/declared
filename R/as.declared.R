@@ -8,14 +8,10 @@
 
 #' @export
 `as.declared.default` <- function(x, ...) {
-  interactive <- TRUE
-
   dots <- list(...)
-  if (!is.null(dots$interactive)) {
-    interactive <- dots$interactive
-  }
+  interactive <- isTRUE(dots$interactive)
 
-  if (isTRUE(interactive)) {
+  if (interactive) {
     msg <- "There is no automatic class method conversion for this type of"
     if (!is.null(dots$vname_)) {
       msg <- paste0(dots$vname_, ": ", msg, " variable.")
@@ -69,6 +65,7 @@
   }
 
   attributes(x) <- NULL
+  attr(x, "xchar") <- is.character(x)
   missingValues(x)[is.element(x, misvals)] <- x[is.element(x, misvals)]
 
   attr(x, "na_values") <- na_values

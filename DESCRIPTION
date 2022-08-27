@@ -38,10 +38,13 @@ Suggests:
     haven,
     knitr,
     labelled,
+    pillar,
     rmarkdown,
     spelling,
     testthat (>= 3.0.0),
-    tibble
+    tibble,
+    vctrs,
+    vroom
 VignetteBuilder: knitr
 Language: en-US
 Config/testthat/edition: 3

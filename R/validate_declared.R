@@ -13,12 +13,6 @@
     if (any(duplicated(stats::na.omit(labels)))) {
       stopError_("`labels` must be unique.")
     }
-
-    if (is.factor(x)) {
-      if (!identical(labels, levels(x))) {
-        stopError_("`x` is a factor, and `labels` are different its levels.")
-      }
-    }
   }
 
   if (

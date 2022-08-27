@@ -92,7 +92,6 @@
                 }
             }
 
-
             if (attr(x, "xvalues")) {
                 # -length(rnms), because of "Total" which does not have a value
                 xvalues <- unlist(lapply(rnms[-length(rnms)], "[[", 2))
@@ -117,8 +116,7 @@
             cnms <- colnames(x)
             if (attr(x, "yvalues")) {
                 cnms <- gsub("_-_", " ", cnms)
-            }
-            else {
+            } else {
                 cnms <- unlist(lapply(strsplit(cnms, split = "_-_"), "[[", 1))
             }
 
@@ -292,115 +290,87 @@
 
     class(x) <- setdiff(class(x), "fobject")
 
-    if (is.list(x)) {
-        nms <- apply(attr(x, "split", exact = TRUE), 1, function(x) {
-            paste(x, collapse = ", ")
-        })
+    # if (is.matrix(x)) {
+    #     # for ex. via using() with split.by
+    #     rnms <- rownames(x)
 
-        cat(ifelse(startend, "\n", ""))
-        for (i in seq(length(x))) {
-            cat(nms[i], "\n")
-            cat(paste(c(rep("-", nchar(nms[i])), "\n"), collapse = ""))
+    #     max.nchar.rnms <- max(nchar(encodeString(rnms)), na.rm = TRUE)
+    #     for (i in seq(length(rnms))) {
+    #         if (nchar(rnms[i]) < max.nchar.rnms) {
+    #             rnms[i] <- padLeft_(rnms[i], max.nchar.rnms - nchar(rnms[i]))
+    #         }
+    #     }
 
-            if (is.null(x[[i]])) {
-                cat("No data.\n")
-            }
-            else {
-                if (is.matrix(x[[i]])) {
-                    class(x[[i]]) <- c("fobject", class(x[[i]]))
-                }
-                class(x[[i]]) <- setdiff(class(x[[i]]), "fobject")
-                print(x[[i]], startend = FALSE)
-            }
+    #     rownames(x) <- rnms
+    # }
+    # else if (is.atomic(x)) {
+        x <- matrix(
+            if (possibleNumeric_(x)) round(asNumeric_(x), 3) else x,
+            nrow = 1,
+            dimnames = list("", names(x))
+        )
+    # }
 
-            if (i < length(x)) {
-                cat("\n")
-            }
-        }
-        cat(ifelse(startend, "\n", ""))
-    }
-    else {
-        if (is.matrix(x)) {
-            # for ex. via using() with split.by
-            rnms <- rownames(x)
+    nax <- is.na(x)
 
-            max.nchar.rnms <- max(nchar(encodeString(rnms)), na.rm = TRUE)
-            for (i in seq(length(rnms))) {
-                if (nchar(rnms[i]) < max.nchar.rnms) {
-                    rnms[i] <- padLeft_(rnms[i], max.nchar.rnms - nchar(rnms[i]))
-                }
-            }
+    pN <- apply(x, 2, possibleNumeric_)
+    nms <- colnames(x)
 
-            rownames(x) <- rnms
-        }
-        else if (is.atomic(x)) {
-            x <- matrix(
-                if (possibleNumeric_(x)) round(asNumeric_(x), 3) else x,
-                nrow = 1,
-                dimnames = list("", names(x))
+    cx <- x
+
+    for (c in seq(ncol(x))) {
+        xc <- x[, c]
+        max.nchar.nc <- max(nchar(xc), na.rm = TRUE)
+        ndec <- 0
+
+        if (pN[c]) {
+            ndec <- min(numdec_(xc), 3)
+            x[, c] <- sprintf(
+                paste0("%", max.nchar.nc, ".", ndec, "f"),
+                asNumeric_(xc)
             )
         }
 
-        nax <- is.na(x)
+        # if (possibleNumeric_(nms[c])) {
+        #     # since this is a column name, most likely it is a whole number
+        #     # e.g. the value of a declared object instead of the label
+        #     nmsc <- sprintf(
+        #         paste0("%", max.nchar.nc, ".", ndec, "f"),
+        #         asNumeric_(nms[c])
+        #     )
 
-        pN <- apply(x, 2, possibleNumeric_)
-        nms <- colnames(x)
+        #     if (grepl("[.]", nmsc)) {
+        #         nmsc <- paste(
+        #             unlist(strsplit(nmsc, split = "[.]"))[1],
+        #             paste(rep(" ", ndec), collapse = "")
+        #         )
+        #     }
 
-        cx <- x
-
-        for (c in seq(ncol(x))) {
-            xc <- x[, c]
-            max.nchar.nc <- max(nchar(xc), na.rm = TRUE)
-            ndec <- 0
-
-            if (pN[c]) {
-                ndec <- min(numdec_(xc), 3)
-                x[, c] <- sprintf(
-                    paste0("%", max.nchar.nc, ".", ndec, "f"),
-                    asNumeric_(xc)
-                )
-            }
-
-            if (possibleNumeric_(nms[c])) {
-                # since this is a column name, most likely it is a whole number
-                # e.g. the value of a declared object instead of the label
-                nmsc <- sprintf(
-                    paste0("%", max.nchar.nc, ".", ndec, "f"),
-                    asNumeric_(nms[c])
-                )
-
-                if (grepl("[.]", nmsc)) {
-                    nmsc <- paste(
-                        unlist(strsplit(nmsc, split = "[.]"))[1],
-                        paste(rep(" ", ndec), collapse = "")
-                    )
-                }
-
-                nms[c] <- nmsc
-            }
-        }
-
-        x[nax] <- ""
-
-
-        max.nchars <- max(nchar(c(encodeString(nms), x)), na.rm = TRUE)
-
-        for (i in seq(length(nms))) {
-            if (nchar(nms[i]) < max.nchars) {
-                nms[i] <- padBoth_(nms[i], max.nchars - nchar(nms[i]))
-            }
-        }
-
-        for (i in seq(length(x))) {
-            if (nchar(x[i]) < max.nchars) {
-                x[i] <- padBoth_(x[i], max.nchars - nchar(x[i]))
-            }
-        }
-
-        colnames(x) <- nms
-
-        cat(ifelse(startend, "\n", ""))
-        print(noquote(x))
-        cat(ifelse(startend, "\n", ""))
+        #     nms[c] <- nmsc
+        # }
     }
+
+    x[nax] <- ""
+
+
+    max.nchars <- max(nchar(c(encodeString(nms), x)), na.rm = TRUE)
+
+    for (i in seq(length(nms))) {
+        if (nchar(nms[i]) < max.nchars) {
+            nms[i] <- padBoth_(nms[i], max.nchars - nchar(nms[i]))
+        }
+    }
+
+    for (i in seq(length(x))) {
+        if (nchar(x[i]) < max.nchars) {
+            x[i] <- padBoth_(x[i], max.nchars - nchar(x[i]))
+        }
+    }
+
+    colnames(x) <- nms
+
+    cat(ifelse(startend, "\n", ""))
+    print(noquote(x))
+    cat(ifelse(startend, "\n", ""))
+
 }

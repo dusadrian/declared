@@ -21,11 +21,12 @@
             x <- x[-na_index]
             wt <- wt[-na_index] # if wt is NULL, the result is still NULL
         }
+        attributes(x) <- NULL
     }
 
     if (is.null(wt)) {
         qs <- quantile(x, probs = probs, na.rm = na.rm, ... = ...)
-        class(qs) <- c("w_quantile", class(qs))
+        class(qs) <- c("fobject", class(qs))
         return(qs)
     }
 

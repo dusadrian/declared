@@ -10,13 +10,13 @@
         x <- as.declared(x)
     }
 
-    nas <- w_table(is.na(undeclare(x)), wt = wt)
+    nas <- w_table(is.empty(x), wt = wt)
     rnms <- rownames(nas)
 
     names(wsum) <- c("Min.", "1st Qu.", "Median", "Mean", "3rd Qu.", "Max.")
 
     if (any(rnms == "TRUE")) {
-        wsum <- c(wsum, "NA's" = nas$fre[2])
+        wsum <- c(wsum, "NA's" = attr(nas, "toprint")$fre[2])
     }
 
     class(wsum) <- c("fobject", class(wsum))

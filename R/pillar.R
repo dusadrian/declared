@@ -7,12 +7,16 @@
     show_labels = getOption("declared.show_pillar_labels", TRUE),
     ...) {
 
-    if (eval(parse(text = "requireNamespace('haven', quietly = TRUE)"))) {
-        return(eval(parse(text = "pillar::pillar_shaft(as.haven(x))")))
+    dots <- list(...)
+
+    if (!isFALSE(dots$use_haven)) {
+      if (eval(parse(text = "requireNamespace('haven', quietly = TRUE)"))) {
+          return(eval(parse(text = "pillar::pillar_shaft(as.haven(x))")))
+      }
     }
 
     if (!isTRUE(show_labels) | !pillar_print_pkgs_available()) {
-        return(eval(parse(text = "pillar::pillar_shaft(unclass(x))")))
+        return(eval(parse(text = "pillar::pillar_shaft(drop(undeclare(x)))")))
     }
 
     if (is.numeric(x)) {
@@ -89,7 +93,7 @@
     if (length(labels) > 0) {
         names(labels) <- eval(parse(text = "pillar::style_subtle(paste0(' [', names(labels), ']'))"))
         attr(x, "labels") <- labels
-        label_display <- eval(parse(text = "as.character(haven::as_factor(x, 'labels'))"))
+        label_display <- eval(parse(text = "as.character(x, drop_na = FALSE, nolabels = TRUE)"))
         label_display[is.na(label_display)] <- ""
     } else {
         label_display <- character(length(x))

@@ -58,9 +58,9 @@ measurement(x)
 # the same with
 measurement(x) <- "categorical, ordinal"
 
-
+set.seed(1890)
 x <- declared(
-    sample(c(18:90, -91), 10, replace = TRUE),
+    sample(c(18:90, -91), 20, replace = TRUE),
     labels = c("No answer" = -91),
     na_values = -91,
     label = "Respondent's age"

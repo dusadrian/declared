@@ -1,16 +1,15 @@
 `.onLoad` <- function(...) {
-    load_library <- function(pkg) {
-        if (pkg %in% loadedNamespaces() && !is.element(pkg, .packages())) {
-            loc <- dirname(getNamespaceInfo(pkg, "path"))
-            do.call(
-                "library",
-                list(pkg, lib.loc = loc, character.only = TRUE, warn.conflicts = FALSE)
-            )
-        }
-    }
-
+    loc <- dirname(getNamespaceInfo("stats", "path"))
     suppressPackageStartupMessages(
-        lapply(c("stats", "utils"), load_library)
+        do.call(
+            "library",
+            list(
+                "stats",
+                lib.loc = loc,
+                character.only = TRUE,
+                warn.conflicts = FALSE
+            )
+        )
     )
 
     if (unlockEnvironment_(asNamespace("base"))) {
@@ -133,17 +132,17 @@
         ) {
 
 
-                    match.names <- function(clabs, nmi)
-            {
-            if(identical(clabs, nmi)) NULL
-            else if(length(nmi) == length(clabs) && all(nmi %in% clabs)) {
-                    ## we need 1-1 matches here
-                m <- pmatch(nmi, clabs, 0L)
-                    if(any(m == 0L))
-                        stop("names do not match previous names")
-                    m
-            } else stop("names do not match previous names")
+            match.names <- function(clabs, nmi) {
+                if(identical(clabs, nmi)) NULL
+                else if(length(nmi) == length(clabs) && all(nmi %in% clabs)) {
+                        ## we need 1-1 matches here
+                    m <- pmatch(nmi, clabs, 0L)
+                        if(any(m == 0L))
+                            stop("names do not match previous names")
+                        m
+                } else stop("names do not match previous names")
             }
+
             allargs <- list(...)
             allargs <- allargs[lengths(allargs) > 0L]
             if(length(allargs)) {
@@ -168,25 +167,24 @@
             cl <- NULL
             perm <- rows <- vector("list", n)
             if(make.row.names) {
-            rlabs <- rows
-            env <- new.env()
-            env$autoRnms <- TRUE # result with 1:nrow(.) row names? [efficiency!]
-            Make.row.names <- function(nmi, ri, ni, nrow)
-            {
-                if(nzchar(nmi)) {
-                if(env$autoRnms) env$autoRnms <- FALSE
-                if(ni == 0L) character()  # PR#8506
-                else if(ni > 1L) paste(nmi, ri, sep = ".")
-                else nmi
+                rlabs <- rows
+                env <- new.env()
+                env$autoRnms <- TRUE # result with 1:nrow(.) row names? [efficiency!]
+                Make.row.names <- function(nmi, ri, ni, nrow) {
+                    if(nzchar(nmi)) {
+                    if(env$autoRnms) env$autoRnms <- FALSE
+                    if(ni == 0L) character()  # PR#8506
+                    else if(ni > 1L) paste(nmi, ri, sep = ".")
+                    else nmi
+                    }
+                    else if(env$autoRnms && nrow > 0L && identical(ri, seq_len(ni)))
+                    as.integer(seq.int(from = nrow + 1L, length.out = ni))
+                    else {
+                    if(env$autoRnms && (nrow > 0L || !identical(ri, seq_len(ni))))
+                        env$autoRnms <- FALSE
+                    ri
+                    }
                 }
-                else if(env$autoRnms && nrow > 0L && identical(ri, seq_len(ni)))
-                as.integer(seq.int(from = nrow + 1L, length.out = ni))
-                else {
-                if(env$autoRnms && (nrow > 0L || !identical(ri, seq_len(ni))))
-                    env$autoRnms <- FALSE
-                ri
-                }
-            }
             }
             smartX <- isTRUE(factor.exclude)
 
@@ -195,73 +193,73 @@
             value <- clabs <- NULL
             all.levs <- list()
             for(i in seq_len(n)) { ## check and treat arg [[ i ]]  -- part 1
-            xi <- allargs[[i]]
-            nmi <- nms[i]
+                xi <- allargs[[i]]
+                nmi <- nms[i]
                 ## coerce matrix to data frame
                 if(is.matrix(xi)) allargs[[i]] <- xi <-
                     as.data.frame(xi, stringsAsFactors = stringsAsFactors)
-            if(inherits(xi, "data.frame")) {
-                if(is.null(cl))
-                cl <- oldClass(xi)
-                ri <- attr(xi, "row.names")
-                ni <- length(ri)
-                if(is.null(clabs)) ## first time
-                clabs <- names(xi)
-                else {
-                        if(length(xi) != length(clabs))
-                            stop("numbers of columns of arguments do not match")
-                pi <- match.names(clabs, names(xi))
-                if( !is.null(pi) ) perm[[i]] <- pi
-                }
-                rows[[i]] <- seq.int(from = nrow + 1L, length.out = ni)
-                if(make.row.names) rlabs[[i]] <- Make.row.names(nmi, ri, ni, nrow)
-                nrow <- nrow + ni
-                if(is.null(value)) { ## first time ==> setup once:
-                value <- unclass(xi)
-                nvar <- length(value)
-
-                ## code for declared
-                lxi <- vector("list", nvar)
-                xideclared <- sapply(xi, is.declared)
-                names(lxi) <- names(xideclared)
-                lxi[xideclared] <- lapply(xi[xideclared], function(x) {
-                    list(
-                        labels = attr(x, "labels", exact = TRUE),
-                        na_values = attr(x, "na_values"),
-                        na_range = attr(x, "na_range")
-                    )
-                })
-                ## code for declared
-
-                all.levs <- vector("list", nvar)
-                has.dim <- facCol <- ordCol <- logical(nvar)
-                if(smartX) NA.lev <- ordCol
-                for(j in seq_len(nvar)) {
-                    xj <- value[[j]]
-                            facCol[j] <- fac <-
-                                if(!is.null(lj <- levels(xj))) {
-                                    all.levs[[j]] <- lj
-                                    TRUE # turn categories into factors
-                                } else
-                                    is.factor(xj)
-                    if(fac) {
-                    ordCol[j] <- is.ordered(xj)
-                    if(smartX && !NA.lev[j])
-                        NA.lev[j] <- anyNA(lj)
+                if(inherits(xi, "data.frame")) {
+                    if(is.null(cl))
+                    cl <- oldClass(xi)
+                    ri <- attr(xi, "row.names")
+                    ni <- length(ri)
+                    if(is.null(clabs)) ## first time
+                    clabs <- names(xi)
+                    else {
+                            if(length(xi) != length(clabs))
+                                stop("numbers of columns of arguments do not match")
+                        pi <- match.names(clabs, names(xi))
+                        if( !is.null(pi) ) perm[[i]] <- pi
                     }
-                    has.dim[j] <- length(dim(xj)) == 2L
-                }
-                }
-                else for(j in seq_len(nvar)) {
+                    rows[[i]] <- seq.int(from = nrow + 1L, length.out = ni)
+                    if(make.row.names) rlabs[[i]] <- Make.row.names(nmi, ri, ni, nrow)
+                    nrow <- nrow + ni
+                    if(is.null(value)) { ## first time ==> setup once:
+                        value <- unclass(xi)
+                        nvar <- length(value)
+
+                        ## code for declared
+                        lxi <- vector("list", nvar)
+                        xideclared <- sapply(xi, is.declared)
+                        names(lxi) <- names(xideclared)
+                        lxi[xideclared] <- lapply(xi[xideclared], function(x) {
+                            list(
+                                labels = attr(x, "labels", exact = TRUE),
+                                na_values = attr(x, "na_values"),
+                                na_range = attr(x, "na_range")
+                            )
+                        })
+                        ## code for declared
+
+                        all.levs <- vector("list", nvar)
+                        has.dim <- facCol <- ordCol <- logical(nvar)
+                        if(smartX) NA.lev <- ordCol
+                        for(j in seq_len(nvar)) {
+                        xj <- value[[j]]
+                                facCol[j] <- fac <-
+                                    if(!is.null(lj <- levels(xj))) {
+                                        all.levs[[j]] <- lj
+                                        TRUE # turn categories into factors
+                                    } else
+                                        is.factor(xj)
+                        if(fac) {
+                        ordCol[j] <- is.ordered(xj)
+                        if(smartX && !NA.lev[j])
+                            NA.lev[j] <- anyNA(lj)
+                        }
+                        has.dim[j] <- length(dim(xj)) == 2L
+                        }
+                    }
+                    else for(j in seq_len(nvar)) {
                         xij <- xi[[j]]
                         if(is.null(pi) || is.na(jj <- pi[[j]])) jj <- j
                         if(facCol[jj]) {
                             if(length(lij <- levels(xij))) {
                                 all.levs[[jj]] <- unique(c(all.levs[[jj]], lij))
-                    if(ordCol[jj])
-                        ordCol[jj] <- is.ordered(xij)
-                    if(smartX && !NA.lev[jj])
-                        NA.lev[jj] <- anyNA(lij)
+                                if(ordCol[jj])
+                                    ordCol[jj] <- is.ordered(xij)
+                                if(smartX && !NA.lev[jj])
+                                    NA.lev[jj] <- anyNA(lij)
                             } else if(is.character(xij))
                                 all.levs[[jj]] <- unique(c(all.levs[[jj]], xij))
                         }
@@ -300,32 +298,32 @@
                         }
                         ## code for declared
                     }
-            } ## end{data.frame}
-            else if(is.list(xi)) {
-                ni <- range(lengths(xi))
-                if(ni[1L] == ni[2L])
-                ni <- ni[1L]
-                else stop("invalid list argument: all variables should have the same length")
-                    ri <- seq_len(ni)
-                rows[[i]] <- seq.int(from = nrow + 1L, length.out = ni)
-                if(make.row.names) rlabs[[i]] <- Make.row.names(nmi, ri, ni, nrow)
-                nrow <- nrow + ni
-                if(length(nmi <- names(xi)) > 0L) {
-                if(is.null(clabs))
-                    clabs <- nmi
-                else {
-                            if(length(xi) != length(clabs))
-                                stop("numbers of columns of arguments do not match")
-                    pi <- match.names(clabs, nmi)
-                    if( !is.null(pi) ) perm[[i]] <- pi
+                } ## end{data.frame}
+                else if(is.list(xi)) {
+                    ni <- range(lengths(xi))
+                    if(ni[1L] == ni[2L])
+                    ni <- ni[1L]
+                    else stop("invalid list argument: all variables should have the same length")
+                        ri <- seq_len(ni)
+                    rows[[i]] <- seq.int(from = nrow + 1L, length.out = ni)
+                    if(make.row.names) rlabs[[i]] <- Make.row.names(nmi, ri, ni, nrow)
+                    nrow <- nrow + ni
+                    if(length(nmi <- names(xi)) > 0L) {
+                        if(is.null(clabs))
+                            clabs <- nmi
+                        else {
+                                    if(length(xi) != length(clabs))
+                                        stop("numbers of columns of arguments do not match")
+                            pi <- match.names(clabs, nmi)
+                            if( !is.null(pi) ) perm[[i]] <- pi
+                        }
+                    }
                 }
+                else if(length(xi)) { # 1 new row
+                    rows[[i]] <- nrow <- nrow + 1L
+                        if(make.row.names)
+                    rlabs[[i]] <- if(nzchar(nmi)) nmi else as.integer(nrow)
                 }
-            }
-            else if(length(xi)) { # 1 new row
-                rows[[i]] <- nrow <- nrow + 1L
-                    if(make.row.names)
-                rlabs[[i]] <- if(nzchar(nmi)) nmi else as.integer(nrow)
-            }
             } # for(i .)
 
             nvar <- length(clabs)
@@ -507,42 +505,43 @@
             x,
             levels = c("labels", "values", "both"),
             drop_na = TRUE,
+            nolabels = FALSE,
             ordered = FALSE,
             ...
         ) {
             if (is.declared(x)) {
                 levels <- match.arg(levels)
-                labels <- names_values(x, drop_na = drop_na)
+                labels <- attr(x, "labels")
+                nv <- names_values(x, drop_na = drop_na)
+
+                if (isFALSE(drop_na)) {
+                    x <- undeclare(x)
+                }
 
                 if (levels == "labels") {
+                    if (isTRUE(nolabels)) {
+                        nv <- nv[is.element(nv, labels)]
+                        x[!is.element(drop(undeclare(x)), labels)] <- NA
+                    }
+
                     x <- factor(
-                        as.character(x, drop_na = drop_na),
-                        levels = names(labels),
+                        as.character(x),
+                        levels = names(nv),
                         ordered = ordered
                     )
                 }
                 else if (levels == "values") {
-                    if (isFALSE(drop_na)) {
-                        x <- undeclare(x)
-                    }
-
-                    attributes(x) <- NULL
-
                     x <- factor(
-                        x,
-                        unname(labels),
+                        drop(x),
+                        unname(nv),
                         ordered = ordered
                     )
                 }
                 else if (levels == "both") {
-                    nms <- paste0("[", labels, "] ", names(labels))
-
-                    if (isFALSE(drop_na)) {
-                        x <- undeclare(x)
-                    }
+                    nms <- paste0("[", nv, "] ", names(nv))
 
                     x <- factor(
-                        nms[match(x, labels)],
+                        nms[match(x, nv)],
                         levels = nms,
                         ordered = ordered
                     )
@@ -573,7 +572,7 @@
                 attributes(x) <- NULL
                 return(x)
             }
-            
+
             eval(parse(text = ".Internal(drop(x))"))
         }
     }
@@ -687,14 +686,18 @@
 
     register_S3_method("haven", "as_factor", "declared")
     register_S3_method("haven", "zap_labels", "declared")
+    register_S3_method("haven", "zap_missing", "declared")
 
     register_S3_method("pillar", "pillar_shaft", "declared")
+    register_S3_method("pillar", "format", "pillar_shaft_declared_num")
+    register_S3_method("pillar", "format", "pillar_shaft_declared_chr")
 
     register_S3_method("vctrs", "vec_ptype_abbr", "declared")
     register_S3_method("vctrs", "vec_ptype_full", "declared")
-    register_S3_method("vctrs", "vec_ptype2", "declared")
+    # register_S3_method("vctrs", "vec_ptype2", "declared")
 
     register_S3_method("vroom", "output_column", "declared")
+
     invisible()
 }
 

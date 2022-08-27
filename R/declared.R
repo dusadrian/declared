@@ -169,18 +169,15 @@ declared.default <- function(
 
   attributes(x) <- NULL
 
-
   validate_declared(x, labels, label, na_values, na_range)
 
   misvals <- all_missing_values(x, na_values, na_range, labels)
 
   if (!is.null(na_range)) {
-    if (!is.atomic(na_range) || length(na_range) != 2 ) {
-      stopError_("The 'na_range' argument should be an atomic vector of length 2.")
-    }
     na_range <- sort(na_range)
   }
 
+  attr(x, "xchar") <- xchar
   missingValues(x)[is.element(x, misvals)] <- x[is.element(x, misvals)]
 
   attr(x, "na_values") <- na_values

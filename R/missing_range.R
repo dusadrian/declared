@@ -51,9 +51,8 @@
 
 #' @export
 `missing_range<-.declared` <- function(x, value) {
-  if (length(value) != 2 || !is.numeric(value)) {
-    cat("\n")
-    stop("`value` should be a numeric vector of length 2.\n\n", call. = FALSE)
+  if (!is.null(value) && (length(value) != 2 || !is.numeric(value))) {
+    stopError_("`value` should be a numeric vector of length 2.")
   }
 
   value <- sort(value)

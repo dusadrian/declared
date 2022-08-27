@@ -20,7 +20,7 @@ extents of the range of missing values (for \code{label}).}
 
 \item{...}{Other arguments, for internal use.}
 
-\item{value}{The variable label, or a vector of (named) value labels}
+\item{value}{The variable label, or a list of (named) variable labels}
 }
 \value{
 \code{labels()} will return a named vector.

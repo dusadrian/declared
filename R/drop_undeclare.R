@@ -50,10 +50,7 @@
 
 #' @export
 `undeclare.default` <- function(x, drop = FALSE, ...) {
-  if (isTRUE(drop)) {
-    attributes(x) <- NULL
-  }
-
+  # do nothing
   return(x)
 }
 
@@ -67,7 +64,6 @@
   # (because of the "[<-.declared" method)
   attributes(x) <- NULL # or x <- unclass(x), but I find this cleaner
   if (!is.null(na_index)) {
-    # x <- ifelse(!is.na(missingValues), missingValues, x)
     x[na_index] <- names(na_index)
   }
 
@@ -138,6 +134,7 @@
 
 #' @export
 `drop_na.data.frame` <- function(x, drop_labels = TRUE) {
-  lapply(x, drop_na, drop_labels)
+  declared <- vapply(x, is.declared, logical(1))
+  x[declared] <- lapply(x[declared], drop_na, drop_labels = drop_labels)
+  return(x)
 }
-

@@ -1,7 +1,8 @@
 #' @export
-`as.character.declared` <- function(x, values = FALSE, drop_na = TRUE, ...) {
+`as.character.declared` <- function(x, drop_na = TRUE, values = FALSE, nolabels = FALSE, ...) {
 
-  labels <- names_values(x, drop_na = drop_na)
+  allabels <- names_values(x, drop_na = drop_na)
+  labels <- labels(x)
 
   # x <- undeclare(x, drop = TRUE)
   if (isFALSE(drop_na)) {
@@ -14,7 +15,13 @@
     return(as.character(x))
   }
 
-  return(names(labels)[match(x, labels)])
+  x <- names(allabels)[match(x, allabels)]
+
+  if (isTRUE(nolabels)) {
+    x[!is.element(x, names(labels))] <- NA
+  }
+
+  return(x)
 }
 
 #' @export
@@ -51,10 +58,8 @@
   duplicates <- duplicated(labels)
 
   if (length(wduplicates <- which(duplicates)) > 0) {
-    for (i in seq(length(wduplicates))) {
-      if (length(unique(names(
-        labels[labels == labels[wduplicates[i]]]
-      ))) > 1) {
+    for (i in wduplicates) {
+      if (length(unique(names(labels[labels == labels[i]]))) > 1) {
         stopError_("Labels must be unique.")
       }
     }
@@ -128,25 +133,7 @@
 
 #' @export
 `sort.declared` <- function(x, decreasing = FALSE, ...) {
-
-  dots <- list(...)
-  callist <- list(x = x, decreasing = decreasing)
-
-  if (is.element("na.last", names(dots))) {
-    callist$na.last <-  dots$na.last
-  }
-
-  if (is.element("method", names(dots))) {
-    callist$method <-  dots$method
-  }
-
-  if (is.element("empty.last", names(dots))) {
-    callist$empty.last <-  dots$empty.last
-  }
-
-  xorder <- do.call("order_declared", callist)
-
-  return(x[xorder])
+  return(x[order_declared(x, decreasing = decreasing, ... = ...)])
 }
 
 #' @export
@@ -166,7 +153,7 @@
   if (n < 0) {
     n <- lx - abs(n)
   }
-  n <- min(n, length(x))
+  n <- min(n, lx)
   if (n < 1) {
     return(x[0])
   }
@@ -537,17 +524,6 @@
   .Primitive("%/%")(e1, e2)
 }
 
-
-`%*%.declared` <- function(x, y) {
-  attributes(x) <- NULL
-  if (!missing(y)) {
-    if (is.declared(y)) {
-      attributes(y) <- NULL
-    }
-  }
-  .Primitive("%*%")(x, y)
-}
-
 #' @export
 `&.declared` <- function(e1, e2) {
   attributes(e1) <- NULL
@@ -579,13 +555,11 @@
 #' @export
 `==.declared` <- function(e1, e2) {
   le1 <- attr(e1, "labels", exact = TRUE)
-  e1 <- undeclare(e1)
-  attributes(e1) <- NULL
+  e1 <- undeclare(e1, drop = TRUE)
 
   if (!missing(e2)) {
     if (is.declared(e2)) {
-      e2 <- undeclare(e2)
-      attributes(e2) <- NULL
+      e2 <- undeclare(e2, drop = TRUE)
     }
 
     if (length(e2) == 1 && is.element(e2, names(le1)) && !is.element(e2, e1)) {
