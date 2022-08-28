@@ -39,7 +39,7 @@ test_that("labelled functions work for declared objects", {
   
   expect_error(labelled::val_label(x, 1) <- c("A", "B"), "should be a single character string")
 
-  expect_equal(labelled::val_label(x, 2), NULL)
+  expect_null(labelled::val_label(x, 2))
   
   expect_error(labelled::val_label(x, 1:2) <- "A", "should be a single value")
 })
@@ -57,8 +57,8 @@ labelled::var_label(x) <- NULL
 labelled::val_label(x, 1) <- NULL
 
 test_that("labels get deleted", {
-  expect_equal(labelled::var_label(x), NULL)
-  expect_equal(labelled::val_label(x, 1), NULL)
+  expect_null(labelled::var_label(x))
+  expect_null(labelled::val_label(x, 1))
 })
 
 labelled::val_label(x, 1) <- "Good"
@@ -67,7 +67,7 @@ labels(x) <- c(Bad = 5)
 labelled::val_label(x, 5) <- NULL
 
 test_that("deleting a single label erases the whole labels attribute", {
-  expect_equal(labels(x), NULL)
+  expect_null(labels(x))
 })
 
 
@@ -93,7 +93,7 @@ test_that("coercion to empty NA works", {
 
 
 test_that("removing labels works", {
-  expect_equal(labels(labelled::remove_labels(x)), NULL)
+  expect_null(labels(labelled::remove_labels(x)))
 
   expect_equal(sum(is.empty(labelled::remove_user_na(x))), 1)
 })

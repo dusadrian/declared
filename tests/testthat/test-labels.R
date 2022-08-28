@@ -60,7 +60,7 @@ test_that("labels<- work for both declared and haven classes", {
 dfd <- data.frame(x, hx)
 
 test_that("labels work data frames", {
-  expect_true(inherits(label(dfd), "list"))
+  expect_type(label(dfd), "list")
 })
 
 
@@ -82,7 +82,7 @@ test_that("labels() works for all variables in a data frame", {
 
 dx <- 1:5
 test_that("label() has a default", {
-  expect_equal(label(dx), NULL)
+  expect_null(label(dx))
 })
 
 

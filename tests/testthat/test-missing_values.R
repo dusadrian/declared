@@ -27,7 +27,7 @@ test_that("missing_values<-() works", {
 y <- 1:5
 missing_values(y) <- -1
 test_that("missing_values<-() has default methods", {
-  expect_equal(missing_values(1:5), NULL)
+  expect_null(missing_values(1:5))
 
   expect_equal(y, 1:5)
 })
@@ -35,5 +35,5 @@ test_that("missing_values<-() has default methods", {
 
 dfd <- data.frame(x, hx)
 test_that("missing_values() works on data.frames", {
-  expect_true(inherits(missing_values(dfd), "list"))
+  expect_type(missing_values(dfd), "list")
 })

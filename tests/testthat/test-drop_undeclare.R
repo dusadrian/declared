@@ -46,7 +46,7 @@ test_that("drop() works", {
 
 
 test_that("drop_na() works", {
-  expect_equal(attr(drop_na(x), "na_index"), NULL)
+  expect_null(attr(drop_na(x), "na_index"))
   
   expect_false(identical(
     attr(drop_na(x), "labels"),

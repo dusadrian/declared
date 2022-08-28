@@ -29,7 +29,7 @@ test_that("missing_range<-() works", {
 y <- 1:5
 missing_range(y) <- -1
 test_that("missing_range<-() has default methods", {
-  expect_equal(missing_range(1:5), NULL)
+  expect_null(missing_range(1:5))
 
   expect_equal(y, 1:5)
 })
@@ -37,5 +37,5 @@ test_that("missing_range<-() has default methods", {
 
 dfd <- data.frame(x, hx)
 test_that("missing_range() works on data.frames", {
-  expect_true(inherits(missing_range(dfd), "list"))
+  expect_type(missing_range(dfd), "list")
 })

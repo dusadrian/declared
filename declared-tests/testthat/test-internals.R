@@ -224,9 +224,9 @@ test_that("internal non exported functions work", {
 
   expect_true(hasTag_(atag))
 
-  expect_false(hasTag_(NA_integer_))
+  expect_equal(hasTag_(NA_integer_), FALSE)
 
-  expect_false(hasTag_(atag, tag = 1))
+  expect_equal(hasTag_(atag, tag = 1), FALSE)
 
   expect_error(hasTag_(atag, tag = list(A = 1)))
 
@@ -256,9 +256,9 @@ test_that("internal non exported functions work", {
 
   seetag <- hasTag_(bigtag, "")
 
-  test <- hasTag_(makeTag_("-a"), "-a")
+  expect_true(hasTag_(makeTag_("-a"), "-a"))
 
-  test <- hasTag_(makeTag_("-ab"), "-ab")
+  expect_true(hasTag_(makeTag_("-ab"), "-ab"))
 
   expect_true(unlockEnvironment_(asNamespace("stats")))
 

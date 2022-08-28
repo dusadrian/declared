@@ -31,5 +31,5 @@ test_that("measurement works", {
 y <- 1:5
 measurement(y) <- "ordinal"
 test_that("measurement has a default method", {
-  expect_equal(measurement(1:5), NULL)
+  expect_null(measurement(1:5))
 })
