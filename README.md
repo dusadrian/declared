@@ -29,7 +29,7 @@ packages.
 
 ## Installation
 
-You can install the development version of declared like so:
+You can install the development version of declared using this command:
 
 ``` r
 install.packages("declared", repos = "dusadrian.r-universe.dev")

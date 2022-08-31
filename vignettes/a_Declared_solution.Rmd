@@ -1,7 +1,7 @@
 ---
 title: "a. Motivation for the declared package"
 output: 
-   rmarkdown::html_vignette:
+  rmarkdown::html_vignette:
 #     highlight: "declared.theme"
 #     css: "declared.css"
 vignette: >
