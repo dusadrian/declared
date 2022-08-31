@@ -1,0 +1,3 @@
+R/onLoad.R
+src/declared.c
+src/registerDynamicSymbol.c
