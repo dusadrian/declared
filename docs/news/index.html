@@ -48,14 +48,111 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.17.7" id="declared-0177">declared 0.17.7<a class="anchor" aria-label="anchor" href="#declared-0177"></a></h2>
-<ul><li>Added a documentation website with NEWS to track changes to the package.</li>
-<li>Added a unit-testing infrastructure and continuous integration.</li>
-</ul></div>
+<h2 class="pkg-version" data-toc-text="0.18" id="version-018">Version 0.18<a class="anchor" aria-label="anchor" href="#version-018"></a></h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="sc">*</span> Improved method <span class="cf">for</span> <span class="st">`</span><span class="at">rbind()</span><span class="st">`</span> data frames, taking care of declared variables</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="sc">*</span> Function <span class="fu">value_labels</span>() has been replaced with the generic base <span class="cf">function</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">labels()</span><span class="st">`</span>, and the <span class="cf">function</span> <span class="st">`</span><span class="at">variable_label()</span><span class="st">`</span> has been replaced with the</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">function</span> <span class="st">`</span><span class="at">label()</span><span class="st">`</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="sc">*</span> Changed default <span class="cf">for</span> <span class="st">`</span><span class="at">as.factor()</span><span class="st">`</span>, with values <span class="fu">and</span> (where available) levels</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  (thanks to Daniel Antal <span class="cf">for</span> the report)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="sc">*</span> New generic <span class="cf">function</span> <span class="st">`</span><span class="at">drop_na()</span><span class="st">`</span> to drop information about the declared</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  missing values</span></code></pre></div>
+</div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.17" id="declared-017">declared 0.17<a class="anchor" aria-label="anchor" href="#declared-017"></a></h2><p class="text-muted">CRAN release: 2022-06-20</p>
-<ul><li>Released on CRAN.</li>
-</ul></div>
+<h2 class="pkg-version" data-toc-text="0.17" id="version-017">Version 0.17<a class="anchor" aria-label="anchor" href="#version-017"></a></h2><p class="text-muted">CRAN release: 2022-06-20</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="sc">*</span> Correctly determine the object mode, <span class="cf">function</span> of both value labels and</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  input <span class="fu">values</span> (especially when all input values are empty <span class="cn">NA</span> values)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="sc">*</span> New argument <span class="st">"`measurement`"</span> <span class="cf">in</span> <span class="cf">function</span> <span class="st">`</span><span class="at">declared()</span><span class="st">`</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="sc">*</span> New <span class="cf">function</span> <span class="st">`</span><span class="at">measurement()</span><span class="st">`</span>, to query and allocate measurement levels</span></code></pre></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.16" id="version-016">Version 0.16<a class="anchor" aria-label="anchor" href="#version-016"></a></h2><p class="text-muted">CRAN release: 2022-05-12</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="sc">*</span> New logical argument <span class="st">"`values`"</span> <span class="cf">in</span> the S3 method <span class="cf">for</span> <span class="st">`</span><span class="at">as.character()</span><span class="st">`</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="sc">*</span> Removed aliases <span class="st">`</span><span class="at">as_declared()</span><span class="st">`</span> and <span class="st">`</span><span class="at">as_haven()</span><span class="st">`</span> from the namespace</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="sc">*</span> Fixed <span class="st">`</span><span class="at">as.haven()</span><span class="st">`</span> which should return double objects</span></code></pre></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.15" id="version-015">Version 0.15<a class="anchor" aria-label="anchor" href="#version-015"></a></h2><p class="text-muted">CRAN release: 2022-04-13</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="sc">*</span> Class method <span class="cf">for</span> many <span class="sc">/</span> most primitive functions, with declared objects</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="sc">*</span> Bug fix <span class="cf">in</span> <span class="st">`</span><span class="at">w_table()</span><span class="st">`</span> affecting zero frequency categories</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="sc">*</span> Dropped alias <span class="st">`</span><span class="at">frtable()</span><span class="st">`</span> from <span class="cf">function</span> <span class="st">`</span><span class="at">w_table()</span><span class="st">`</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="sc">*</span> New <span class="cf">function</span> <span class="st">`</span><span class="at">is.empty()</span><span class="st">`</span>, testing the presence of undeclared missing values</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="sc">*</span> Main <span class="cf">function</span> <span class="st">`</span><span class="at">declare()</span><span class="st">`</span> is now generic, allowing flexibility to create</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  custom methods <span class="cf">for</span> any other classes of objects</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="sc">*</span> Removed dependency on package admisc, by incorporating the necessary</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  functionality as internal functions</span></code></pre></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.13" id="version-013">Version 0.13<a class="anchor" aria-label="anchor" href="#version-013"></a></h2><p class="text-muted">CRAN release: 2022-04-03</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="sc">*</span> New functions <span class="st">`</span><span class="at">w_mode()</span><span class="st">`</span> and <span class="st">`</span><span class="at">w_standardize()</span><span class="st">`</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="sc">*</span> Fixed <span class="st">`</span><span class="at">w_summary()</span><span class="st">`</span>, summaries should not be rounded by default</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="sc">*</span> Fixed <span class="st">`</span><span class="at">w_mean()</span><span class="st">`</span> to weight negative values</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>Thanks to an anonymous reviewer <span class="cf">for</span> reporting and suggesting the following<span class="sc">:</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="er">*</span> New argument <span class="st">"`drop`"</span> <span class="cf">in</span> <span class="cf">function</span> <span class="st">`</span><span class="at">undeclare()</span><span class="st">`</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="sc">*</span> Bug fix <span class="cf">in</span> the class methods <span class="cf">for</span> <span class="st">`</span><span class="at">head()</span><span class="st">`</span> and <span class="st">`</span><span class="at">tail()</span><span class="st">`</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="sc">*</span> Function declared now duly recognizes input factors</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="sc">*</span> Extended <span class="st">`</span><span class="at">as.factor()</span><span class="st">`</span> <span class="cf">for</span> objects of class <span class="st">"`declared`"</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="sc">*</span> Added proper class methods <span class="cf">for</span> primitive arithmetic operations</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="sc">*</span> New functions <span class="st">`</span><span class="at">as.declared()</span><span class="st">`</span>, <span class="st">`</span><span class="at">is.declared()</span><span class="st">`</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="sc">*</span> Added explanatory <span class="fu">documentation</span> (<span class="cf">for</span> instance <span class="cf">in</span> the DESCRIPTION file) to</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  explain the reasons <span class="cf">for</span> reimplementing some of the base functions</span></code></pre></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.12" id="version-012">Version 0.12<a class="anchor" aria-label="anchor" href="#version-012"></a></h2><p class="text-muted">CRAN release: 2022-03-14</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="sc">*</span> New <span class="cf">function</span> <span class="st">`</span><span class="at">w_summary()</span><span class="st">`</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="sc">*</span> Functions <span class="st">`</span><span class="at">w_table()</span><span class="st">`</span> and <span class="st">`</span><span class="at">w_quantile()</span><span class="st">`</span> now properly deal with missing weights</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="sc">*</span> New argument <span class="st">"`trim`"</span> <span class="cf">in</span> <span class="cf">function</span> <span class="st">`</span><span class="at">w_mean()</span><span class="st">`</span></span></code></pre></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.11" id="version-011">Version 0.11<a class="anchor" aria-label="anchor" href="#version-011"></a></h2><p class="text-muted">CRAN release: 2022-03-03</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="sc">*</span> Fixed <span class="st">`</span><span class="at">w_table()</span><span class="st">`</span>, an internal object was inadvertently returned</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="sc">*</span> Improved printing of crosstables</span></code></pre></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.10" id="version-010">Version 0.10<a class="anchor" aria-label="anchor" href="#version-010"></a></h2><p class="text-muted">CRAN release: 2022-02-22</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="sc">*</span> New functions <span class="st">`</span><span class="at">w_mean()</span><span class="st">`</span>, <span class="st">`</span><span class="at">w_var()</span><span class="st">`</span> and <span class="st">`</span><span class="at">w_sd()</span><span class="st">`</span>, <span class="st">`</span><span class="at">w_quantile()</span><span class="st">`</span> and</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">w_median()</span><span class="st">`</span>, to  obtain weighted versions of mean, variance and standard</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  deviation, quantiles and median, respectively, adapted to declared objects</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="sc">*</span> Fixed a bug <span class="cf">in</span> <span class="st">`</span><span class="at">as.haven.declared()</span><span class="st">`</span>, when all values <span class="fu">are</span> (declared)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  missing and labels are not numeric</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="sc">*</span> Argument <span class="st">"`weight`"</span> changed to <span class="st">"`wt`"</span> <span class="cf">in</span> <span class="st">`</span><span class="at">w_table()</span><span class="st">`</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="sc">*</span> New arguments <span class="cf">in</span> <span class="cf">function</span> <span class="st">`</span><span class="at">w_table()</span><span class="st">`</span><span class="sc">:</span> <span class="st">"`observed`"</span> to only print observed</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  values, and <span class="st">"`margin`"</span> to calculate proportions <span class="cf">in</span> crosstabs</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="sc">*</span> Function <span class="st">`</span><span class="at">w_table()</span><span class="st">`</span> now accepts a second argument <span class="st">"`y`"</span> to create crosstabs</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="sc">*</span> Function <span class="st">`</span><span class="at">frtable()</span><span class="st">`</span> renamed to <span class="st">`</span><span class="at">w_table()</span><span class="st">`</span> standing <span class="cf">for</span> weighted table</span></code></pre></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.9" id="version-09">Version 0.9<a class="anchor" aria-label="anchor" href="#version-09"></a></h2><p class="text-muted">CRAN release: 2022-02-11</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="sc">*</span> New argument <span class="st">"`weight`"</span> <span class="cf">in</span> <span class="cf">function</span> <span class="st">`</span><span class="at">frtable()</span><span class="st">`</span>, allowing to weight not</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  only valid but also missing values</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="sc">*</span> More robust <span class="cf">function</span> <span class="st">`</span><span class="at">frtable()</span><span class="st">`</span> <span class="cf">in</span> treating declared values with</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  overlapping <span class="fu">labels</span> (e.g. hierarchical ISCO codes and categories)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="sc">*</span> Fixed a bug <span class="cf">in</span> <span class="st">`</span><span class="at">declared()</span><span class="st">`</span> when all values are completely missing</span></code></pre></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.8" id="version-08">Version 0.8<a class="anchor" aria-label="anchor" href="#version-08"></a></h2><p class="text-muted">CRAN release: 2022-01-11</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="sc">*</span> Improved treatment of equality and non<span class="sc">-</span>equality, now accepting labels as</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  well as values</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="sc">*</span> Reverted functionality to not dropping the attributes <span class="cf">in</span> arithmetic</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  operations, this is now left to the users<span class="st">' preference</span></span></code></pre></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.7" id="version-07">Version 0.7<a class="anchor" aria-label="anchor" href="#version-07"></a></h2><p class="text-muted">CRAN release: 2021-09-02</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="sc">*</span> Bug fix saving declared data frames as .csv files</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="sc">*</span> <span class="st">`</span><span class="at">as.declared()</span><span class="st">`</span> now retains the <span class="st">"format.spss"</span> attribute, <span class="cf">if</span> existing</span></code></pre></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.6" id="version-06">Version 0.6<a class="anchor" aria-label="anchor" href="#version-06"></a></h2><p class="text-muted">CRAN release: 2021-08-18</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="sc">*</span> Improved treatment of arithmetic operations, attributes are no longer</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">propagated</span> (thanks to Randall Pruim <span class="cf">for</span> the suggestion)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="sc">*</span> Modified <span class="fu">as.haven</span>() <span class="cf">for</span> objects of class <span class="st">"`declared`"</span>, to avoid a bug <span class="cf">in</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  package ReadStat that prevents exporting missing values to SPSS <span class="cf">for</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  integer variables</span></code></pre></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.5" id="version-05">Version 0.5<a class="anchor" aria-label="anchor" href="#version-05"></a></h2><p class="text-muted">CRAN release: 2021-06-16</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="sc">*</span> Initial version</span></code></pre></div>
+</div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 
