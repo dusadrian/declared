@@ -487,6 +487,10 @@ NULL
         x <- as.character(x)
     }
 
+    irv <- c(194, 160)
+    multibyte_space <- rawToChar(as.raw(irv))
+    x <- gsub(multibyte_space, " ", x)
+
     multibyte <- grepl("[^!-~ ]", x)
     if (any(multibyte)) {
         isna[multibyte] <- TRUE
@@ -515,6 +519,10 @@ NULL
         }
         return(as.numeric(x))
     }
+
+    irv <- c(194, 160)
+    multibyte_space <- rawToChar(as.raw(irv))
+    x <- gsub(multibyte_space, " ", x)
 
     result <- rep(NA, length(x))
     multibyte <- grepl("[^!-~ ]", x)
