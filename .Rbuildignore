@@ -11,3 +11,5 @@
 ^\.covrignore$
 ^doc$
 ^Meta$
+^CONTRIBUTING\.md$
+^codemeta\.json$
