@@ -63,11 +63,11 @@
   # this is necessary to replace those values
   # (because of the "[<-.declared" method)
   attributes(x) <- NULL # or x <- unclass(x), but I find this cleaner
+
   if (!is.null(na_index)) {
     x[na_index] <- names(na_index)
+    x <- coerceMode_(x)
   }
-
-  x <- coerceMode_(x)
 
   attrx$na_index <- NULL
   attrx$na_values <- NULL
@@ -76,6 +76,7 @@
   if (isFALSE(drop)) {
     attributes(x) <- attrx
   }
+  
   return(x)
 }
 

@@ -59,8 +59,8 @@ reference:
       - is.empty
   - title: "Arithmetic methods"
     desc: >
-      Correctly calculate statistical (weighted) statistical values when declared missing
-      values are present.
+      Correctly calculate (weighted) statistical values and summaries, when
+      declared missing values are present.
     contents:
       - w_mean
       - w_median

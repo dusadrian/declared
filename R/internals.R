@@ -12,8 +12,8 @@ NULL
   }
 
   out <- format(unclass(x), digits = digits)
-  na_index <- attr(x, "na_index")
 
+  na_index <- attr(x, "na_index")
   out[na_index] <- paste0("NA(", names(na_index), ")")
 
   # format again to make sure all elements have same width
