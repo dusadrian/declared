@@ -113,6 +113,7 @@ xc <- declared(
   labels = c(Good = 1, Bad = 5, DK = "a"),
   na_values = -1
 )
+
 test_that("character values in labels coerce x to character", {
   expect_true(is.character(xc))
 })

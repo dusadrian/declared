@@ -47,7 +47,7 @@ test_that("labelled functions work for declared objects", {
 
 labelled::val_label(x, 1) <- "Good"
 
-test_that("labels get overwritten", {
+test_that("labels get overwritten in declared objects", {
   expect_equal(labelled::val_label(x, 1), "Good")
 })
 
@@ -56,7 +56,7 @@ test_that("labels get overwritten", {
 labelled::var_label(x) <- NULL
 labelled::val_label(x, 1) <- NULL
 
-test_that("labels get deleted", {
+test_that("labels get deleted in declared objects", {
   expect_null(labelled::var_label(x))
   expect_null(labelled::val_label(x, 1))
 })

@@ -101,9 +101,39 @@ test_that("print.w_table method works", {
 })
 
 
+test_that("golden test for print.w_table", {
+  expect_snapshot_output(print(w_table(xl)))
+  expect_snapshot_output(print(w_table(c(xl, NA))))
+  
+  expect_snapshot_output(print(w_table(xl, values = TRUE)))
+  expect_snapshot_output(print(proportions(w_table(xl))))
+
+  wdf <- with(DF, w_table(Gender, Area, values = TRUE))
+  expect_snapshot_output(print(wdf))
+  expect_snapshot_output(print(proportions(wdf)))
+
+  expect_snapshot_output(print(proportions(w_table(xl, DF$Area))))
+  expect_snapshot_output(print(w_table(xl, DF$Area, values = TRUE)))
+
+  expect_snapshot_output(print(with(DF, w_table(Gender, Area))))
+  expect_snapshot_output(print(with(DF, w_table(Gender, values = TRUE))))
+  expect_snapshot_output(print(with(DF, w_table(Gender, values = TRUE)), show_values = FALSE))
+
+  expect_snapshot_output(print(w_table(c(1:5, NA))))
+
+  expect_snapshot_error(print(w_table(1:101)))
+})
+
+
+
 
 
 test_that("print.fobject method works", {
-   test <- capture.output(print(w_summary(xl)))
-   expect_true(is.character(test))
+  test <- capture.output(print(w_summary(xl)))
+  expect_true(is.character(test))
+})
+
+
+test_that("golden test for print.fobject", {
+  expect_snapshot_output(print(w_summary(xl)))
 })

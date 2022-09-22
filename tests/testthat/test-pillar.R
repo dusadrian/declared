@@ -48,10 +48,47 @@ test_that("pillar method works", {
   )
 })
 
-aa <- pillar::pillar_shaft(undeclare(x), use_haven = FALSE)
-bb <- format(aa, 10)
-cc <- format(aa, 100)
+px <- pillar::pillar_shaft(undeclare(x), use_haven = FALSE)
 
-aa <- pillar::pillar_shaft(undeclare(cx), use_haven = FALSE)
-bb <- format(aa, 10)
-cc <- format(aa, 100)
+
+test_that("format works on pillar for declared objects", {
+  expect_equal(
+    nchar(
+      capture.output(format(px, 10))[2]
+    ),
+    10
+  )
+  
+  expect_equal(
+    nchar(
+      capture.output(format(px, 100))[2]
+    ),
+    100
+  )
+})
+
+
+pcx <- pillar::pillar_shaft(undeclare(cx), use_haven = FALSE)
+test_that("format works on pillar for declared character objects", {
+  expect_equal(
+    nchar(
+      capture.output(format(pcx, 10))[2]
+    ),
+    10
+  )
+  
+  expect_equal(
+    nchar(
+      capture.output(format(pcx, 100))[2]
+    ),
+    100
+  )
+})
+
+
+test_that("golden tests", {
+  expect_snapshot_output(format(px, 10))
+  expect_snapshot_output(format(px, 100))
+  expect_snapshot_output(format(pcx, 10))
+  expect_snapshot_output(format(pcx, 100))
+})

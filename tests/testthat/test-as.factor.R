@@ -7,29 +7,25 @@ x <- declared(
 
 test_that("as.factor.declared() works", {
   expect_true(inherits(as.factor(x), "factor"))
+
   expect_identical(as.factor(x), as.factor(drop_na(x)))
+
   expect_true(
     all(is.element(
       names(labels(x)),
       levels(as.factor(x, drop_na = FALSE))
     ))
   )
+
   expect_true(
     all(is.element(
       names(labels(x)),
       levels(as.factor(undeclare(x)))
     ))
   )
+  
   expect_setequal(
     levels(as.factor(undeclare(x))),
     levels(as.factor(x, drop_na = FALSE))
-  )
-})
-
-
-test_that("as_factor.declared() works", {
-  expect_identical(
-    haven::as_factor(x),
-    as.factor(x, drop_na = FALSE, nolabels = TRUE)
   )
 })

@@ -62,12 +62,23 @@ test_that("as.haven() works for data.frames", {
 
 
 test_that("as_factor.declared() works", {
-  expect_length(haven::as_factor(x), 6)
+  expect_identical(
+    haven::as_factor(x),
+    factor(
+      c("Good", 2:4, "Bad", "DK"),
+      levels = c("DK", "Good", 2:4, "Bad")
+    )
+  )
 })
 
 
 test_that("zap_labels.declared() and zap_missing.declared() work", {
-  expect_length(haven::zap_labels(x), 6)
+  expect_identical(haven::zap_labels(x), c(1:5, NA))
   
-  expect_length(haven::zap_missing(x), 6)
+  expect_null(
+    attr(
+      haven::zap_missing(x),
+      "na_index"
+    )
+  )
 })

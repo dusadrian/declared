@@ -11,5 +11,8 @@ test_that("is.empty() works", {
 
   expect_equal(is.empty(x), rep(FALSE, 3))
 
-  expect_equal(is.empty(c(x, NA)), c(rep(FALSE, 3), TRUE))
+  expect_equal(
+    is.empty(c(x, NA)),
+    c(FALSE, FALSE, FALSE, TRUE)
+  )
 })

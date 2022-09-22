@@ -278,9 +278,3 @@ test_that("internal non exported functions work", {
 
   text <- trimstr_("foo", what = "+")
 })
-
-
-# test_that("tagged values work", {
-#     expect_true(hasTag_(makeTag_("-a"), "-a"))
-#     expect_true(hasTag_(makeTag_("-ab"), "-ab"))
-# })

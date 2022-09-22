@@ -24,7 +24,7 @@ attr(ux, "na_index") <- NULL
 attr(ux, "na_values") <- NULL
 attr(ux, "na_range") <- NULL
 na_index <- attr(x, "na_index")
-ux[na_index] <- names(na_index)
+ux[na_index] <- names(na_index) # automatically coerced to numeric
 
 test_that("undeclare() works", {
   expect_equal(undeclare(x), ux)

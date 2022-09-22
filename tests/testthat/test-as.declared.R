@@ -32,7 +32,12 @@ test_that("as.declared() works", {
 
   expect_equal(as.declared(hx), x)
   
-  expect_true(inherits(as.declared(data.frame ( x = 1:2, y = c("a", "b"))), "data.frame"))
+  expect_true(
+    inherits(
+      as.declared(data.frame(x = 1:2, y = c("a", "b"))),
+      "data.frame"
+    )
+  )
 
   expect_length(as.declared(hs), 6)
 })
@@ -57,8 +62,6 @@ dfd <- data.frame(
 
 test_that("as.declared.data.frame() works", {
   expect_equal(as.declared(dfh), dfd)
-
-  expect_true(inherits(as.declared(dfd, interactive = TRUE), "data.frame"))
 })
 
 
@@ -69,6 +72,13 @@ test_that("as.declared.default() works", {
 
 dfd$C <- 1:6
 test_that("as.declared works interactively", {
+  expect_true(
+    inherits(
+      as.declared(dfd, interactive = TRUE),
+      "data.frame"
+    )
+  )
+
   expect_message(
     as.declared(1:5, interactive = TRUE),
     "no automatic class method conversion"

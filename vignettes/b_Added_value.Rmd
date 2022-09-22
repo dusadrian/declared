@@ -263,5 +263,3 @@ the main functions `declared()`{.R}, `as.declared()`{.R}, `undeclare()`{.R} and
 `drop_na()`{.R} are all generic, allowing full flexibility for any other package
 to create custom (coercion) methods for different classes of objects, thus
 facilitating and encouraging a widespread use.
-
-
