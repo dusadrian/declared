@@ -164,3 +164,4 @@
       [1] "Good" "2"    "3"    "4"    "Bad"  "DK"  
       attr(,"label")
       [1] "Label for variable x"
+
