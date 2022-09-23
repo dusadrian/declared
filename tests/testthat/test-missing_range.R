@@ -18,7 +18,8 @@ test_that("missing_range() works", {
 })
 
 
-missing_range(x) <- c(-2, -1)
+missing_values(x) <- NULL
+missing_range(x) <- c(-5, -1)
 test_that("missing_range<-() works", {
   expect_length(missing_range(x), 2)
 

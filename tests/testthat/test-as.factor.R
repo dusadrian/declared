@@ -29,3 +29,12 @@ test_that("as.factor.declared() works", {
     levels(as.factor(x, drop_na = FALSE))
   )
 })
+
+test_that("tests have the same output", {
+  expect_snapshot(x)
+  expect_snapshot(as.factor(x))
+  expect_snapshot(as.factor(drop_na(x)))
+  expect_snapshot(names(labels(x)))
+  expect_snapshot(levels(as.factor(undeclare(x))))
+  expect_snapshot(levels(as.factor(x, drop_na = FALSE)))
+})

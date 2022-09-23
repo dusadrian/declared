@@ -86,15 +86,6 @@ test_that("declared() other methods work", {
 })
 
 
-missing_values(x) <- NULL
-missing_range(x) <- c(-5, -1)
-test_that("na_range works in declared()", {
-  expect_true(any(is.na(x)))
-  
-  expect_error(declared(1:5, na_range = 1:3))
-})
-
-
 xs <- declared(
   x = sample(
     c("Left", "Middle", "Right", "Apolitic"),
@@ -116,4 +107,16 @@ xc <- declared(
 
 test_that("character values in labels coerce x to character", {
   expect_true(is.character(xc))
+})
+
+test_that("tests have the same output", {
+  expect_snapshot(x)
+  expect_snapshot(labels(x))
+  expect_snapshot(attr(x, "na_index"))
+  expect_snapshot(fx)
+  expect_snapshot(labels(declared(fx, na_values = 6)))
+  expect_snapshot(labels(declared(fx, na_values = "DK")))
+  expect_snapshot(labels(declared(fx, na_values = 6, llevels = TRUE)))
+  expect_snapshot(xc)
+  expect_snapshot(is.character(xc))
 })

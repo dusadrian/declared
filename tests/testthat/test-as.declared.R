@@ -89,3 +89,17 @@ test_that("as.declared works interactively", {
     "no automatic class method conversion"
   )
 })
+
+test_that("tests have the same output", {
+  expect_snapshot(x)
+  expect_snapshot(fx)
+  expect_snapshot(hx)
+  expect_snapshot(hs)
+  expect_snapshot(as.declared(fx))
+  expect_snapshot(as.declared(hx))
+  expect_snapshot(as.declared(hs))
+  expect_snapshot(dfh)
+  expect_snapshot(as.declared(dfh))
+  expect_snapshot(dfd)
+  expect_snapshot(as.declared(dfd, interactive = TRUE))
+})

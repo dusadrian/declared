@@ -76,7 +76,7 @@ SEXP _tag(SEXP x) {
 
 
 
-SEXP _hasTag_(SEXP x, SEXP tag_) {
+SEXP _hasTag(SEXP x, SEXP tag_) {
     int n = Rf_length(x);
     SEXP out = PROTECT(Rf_allocVector(LGLSXP, n));
 
@@ -141,7 +141,7 @@ SEXP _hasTag_(SEXP x, SEXP tag_) {
 
 
 
-SEXP _getTag_(SEXP x) {
+SEXP _getTag(SEXP x) {
     
     int n = Rf_length(x);
     SEXP out = PROTECT(Rf_allocVector(STRSXP, n));

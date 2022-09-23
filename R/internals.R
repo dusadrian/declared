@@ -622,6 +622,9 @@ NULL
 }
 
 
+#' @rdname declared_internal
+#' @keywords internal
+#' @export
 `makeTag_` <- function(...) {
     x <- as.character(c(...))
 
@@ -632,6 +635,9 @@ NULL
 }
 
 
+#' @rdname declared_internal
+#' @keywords internal
+#' @export
 `hasTag_` <- function(x, tag = NULL) {
     if (!is.double(x)) {
         return(logical(length(x)))
@@ -645,13 +651,16 @@ NULL
         tag <- as.character(tag)
     }
 
-    return(.Call("_hasTag_", x, tag, PACKAGE = "declared"))
+    return(.Call("_hasTag", x, tag, PACKAGE = "declared"))
 }
 
 
+#' @rdname declared_internal
+#' @keywords internal
+#' @export
 `getTag_` <- function(x) {
     if (is.double(x)) {
-        x <- .Call("_getTag_", x, PACKAGE = "declared")
+        x <- .Call("_getTag", x, PACKAGE = "declared")
         if (!any(is.na(suppressWarnings(as.numeric(na.omit(x)))))) {
             x <- as.numeric(x)
         }
@@ -666,25 +675,27 @@ NULL
 
 `numdec_` <- function(x, each = FALSE, na.rm = TRUE, maxdec = 15) {
 
+    scipen <- options("scipen")$scipen
+    options(scipen = 999) # for scientific numbers such as 1e-04
+    
+    on.exit(options(scipen = scipen))
+
     pN <- possibleNumeric_(x, each = TRUE)
 
     # sum(pN), maybe each = TRUE and it's a vector
     if (sum(na.omit(pN)) == 0) {
-        stopError_("'x' should contain at least one (possibly) numeric value.")
+        stopError("'x' should contain at least one (possibly) numeric value.")
     }
 
-    result <- rep(0, length(x))
-    x <- asNumeric_(x)
-    attributes(x) <- NULL
-    result[is.na(x)] <- NA
-    hasdec <- (x %% 1) - .Machine$double.eps^0.5 > 0
+    result <- rep(NA, length(x))
+    wpN <- which(pN)
+    
+    # asNumeric is important here because the (possible) number might arrive
+    # as character through coercion, for instance c("A", 1e-04)
+    x <- as.character(asNumeric_(x[wpN]))
 
-    if (any(hasdec, na.rm = TRUE)) {
-        wdec <- which(hasdec)
-        x[wdec] <- abs(x[wdec])
-        x[wdec] <- trimstr_(formatC(x[wdec] - floor(x[wdec]), digits = maxdec))
-        result[wdec] <- nchar(asNumeric_(gsub("^0.", "", x[wdec])))
-    }
+    x <- sapply(strsplit(x, split = "\\."), function(x) x[2])
+    result[wpN] <- ifelse(is.na(x), 0, nchar(x))
 
     if (each) {
         return(result)

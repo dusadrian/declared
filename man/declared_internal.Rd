@@ -7,6 +7,9 @@
 \alias{value_labels}
 \alias{variable_label}
 \alias{names_values}
+\alias{makeTag_}
+\alias{hasTag_}
+\alias{getTag_}
 \title{declared internal functions}
 \usage{
 format_declared(x, digits = getOption("digits"))
@@ -25,6 +28,12 @@ value_labels(...)
 variable_label(...)
 
 names_values(x, drop_na = FALSE)
+
+makeTag_(...)
+
+hasTag_(x, tag = NULL)
+
+getTag_(x)
 }
 \description{
 Functions to be used internally, only by developers and contributors.

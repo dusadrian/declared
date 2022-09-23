@@ -16,3 +16,9 @@ test_that("is.empty() works", {
     c(FALSE, FALSE, FALSE, TRUE)
   )
 })
+
+test_that("tests have the same output", {
+  expect_snapshot(x)
+  expect_snapshot(is.empty(x))
+  expect_snapshot(is.empty(c(x, NA)))
+})

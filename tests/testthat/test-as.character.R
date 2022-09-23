@@ -22,3 +22,15 @@ test_that("as.character.declared() works", {
     as.character(undeclare(x))
   )
 })
+
+test_that("tests have the same output", {
+  expect_snapshot(x)
+  expect_snapshot(as.character(x))
+  expect_snapshot(as.character(x, values = TRUE))
+  expect_snapshot(as.character(x, drop_na = FALSE))
+  expect_snapshot(as.character(x, drop_na = FALSE, nolabels = TRUE))
+  expect_snapshot(as.character(x, values = TRUE, drop_na = FALSE))
+  expect_snapshot(as.character(drop_na(x)))
+  expect_snapshot(as.character(undeclare(x)))
+  expect_snapshot(as.character(undeclare(x), values = TRUE))
+})

@@ -64,3 +64,15 @@ test_that("drop_na() works on data.frames", {
 
   expect_true(inherits(drop_na(dfd, drop_labels = TRUE), "data.frame"))
 })
+
+
+test_that("tests have the same output", {
+  expect_snapshot(drop(x))
+  expect_snapshot(undeclare(x))
+  expect_snapshot(undeclare(x, drop = TRUE))
+  expect_snapshot(drop(undeclare(x)))
+  expect_snapshot(drop_na(x))
+  expect_snapshot(drop_na(hx))
+  expect_snapshot(drop_na(dfd))
+  expect_snapshot(drop_na(dfd, drop_labels = TRUE))
+})
