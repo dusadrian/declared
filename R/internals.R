@@ -675,10 +675,7 @@ NULL
 
 `numdec_` <- function(x, each = FALSE, na.rm = TRUE, maxdec = 15) {
 
-    scipen <- options("scipen")$scipen
-    options(scipen = 999) # for scientific numbers such as 1e-04
-    
-    on.exit(options(scipen = scipen))
+    maxdec <- min(15, maxdec)
 
     pN <- possibleNumeric_(x, each = TRUE)
 
@@ -687,21 +684,45 @@ NULL
         stopError("'x' should contain at least one (possibly) numeric value.")
     }
 
-    result <- rep(NA, length(x))
-    wpN <- which(pN)
-    
     # asNumeric is important here because the (possible) number might arrive
     # as character through coercion, for instance c("A", 1e-04)
-    x <- as.character(asNumeric_(x[wpN]))
-
-    x <- sapply(strsplit(x, split = "\\."), function(x) x[2])
-    result[wpN] <- ifelse(is.na(x), 0, nchar(x))
-
-    if (each) {
-        return(result)
+    if (is.character(x)) {
+        x <- asNumeric_(x)
     }
 
-    return(max(result, na.rm = na.rm))
+    result <- rep(NA, length(x))
+    wpN <- which(pN)
+
+    x <- abs(x[wpN])
+    x <- x - floor(x) # all numbers are now 0.something
+
+    x <- sub("0\\.", "",
+        sub("0+$", "", # erase trailing zeros
+            format(x, scientific = FALSE, digits = max(7, maxdec))
+        )
+    )
+
+    if (any(w9 <- grepl("999999", x))) {
+        # A floating point number like 234.1 might have been represented as
+        # 0.0999999999999943 (after subtracting the floor)
+        x[w9] <- sub(
+            "0+", "1", # last 0 becomes 1
+            sub("(*)999999.*", "\\1", x[w9]) # retains everthing <up to> the sequence
+        )
+    }
+
+    if (any(w0 <- grepl("000000", x))) {
+        # ex. 0.00000000000000001, for all practical purposes this is equal to 0
+        x[w0] <- sub("(*)000000.*", "\\1", x[w0])
+    }
+
+    result[wpN] <- nchar(x)
+
+    if (each) {
+        return(pmin(result, maxdec))
+    }
+
+    return(min(maxdec, max(result, na.rm = na.rm)))
 }
 
 
