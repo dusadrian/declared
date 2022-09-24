@@ -86,7 +86,7 @@ test_that("format works on pillar for declared character objects", {
 })
 
 
-test_that("golden tests", {
+test_that("tests have the same output", {
   expect_snapshot_output(format(px, 10))
   expect_snapshot_output(format(px, 100))
   expect_snapshot_output(format(pcx, 10))

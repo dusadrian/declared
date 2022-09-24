@@ -264,6 +264,8 @@ test_that("internal non exported functions work", {
 
   expect_equal(numdec_(x, each = TRUE), c(1, 2, 0, NA, NA))
 
+  expect_equal(numdec_(c(234.1, 3.7500, 1.345, 3e-17)), 3)
+
   text <- trimstr_("foo", what = "+")
 
   ### For some unknown reason, these all fail despite passing in interactive

@@ -112,10 +112,10 @@ test_that("onLoad functions work", {
   i <- which(diff(d4s[, 3]) == 0)
   #   in 2 places, needed 3 cols to break ties:
   test <- d4s[ rbind(i, i+1), ]
-  x <- c(5:1, 6:8, 12:9)
-  y <- (x - 5)^2
-  o <- order(x)
-  test <- rbind(x[o], y[o])
+  a <- c(5:1, 6:8, 12:9)
+  b <- (a - 5)^2
+  o <- order(a)
+  test <- rbind(a[o], b[o])
 
   # examples from base ?rbind
   dd <- 10
@@ -130,8 +130,8 @@ test_that("onLoad functions work", {
   new <- data.frame(a = 8, B ="B", f = "1")
   df1  <- rbind(df , new)
   df.1 <- rbind(df., new)
-  expect_identical(df1, rbind(df,  new, make.row.names=FALSE))
-  expect_identical(df1, rbind(df.,  new, make.row.names=FALSE))
+  expect_identical(df1, rbind(df,  new, make.row.names = FALSE))
+  expect_identical(df1, rbind(df.,  new, make.row.names = FALSE))
 
   expect_error(register_S3_method("haven", "as_factor", "declared", fun = 1))
 
@@ -142,3 +142,23 @@ test_that("onLoad functions work", {
 # to test if S3 methods are (re)registered once a package is (re)loaded
 unloadNamespace("labelled")
 library(labelled)
+
+
+test_that("tests have the same output", {
+  expect_snapshot(fx)
+  expect_snapshot(as.factor(fx))
+  expect_snapshot(as.factor(c(a = 1, b = 2, c = 2, d = 4, e = 5, f = 6)))
+  expect_snapshot(as.factor(letters[1:6]))
+  expect_snapshot(x)
+  expect_snapshot(as.factor(x))
+  expect_snapshot(as.factor(x, levels = "values"))
+  expect_snapshot(as.factor(x, levels = "both"))
+  expect_snapshot(as.factor(x, drop_na = FALSE))
+  expect_snapshot(as.factor(x, drop_na = FALSE, nolabels = TRUE))
+  expect_snapshot(sd(x))
+  expect_snapshot(var(x))
+  expect_snapshot(var(as.data.frame(x), na.rm = TRUE))
+  expect_snapshot(fivenum(x))
+  expect_snapshot(fivenum(drop_na(x), na.rm = TRUE))
+  expect_snapshot(order(x))
+})

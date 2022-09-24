@@ -34,3 +34,9 @@ test_that("w_var() works", {
   
   expect_error(w_var(x, wt = rep(1, 6), method = "method"))
 })
+
+
+test_that("tests have the same output", {
+  expect_snapshot(x)
+  expect_snapshot(w_var(x))
+})

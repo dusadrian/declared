@@ -37,3 +37,11 @@ dfd <- data.frame(x, hx)
 test_that("missing_values() works on data.frames", {
   expect_type(missing_values(dfd), "list")
 })
+
+
+test_that("tests have the same output", {
+  expect_snapshot(x)
+  expect_snapshot(missing_values(x))
+  expect_snapshot(dfd)
+  expect_snapshot(missing_values(dfd))
+})

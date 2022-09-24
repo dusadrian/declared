@@ -33,3 +33,14 @@ measurement(y) <- "ordinal"
 test_that("measurement has a default method", {
   expect_null(measurement(1:5))
 })
+
+test_that("tests have the same output", {
+  expect_snapshot(x)
+  expect_snapshot(measurement(x))
+  expect_snapshot(x2)
+  expect_snapshot(measurement(x2))
+  expect_snapshot(numx)
+  expect_snapshot(measurement(numx))
+  expect_snapshot(numx2)
+  expect_snapshot(measurement(numx2))
+})

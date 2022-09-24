@@ -7,3 +7,8 @@ x <- declared(
 test_that("vroom method works", {
   expect_true(is.character(vroom::output_column(x)))
 })
+
+test_that("tests have the same output", {
+  expect_snapshot(x)
+  expect_snapshot(vroom::output_column(x))
+})

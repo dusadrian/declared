@@ -112,3 +112,22 @@ test_that("w_table() works", {
   
   expect_error(with(DF, w_table(Gender, list(A = 1), wt = fweight)))
 })
+
+library(admisc)
+test_that("tests have the same output", {
+  expect_snapshot(x)
+  expect_snapshot(w_table(x))
+  expect_snapshot(w_table(x, values = TRUE))
+  expect_snapshot(fx)
+  expect_snapshot(w_table(fx))
+  expect_snapshot(x2)
+  expect_snapshot(w_table(x2))
+  expect_snapshot(x4)
+  expect_snapshot(w_table(x4))
+  expect_snapshot(using(DF, w_table(Gender)))
+  expect_snapshot(using(DF, w_table(Gender, wt = fweight)))
+  expect_snapshot(using(DF, w_table(Gender), split.by = Area))
+  expect_snapshot(using(DF, w_table(Gender, wt = fweight), split.by = Area))
+  expect_snapshot(using(DF, w_table(Gender, Area)))
+  expect_snapshot(using(DF, w_table(Gender, Area, wt = fweight)))
+})

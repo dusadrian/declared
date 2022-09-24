@@ -121,6 +121,21 @@ test_that("errors work for label(s)(<-)", {
   expect_error(label(dx) <- c("A", "B"))
 })
 
+
+test_that("tests have the same output", {
+  expect_snapshot(x)
+  expect_snapshot(label(x))
+  expect_snapshot(attr(x, "label"))
+  expect_snapshot(labels(x))
+  expect_snapshot(labels(x, prefixed = TRUE))
+  expect_snapshot(hx)
+  expect_snapshot(labels(hx))
+  expect_snapshot(dfd)
+  expect_snapshot(labels(dfd))
+  expect_snapshot(labels(dfd, prefixed = TRUE))
+})
+
+
 label(x) <- NULL
 label(hx) <- NULL
 label(dfd) <- NULL

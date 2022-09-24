@@ -1,4 +1,4 @@
-# golden tests
+# tests have the same output
 
     <pillar_ornament>
       1 [Good]

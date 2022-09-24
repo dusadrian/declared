@@ -40,3 +40,11 @@ dfd <- data.frame(x, hx)
 test_that("missing_range() works on data.frames", {
   expect_type(missing_range(dfd), "list")
 })
+
+
+test_that("tests have the same output", {
+  expect_snapshot(x)
+  expect_snapshot(missing_range(x))
+  expect_snapshot(dfd)
+  expect_snapshot(missing_range(dfd))
+})

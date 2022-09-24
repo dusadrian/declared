@@ -18,3 +18,9 @@ test_that("w_summary() works", {
 
   expect_length(w_summary(c(x, NA)), 7)
 })
+
+
+test_that("tests have the same output", {
+  expect_snapshot(x)
+  expect_snapshot(w_summary(x))
+})

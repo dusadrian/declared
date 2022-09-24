@@ -11,3 +11,9 @@ test_that("vctrs method works", {
 
   # expect_length(vec_ptype2(x, x), 0)
 })
+
+test_that("tests have the same output", {
+  expect_snapshot(x)
+  expect_snapshot(vctrs::vec_ptype_abbr(x))
+  expect_snapshot(vctrs::vec_ptype_full(x))
+})
