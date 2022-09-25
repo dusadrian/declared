@@ -681,7 +681,7 @@ NULL
 
     # sum(pN), maybe each = TRUE and it's a vector
     if (sum(na.omit(pN)) == 0) {
-        stopError("'x' should contain at least one (possibly) numeric value.")
+        stopError_("'x' should contain at least one (possibly) numeric value.")
     }
 
     # asNumeric is important here because the (possible) number might arrive

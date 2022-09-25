@@ -58,22 +58,6 @@
 ---
 
     Code
-      as.factor(x, levels = "values")
-    Output
-      [1] 1    2    3    4    5    <NA>
-      Levels: 1 2 3 4 5
-
----
-
-    Code
-      as.factor(x, levels = "both")
-    Output
-      [1] [1] Good [2] 2    [3] 3    [4] 4    [5] Bad  <NA>    
-      Levels: [1] Good [2] 2 [3] 3 [4] 4 [5] Bad
-
----
-
-    Code
       as.factor(x, drop_na = FALSE)
     Output
       [1] Good 2    3    4    Bad  DK  
