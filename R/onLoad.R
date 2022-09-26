@@ -531,9 +531,10 @@
                     )
                 }
                 else if (levels == "values") {
+                    attributes(x) <- NULL
                     x <- factor(
-                        drop(x),
-                        unname(nv),
+                        x,
+                        levels = unname(nv),
                         ordered = ordered
                     )
                 }
