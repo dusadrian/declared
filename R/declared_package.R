@@ -1,3 +1,4 @@
+# A normal comment
 #' @docType package
 #'
 #' @name declared_package
@@ -23,8 +24,8 @@
 #' \tabular{ll}{
 #'   Package: \tab declared\cr
 #'   Type: \tab Package\cr
-#'   Version: \tab 0.17.8\cr
-#'   Date: \tab 2022-08-28\cr
+#'   Version: \tab 0.17.9\cr
+#'   Date: \tab 2022-09-26\cr
 #'   License: \tab GPL-v3\cr
 #' }
 #'

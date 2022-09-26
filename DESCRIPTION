@@ -1,7 +1,6 @@
 Package: declared
 Title: Functions for Declared Missing Values
-Version: 0.17.8
-Date: 2022-08-24
+Version: 0.17.9
 Authors@R: 
     c(
         person(
@@ -19,9 +18,9 @@ Authors@R:
     )
 URL: https://github.com/dusadrian/declared
 BugReports: https://github.com/dusadrian/declared/issues
-Description: A set of functions to declare labels and missing values, coupled
-    with associated functions to create (weighted) tables of frequencies and
-    various other summary measures. 
+Description: A zero dependency package containing functions to declare labels
+    and missing values, coupled with associated functions to create (weighted)
+    tables of frequencies and various other summary measures. 
     Some of the base functions have been rewritten to make use of the specific 
     information about the missing values, most importantly to distinguish
     between empty and declared missing values.
@@ -33,7 +32,8 @@ License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.1
-Suggests: 
+Suggests:
+    admisc,
     covr,
     haven,
     knitr,
