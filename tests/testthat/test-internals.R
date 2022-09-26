@@ -244,8 +244,6 @@ test_that("internal non exported functions work", {
 
   expect_equal(getTag_(onetag), 1)
 
-  expect_equal(hasTag_(c(minustag, NA, atag)), c(TRUE, FALSE, TRUE))
-
   expect_false(hasTag_(bigtag, ""))
 
   expect_true(unlockEnvironment_(asNamespace("stats")))
@@ -268,16 +266,15 @@ test_that("internal non exported functions work", {
 
   text <- trimstr_("foo", what = "+")
 
-  ### For some unknown reason, these all fail despite passing in interactive
-  ### mode, as well as working as expected in expect_snapshot() below
-  # -----------
-  # expect_equal(hasTag_(c(minustag, NA, atag), -1), c(TRUE, FALSE, FALSE))
-  # expect_equal(hasTag_(c(bigminustag, atag), -99), c(TRUE, FALSE))
-  # expect_equal(getTag_(c(atag, NA, minustag)), c("a", NA, "-1"))
-  # expect_true(hasTag_(makeTag_("-a"), "-a"))
-  # expect_true(hasTag_(makeTag_("-ab"), "-ab"))
-  # -----------
-  ###
+  expect_equal(hasTag_(c(minustag, NA, atag), -1), c(TRUE, FALSE, FALSE))
+  
+  expect_equal(hasTag_(c(bigminustag, atag), -99), c(TRUE, FALSE))
+  
+  expect_equal(getTag_(c(atag, NA, minustag)), c("a", NA, "-1"))
+  
+  expect_true(hasTag_(makeTag_("-a"), "-a"))
+  
+  expect_true(hasTag_(makeTag_("-ab"), "-ab"))
 })
 
 
@@ -337,7 +334,6 @@ test_that("tests have the same output", {
   expect_snapshot(padLeft_("foo", 5))
   expect_snapshot(padRight_("foo", 5))
   expect_snapshot(padBoth_("foo", 5))
-  expect_snapshot(hasTag_(c(minustag, NA, atag)))
   expect_snapshot(hasTag_(bigtag, ""))
   expect_snapshot(hasTag_(c(atag, NA), "a"))
   expect_snapshot(getTag_(onetag))
@@ -351,10 +347,8 @@ test_that("tests have the same output", {
   expect_snapshot(numdec_(decx2, each = TRUE))
   expect_snapshot(trimstr_(" foo ", what = " "))
   expect_snapshot(trimstr_(" foo ", what = "+"))
-
-  # these work here as expected, despite not passing in tests above
-  expect_snapshot(hasTag_(c(minustag, NA, atag), -1))
-  expect_snapshot(hasTag_(c(bigminustag, atag), -99))
+  expect_snapshot(hasTag_(c(minustag, NA, atag)))
+  expect_snapshot(hasTag_(c(bigminustag, atag)))
   expect_snapshot(getTag_(c(atag, NA, minustag)))
   expect_snapshot(hasTag_(makeTag_("-a"), "-a"))
   expect_snapshot(hasTag_(makeTag_("-ab"), "-ab"))

@@ -146,17 +146,12 @@ library(labelled)
 
 
 test_that("tests have the same output", {
+  expect_snapshot(x)
   expect_snapshot(fx)
   expect_snapshot(as.factor(fx))
   expect_snapshot(as.factor(c(a = 1, b = 2, c = 2, d = 4, e = 5, f = 6)))
   expect_snapshot(as.factor(letters[1:6]))
-  expect_snapshot(x)
   expect_snapshot(as.factor(x))
-  ###-----
-  ### These work well on devtools::test() but for some reason devtools::check() gives an error
-  # expect_snapshot(as.factor(x, levels = "values"))
-  # expect_snapshot(as.factor(x, levels = "both"))
-  ###-----
   expect_snapshot(as.factor(x, drop_na = FALSE))
   expect_snapshot(as.factor(x, drop_na = FALSE, nolabels = TRUE))
   expect_snapshot(sd(x))
@@ -165,4 +160,6 @@ test_that("tests have the same output", {
   expect_snapshot(fivenum(x))
   expect_snapshot(fivenum(drop_na(x), na.rm = TRUE))
   expect_snapshot(order(x))
+  expect_snapshot(as.factor(x, levels = "values"))
+  expect_snapshot(as.factor(x, levels = "both"))
 })

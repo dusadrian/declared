@@ -1,6 +1,22 @@
 # tests have the same output
 
     Code
+      x
+    Output
+      <declared<integer>[6]>
+      [1]      1      2      3      4      5 NA(-1)
+      Missing values: -1
+      Missing range:  [-5, -1]
+      
+      Labels:
+       value label
+           1  Good
+           5   Bad
+          -1    DK
+
+---
+
+    Code
       fx
     Output
       [1] Good 2    3    4    Bad  <NA>
@@ -30,22 +46,6 @@
     Output
       [1] a b c d e f
       Levels: a b c d e f
-
----
-
-    Code
-      x
-    Output
-      <declared<integer>[6]>
-      [1]      1      2      3      4      5 NA(-1)
-      Missing values: -1
-      Missing range:  [-5, -1]
-      
-      Labels:
-       value label
-           1  Good
-           5   Bad
-          -1    DK
 
 ---
 
@@ -113,4 +113,20 @@
       order(x)
     Output
       [1] 1 2 3 4 5 6
+
+---
+
+    Code
+      as.factor(x, levels = "values")
+    Output
+      [1] 1    2    3    4    5    <NA>
+      Levels: 1 2 3 4 5
+
+---
+
+    Code
+      as.factor(x, levels = "both")
+    Output
+      [1] [1] Good [2] 2    [3] 3    [4] 4    [5] Bad  <NA>    
+      Levels: [1] Good [2] 2 [3] 3 [4] 4 [5] Bad
 

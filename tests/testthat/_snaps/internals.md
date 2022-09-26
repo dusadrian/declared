@@ -438,13 +438,6 @@
 ---
 
     Code
-      hasTag_(c(minustag, NA, atag))
-    Output
-      [1]  TRUE FALSE  TRUE
-
----
-
-    Code
       hasTag_(bigtag, "")
     Output
       [1] FALSE
@@ -522,16 +515,16 @@
 ---
 
     Code
-      hasTag_(c(minustag, NA, atag), -1)
+      hasTag_(c(minustag, NA, atag))
     Output
-      [1]  TRUE FALSE FALSE
+      [1]  TRUE FALSE  TRUE
 
 ---
 
     Code
-      hasTag_(c(bigminustag, atag), -99)
+      hasTag_(c(bigminustag, atag))
     Output
-      [1]  TRUE FALSE
+      [1] TRUE TRUE
 
 ---
 
