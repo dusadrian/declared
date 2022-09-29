@@ -30,7 +30,7 @@ design features that run, in some situations, against the user's expectations.
 This has a lot to do with the treatment of declared missing values, that are
 instrumental for the social sciences. The aim of `declared` is to offer an
 alternative class, `declared()`{.R}, whilst ensuring as much compatibility as
-possible with these packages popular packages.
+possible with these popular packages.
 
 ## Installation
 

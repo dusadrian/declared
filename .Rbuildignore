@@ -5,6 +5,7 @@
 ^docs$
 ^pkgdown$
 ^README\.Rmd$
+^README\.md$
 ^not_included$
 ^appveyor\.yml$
 ^codecov\.yml$
