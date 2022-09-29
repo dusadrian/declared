@@ -85,8 +85,7 @@ test_that("zap_labels.declared() and zap_missing.declared() work", {
   )
 })
 
-R_version <- R.version
-R_variant <- paste0("R", R_version$major, R_version$minor, R.version$platform)
+R_variant <- paste0("R", getRversion()[, 1:2], R.version$platform)
 
 test_that("tests have the same output", {
   expect_snapshot(x)
@@ -102,7 +101,4 @@ test_that("tests have the same output", {
   expect_snapshot(as.haven(dfd, interactive = TRUE), variant = R_variant)
   expect_snapshot(as.haven(dfd, only_declared = FALSE), variant = R_variant)
   expect_snapshot(as.haven(dfd, only_declared = FALSE, interactive = TRUE), variant = R_variant)
-
-  ### These snapshots fail on GitHub because their R arranges the columns from the left:
-  
 })
