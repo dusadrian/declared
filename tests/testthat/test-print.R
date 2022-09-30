@@ -93,11 +93,16 @@ test_that("print.w_table method works", {
 
   test <- capture.output(print(with(DF, w_table(Gender, Area))))
   test <- capture.output(print(with(DF, w_table(Gender, values = TRUE))))
-  test <- capture.output(print(with(DF, w_table(Gender, values = TRUE)), show_values = FALSE))
+  test <- capture.output(
+    print(with(DF, w_table(Gender, values = TRUE)), show_values = FALSE)
+  )
 
   test <- capture.output(print(w_table(c(1:5, NA))))
 
-  expect_error(capture.output(print(w_table(1:101))), "looks like a lot of categories")
+  expect_error(
+    capture.output(print(w_table(1:101))),
+    "looks like a lot of categories"
+  )
 })
 
 
@@ -119,7 +124,9 @@ test_that("tests have the same output", {
   expect_snapshot(print(w_table(xl, DF$Area, values = TRUE)))
   expect_snapshot(print(with(DF, w_table(Gender, Area))))
   expect_snapshot(print(with(DF, w_table(Gender, values = TRUE))))
-  expect_snapshot(print(with(DF, w_table(Gender, values = TRUE)), show_values = FALSE))
+  expect_snapshot(
+    print(with(DF, w_table(Gender, values = TRUE)), show_values = FALSE)
+  )
   expect_snapshot(print(w_table(c(1:5, NA))))
   expect_snapshot(cat("w_table(1:101) # for the output below:"))
   expect_snapshot_error(print(w_table(1:101)))

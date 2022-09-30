@@ -56,7 +56,9 @@ test_that("as.haven() works for data.frames", {
 
   expect_true(
     inherits(
-      suppressMessages(as.haven(dfd, only_declared = FALSE, interactive = TRUE)),
+      suppressMessages(
+        as.haven(dfd, only_declared = FALSE, interactive = TRUE)
+      ),
       "data.frame"
     )
   )
@@ -100,5 +102,8 @@ test_that("tests have the same output", {
   expect_snapshot(as.haven(dfd), variant = R_variant)
   expect_snapshot(as.haven(dfd, interactive = TRUE), variant = R_variant)
   expect_snapshot(as.haven(dfd, only_declared = FALSE), variant = R_variant)
-  expect_snapshot(as.haven(dfd, only_declared = FALSE, interactive = TRUE), variant = R_variant)
+  expect_snapshot(
+    as.haven(dfd, only_declared = FALSE, interactive = TRUE),
+    variant = R_variant
+  )
 })

@@ -50,7 +50,10 @@ test_that("onLoad functions work", {
   test <- rbind(as.list(dfd), as.list(dfd))
 
   test <- rbind(dfd, dfd[-seq(1, nrow(dfd)), , drop = FALSE])
-  test <- rbind(dfd[-seq(1, nrow(dfd)), , drop = FALSE], dfd[-seq(1, nrow(dfd)), , drop = FALSE])
+  test <- rbind(
+    dfd[-seq(1, nrow(dfd)), , drop = FALSE],
+    dfd[-seq(1, nrow(dfd)), , drop = FALSE]
+  )
   test <- rbind(dfd1 = dfd, dfd2 = dfd)
   ldfd <- as.list(dfd)
   test <- rbind(dfd, ldfd)
@@ -102,7 +105,9 @@ test_that("onLoad functions work", {
   test <- rbind(a, b, c)[, order(a, -b, c)]
   cb <- as.character(b)
   test <- rbind(a, b, c)[, order(a, -xtfrm(cb), c)]
-  test <- rbind(a, b, c)[, order(a, cb, c, decreasing = c(FALSE, TRUE, FALSE), method="radix")]
+  test <- rbind(a, b, c)[, order(
+    a, cb, c, decreasing = c(FALSE, TRUE, FALSE), method="radix"
+  )]
   dd <- transform(data.frame(a, b, c), c = factor(c, labels = LETTERS[9:1]))
   test <- dd[ order(a, -b, c), ]
   test <- dd[ do.call(order, dd), ]

@@ -27,8 +27,8 @@
 #' @param x A vector.
 #'
 #' @param value Any vector of values that should be declared as missing
-#' (for \code{missing_values}) or a numeric vector of length two giving the (inclusive)
-#' extents of the range of missing values (for \code{missing_range}).
+#' (for `missing_values`) or a numeric vector of length two giving the
+#' (inclusive) extents of the range of missing values (for `missing_range`).
 #'
 #' @export
 `missing_values` <- function(x) {

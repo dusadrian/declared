@@ -9,8 +9,8 @@
 #' `na_values`, `na_range` and `na_index`, and it preserves the labels referring
 #' to the missing values.
 #'
-#' The result can be a regular vector (dropping all attributes, including the class
-#' "declared") by activating the argument `drop`.
+#' The result can be a regular vector (dropping all attributes, including the
+#' class "declared") by activating the argument `drop`.
 #'
 #' Function `drop_na()` transforms the declared missing values in regular empty
 #' NAs, and the labels referring to the missing values are deleted by default.

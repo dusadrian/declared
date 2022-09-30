@@ -29,9 +29,13 @@ cx <- declared(
 test_that("pillar method works", {
   expect_true(inherits(pillar::pillar_shaft(x), "pillar_shaft"))
 
-  expect_true(inherits(pillar::pillar_shaft(x, use_haven = FALSE), "pillar_shaft"))
+  expect_true(
+    inherits(pillar::pillar_shaft(x, use_haven = FALSE), "pillar_shaft")
+  )
 
-  expect_true(inherits(pillar::pillar_shaft(y, use_haven = FALSE), "pillar_shaft"))
+  expect_true(
+    inherits(pillar::pillar_shaft(y, use_haven = FALSE), "pillar_shaft")
+  )
 
   expect_true(
     inherits(

@@ -23,7 +23,8 @@
 
 #' @name as.haven
 #' @export
-# See https://stackoverflow.com/questions/18512528/how-to-export-s3-method-so-it-is-available-in-namespace
+# See https://stackoverflow.com/questions/18512528/
+#     how-to-export-s3-method-so-it-is-available-in-namespace
 `as.haven` <- function(x, ...) {
     UseMethod("as.haven")
 }
@@ -126,13 +127,19 @@
     #------------------------------------------
 
     attrx$na_index <- NULL
-    # attrx$class <- c("haven_labelled_spss", "haven_labelled", "vctrs_vctr", setdiff(attrx$class, "declared"))
+    # attrx$class <- c(
+    #     "haven_labelled_spss", "haven_labelled", "vctrs_vctr",
+    #     setdiff(attrx$class, "declared")
+    # )
 
     #------------------------------------------
     # detour until ReadStat deals with integers
     attrx$class <- unique(c(
             "haven_labelled_spss", "haven_labelled", "vctrs_vctr",
-            setdiff(attrx$class, c("declared", "double", "integer", "character")),
+            setdiff(
+                attrx$class,
+                c("declared", "double", "integer", "character")
+            ),
             class(x)
     ))
     #------------------------------------------
@@ -142,11 +149,15 @@
 }
 
 #' @export
-`as.haven.data.frame` <- function(x, ..., only_declared = TRUE, interactive = FALSE) {
+`as.haven.data.frame` <- function(
+    x, ..., only_declared = TRUE, interactive = FALSE
+) {
     if (only_declared) {
         xdeclared <- vapply(x, is.declared, logical(1))
         if (isFALSE(interactive)) {
-            x[xdeclared] <- lapply(x[xdeclared], as.haven, interactive = FALSE, ... = ...)
+            x[xdeclared] <- lapply(
+                x[xdeclared], as.haven, interactive = FALSE, ... = ...
+            )
         }
         else {
             nms <- names(x)[xdeclared]
@@ -175,8 +186,9 @@
 
 
 # Dynamically exported, see onLoad.R
-# using eval(parse()) to avoid the huge dependency tree of vctrs, haven, labelled and pillar
-# these functions will be registered when or if the package haven is loaded
+# using eval(parse()) to avoid the huge dependency tree of vctrs, haven,
+# labelled and pillar these functions will be registered when or if the package
+# haven is loaded
 
 `as_factor.declared` <- function(
     x, levels = c("default", "labels", "values", "both"), ordered = FALSE, ...

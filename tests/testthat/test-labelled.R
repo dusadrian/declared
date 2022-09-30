@@ -30,7 +30,10 @@ test_that("labelled functions work for declared objects", {
 
   expect_true(is.character(labelled::var_label(x)))
 
-  expect_error(labelled::var_label(x) <- c("A", "B"), "should be a single character string")
+  expect_error(
+    labelled::var_label(x) <- c("A", "B"),
+    "should be a single character string"
+  )
 
   expect_length(labelled::drop_unused_value_labels(x), 6)
 
@@ -40,11 +43,17 @@ test_that("labelled functions work for declared objects", {
   
   expect_error(labelled::val_label(x, 1:2), "should be a single value")
   
-  expect_error(labelled::val_label(x, 1) <- c("A", "B"), "should be a single character string")
+  expect_error(
+    labelled::val_label(x, 1) <- c("A", "B"),
+    "should be a single character string"
+  )
 
   expect_null(labelled::val_label(x, 2))
   
-  expect_error(labelled::val_label(x, 1:2) <- "A", "should be a single value")
+  expect_error(
+    labelled::val_label(x, 1:2) <- "A",
+    "should be a single value"
+  )
 })
 
 

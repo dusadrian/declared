@@ -3,13 +3,13 @@
 #' @title Get / Declare value labels
 #'
 #' @description
-#' Functions to extract information about the declared variable / value labels, or
-#' to declare such values if they are present in the data.
+#' Functions to extract information about the declared variable / value labels,
+#' or to declare such values if they are present in the data.
 #'
 #' @details
-#' The function \code{labels()} is a adaptation of the base function to the objects
-#' of class \code{declared}. In addition to the regular arguments, it has an
-#' additional logical one called \code{prefixed}, to retrieve the value labels
+#' The function `labels()` is a adaptation of the base function to the objects
+#' of class `declared`. In addition to the regular arguments, it has an
+#' additional logical one called `prefixed`, to retrieve the value labels
 #' prefixed with their values.
 #'
 #' @return

@@ -1,5 +1,6 @@
 #' @title declared internal functions
-#' @description Functions to be used internally, only by developers and contributors.
+#' @description Functions to be used internally, only by developers and
+#' contributors.
 #' @name declared_internal
 NULL
 
@@ -54,7 +55,9 @@ NULL
     if (possibleNumeric_(nms)) {
       nms <- asNumeric_(nms)
     }
-    declared_indexes <- unname(na_index[order(nms, decreasing = decreasing, method = method)])
+    declared_indexes <- unname(
+        na_index[order(nms, decreasing = decreasing, method = method)]
+    )
   }
 
   attributes(x) <- NULL
@@ -74,7 +77,10 @@ NULL
   }
 
 
-  res <- c(res, x_indexes[order(unclass(x), decreasing = decreasing, method = method)])
+  res <- c(
+    res,
+    x_indexes[order(unclass(x), decreasing = decreasing, method = method)]
+  )
 
 
   if (isTRUE(na.last)) {
@@ -163,7 +169,10 @@ NULL
 
     if (length(first) > 1) {
         stopError_(
-            "Measurement can not be categorical and quantitative at the same time."
+            paste(
+                "Measurement can not be categorical",
+                "and quantitative at the same time."
+            )
         )
     }
     cpos <- setdiff(position, first)
@@ -171,30 +180,27 @@ NULL
     if (length(cpos) > 1) {
 
         if (first == 4) { # quantitative
-            # check for combinations of interval / ratio and discrete / continuous
+            # check for combinations of interval / ratio and
+            # discrete / continuous
             if (any(cpos < 7)) {
                 ir <- cpos[cpos < 7]
                 if (length(ir) > 1) {
-                    stopError_(
-                        sprintf(
-                            "Measurement can not be both %s and %s at the same time.",
-                            mlevels[ir[1]],
-                            mlevels[ir[2]]
-                        )
-                    )
+                stopError_(sprintf(
+                    "Measurement can not be both %s and %s at the same time.",
+                    mlevels[ir[1]],
+                    mlevels[ir[2]]
+                ))
                 }
             }
 
             if (any(cpos > 6)) {
                 dc <- cpos[cpos > 6]
                 if (length(dc) > 1) {
-                    stopError_(
-                        sprintf(
-                            "Measurement can not be both %s and %s at the same time.",
-                            mlevels[dc[1]],
-                            mlevels[dc[2]]
-                        )
-                    )
+                stopError_(sprintf(
+                    "Measurement can not be both %s and %s at the same time.",
+                    mlevels[dc[1]],
+                    mlevels[dc[2]]
+                ))
                 }
             }
         }
@@ -237,7 +243,8 @@ NULL
                 return("quantitative")
             }
             else {
-                return("") # character, but cannot determine the measurement level
+                # character, but cannot determine the measurement level
+                return("")
             }
         }
 
@@ -311,7 +318,9 @@ NULL
 `names_values` <- function(x, drop_na = FALSE) {
 
     if (!inherits(x, "declared") & !inherits(x, "haven_labelled_spss")) {
-        stopError_("The input should be a declared / haven_labelled_spss vector.")
+        stopError_(
+            "The input should be a declared / haven_labelled_spss vector."
+        )
     }
 
     na_values <- attr(x, "na_values")
@@ -367,8 +376,9 @@ NULL
         nms <- names(labels)
         for (i in seq(length(xnotmis))) {
             if (any(isel <- labels == xnotmis[i])) {
-                # names(xnotmis)[i] <- ifelse(nms[isel] == "", xnotmis[i], nms[isel])
-                names(xnotmis)[i] <- ifelse(nzchar(nms[isel]), nms[isel], xnotmis[i])
+                names(xnotmis)[i] <- ifelse(
+                    nzchar(nms[isel]), nms[isel], xnotmis[i]
+                )
             }
         }
     }
@@ -381,7 +391,8 @@ NULL
 
 
 
-# The following functions are copied from package admisc to achieve zero dependency.
+# The following functions are copied from package admisc
+# to achieve zero dependency.
 `stopError_` <- function(message, enter = "\n") {
 
     message <- paste0(
@@ -433,7 +444,7 @@ NULL
         wholeNumeric_(x) &&
         # some whole numbers might be too big to be represented in memory
         # as integers, in which case a warning will be captured
-        # otherwise, if nothing is captured (the result is null) everything is ok
+        # else, if nothing is captured (the result is null) everything is ok
         is.null(tryCatchWEM_(as.integer(x)))
     ) {
         x <- as.integer(x)
@@ -584,7 +595,11 @@ NULL
             invokeRestart("muffleWarning")
         },
         message = function(m) {
-            env$toreturn$message <- paste(env$toreturn$message, m$message, sep = "")
+            env$toreturn$message <- paste(
+                env$toreturn$message,
+                m$message,
+                sep = ""
+            )
             invokeRestart("muffleMessage")
         }
     ))
@@ -706,8 +721,10 @@ NULL
         # A floating point number like 234.1 might have been represented as
         # 0.0999999999999943 (after subtracting the floor)
         x[w9] <- sub(
-            "0+", "1", # last 0 becomes 1
-            sub("(*)999999.*", "\\1", x[w9]) # retains everthing <up to> the sequence
+             # last 0 becomes 1
+            "0+", "1",
+             # retains everthing <up to> the sequence
+            sub("(*)999999.*", "\\1", x[w9])
         )
     }
 

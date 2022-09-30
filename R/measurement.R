@@ -7,21 +7,22 @@
 #' (if already present), or to specify such measurement levels.
 #'
 #' @details
-#' This function creates an attribute called \code{"measurement"} to a declared
-#' object, as an optional feature, at this point for purely aesthetic reasons. This
-#' attribute might become useful in the future to (automatically) determine if a
-#' declared object is suitable for a certain statistical analysis, for instance
-#' regression requires quantitative variables, while some declared objects are
-#' certainly categorical despite using numbers to denote categories.
+#' This function creates an attribute called `"measurement"` to a declared
+#' This object, as an optional feature, at this point for purely aesthetic
+#' reasons. attribute might become useful in the future to (automatically)
+#' determine if a declared object is suitable for a certain statistical
+#' analysis, for instance regression requires quantitative variables, while some
+#' declared objects are certainly categorical despite using numbers to denote
+#' categories.
 #'
-#' It distinguishes between \code{"categorical"} and \code{"quantitative"} types of
-#' variables, and additionally recognizes \code{"nominal"} and \code{"ordinal"} as
-#' categorical, and similarly recognizes \code{"interval"}, \code{"ratio"},
-#' \code{"discrete"} and \code{"continuous"} as quantitative.
+#' It distinguishes between `"categorical"` and `"quantitative"` types of
+#' variables, and additionally recognizes `"nominal"` and `"ordinal"` as
+#' categorical, and similarly recognizes `"interval"`, `"ratio"`,
+#' `"discrete"` and `"continuous"` as quantitative.
 #'
-#' The words \code{"qualitative"} is treated as a synonym for \code{"categorical"},
-#' and the words \code{"metric"} and \code{"numeric"} are treated as synonyms for
-#' \code{"quantitative"}, respectively.
+#' The words `"qualitative"` is treated as a synonym for `"categorical"`,
+#' and the words `"metric"` and `"numeric"` are treated as synonyms for
+#' `"quantitative"`, respectively.
 #'
 #' @return
 #' A character vector.
@@ -92,7 +93,8 @@
 
 
 #' @rdname measurement
-#' @param value A single character string of measurement levels, separated by commas.
+#' @param value A single character string of measurement levels,
+#' separated by commas.
 #' @export
 `measurement<-` <- function(x, value) {
   UseMethod("measurement<-")

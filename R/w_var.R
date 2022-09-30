@@ -1,5 +1,6 @@
 #' @rdname weighted
-#' @param method Character, specifying how the result is scaled, see 'Details' below.
+#' @param method Character, specifying how the result is scaled, see 'Details'
+#' below.
 #' @export
 `w_var` <- function (
     x, wt = NULL, method = NULL, na.rm = TRUE

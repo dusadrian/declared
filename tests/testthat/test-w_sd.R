@@ -56,5 +56,7 @@ test_that("tests have the same output", {
   expect_snapshot(using(DF, w_sd(Age), split.by = Gender))
   expect_snapshot(using(DF, w_sd(Age, wt = fweight), split.by = Gender))
   expect_snapshot(using(DF, w_sd(Age), split.by = Gender & Children))
-  expect_snapshot(using(DF, w_sd(Age, wt = fweight), split.by = Gender & Children))
+  expect_snapshot(
+    using(DF, w_sd(Age, wt = fweight), split.by = Gender & Children)
+  )
 })

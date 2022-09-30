@@ -19,8 +19,10 @@
 
         # this function is unchanged, but it needs to be re-written to access
         # the custom version of format.data.frame()
-        env$`print.data.frame` <- function (x, ..., digits = NULL, quote = FALSE,
-            right = TRUE, row.names = TRUE, max = NULL) {
+        env$`print.data.frame` <- function (
+            x, ..., digits = NULL, quote = FALSE,
+            right = TRUE, row.names = TRUE, max = NULL
+        ) {
             n <- length(row.names(x))
             if (length(x) == 0L) {
                 do.call("cat", list(
@@ -53,11 +55,18 @@
                         n0
                         else n)
                     else row.names
-                do.call("print", list(m, ..., quote = quote, right = right, max = max))
+                do.call(
+                    "print",
+                    list(m, ..., quote = quote, right = right, max = max)
+                )
                 if (omit)
-                    do.call("cat", list(
-                        " [ reached 'max' / getOption(\"max.print\") -- omitted",
-                        n - n0, "rows ]\n"
+                    do.call(
+                        "cat",
+                        list(
+                            " [ reached 'max' /",
+                            "getOption(\"max.print\") -- omitted",
+                            n - n0,
+                            "rows ]\n"
                         )
                     )
             }
@@ -78,7 +87,8 @@
             # this function is also unchanged, except for this part:
             for (i in seq_len(nc)) {
                 if (is.declared(x[[i]]) && any(is.na(x[[i]]))) {
-                    # any(is.na()) is necessary to guard against na.omit(), for instance
+                    # any(is.na()) is necessary to guard against na.omit(),
+                    # for instance:
                     rval[[i]] <- format_declared(x[[i]])
                 }
                 else {
@@ -90,7 +100,12 @@
             lens <- vapply(rval, NROW, 1)
 
             if (any(lens != nr)) {
-                warning("corrupt data frame: columns will be truncated or padded with NAs")
+                warning(
+                    paste(
+                        "corrupt data frame: columns will be",
+                        "truncated or padded with NAs"
+                    )
+                )
                 for (i in seq_len(nc)) {
                     len <- NROW(rval[[i]])
                     if (len == nr)
@@ -113,8 +128,10 @@
                     oldClass(rval[[i]]) <- "AsIs"
             }
 
-            y <- as.data.frame.list(rval, row.names = seq_len(nr), col.names = names(x),
-                optional = TRUE, fix.empty.names = FALSE, cut.names = TRUE)
+            y <- as.data.frame.list(
+                    rval, row.names = seq_len(nr), col.names = names(x),
+                    optional = TRUE, fix.empty.names = FALSE, cut.names = TRUE
+                )
 
             attr(y, "row.names") <- row.names(x)
 
@@ -146,8 +163,8 @@
             allargs <- list(...)
             allargs <- allargs[lengths(allargs) > 0L]
             if(length(allargs)) {
-                ## drop any zero-row data frames, as they may not have proper column
-                ## types (e.g. NULL).
+                ## drop any zero-row data frames, as they may not have proper
+                ## column types (e.g. NULL).
                 nr <- vapply(allargs, function(x)
                             if(is.data.frame(x)) .row_names_info(x, 2L)
                             else if(is.list(x)) length(x[[1L]])
@@ -169,7 +186,8 @@
             if(make.row.names) {
                 rlabs <- rows
                 env <- new.env()
-                env$autoRnms <- TRUE # result with 1:nrow(.) row names? [efficiency!]
+                # result with 1:nrow(.) row names? [efficiency!]
+                env$autoRnms <- TRUE
                 Make.row.names <- function(nmi, ri, ni, nrow) {
                     if(nzchar(nmi)) {
                     if(env$autoRnms) env$autoRnms <- FALSE
@@ -177,12 +195,18 @@
                     else if(ni > 1L) paste(nmi, ri, sep = ".")
                     else nmi
                     }
-                    else if(env$autoRnms && nrow > 0L && identical(ri, seq_len(ni)))
+                    else if(
+                        env$autoRnms && nrow > 0L && identical(ri, seq_len(ni))
+                    )
                     as.integer(seq.int(from = nrow + 1L, length.out = ni))
                     else {
-                    if(env$autoRnms && (nrow > 0L || !identical(ri, seq_len(ni))))
-                        env$autoRnms <- FALSE
-                    ri
+                        if(
+                            env$autoRnms && (nrow > 0L ||
+                            !identical(ri, seq_len(ni)))
+                        ) {
+                            env$autoRnms <- FALSE
+                        }
+                        ri
                     }
                 }
             }
@@ -207,12 +231,16 @@
                     clabs <- names(xi)
                     else {
                             if(length(xi) != length(clabs))
-                                stop("numbers of columns of arguments do not match")
+                                stop(
+                                  "numbers of columns of arguments do not match"
+                                )
                         pi <- match.names(clabs, names(xi))
                         if( !is.null(pi) ) perm[[i]] <- pi
                     }
                     rows[[i]] <- seq.int(from = nrow + 1L, length.out = ni)
-                    if(make.row.names) rlabs[[i]] <- Make.row.names(nmi, ri, ni, nrow)
+                    if(make.row.names) rlabs[[i]] <- Make.row.names(
+                        nmi, ri, ni, nrow
+                    )
                     nrow <- nrow + ni
                     if(is.null(value)) { ## first time ==> setup once:
                         value <- unclass(xi)
@@ -220,7 +248,7 @@
 
                         ## code for declared
                         lxi <- vector("list", nvar)
-                        xideclared <- sapply(xi, is.declared)
+                        xideclared <- vapply(xi, is.declared, TRUE)
                         names(lxi) <- names(xideclared)
                         lxi[xideclared] <- lapply(xi[xideclared], function(x) {
                             list(
@@ -303,17 +331,27 @@
                     ni <- range(lengths(xi))
                     if(ni[1L] == ni[2L])
                     ni <- ni[1L]
-                    else stop("invalid list argument: all variables should have the same length")
+                    else stop(
+                        paste(
+                            "invalid list argument: all variables",
+                            "should have the same length"
+                        )
+                    )
                         ri <- seq_len(ni)
                     rows[[i]] <- seq.int(from = nrow + 1L, length.out = ni)
-                    if(make.row.names) rlabs[[i]] <- Make.row.names(nmi, ri, ni, nrow)
+                    if(make.row.names) rlabs[[i]] <- Make.row.names(
+                        nmi, ri, ni, nrow
+                    )
                     nrow <- nrow + ni
                     if(length(nmi <- names(xi)) > 0L) {
                         if(is.null(clabs))
                             clabs <- nmi
                         else {
-                                    if(length(xi) != length(clabs))
-                                        stop("numbers of columns of arguments do not match")
+                            if (length(xi) != length(clabs)) {
+                                stop(
+                                  "numbers of columns of arguments do not match"
+                                )
+                            }
                             pi <- match.names(clabs, nmi)
                             if( !is.null(pi) ) perm[[i]] <- pi
                         }
@@ -351,7 +389,9 @@
 
             if(any(has.dim)) { # some col's are matrices or d.frame's
                 jdim <- pseq[has.dim]
-                if(!all(df <- vapply(jdim, function(j) inherits(value[[j]],"data.frame"), NA))) {
+                if(!all(df <- vapply(
+                    jdim, function(j) inherits(value[[j]],"data.frame"), NA
+                ))) {
                     ## Ensure matrix columns can be filled in  for(i ...) below
                     rmax <- max(unlist(rows))
                     for(j in jdim[!df]) {
@@ -370,9 +410,15 @@
             if(!is.list(xi))
                 if((ni <- length(xi)) != nvar) {
                 if(ni && nvar %% ni != 0)
-                    warning(gettextf(
-                "number of columns of result, %d, is not a multiple of vector length %d of arg %d",
-                                nvar, ni, i), domain = NA)
+                    warning(
+                        gettextf(
+                            paste(
+                                "number of columns of result, %d, is not a",
+                                "multiple of vector length %d of arg %d"
+                            ),
+                            nvar, ni, i),
+                        domain = NA
+                    )
                 xi <- rep_len(xi, nvar)
                     }
             ri <- rows[[i]]
@@ -389,11 +435,17 @@
                             .row_names_info(xij) <= 0))
                             rownames(value[[jj]])[ri] <- r
                 } else {
-                        ## coerce factors to vectors, in case lhs is character or
-                        ## level set has changed
-                        value[[jj]][ri] <- if(is.factor(xij)) as.vector(xij) else xij
+                        ## coerce factors to vectors, in case lhs is character
+                        ## or level set has changed
+                        value[[jj]][ri] <- if(is.factor(xij)) {
+                            as.vector(xij)
+                        } else {
+                            xij
+                        }
                         ## copy names if any
-                        if(!is.null(nm <- names(xij))) names(value[[jj]])[ri] <- nm
+                        if(!is.null(nm <- names(xij))) {
+                            names(value[[jj]])[ri] <- nm
+                        }
                     }
             }
             }
@@ -436,8 +488,17 @@
             z <- list(...)
             decreasing <- as.logical(decreasing)
 
-            if (length(z) == 1L && is.numeric(x <- z[[1L]]) && !is.object(x) && length(x) > 0) {
-                if (eval(parse(text = ".Internal(sorted_fpass(x, decreasing, na.last))"))) {
+            if (
+                length(z) == 1L &&
+                is.numeric(x <- z[[1L]]) &&
+                !is.object(x) &&
+                length(x) > 0
+            ) {
+                if (
+                    eval(parse(
+                        text = ".Internal(sorted_fpass(x, decreasing, na.last))"
+                    ))
+                ) {
                     return(seq_along(x))
                 }
             }
@@ -456,23 +517,39 @@
 
             if (method == "auto") {
                 useRadix <- all(vapply(z, function(x) {
-                    (is.numeric(x) || is.factor(x) || is.logical(x)) && is.integer(length(x))
+                    (
+                        is.numeric(x) ||
+                        is.factor(x) ||
+                        is.logical(x)
+                    ) &&
+                    is.integer(length(x))
                 }, logical(1L)))
                 method <- ifelse (useRadix, "radix", "shell")
             }
 
 
             if (length(z) == 1L && is.declared(x)) {
-                return(order_declared(x, na.last = na.last, decreasing = decreasing, method = method, empty.last = empty.last))
+                return(order_declared(
+                    x, na.last = na.last, decreasing = decreasing,
+                    method = method, empty.last = empty.last
+                ))
             }
 
             if (method != "radix" && !is.na(na.last)) {
-                return(eval(parse(text = ".Internal(order(na.last, decreasing, ...))")))
+                return(eval(parse(
+                    text = ".Internal(order(na.last, decreasing, ...))"
+                )))
             }
 
             if (method == "radix") {
                 decreasing <- rep_len(as.logical(decreasing), length(z))
-                return(eval(parse(text = ".Internal(radixsort(na.last, decreasing, FALSE, TRUE, ...))")))
+                return(eval(parse(
+                    text = paste(
+                        ".Internal(radixsort(",
+                        "na.last, decreasing, FALSE, TRUE, ...",
+                        "))"
+                    )
+                )))
             }
 
             if (any(diff((l.z <- lengths(z)) != 0L))) {
@@ -576,6 +653,20 @@
 
             eval(parse(text = ".Internal(drop(x))"))
         }
+
+        do.call("unlockBinding", list(sym = "match", env = env))
+
+        env$match <- function(
+            x, table, nomatch = NA_integer_, incomparables = NULL
+        ) {
+            if (is.declared(x)) {
+                attributes(x) <- NULL
+            }
+
+            eval(parse(
+                text = ".Internal(match(x, table, nomatch, incomparables))"
+            ))
+        }
     }
 
     if (unlockEnvironment_(asNamespace("stats"))) {
@@ -593,7 +684,12 @@
                 class(x) <- setdiff(class(x), "declared")
             }
 
-            sqrt(var(if (is.vector(x) || is.factor(x)) x else as.double(x), na.rm = na.rm))
+            sqrt(
+                var(
+                    if (is.vector(x) || is.factor(x)) x else as.double(x),
+                    na.rm = na.rm
+                )
+            )
         }
 
         do.call("unlockBinding", list(sym = "var", env = env))
@@ -611,8 +707,13 @@
                 use <- ifelse(na.rm, "na.or.complete", "everything")
             }
 
-            na.method <- pmatch(use, c("all.obs", "complete.obs", "pairwise.complete.obs",
-                "everything", "na.or.complete"))
+            na.method <- pmatch(
+                use,
+                c(
+                    "all.obs", "complete.obs", "pairwise.complete.obs",
+                    "everything", "na.or.complete"
+                )
+            )
 
             if (is.na(na.method)) {
                 stop("invalid 'use' argument")
@@ -715,7 +816,7 @@
         stopifnot(is.function(fun))
     }
 
-    if (pkg %in% loadedNamespaces()) {
+    if (is.element(pkg, loadedNamespaces())) {
         registerS3method(generic, class, fun, envir = asNamespace(pkg))
     }
 

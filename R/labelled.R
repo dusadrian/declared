@@ -65,12 +65,14 @@
 
 `val_label.declared` <- function(x, v, prefixed = FALSE) {
     if (length(v) != 1) {
-        stop("`v` should be a single value", call. = FALSE, domain = "R-labelled")
+        stop(
+            "`v` should be a single value", call. = FALSE, domain = "R-labelled"
+        )
     }
 
     labels <- labels(x)
 
-    if (v %in% labels) {
+    if (is.element(v, labels)) {
         if (prefixed) {
             return(paste0("[", v, "] ", names(labels)[labels == v]))
         }
@@ -85,7 +87,9 @@
 
 `val_label<-.declared` <- function(x, v, value) {
     if (length(v) != 1) {
-        stop("`v` should be a single value", call. = FALSE, domain = "R-labelled")
+        stop(
+            "`v` should be a single value", call. = FALSE, domain = "R-labelled"
+        )
     }
 
     if (length(value) > 1) {
@@ -96,12 +100,12 @@
     labels <- labels(x)
 
     if (is.null(value)) {
-        if (v %in% labels) {
+        if (is.element(v, labels)) {
             labels <- labels[labels != v]
         }
     }
     else {
-        if (v %in% labels) {
+        if (is.element(v, labels)) {
             names(labels)[labels == v] <- value
         }
         else {
@@ -142,9 +146,9 @@
 `nolabel_to_na.declared` <- function(x) {
     allval <- unique(x)
     allval <- allval[!is.na(allval)]
-    nolabel <- allval[!allval %in% labels(x)]
+    nolabel <- setdiff(allval, labels(x))
     if (length(nolabel) > 0) {
-        x[x %in% nolabel] <- NA
+        x[is.element(x, nolabel)] <- NA
     }
     x
 }
@@ -160,7 +164,9 @@
     return(x)
 }
 
-`remove_labels.declared` <- function(x, user_na_to_na = FALSE, keep_var_label = FALSE) {
+`remove_labels.declared` <- function(
+    x, user_na_to_na = FALSE, keep_var_label = FALSE
+) {
     if (!keep_var_label) {
         label(x) <- NULL
     }
@@ -189,8 +195,9 @@
     sort_levels <- match.arg(sort_levels)
     labelled::to_factor(
       x, levels = levels, ordered = ordered, nolabel_to_na = nolabel_to_na,
-      sort_levels = sort_levels, decreasing = decreasing, drop_unused_labels = drop_unused_labels,
-      user_na_to_na = user_na_to_na, strict = strict, unclass = unclass, ... = ...
+      sort_levels = sort_levels, decreasing = decreasing,
+      drop_unused_labels = drop_unused_labels, user_na_to_na = user_na_to_na,
+      strict = strict, unclass = unclass, ... = ...
     )
 }
 
@@ -199,13 +206,17 @@
     x <- as.haven(x)
     levels <- match.arg(levels)
     labelled::to_character(
-      x, levels = levels, nolabel_to_na = nolabel_to_na, user_na_to_na = user_na_to_na, ... = ...
+      x, levels = levels, nolabel_to_na = nolabel_to_na,
+      user_na_to_na = user_na_to_na, ... = ...
     )
 }
 
 `copy_labels.declared` <- function(from, to, .strict = TRUE) {
     if (mode(from) != mode(to) & .strict) {
-        stop("`from` and `to` should be of same type", call. = FALSE, domain = "R-labelled")
+        stop(
+            "`from` and `to` should be of same type",
+            call. = FALSE, domain = "R-labelled"
+        )
     }
 
     label(to) <- label(from)

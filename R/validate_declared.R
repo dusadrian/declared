@@ -34,7 +34,9 @@
       (is.numeric(x) && is.numeric(na_range))
 
     if (!type_ok || length(na_range) != 2) {
-      stopError_("`na_range` must be a vector of length two of the same type as `x`.")
+      stopError_(
+        "`na_range` must be a vector of length two of the same type as `x`."
+      )
     }
 
     if (any(is.na(na_range))) {

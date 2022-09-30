@@ -2,17 +2,17 @@
 #' Test the presence of empty (undeclared) missing values
 #'
 #' @description
-#' Functions that indicate which elements are empty \code{NA} missing values, in
+#' Functions that indicate which elements are empty `NA` missing values, in
 #' contrast to declared missing values.
 #'
 #' @details
-#' All missing values, declared or undeclared, as stored as regular \code{NA}
-#' values, therefore the base function \code{is_na()} does not differentiate
+#' All missing values, declared or undeclared, as stored as regular `NA`
+#' values, therefore the base function `is_na()` does not differentiate
 #' between them.
 #'
-#' These functions are specifically adapted to objects of class \code{"declared"},
-#' to return a truth value only for those elements that are completely missing with
-#' no reason.
+#' These functions are specifically adapted to objects of class `"declared"`,
+#' to return a truth value only for those elements that are completely missing
+#' with no reason.
 #'
 #' @return
 #' A logical vector.
