@@ -121,7 +121,7 @@
     Code
       is.empty(labelled::val_labels_to_na(x))
     Output
-      [1]  TRUE FALSE FALSE FALSE  TRUE FALSE
+      [1]  TRUE FALSE FALSE FALSE  TRUE  TRUE
 
 ---
 

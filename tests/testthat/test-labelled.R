@@ -101,7 +101,7 @@ test_that("sort_value_labels() works", {
 test_that("coercion to empty NA works", {
   expect_equal(sum(is.empty(labelled::nolabel_to_na(x))), 3)
 
-  expect_equal(sum(is.empty(labelled::val_labels_to_na(x))), 2)
+  expect_equal(sum(is.empty(labelled::val_labels_to_na(x))), 3)
 })
 
 
