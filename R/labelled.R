@@ -144,9 +144,10 @@
 }
 
 `nolabel_to_na.declared` <- function(x) {
-    allval <- unique(x)
-    allval <- allval[!is.na(allval)]
-    nolabel <- setdiff(allval, labels(x))
+    nolabel <- setdiff(
+        na.omit(unique(undeclare(x, drop = TRUE))),
+        labels(x)
+    )
     if (length(nolabel) > 0) {
         x[is.element(x, nolabel)] <- NA
     }

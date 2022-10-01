@@ -667,6 +667,22 @@
                 text = ".Internal(match(x, table, nomatch, incomparables))"
             ))
         }
+
+        do.call("unlockBinding", list(sym = "%in%", env = env))
+
+        env$`%in%` <- function(x, table) {
+            match(x, table, nomatch = 0L) > 0L
+        }
+
+        do.call("unlockBinding", list(sym = "is.element", env = env))
+
+        env$is.element <- function(el, set) {
+            match(
+                as.vector(undeclare(el, drop = TRUE)),
+                as.vector(undeclare(set, drop = TRUE)),
+                0L
+            ) > 0L
+        }
     }
 
     if (unlockEnvironment_(asNamespace("stats"))) {
