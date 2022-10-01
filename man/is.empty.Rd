@@ -22,8 +22,8 @@ values, therefore the base function \code{is_na()} does not differentiate
 between them.
 
 These functions are specifically adapted to objects of class \code{"declared"},
-to return a truth value only for those elements that are completely missing with
-no reason.
+to return a truth value only for those elements that are completely missing
+with no reason.
 }
 \examples{
 

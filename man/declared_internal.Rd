@@ -36,6 +36,7 @@ hasTag_(x, tag = NULL)
 getTag_(x)
 }
 \description{
-Functions to be used internally, only by developers and contributors.
+Functions to be used internally, only by developers and
+contributors.
 }
 \keyword{internal}

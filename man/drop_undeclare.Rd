@@ -32,8 +32,8 @@ numeric values, and drops all attributes related to missing values:
 \code{na_values}, \code{na_range} and \code{na_index}, and it preserves the labels referring
 to the missing values.
 
-The result can be a regular vector (dropping all attributes, including the class
-"declared") by activating the argument \code{drop}.
+The result can be a regular vector (dropping all attributes, including the
+class "declared") by activating the argument \code{drop}.
 
 Function \code{drop_na()} transforms the declared missing values in regular empty
 NAs, and the labels referring to the missing values are deleted by default.

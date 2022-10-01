@@ -19,8 +19,8 @@ missing_values(x) <- value
 \item{x}{A vector.}
 
 \item{value}{Any vector of values that should be declared as missing
-(for \code{missing_values}) or a numeric vector of length two giving the (inclusive)
-extents of the range of missing values (for \code{missing_range}).}
+(for \code{missing_values}) or a numeric vector of length two giving the
+(inclusive) extents of the range of missing values (for \code{missing_range}).}
 }
 \value{
 \code{missing_values()} will return a vector of one or more values.

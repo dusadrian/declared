@@ -1,3 +1,7 @@
+Version 0.19
+    o More effort on meeting Good Practices for pkgcheck()
+    o Bug fix hapenning only on Fedora, for the base function %in% and match()
+
 Version 0.18
     o Improved method for rbind() data frames, taking care of declared variables
     o Function value_labels() has been replaced with the generic base function

@@ -42,7 +42,8 @@ w_table(
 w_var(x, wt = NULL, method = NULL, na.rm = TRUE)
 }
 \arguments{
-\item{x}{A numeric vector for summaries, or declared / factor for frequency tables}
+\item{x}{A numeric vector for summaries, or declared / factor for frequency
+tables}
 
 \item{wt}{A numeric vector of frequency weights}
 
@@ -56,9 +57,11 @@ taken as the nearest endpoint.}
 
 \item{probs}{Numeric vector of probabilities with values in [0,1]}
 
-\item{method}{Character, specifying how the result is scaled, see 'Details' below.}
+\item{method}{Character, specifying how the result is scaled, see 'Details'
+below.}
 
-\item{y}{An optional variable, to create crosstabs; must have the same length as x}
+\item{y}{An optional variable, to create crosstabs; must have the same length
+as x}
 
 \item{values}{Logical, print the values in the table rows}
 
@@ -67,41 +70,42 @@ if any missing values are present}
 
 \item{observed}{Logical, print the observed categories only}
 
-\item{margin}{Numeric, indicating the margin to calculate crosstab proportions:
-0 from the total, 1 from row totals and 2 from column totals}
+\item{margin}{Numeric, indicating the margin to calculate crosstab
+proportions: 0 from the total, 1 from row totals and 2 from column totals}
 }
 \value{
 A vector of (weighted) values.
 }
 \description{
-Functions to compute weighted tables or summaries, based on a vector of frequency
-weights. These are reimplementations of various existing functions, adapted to
-objects of class \code{"declared"} (see Details below)
+Functions to compute weighted tables or summaries, based on a vector of
+frequency weights. These are reimplementations of various existing functions,
+adapted to objects of class \code{"declared"} (see Details below)
 }
 \details{
 Weighted summaries
 
-A frequency table is usually performed for a categorical variable, displaying the
-frequencies of the respective categories. Note that general variables containing
-text are not necessarily factors, despite having a small number of characters.
+A frequency table is usually performed for a categorical variable, displaying
+the frequencies of the respective categories. Note that general variables
+containing text are not necessarily factors, despite having a small number of
+characters.
 
 A general table of frequencies, using the base function \code{table()}, ignores
-the defined missing values (which are all stored as NAs). The reimplementation
-of this function in \code{w_table()} takes care of this detail, and presents
-frequencies for each separately defined missing values. Similar reimplementations
-for the other functions have the same underlying objective.
+the defined missing values (which are all stored as NAs). The
+reimplementation of this function in \code{w_table()} takes care of this detail,
+and presents frequencies for each separately defined missing values. Similar
+reimplementations for the other functions have the same underlying objective.
 
-It is also possible to perform a frequency table for numerical variables, if the
-number of values is limited (an arbitrary and debatable upper limit of 15 is
-used). An example of such variable can be the number of children, where each
-value can be interpreted as a class, containing a single value (for instance 0
-meaning the category of people with no children).
+It is also possible to perform a frequency table for numerical variables, if
+the number of values is limited (an arbitrary and debatable upper limit of 15
+is used). An example of such variable can be the number of children, where
+each value can be interpreted as a class, containing a single value (for
+instance 0 meaning the category of people with no children).
 
 Objects of class \code{declared} are not pure categorical variables (R factors)
-but they are nevertheless interpreted similarly to factors, to allow producing
-frequency tables. Given the high similarity with package \bold{\code{haven}},
-objects of class \code{haven_labelled_spss} are automatically coerced to objects
-of class \code{declared} and treated accordingly.
+but they are nevertheless interpreted similarly to factors, to allow
+producing frequency tables. Given the high similarity with package
+\strong{\code{haven}}, objects of class \code{haven_labelled_spss} are automatically
+coerced to objects of class \code{declared} and treated accordingly.
 
 The argument \code{values} makes sense only when the input is of family class
 \code{declared}, otherwise for regular (base R) factors the values are
@@ -110,43 +114,42 @@ just a sequence of numbers.
 The later introduced argument \code{observed} is useful in situations when a
 variable has a very large number of potential values, and a smaller subset of
 actually observed ones. As an example, the variable \dQuote{Occupation} has
-hundreds of possible values in the ISCO08 codelist, and not all of them might be
-actually observed. When activated, this argument restricts the printed frequency
-table to the subset of observed values only.
+hundreds of possible values in the ISCO08 codelist, and not all of them might
+be actually observed. When activated, this argument restricts the printed
+frequency table to the subset of observed values only.
 
 The argument \code{method} can be one of \code{"unbiased"} or \code{"ML"}.
 
-When this is set to \code{"unbiased"}, the result is an unbiased estimate using
-Bessel's correction. When this is set to \code{"ML"}, the result is the
+When this is set to \code{"unbiased"}, the result is an unbiased estimate
+using Bessel's correction. When this is set to \code{"ML"}, the result is the
 maximum likelihood estimate for a Gaussian distribution.
 
 The argument \code{wt} refers only to frequency weights. Users should be
-aware of the differences between frequency weights, analytic weights, probability
-weights, design weights, post-stratification weights etc. For purposes of
-inferential testing, Thomas Lumley's package \bold{\code{survey}} should be
-employed.
+aware of the differences between frequency weights, analytic weights,
+probability weights, design weights, post-stratification weights etc. For
+purposes of inferential testing, Thomas Lumley's package \strong{\code{survey}}
+should be employed.
 
 If no frequency weights are provided, the result is identical to the
 corresponding base functions.
 
 The function \code{w_quantile()} extensively borrowed ideas from packages
-\bold{\code{stats}} and \bold{\code{Hmisc}}, to ensure a constant interpolation
-that would produce the same quantiles if no weights are provided or if all
+\strong{\code{stats}} and \strong{\code{Hmisc}}, to ensure a constant interpolation that would
+produce the same quantiles if no weights are provided or if all
 weights are equal to 1.
 
 Other arguments can be passed to the stats function \code{quantile()} via the
 three dots \code{...} argument, and their extensive explanation is found in the
 corresponding stats function's help page.
 
-For all functions, the argument \code{na.rm} refers to the empty missing
-values and its default is set to TRUE. The declared missing values are
-automatically eliminated from the summary statistics, even if this argument is
-deactivated.
+For all functions, the argument \code{na.rm} refers to the empty missing values
+and its default is set to TRUE. The declared missing values are automatically
+eliminated from the summary statistics, even if this argument is deactivated.
 
 The function \code{w_mode()} returns the weighted mode of a variable. Unlike the
 other functions where the prefix \code{w_} signals a weighted version of the
-base function with the same name, this has nothing to do with the base function
-\code{mode()} which refers to the storage mode / type of an R object.
+base function with the same name, this has nothing to do with the base
+function \code{mode()} which refers to the storage mode / type of an R object.
 }
 \examples{
 set.seed(215)

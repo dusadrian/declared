@@ -28,8 +28,8 @@ extents of the range of missing values (for \code{label}).}
 \code{label()} will return a single character string.
 }
 \description{
-Functions to extract information about the declared variable / value labels, or
-to declare such values if they are present in the data.
+Functions to extract information about the declared variable / value labels,
+or to declare such values if they are present in the data.
 }
 \details{
 The function \code{labels()} is a adaptation of the base function to the objects

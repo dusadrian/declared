@@ -22,7 +22,8 @@ declared(
 is.declared(x)
 }
 \arguments{
-\item{x}{A numeric vector to label, or a declared labelled vector (for \code{undeclare})}
+\item{x}{A numeric vector to label, or a declared labelled vector
+(for \code{undeclare})}
 
 \item{...}{Other arguments used by various other methods}
 
@@ -30,7 +31,7 @@ is.declared(x)
 as \code{x}. Unlike factors, labels don't need to be exhaustive: only a fraction
 of the values might be labelled}
 
-\item{na_values}{A vector of values that should also be considered as missing.}
+\item{na_values}{A vector of values that should also be considered as missing}
 
 \item{na_range}{A numeric vector of length two giving the (inclusive) extents
 of the range. Use \code{-Inf} and \code{Inf} if you want the range to be
@@ -40,7 +41,8 @@ open ended}
 
 \item{measurement}{Optional, user specified measurement level}
 
-\item{llevels}{Logical, when \code{x} is a factor only use those levels that have labels}
+\item{llevels}{Logical, when \code{x} is a factor only use those levels that have
+labels}
 }
 \value{
 A labelled vector of class "declared".
@@ -51,13 +53,13 @@ The labelled vectors are mainly used to analyse social science data,
 and the missing values declaration is an important step in the analysis.
 }
 \details{
-The \code{declared} objects are very similar to the \code{haven_labelled_spss}
-objects from package \bold{haven}. It has exactly the same arguments, but it
-features a fundamental difference in the treatment of (declared) missing values.
+The \code{declared} objects are very similar to the \code{haven_labelled_spss} objects
+from package \bold{haven}. It has exactly the same arguments, but it features
+a fundamental difference in the treatment of (declared) missing values.
 
-In package \bold{haven}, existing values are treated as if they were missing. By
-contrast, in package \bold{declared} the NA values are treated as if they were
-existing values.
+In package \bold{haven}, existing values are treated as if they were missing.
+By contrast, in package \bold{declared} the NA values are treated as if they
+were existing values.
 
 This difference is fundamental and points to an inconsistency in package
 \bold{haven}: while existing values can be identified as missing using the
@@ -70,26 +72,26 @@ Consequently, the existing values are interpreted as missing only by package
 valid values.
 
 Package \bold{declared} approaches the problem in exactly the opposite way:
-instead of treating existing values as missing, it treats (certain) NA values as
-existing. It does that by storing an attribute containing the indices of those
-NA values which are to be treated as declared missing values, and it refreshes
-this attribute each time the declared object is changed.
+instead of treating existing values as missing, it treats (certain) NA values
+as existing. It does that by storing an attribute containing the indices of
+those NA values which are to be treated as declared missing values, and it
+refreshes this attribute each time the declared object is changed.
 
-This is a trade off and has important implications when subsetting datasets: all
-declared variables get this attribute refreshed, which consumes some time
+This is a trade off and has important implications when subsetting datasets:
+all declared variables get this attribute refreshed, which consumes some time
 depending on the number of variables in the data.
 
 The generic function \code{as.declared()} attempts to coerce only the compatible
-types of objects, namely \code{haven_labelled} and \code{factor}s. Dedicated
-class methods can be written for any other type of object, and users are free to
-write their own. To end of with a declared object, additional metadata is needed
-such as value labels, which values should be treated as missing etc.
+types of objects, namely \code{haven_labelled} and \code{factor}s. Dedicated class
+methods can be written for any other type of object, and users are free to
+write their own. To end of with a declared object, additional metadata is
+needed such as value labels, which values should be treated as missing etc.
 
-The measurement level is optional and, for the moment, purely aesthetic. It might
-however be useful to (automatically) determine if a declared object is suitable
-for a certain statistical analysis, for instance regression requires quantitative
-variables, while some declared objects are certainly categorical despite using
-numbers to denote categories.
+The measurement level is optional and, for the moment, purely aesthetic. It
+might however be useful to (automatically) determine if a declared object is
+suitable for a certain statistical analysis, for instance regression requires
+quantitative variables, while some declared objects are certainly categorical
+despite using numbers to denote categories.
 
 It distinguishes between \code{"categorial"} and \code{"quantitative"} types of
 variables, and additionally recognizes \code{"nominal"} and \code{"ordinal"} as
@@ -112,11 +114,13 @@ x > 0
 
 x == -1
 
-# Values are actually placeholder for categories, so labels work as if they were factors:
+# Values are actually placeholder for categories,
+# so labels work as if they were factors:
 x == "DK"
 
 
-# when newly added values are already declared as missing, they are automatically coerced
+# when newly added values are already declared as missing,
+# they are automatically coerced
 c(x, 2, -1)
 
 # switch NAs with their original values
