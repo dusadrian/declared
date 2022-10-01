@@ -27,6 +27,12 @@ fo <- factor(
   ordered = TRUE
 )
 
+x2 <- declared(
+  c(-1, 1:5, -2),
+  labels = c(Good = 1, Bad = 5, DK = -1, Other = -2),
+  na_range = c(-5, -1)
+)
+
 dfd <- data.frame(x, hx, fx, fo)
 
 test_that("onLoad functions work", {
@@ -143,6 +149,12 @@ test_that("onLoad functions work", {
 
   dd <- data.frame(a = factor(1:2), b = 3:4, c = 5:6)
   test <- rbind(dd, list(1, 1, 1))
+
+  expect_equal(sum(is.element(x, labels(x))), 3L)
+  expect_equal(sum(x %in% labels(x)), 3L)
+  expect_equal(match(x, labels(x)), c(1L, NA, NA, NA, 2L, 3L))
+  expect_equal(sum(is.na(match(x, x2))), 0L)
+  expect_equal(sum(is.na(match(x2, x))), 1L)
 })
 
 # to test if S3 methods are (re)registered once a package is (re)loaded
@@ -167,4 +179,10 @@ test_that("tests have the same output", {
   expect_snapshot(order(x))
   expect_snapshot(as.factor(x, levels = "values"))
   expect_snapshot(as.factor(x, levels = "both"))
+  expect_snapshot(is.element(x, labels(x)))
+  expect_snapshot(x %in% labels(x))
+  expect_snapshot(match(x, labels(x)))
+  expect_snapshot(x2)
+  expect_snapshot(match(x, x2))
+  expect_snapshot(match(x2, x))
 })

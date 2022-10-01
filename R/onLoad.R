@@ -659,9 +659,8 @@
         env$match <- function(
             x, table, nomatch = NA_integer_, incomparables = NULL
         ) {
-            if (is.declared(x)) {
-                attributes(x) <- NULL
-            }
+            x <- undeclare(x, drop = TRUE)
+            table <- undeclare(table, drop = TRUE)
 
             eval(parse(
                 text = ".Internal(match(x, table, nomatch, incomparables))"
@@ -671,7 +670,12 @@
         do.call("unlockBinding", list(sym = "%in%", env = env))
 
         env$`%in%` <- function(x, table) {
-            match(x, table, nomatch = 0L) > 0L
+            x <- undeclare(x, drop = TRUE)
+            table <- undeclare(table, drop = TRUE)
+
+            eval(parse(
+                text = ".Internal(match(x, table, 0L, NULL))"
+            )) > 0L
         }
 
         do.call("unlockBinding", list(sym = "is.element", env = env))

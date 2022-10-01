@@ -130,3 +130,54 @@
       [1] [1] Good [2] 2    [3] 3    [4] 4    [5] Bad  <NA>    
       Levels: [1] Good [2] 2 [3] 3 [4] 4 [5] Bad
 
+---
+
+    Code
+      is.element(x, labels(x))
+    Output
+      [1]  TRUE FALSE FALSE FALSE  TRUE  TRUE
+
+---
+
+    Code
+      x %in% labels(x)
+    Output
+      [1]  TRUE FALSE FALSE FALSE  TRUE  TRUE
+
+---
+
+    Code
+      match(x, labels(x))
+    Output
+      [1]  1 NA NA NA  2  3
+
+---
+
+    Code
+      x2
+    Output
+      <declared<integer>[7]>
+      [1] NA(-1)      1      2      3      4      5 NA(-2)
+      Missing range:  [-5, -1]
+      
+      Labels:
+       value label
+           1  Good
+           5   Bad
+          -1    DK
+          -2 Other
+
+---
+
+    Code
+      match(x, x2)
+    Output
+      [1] 2 3 4 5 6 1
+
+---
+
+    Code
+      match(x2, x)
+    Output
+      [1]  6  1  2  3  4  5 NA
+

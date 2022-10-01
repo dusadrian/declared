@@ -1,5 +1,6 @@
 Version 0.20
-    o Base function is.element() now recognizes declared objects
+    o Base functions is.element(), %in% and match() now recognize declared types
+      of objects
 
 Version 0.19
     o More effort on meeting Good Practices for pkgcheck()
