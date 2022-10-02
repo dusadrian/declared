@@ -1,10 +1,10 @@
 Version 0.20
-    o Base functions is.element(), %in% and match() now recognize declared types
-      of objects
+    o Base functions is.element(), %in% and match() now properly recognize
+      declared objects
 
 Version 0.19
     o More effort on meeting Good Practices for pkgcheck()
-    o Bug fix hapenning only on Fedora, for the base function %in% and match()
+    o Bug fix hapenning on r-devel, to silence CRAN errors
 
 Version 0.18
     o Improved method for rbind() data frames, taking care of declared variables

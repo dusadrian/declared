@@ -101,95 +101,95 @@ NULL
 
 #' @rdname declared
 #' @export
-declared <- function(
+declared <- function (
     x, labels = NULL, na_values = NULL, na_range = NULL, label = NULL,
     measurement = NULL, llevels = FALSE, ...
 ) {
-  UseMethod("declared")
+  UseMethod ("declared")
 }
 
 
 #' @export
-declared.default <- function(
+declared.default <- function (
     x, labels = NULL, na_values = NULL, na_range = NULL, label = NULL,
     measurement = NULL, llevels = FALSE, ...
 ) {
-  if (is.factor(x)) {
-    nms <- levels(x)
-    if (is.null(labels)) {
-      labels <- seq(length(nms))
-      names(labels) <- nms
+  if (is.factor (x)) {
+    nms <- levels (x)
+    if (is.null (labels)) {
+      labels <- seq (length (nms))
+      names (labels) <- nms
     }
 
-    if (isTRUE(llevels)) {
-      labels <- labels[!possibleNumeric_(names(labels), each = TRUE)]
+    if (isTRUE (llevels)) {
+      labels <- labels[!possibleNumeric_ (names (labels), each = TRUE)]
     }
 
-    wnms <- which(is.element(na_values, nms))
+    wnms <- which (is.element (na_values, nms))
 
-    if (length(wnms) > 0) {
+    if (length (wnms) > 0) {
       for (i in wnms) {
-        na_values[i] <- which(nms == na_values[i])
+        na_values[i] <- which (nms == na_values[i])
       }
-      if (possibleNumeric_(na_values)) {
-        na_values <- asNumeric_(na_values)
+      if (possibleNumeric_ (na_values)) {
+        na_values <- asNumeric_ (na_values)
       }
     }
 
-    x <- as.numeric(x)
+    x <- as.numeric (x)
   }
 
   xchar <- FALSE
 
-  if (!is.null(labels)) {
-    nms <- names(labels)
-    if (possibleNumeric_(labels) && (possibleNumeric_(x) | all(is.na(x)))) {
-      labels <- asNumeric_(labels)
+  if (!is.null (labels)) {
+    nms <- names (labels)
+    if (possibleNumeric_ (labels) && (possibleNumeric_ (x) | all (is.na (x)))) {
+      labels <- asNumeric_ (labels)
     }
     else {
-      x <- as.character(x)
-      labels <- as.character(labels)
+      x <- as.character (x)
+      labels <- as.character (labels)
       xchar <- TRUE
       na_range <- NULL
     }
-    names(labels) <- nms
+    names (labels) <- nms
   }
 
-  if (!is.null(na_values)) {
-    if (possibleNumeric_(na_values) & !xchar) {
-      na_values <- asNumeric_(na_values)
+  if (!is.null (na_values)) {
+    if (possibleNumeric_ (na_values) & !xchar) {
+      na_values <- asNumeric_ (na_values)
     }
     else {
-      na_values <- as.character(na_values)
+      na_values <- as.character (na_values)
     }
   }
 
-  if ((possibleNumeric_(x) | all(is.na(x))) & !xchar) {
-    x <- asNumeric_(x)
+  if ((possibleNumeric_ (x) | all (is.na (x))) & !xchar) {
+    x <- asNumeric_ (x)
   }
   else {
-    x <- as.character(x)
+    x <- as.character (x)
   }
 
-  attributes(x) <- NULL
+  attributes (x) <- NULL
 
-  validate_declared(x, labels, label, na_values, na_range)
+  validate_declared (x, labels, label, na_values, na_range)
 
-  misvals <- all_missing_values(x, na_values, na_range, labels)
+  misvals <- all_missing_values (x, na_values, na_range, labels)
 
-  if (!is.null(na_range)) {
-    na_range <- sort(na_range)
+  if (!is.null (na_range)) {
+    na_range <- sort (na_range)
   }
 
-  attr(x, "xchar") <- xchar
-  missingValues(x)[is.element(x, misvals)] <- x[is.element(x, misvals)]
+  attr (x, "xchar") <- xchar
+  missingValues (x)[is.element (x, misvals)] <- x[is.element (x, misvals)]
 
-  attr(x, "na_values") <- na_values
-  attr(x, "na_range") <- na_range
-  attr(x, "labels") <- labels
-  attr(x, "label") <- label
+  attr (x, "na_values") <- na_values
+  attr (x, "na_range") <- na_range
+  attr (x, "labels") <- labels
+  attr (x, "label") <- label
 
-  attr(x, "measurement") <- check_measurement(measurement)
+  attr (x, "measurement") <- check_measurement (measurement)
 
-  return(x)
+  return (x)
 }

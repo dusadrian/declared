@@ -11,73 +11,75 @@
     x, wt = NULL, trim = 0, na.rm = TRUE
 ) {
 
-    if (inherits(x, "haven_labelled")) {
-        x <- as.declared(x)
+    if (inherits (x, "haven_labelled")) {
+        x <- as.declared (x)
     }
 
-    if (!(is.atomic(x) && (is.numeric(x) || is.complex(x) || is.logical(x)))) {
-        warning("'x' should be a numerical / logical vector: returning NA")
-        return(NA_real_)
+    if (
+        !(is.atomic (x) && (is.numeric (x) || is.complex (x) || is.logical (x)))
+    ) {
+        warning ("'x' should be a numerical / logical vector: returning NA")
+        return (NA_real_)
     }
 
-    if (inherits(x, "declared")) {
-        na_index <- attr(x, "na_index")
-        if (!is.null(na_index)) {
+    if (inherits (x, "declared")) {
+        na_index <- attr (x, "na_index")
+        if (!is.null (na_index)) {
             wt <- wt[-na_index]
             x <- x[-na_index]
         }
     }
 
-    if (is.null(wt)) {
-        return(mean(x, na.rm = na.rm))
+    if (is.null (wt)) {
+        return (mean (x, na.rm = na.rm))
     }
 
-    if (!(is.atomic(wt) && all(is.finite(na.omit(wt))))) {
-        stopError_("'wt' should be an atomic vector with finite values.")
+    if (!(is.atomic (wt) && all (is.finite (na.omit (wt))))) {
+        stopError_ ("'wt' should be an atomic vector with finite values.")
     }
 
-    if (length(x) != length(wt)) {
-        stopError_("Lengths of 'x' and 'wt' differ.")
+    if (length (x) != length (wt)) {
+        stopError_ ("Lengths of 'x' and 'wt' differ.")
     }
 
-    ok <- !is.na(x + wt)
+    ok <- !is.na (x + wt)
 
     if (na.rm) {
         x <- x[ok]
         wt <- wt[ok]
     }
-    else if (any(!ok)) {
-        return(NA_real_)
+    else if (any (!ok)) {
+        return (NA_real_)
     }
 
-    sumwt <- sum(wt)
+    sumwt <- sum (wt)
 
-    if (any(wt < 0) || sumwt == 0) {
-        stopError_("'wt' must be non-negative and not all zero")
+    if (any (wt < 0) || sumwt == 0) {
+        stopError_ ("'wt' must be non-negative and not all zero")
     }
 
-    n <- length(x)
+    n <- length (x)
 
     if (trim > 0 & n) {
-        if (is.complex(x)) {
-            stopError_("Trimmed means are not defined for complex data")
+        if (is.complex (x)) {
+            stopError_ ("Trimmed means are not defined for complex data")
         }
 
         if (trim >= 0.5) {
-            return(w_median(x, wt = wt))
+            return (w_median (x, wt = wt))
         }
 
-        lo <- floor(n * trim) + 1
+        lo <- floor (n * trim) + 1
         hi <- n + 1 - lo
 
         # when this will be implemented in the base package:
-        # ox <- sort.list(x, partial = unique(c(lo, hi)))
-        lohi <- order(wt * x)[lo:hi]
+        # ox <- sort.list (x, partial = unique (c (lo, hi)))
+        lohi <- order (wt * x)[lo:hi]
 
         x <- x[lohi]
         wt <- wt[lohi]
-        sumwt <- sum(wt)
+        sumwt <- sum (wt)
     }
 
-    return(sum(wt * x)/sumwt)
+    return (sum (wt * x)/sumwt)
 }

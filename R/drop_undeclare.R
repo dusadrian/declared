@@ -43,99 +43,99 @@
 #' @param drop_labels Logical, drop the labels for the declared missing values
 #' @param ... Other internal arguments
 #' @export
-`undeclare` <- function(x, drop = FALSE, ...) {
-  UseMethod("undeclare")
+`undeclare` <- function (x, drop = FALSE, ...) {
+  UseMethod ("undeclare")
 }
 
 
 #' @export
-`undeclare.default` <- function(x, drop = FALSE, ...) {
+`undeclare.default` <- function (x, drop = FALSE, ...) {
   # do nothing
-  return(x)
+  return (x)
 }
 
 
 #' @export
-`undeclare.declared` <- function(x, drop = FALSE, ...) {
-  na_index <- attr(x, "na_index")
-  attrx <- attributes(x)
+`undeclare.declared` <- function (x, drop = FALSE, ...) {
+  na_index <- attr (x, "na_index")
+  attrx <- attributes (x)
 
   # this is necessary to replace those values
   # (because of the "[<-.declared" method)
-  attributes(x) <- NULL # or x <- unclass(x), but I find this cleaner
+  attributes (x) <- NULL # or x <- unclass (x), but I find this cleaner
 
-  if (!is.null(na_index)) {
-    x[na_index] <- names(na_index)
-    x <- coerceMode_(x)
+  if (!is.null (na_index)) {
+    x[na_index] <- names (na_index)
+    x <- coerceMode_ (x)
   }
 
   attrx$na_index <- NULL
   attrx$na_values <- NULL
   attrx$na_range <- NULL
 
-  if (isFALSE(drop)) {
-    attributes(x) <- attrx
+  if (isFALSE (drop)) {
+    attributes (x) <- attrx
   }
   
-  return(x)
+  return (x)
 }
 
 
 #' @export
-`undeclare.data.frame` <- function(x, drop = FALSE, ...) {
-  declared <- vapply(x, is.declared, logical(1))
-  x[declared] <- lapply(x[declared], undeclare, drop = drop)
+`undeclare.data.frame` <- function (x, drop = FALSE, ...) {
+  declared <- vapply (x, is.declared, logical (1))
+  x[declared] <- lapply (x[declared], undeclare, drop = drop)
 
-  return(x)
+  return (x)
 }
 
 
 #' @rdname drop_undeclare
 #' @export
-`drop_na` <- function(x, drop_labels = TRUE) {
-  UseMethod("drop_na")
+`drop_na` <- function (x, drop_labels = TRUE) {
+  UseMethod ("drop_na")
 }
 
 
 #' @export
-`drop_na.default` <- function(x, drop_labels = TRUE) {
+`drop_na.default` <- function (x, drop_labels = TRUE) {
   # do nothing
   x
 }
 
 
 #' @export
-`drop_na.haven_labelled_spss` <- function(x, drop_labels = TRUE) {
-  attrx <- attributes(x)
-  x[is.element(x, attrx$na_values)] <- NA
-  if (isTRUE(drop_labels)) {
-    attrx$labels <- attrx$labels[!is.element(attrx$labels, attrx$na_values)]
+`drop_na.haven_labelled_spss` <- function (x, drop_labels = TRUE) {
+  attrx <- attributes (x)
+  x[is.element (x, attrx$na_values)] <- NA
+  if (isTRUE (drop_labels)) {
+    attrx$labels <- attrx$labels[!is.element (attrx$labels, attrx$na_values)]
   }
   attrx$na_index <- NULL
   attrx$na_values <- NULL
   attrx$na_range <- NULL
-  attributes(x) <- attrx
-  return(x)
+  attributes (x) <- attrx
+  return (x)
 }
 
 
 #' @export
-`drop_na.declared` <- function(x, drop_labels = TRUE) {
-  attrx <- attributes(x)
-  if (isTRUE(drop_labels)) {
-    attrx$labels <- attrx$labels[!is.element(attrx$labels, attrx$na_values)]
+`drop_na.declared` <- function (x, drop_labels = TRUE) {
+  attrx <- attributes (x)
+  if (isTRUE (drop_labels)) {
+    attrx$labels <- attrx$labels[!is.element (attrx$labels, attrx$na_values)]
   }
   attrx$na_index <- NULL
   attrx$na_values <- NULL
   attrx$na_range <- NULL
-  attributes(x) <- attrx
-  return(x)
+  attributes (x) <- attrx
+  return (x)
 }
 
 
 #' @export
-`drop_na.data.frame` <- function(x, drop_labels = TRUE) {
-  declared <- vapply(x, is.declared, logical(1))
-  x[declared] <- lapply(x[declared], drop_na, drop_labels = drop_labels)
-  return(x)
+`drop_na.data.frame` <- function (x, drop_labels = TRUE) {
+  declared <- vapply (x, is.declared, logical (1))
+  x[declared] <- lapply (x[declared], drop_na, drop_labels = drop_labels)
+  return (x)
 }

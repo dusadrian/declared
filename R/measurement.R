@@ -65,30 +65,30 @@
 #'
 #' @param x A declared vector.
 #' @export
-`measurement` <- function(x) {
-    UseMethod("measurement")
+`measurement` <- function (x) {
+    UseMethod ("measurement")
 }
 
 
 #' @export
-`measurement.default` <- function(x) {
+`measurement.default` <- function (x) {
     # do nothing
     NULL
 }
 
 
 #' @export
-`measurement.declared` <- function(x) {
-    m <- attr(x, "measurement")
-    if (is.null(m)) {
+`measurement.declared` <- function (x) {
+    m <- attr (x, "measurement")
+    if (is.null (m)) {
         m <- "Unspecified"
         l_m <- likely_measurement(x)
-        if (!identical(l_m, "")) {
-            m <- paste0(m, ", but likely ", paste(l_m, collapse = " "))
+        if (!identical (l_m, "")) {
+            m <- paste0 (m, ", but likely ", paste (l_m, collapse = " "))
         }
     }
 
-    return(m)
+    return (m)
 }
 
 
@@ -96,20 +96,20 @@
 #' @param value A single character string of measurement levels,
 #' separated by commas.
 #' @export
-`measurement<-` <- function(x, value) {
-  UseMethod("measurement<-")
+`measurement<-` <- function (x, value) {
+  UseMethod ("measurement<-")
 }
 
 
 #' @export
-`measurement<-.default` <- function(x, value) {
+`measurement<-.default` <- function (x, value) {
     # do nothing
     x
 }
 
 
 #' @export
-`measurement<-.declared` <- function(x, value) {
-    attr(x, "measurement") <- check_measurement(value)
-    return(x)
+`measurement<-.declared` <- function (x, value) {
+    attr (x, "measurement") <- check_measurement (value)
+    return (x)
 }
