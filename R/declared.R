@@ -147,8 +147,8 @@ declared.default <- function (
       labels <- asNumeric_ (labels)
     }
     else {
-      x <- as.character (x)
-      labels <- as.character (labels)
+      x <- as.character (x, values = TRUE)
+      labels <- as.character (labels, values = TRUE)
       xchar <- TRUE
       na_range <- NULL
     }
@@ -160,7 +160,7 @@ declared.default <- function (
       na_values <- asNumeric_ (na_values)
     }
     else {
-      na_values <- as.character (na_values)
+      na_values <- as.character (na_values, values = TRUE)
     }
   }
 
@@ -168,7 +168,7 @@ declared.default <- function (
     x <- asNumeric_ (x)
   }
   else {
-    x <- as.character (x)
+    x <- as.character (x, values = TRUE)
   }
 
   attributes (x) <- NULL
