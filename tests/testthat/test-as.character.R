@@ -23,6 +23,22 @@ test_that("as.character.declared() works", {
   )
 })
 
+cx <- declared(
+  c(letters[1:5], "z"),
+  labels = c(Good = "a", Bad = "e", DK = "z"),
+  na_values = "z"
+)
+
+cx2 <- cx
+missing_values(cx2) <- NULL
+missing_values(cx2) <- "z"
+cx2[2] <- "f"
+cx2[2] <- "b"
+test_that("changing (missing) values does not alter the original values", {
+  expect_equal(cx, cx2)
+})
+
+
 test_that("tests have the same output", {
   expect_snapshot(x)
   expect_snapshot(as.character(x))

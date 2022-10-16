@@ -152,6 +152,7 @@ test_that("onLoad functions work", {
 
   expect_equal(sum(is.element(x, labels(x))), 3L)
   expect_equal(sum(x %in% labels(x)), 3L)
+  expect_equal(is.element(x, labels(x)), x %in% labels(x))
   expect_equal(match(x, labels(x)), c(1L, NA, NA, NA, 2L, 3L))
   expect_equal(sum(is.na(match(x, x2))), 0L)
   expect_equal(sum(is.na(match(x2, x))), 1L)
