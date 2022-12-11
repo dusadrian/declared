@@ -35,7 +35,7 @@ x2 <- declared(
 
 The proposed method to declare missing values is unique in the R ecosystem.
 Differentiating between empty and declared missing values opens the door to a
-new set of challenges for which base the R does not have built in functionality.
+new set of challenges for which base the R does not have built-in functionality.
 
 For instance, the declared missing values can be compared against both the
 original values and their labels:
@@ -55,16 +55,15 @@ x2 <- c(x2, -91)
 x2
 ```
 
-Most functions are designed to be as similar as possible, for instance
-`labels()`{.R} to to retrieve, or add / change value labels:
+Most functions are designed to be as similar as possible, for instance,
+`labels()`{.R} to retrieve or add/change value labels:
 
 ```{r}
 labels(x2) <- c("Does not know" = -92, "Not responded" = -91)
 x2
 ```
 
-The value -92 is now properly labelled, and it can further be declared as
-missing. Such declarations do not necessarily have to use the main function
+The value `-92` is now properly labelled, and can further be declared missing. Such declarations do not necessarily have to use the main function
 `declared()`{.R}, due to the separate functions `missing_values()`{.R} and
 `missing_range()`{.R}:
 
@@ -80,7 +79,7 @@ following functions are of interest: `undeclare()`{.R}, `as.haven()`{.R} and
 
 The function `undeclare()`{.R} replaces the NAs with their declared missing values.
 The result is still an object of class `"declared"`{.R}, but all missing values (and
-missing range) are stripped off the vector and values are presented as they have
+missing range) are stripped off the vector, and values are presented as they have
 been collected. All other attributes of interest (variable and value labels) are
 retained and printed accordingly. Activating the argument `drop`{.R} eliminates all
 classes and attributes, returning a regular R object:
@@ -140,13 +139,9 @@ sort(x3, na.last = TRUE, decreasing = TRUE, empty.last = FALSE)
 ```
 
 All types of variables (categorical and numerical) can have declared missing
-values. There are always situations values are not missing randomly, but with a
-specific reason. In social research, respondents often can not, or do not want
-to provide an answer for a certain question, be it categories of opinions of
-pure numerical answers like age, income etc.
+values. There are situations when values are not missing randomly but with a specific reason. In social research, respondents often can not or do not want to provide an answer for a certain question, be it categories of opinions or pure numerical answers like age, income, etc.
 
-In base R there is a clear distinction between numerical and categorical
-variables. For the later, R provides a special type of object called `factor`{.R}.
+Base R has a clear distinction between numerical and categorical variables. For the latter, R provides a special type of object called `factor`{.R}.
 The following object simulates such a categorical variable, for instance
 political orientation:
 
@@ -172,9 +167,7 @@ x5 <- factor(
 x5
 ```
 
-The base factors provide no possibility to assign specific values for the specific
-categories, and most importantly they do not differentiate between valid values
-and (declared) missing values. To make the functionality consistent with the base
+The base factors provide no possibility to assign specific values for the specific categories, and most importantly, they do not differentiate between valid values and (declared) missing values. To make the functionality consistent with the base
 treatment of NA values, coercing to factors defaults to dropping the declared
 missing values because of the default value of the argument `drop_na`:
 
@@ -234,10 +227,7 @@ as.character(undeclare(x4))
 as.character(x4, drop_na = FALSE)
 ```
 
-
-The base factors store the categories using numeric values, and this is also
-the most often scenario for the declared objects. But this is not at all
-mandatory, as the declared objects are also able to ingest character objects:
+The base factors store the categories using numeric values, which is also the most often scenario for the declared objects. But this is not at all mandatory, as the declared objects are also able to ingest character objects:
 
 ```{r}
 x6 <- declared(
@@ -253,7 +243,7 @@ x6 <- declared(
 x6
 ```
 
-Either as character, numeric or categorical, it is possible to declare and use
+Either as a character, numeric or categorical, it is possible to declare and use
 special types of missing values, employing this new object type of class
 `"declared"`{.R}.
 
