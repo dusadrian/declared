@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">declared</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.17.8</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -88,7 +88,7 @@
 <p>The proposed method to declare missing values is unique in the R
 ecosystem. Differentiating between empty and declared missing values
 opens the door to a new set of challenges for which base the R does not
-have built in functionality.</p>
+have built-in functionality.</p>
 <p>For instance, the declared missing values can be compared against
 both the original values and their labels:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
@@ -114,8 +114,8 @@ class:</p>
 <span><span class="co">#&gt;  value   label</span></span>
 <span><span class="co">#&gt;    -91 Missing</span></span></code></pre></div>
 <p>Most functions are designed to be as similar as possible, for
-instance <code class="sourceCode r"><span class="fu">labels</span>()</code> to to
-retrieve, or add / change value labels:</p>
+instance, <code class="sourceCode r"><span class="fu">labels</span>()</code> to retrieve
+or add/change value labels:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/labels.html">labels</a></span><span class="op">(</span><span class="va">x2</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Does not know"</span> <span class="op">=</span> <span class="op">-</span><span class="fl">92</span>, <span class="st">"Not responded"</span> <span class="op">=</span> <span class="op">-</span><span class="fl">91</span><span class="op">)</span></span>
 <span><span class="va">x2</span></span>
@@ -127,8 +127,8 @@ retrieve, or add / change value labels:</p>
 <span><span class="co">#&gt;  value         label</span></span>
 <span><span class="co">#&gt;    -92 Does not know</span></span>
 <span><span class="co">#&gt;    -91 Not responded</span></span></code></pre></div>
-<p>The value -92 is now properly labelled, and it can further be
-declared as missing. Such declarations do not necessarily have to use
+<p>The value <code>-92</code> is now properly labelled, and can further
+be declared missing. Such declarations do not necessarily have to use
 the main function <code class="sourceCode r"><span class="fu">declared</span>()</code>, due to
 the separate functions <code class="sourceCode r"><span class="fu">missing_values</span>()</code> and
 <code class="sourceCode r"><span class="fu">missing_range</span>()</code>:</p>
@@ -151,7 +151,7 @@ functions are of interest: <code class="sourceCode r"><span class="fu">undeclare
 <p>The function <code class="sourceCode r"><span class="fu">undeclare</span>()</code> replaces
 the NAs with their declared missing values. The result is still an
 object of class <code class="sourceCode r"><span class="st">"declared"</span></code>,
-but all missing values (and missing range) are stripped off the vector
+but all missing values (and missing range) are stripped off the vector,
 and values are presented as they have been collected. All other
 attributes of interest (variable and value labels) are retained and
 printed accordingly. Activating the argument <code class="sourceCode r">drop</code> eliminates all classes and attributes,
@@ -206,8 +206,8 @@ properly formatted in a similar way to those from package
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="va">dfm</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 7 × 2</span></span></span>
-<span><span class="co">#&gt;   x1                          x2</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;int+lbl&gt;</span></span></span>
+<span><span class="co">#&gt;   x1    x2                      </span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int+lbl&gt;</span>               </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> a       1                     </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> b       2                     </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> c       3                     </span></span>
@@ -241,16 +241,15 @@ ordering function), to allow sorting within the missing values:</p>
 <span><span class="co">#&gt; [1]       5       4       3       2       1      NA NA(-91) NA(-91) NA(-92)</span></span>
 <span><span class="co">#&gt; Missing values: -92, -91</span></span></code></pre></div>
 <p>All types of variables (categorical and numerical) can have declared
-missing values. There are always situations values are not missing
-randomly, but with a specific reason. In social research, respondents
-often can not, or do not want to provide an answer for a certain
-question, be it categories of opinions of pure numerical answers like
-age, income etc.</p>
-<p>In base R there is a clear distinction between numerical and
-categorical variables. For the later, R provides a special type of
-object called <code class="sourceCode r">factor</code>. The following
-object simulates such a categorical variable, for instance political
-orientation:</p>
+missing values. There are situations when values are not missing
+randomly but with a specific reason. In social research, respondents
+often can not or do not want to provide an answer for a certain
+question, be it categories of opinions or pure numerical answers like
+age, income, etc.</p>
+<p>Base R has a clear distinction between numerical and categorical
+variables. For the latter, R provides a special type of object called
+<code class="sourceCode r">factor</code>. The following object simulates
+such a categorical variable, for instance political orientation:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/declared.html">declared</a></span><span class="op">(</span></span>
 <span>  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="op">-</span><span class="fl">91</span><span class="op">)</span>,</span>
@@ -282,7 +281,7 @@ factor:</p>
 <span><span class="co">#&gt; [1] Left     Middle   Right    Apolitic</span></span>
 <span><span class="co">#&gt; Levels: Left Middle Right Apolitic</span></span></code></pre></div>
 <p>The base factors provide no possibility to assign specific values for
-the specific categories, and most importantly they do not differentiate
+the specific categories, and most importantly, they do not differentiate
 between valid values and (declared) missing values. To make the
 functionality consistent with the base treatment of NA values, coercing
 to factors defaults to dropping the declared missing values because of
@@ -348,9 +347,9 @@ by either of the following two commands:</p>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">x4</span>, drop_na <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "Left"     "Middle"   "Right"    "Apolitic"</span></span></code></pre></div>
-<p>The base factors store the categories using numeric values, and this
-is also the most often scenario for the declared objects. But this is
-not at all mandatory, as the declared objects are also able to ingest
+<p>The base factors store the categories using numeric values, which is
+also the most often scenario for the declared objects. But this is not
+at all mandatory, as the declared objects are also able to ingest
 character objects:</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x6</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/declared.html">declared</a></span><span class="op">(</span></span>
@@ -375,7 +374,7 @@ character objects:</p>
 <span><span class="co">#&gt;      b   Middle</span></span>
 <span><span class="co">#&gt;      c    Right</span></span>
 <span><span class="co">#&gt;      z Apolitic</span></span></code></pre></div>
-<p>Either as character, numeric or categorical, it is possible to
+<p>Either as a character, numeric or categorical, it is possible to
 declare and use special types of missing values, employing this new
 object type of class <code class="sourceCode r"><span class="st">"declared"</span></code>.</p>
 <p>Factors and <code class="sourceCode r">haven</code> objects have
