@@ -31,14 +31,11 @@
 
 #' @export
 `as.haven.default` <- function (x, ...) {
-    interactive <- TRUE
 
     dots <- list (...)
-    if (!is.null (dots$interactive)) {
-        interactive <- dots$interactive
-    }
+    interactive <- !isFALSE(dots$interactive)
 
-    if (isTRUE (interactive)) {
+    if (interactive) {
         msg <- "There is no automatic class method conversion for this type of"
         if (!is.null (dots$vname_)) {
             msg <- paste0 (dots$vname_, ": ", msg, " variable.")
@@ -51,6 +48,20 @@
 
     return (x)
 }
+
+#' @export
+`as.haven.haven_labelled` <- function (x, ...) {
+    # do nothing
+    return (x)
+}
+
+#' @export
+`as.haven.haven_labelled_spss` <- function (x, ...) {
+    # do nothing
+    return (x)
+}
+
+
 
 #' @export
 `as.haven.declared` <- function (x, ...) {

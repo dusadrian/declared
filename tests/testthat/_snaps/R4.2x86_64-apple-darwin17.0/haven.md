@@ -17,8 +17,8 @@
       as.haven(dfd)
     Output
       # A data frame: 6 x 2
-                   x           hx
-           <dbl+lbl>    <dbl+lbl>
+        x            hx          
+        <hvn_lbl_>   <hvn_lbl_>  
       1  1 [Good]     1 [Good]   
       2  2            2          
       3  3            3          
@@ -32,8 +32,8 @@
       as.haven(dfd, interactive = TRUE)
     Output
       # A data frame: 6 x 2
-                   x           hx
-           <dbl+lbl>    <dbl+lbl>
+        x            hx          
+        <hvn_lbl_>   <hvn_lbl_>  
       1  1 [Good]     1 [Good]   
       2  2            2          
       3  3            3          
@@ -47,8 +47,8 @@
       as.haven(dfd, only_declared = FALSE)
     Output
       # A data frame: 6 x 2
-                   x           hx
-           <dbl+lbl>    <dbl+lbl>
+        x            hx          
+        <hvn_lbl_>   <hvn_lbl_>  
       1  1 [Good]     1 [Good]   
       2  2            2          
       3  3            3          
@@ -60,12 +60,10 @@
 
     Code
       as.haven(dfd, only_declared = FALSE, interactive = TRUE)
-    Message <simpleMessage>
-      hx: There is no automatic class method conversion for this type of variable.
     Output
       # A data frame: 6 x 2
-                   x           hx
-           <dbl+lbl>    <dbl+lbl>
+        x            hx          
+        <hvn_lbl_>   <hvn_lbl_>  
       1  1 [Good]     1 [Good]   
       2  2            2          
       3  3            3          
