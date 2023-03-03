@@ -2,9 +2,12 @@
 % Please edit documentation in R/is.empty.R
 \name{is.empty}
 \alias{is.empty}
+\alias{anyNAempty}
 \title{Test the presence of empty (undeclared) missing values}
 \usage{
 is.empty(x)
+
+anyNAempty(x)
 }
 \arguments{
 \item{x}{A vector}
@@ -37,8 +40,12 @@ x
 
 is.empty(x) # FALSE FALSE FALSE
 
+anyNAempty(x) # FALSE
+
 x <- c(x, NA)
 
 is.empty(x) # FALSE FALSE FALSE  TRUE
+
+anyNAempty(x) # TRUE
 
 }

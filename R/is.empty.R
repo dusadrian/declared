@@ -29,9 +29,13 @@
 #'
 #' is.empty(x) # FALSE FALSE FALSE
 #'
+#' anyNAempty(x) # FALSE
+#'
 #' x <- c(x, NA)
 #'
 #' is.empty(x) # FALSE FALSE FALSE  TRUE
+#'
+#' anyNAempty(x) # TRUE
 #'
 #' @param x A vector
 #'
@@ -51,4 +55,10 @@
   }
 
   return (empty)
+}
+
+#' @rdname is.empty
+#' @export
+`anyNAempty` <- function (x) {
+  return (anyNA (undeclare (x)))
 }

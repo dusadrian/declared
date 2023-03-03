@@ -47,8 +47,10 @@
 #' variables, and additionally recognizes `"nominal"` and `"ordinal"` as
 #' categorical, and similarly recognizes `"interval"`, `"ratio"`,
 #' `"discrete"` and `"continuous"` as quantitative.
-#' @return A labelled vector of class "declared".
-#'   `is.declared()` returns a logical value.
+#' @return `declared()` and `as.declared()` return labelled vector of class
+#' "declared". When applied to a data frame, `as.declared()` will return a
+#' corresponding data frame with declared variables. `is.declared()` and
+#' `anyNAdeclared` return a logical value.
 #' @examples
 #'
 #' x <- declared(

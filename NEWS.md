@@ -1,3 +1,13 @@
+# Version 0.20
+    * Base functions `is.element()`, `%in%` and `match()` now properly recognize
+      declared objects
+    * Bug fix affecting declared character objects, via `as.character.declared()`
+    * New functions `anyNAempty()` and `anyNAdeclared()`
+
+# Version 0.19
+    * More effort on meeting Good Practices for pkgcheck()
+    * Bug fix hapenning on r-devel, to silence CRAN errors
+
 # Version 0.18
     * Improved method for `rbind()` data frames, taking care of declared variables
     * Function value_labels() has been replaced with the generic base function

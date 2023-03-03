@@ -2,6 +2,7 @@ Version 0.20
     o Base functions is.element(), %in% and match() now properly recognize
       declared objects
     o Bug fix affecting declared character objects, via as.character.declared()
+    o New functions anyNAempty() and anyNAdeclared()
 
 Version 0.19
     o More effort on meeting Good Practices for pkgcheck()

@@ -4,6 +4,7 @@
 \alias{as.declared}
 \alias{declared}
 \alias{is.declared}
+\alias{anyNAdeclared}
 \title{Labelled vectors with declared missing values}
 \usage{
 as.declared(x, ...)
@@ -20,6 +21,8 @@ declared(
 )
 
 is.declared(x)
+
+anyNAdeclared(x)
 }
 \arguments{
 \item{x}{A numeric vector to label, or a declared labelled vector
@@ -45,8 +48,10 @@ open ended}
 labels}
 }
 \value{
-A labelled vector of class "declared".
-\code{is.declared()} returns a logical value.
+\code{declared()} and \code{as.declared()} return labelled vector of class
+"declared". When applied to a data frame, \code{as.declared()} will return a
+corresponding data frame with declared variables. \code{is.declared()} and
+\code{anyNAdeclared} return a logical value.
 }
 \description{
 The labelled vectors are mainly used to analyse social science data,
