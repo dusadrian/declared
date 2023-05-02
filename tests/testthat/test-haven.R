@@ -7,6 +7,12 @@ x <- declared(
 )
 
 
+hs <- haven::labelled(
+  c(1:5, -1),
+  labels = c(Good = 1, Bad = 5, DK = -1)
+)
+
+
 hx <- haven::labelled_spss(
   c(1:5, -1),
   labels = c(Good = 1, Bad = 5, DK = -1),
@@ -29,6 +35,8 @@ test_that("as.haven() works", {
   expect_equal(as.haven(1:5, interactive = FALSE), as.integer(1:5))
 
   expect_true(inherits(as.haven(cx), "haven_labelled"))
+
+  expect_true(inherits(as.haven(hs), "haven_labelled"))
 
   expect_message(as.haven(1:5), "no automatic class method conversion")
 

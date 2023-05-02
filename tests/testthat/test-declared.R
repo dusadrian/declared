@@ -1,12 +1,15 @@
+values <- c(1:5, -1)
+value_labels <- c(Good = 1, Bad = 5, DK = -1)
+
 x <- declared(
-  c(1:5, -1),
-  labels = c(Good = 1, Bad = 5, DK = -1),
+  values,
+  labels = value_labels,
   na_values = -1
 )
 
 fx <- factor(
-  c(1:5, -1),
-  levels = c(1:5, -1),
+  values,
+  levels = values,
   labels = c("Good", 2:4, "Bad", "DK")
 )
 
@@ -55,6 +58,23 @@ test_that("declared() works", {
   expect_length(labels(declared(fx, na_values = 6, llevels = TRUE)), 3)
 
   expect_error(missing_range(x) <- 1:3)
+})
+
+
+
+xrec <- admisc::recode(
+  values,
+  cut = c(0, 3),
+  labels = c("DK", "Good", "Bad"),
+  values = c(-1, 1, 2)
+)
+
+test_that(
+  "if the values already have a labels attribute, declared() recognizes it", {
+  expect_equal(
+    labels(declared(xrec)),
+    attr(xrec, "labels", exact = TRUE)
+  )
 })
 
 

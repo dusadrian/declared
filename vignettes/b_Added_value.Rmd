@@ -35,7 +35,7 @@ x2 <- declared(
 
 The proposed method to declare missing values is unique in the R ecosystem.
 Differentiating between empty and declared missing values opens the door to a
-new set of challenges for which base the R does not have built-in functionality.
+new set of challenges for which base R does not have built-in functionality.
 
 For instance, the declared missing values can be compared against both the
 original values and their labels:
