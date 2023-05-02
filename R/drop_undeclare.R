@@ -4,7 +4,7 @@
 #' A function to obtain a version of the object with all information about
 #' declared missing values, dropped
 #' @details
-#' #' The function `undeclare()` replaces the NA entries into their original
+#' The function `undeclare()` replaces the NA entries into their original
 #' numeric values, and drops all attributes related to missing values:
 #' `na_values`, `na_range` and `na_index`, and it preserves the labels referring
 #' to the missing values.
