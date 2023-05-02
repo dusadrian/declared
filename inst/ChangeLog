@@ -1,5 +1,7 @@
 Version 0.21
     o declared() now recognize a "labels" attribute if it exists
+    o fixed bug in function measurement(), when dealing with variables with
+      missing range only (no discrete missing values declared)
 
 Version 0.20
     o Base functions is.element(), %in% and match() now properly recognize

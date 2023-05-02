@@ -228,6 +228,15 @@ NULL
 
     labels <- attr (x, "labels", exact = TRUE)
     na_values <- attr (x, "na_values")
+
+    na_range <- attr (x, "na_range")
+    if (!is.null(na_range)) {
+        na_values <- sort(union(
+            na_values,
+            undeclare(x[x >= na_range[1] & x <= na_range[2]], drop = TRUE)
+        ))
+    }
+
     x <- undeclare (x, drop = TRUE)
 
     xnumeric <- possibleNumeric_ (x)
