@@ -233,7 +233,7 @@ NULL
     if (!is.null(na_range)) {
         na_values <- sort(union(
             na_values,
-            undeclare(x[x >= na_range[1] & x <= na_range[2]], drop = TRUE)
+            seq(na_range[1], na_range[2])
         ))
     }
 
