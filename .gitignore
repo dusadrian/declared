@@ -11,7 +11,5 @@
 *.Ruserdata
 *.DS_Store
 *.vscode
-inst/doc
+*.txt
 .Rproj.user
-/doc/
-/Meta/

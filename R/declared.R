@@ -143,6 +143,10 @@ declared.default <- function (
 
   xchar <- FALSE
 
+  if (is.null (labels)) {
+    labels <- attr (x, "labels", exact = TRUE)
+  }
+
   if (!is.null (labels)) {
     nms <- names (labels)
     if (possibleNumeric_ (labels) && (possibleNumeric_ (x) | all (is.na (x)))) {
