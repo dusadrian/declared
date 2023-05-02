@@ -27,7 +27,7 @@ A function to obtain a version of the object with all information about
 declared missing values, dropped
 }
 \details{
-#' The function \code{undeclare()} replaces the NA entries into their original
+The function \code{undeclare()} replaces the NA entries into their original
 numeric values, and drops all attributes related to missing values:
 \code{na_values}, \code{na_range} and \code{na_index}, and it preserves the labels referring
 to the missing values.
