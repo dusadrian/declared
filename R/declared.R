@@ -159,6 +159,14 @@ declared.default <- function (
       na_range <- NULL
     }
     names (labels) <- nms
+
+    # 2023.05.08 rationale, ex. ESS10 (integrated data file) has a variable
+    # called region, which has multiple duplicated values and labels:
+    # deprecated codes
+    #        "DEP"
+    # this is a mistake of course, but it nevertheless prevents subsetting,
+    # because of validate_declared()
+    labels <- labels[!duplicated(labels)]
   }
 
   if (!is.null (na_values)) {

@@ -11,7 +11,7 @@
     }
 
     if (any (duplicated (stats::na.omit (labels)))) {
-      stopError_ ("`labels` must be unique.")
+      stopError_ ("Value `labels` must be unique.")
     }
   }
 
