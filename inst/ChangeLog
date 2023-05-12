@@ -1,9 +1,13 @@
 Version 0.21
-    o declared() now recognize a "labels" attribute if it exists
+    o declared() now recognize a "labels" attribute if it already exists
     o fixed bug in function measurement(), when dealing with variables with
       missing range only (no discrete missing values declared)
     o to prevent abrupt errors when subsetting a data frame with declared
       variables, the default action is now to impose unique value labels
+    o labels() gains a new argument "df", to print the labels as a data frame
+    o printing a declared object displays a maximum of seven value labels,
+      with a message indicating how many are left out
+    o new functions w_IQR() and w_fivenum()
 
 Version 0.20
     o Base functions is.element(), %in% and match() now properly recognize

@@ -33,9 +33,10 @@ or to declare such values if they are present in the data.
 }
 \details{
 The function \code{labels()} is a adaptation of the base function to the objects
-of class \code{declared}. In addition to the regular arguments, it has an
-additional logical one called \code{prefixed}, to retrieve the value labels
-prefixed with their values.
+of class \code{declared}. In addition to the regular arguments, it has two
+additional (logical) arguments called \code{prefixed}, to retrieve the value
+labels, prefixed with their values, and \code{df}, to print the result as a data
+frame.
 }
 \examples{
 x <- declared(

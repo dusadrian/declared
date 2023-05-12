@@ -8,9 +8,10 @@
 #'
 #' @details
 #' The function `labels()` is a adaptation of the base function to the objects
-#' of class `declared`. In addition to the regular arguments, it has an
-#' additional logical one called `prefixed`, to retrieve the value labels
-#' prefixed with their values.
+#' of class `declared`. In addition to the regular arguments, it has two
+#' additional (logical) arguments called `prefixed`, to retrieve the value
+#' labels, prefixed with their values, and `df`, to print the result as a data
+#' frame.
 #'
 #' @return
 #' \code{labels()} will return a named vector.
@@ -181,10 +182,22 @@ label.data.frame <- function (x) {
 
 
 #' @export
-labels.declared <- function (object, prefixed = FALSE, ...) {
+labels.declared <- function (object, ...) {
+    dots <- list(...)
+    
     labels <- attr (object, "labels", exact = TRUE)
-    if (prefixed) {
-        names (labels) <- paste0 ("[", labels, "] ", names (labels))
+    if (isTRUE(dots$prefixed)) {
+      names (labels) <- paste0 ("[", labels, "] ", names (labels))
+    }
+
+    if (isTRUE(dots$df)) {
+      lbldf <- data.frame (
+        value = unname (labels),
+        label = names (labels),
+        row.names = NULL
+      )
+      
+      return (structure (lbldf, class = c ("labels_df", class (lbldf))))
     }
 
     return (labels)
@@ -192,17 +205,30 @@ labels.declared <- function (object, prefixed = FALSE, ...) {
 
 
 #' @export
-labels.haven_labelled_spss <- function (object, prefixed = FALSE, ...) {
+labels.haven_labelled_spss <- function (object, ...) {
+    dots <- list(...)
+    
     labels <- attr (object, "labels", exact = TRUE)
-    if (prefixed)
-        names (labels) <- paste0 ("[", labels, "] ", names (labels))
-    labels
+    if (isTRUE(dots$prefixed)) {
+      names (labels) <- paste0 ("[", labels, "] ", names (labels))
+    }
+
+    if (isTRUE(dots$df)) {
+      lbldf <- data.frame (
+        value = unname (labels),
+        label = names (labels)
+      )
+      
+      return (structure (lbldf, class = c ("labels_df", class (lbldf))))
+    }
+
+    return(labels)
 }
 
 
 #' @export
-labels.data.frame <- function (object, prefixed = FALSE, ...) {
-    lapply (object, labels, prefixed = prefixed)
+labels.data.frame <- function (object, ...) {
+  lapply (object, labels, ...)
 }
 
 

@@ -1,9 +1,9 @@
-pandoc: '2.18'
-pkgdown: 2.0.6
+pandoc: 3.1.2
+pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
   a_Declared_solution: a_Declared_solution.html
   b_Added_value: b_Added_value.html
   c_Weighting: c_Weighting.html
-last_built: 2022-12-11T16:23Z
+last_built: 2023-05-12T07:36Z
 

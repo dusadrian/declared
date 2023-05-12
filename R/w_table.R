@@ -30,7 +30,7 @@
 #' instance 0 meaning the category of people with no children).
 #'
 #' Objects of class `declared` are not pure categorical variables (R factors)
-#' but they are nevertheless interpreted similarly to factors, to allow
+#' but they are nevertheless interpreted as if they were factors, to allow
 #' producing frequency tables. Given the high similarity with package
 #' **`haven`**, objects of class `haven_labelled_spss` are automatically
 #' coerced to objects of class `declared` and treated accordingly.
