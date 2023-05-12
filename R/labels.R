@@ -9,9 +9,9 @@
 #' @details
 #' The function `labels()` is a adaptation of the base function to the objects
 #' of class `declared`. In addition to the regular arguments, it has two
-#' additional (logical) arguments called `prefixed`, to retrieve the value
-#' labels, prefixed with their values, and `df`, to print the result as a data
-#' frame.
+#' additional (logical) arguments called `prefixed` (FALSE by default), to 
+#' retrieve the value labels prefixed with their values, and `print_as_df`
+#' (TRUE by default) to print the result as a data frame.
 #'
 #' @return
 #' \code{labels()} will return a named vector.
@@ -182,47 +182,33 @@ label.data.frame <- function (x) {
 
 
 #' @export
-labels.declared <- function (object, ...) {
-    dots <- list(...)
-    
+labels.declared <- function (
+    object, prefixed = FALSE, print_as_df = TRUE, ...
+  ) {
     labels <- attr (object, "labels", exact = TRUE)
-    if (isTRUE(dots$prefixed)) {
+    if (isTRUE(prefixed)) {
       names (labels) <- paste0 ("[", labels, "] ", names (labels))
     }
 
-    if (isTRUE(dots$df)) {
-      lbldf <- data.frame (
-        value = unname (labels),
-        label = names (labels),
-        row.names = NULL
-      )
+    attr (labels, "print_as_df") <- isTRUE (print_as_df)
       
-      return (structure (lbldf, class = c ("labels_df", class (lbldf))))
-    }
-
-    return (labels)
+    return (structure (labels, class = c ("labels_df", class (labels))))
 }
 
 
 #' @export
-labels.haven_labelled_spss <- function (object, ...) {
-    dots <- list(...)
+labels.haven_labelled_spss <- function (
+    object, prefixed = FALSE, print_as_df = TRUE, ...
+  ) {
     
     labels <- attr (object, "labels", exact = TRUE)
-    if (isTRUE(dots$prefixed)) {
+    if (isTRUE(prefixed)) {
       names (labels) <- paste0 ("[", labels, "] ", names (labels))
     }
 
-    if (isTRUE(dots$df)) {
-      lbldf <- data.frame (
-        value = unname (labels),
-        label = names (labels)
-      )
+    attr (labels, "print_as_df") <- isTRUE (print_as_df)
       
-      return (structure (lbldf, class = c ("labels_df", class (lbldf))))
-    }
-
-    return(labels)
+    return (structure (labels, class = c ("labels_df", class (labels))))
 }
 
 

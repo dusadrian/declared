@@ -77,9 +77,12 @@
 
 `print.labels_df` <- function(x, ...) {
     class(x) <- setdiff(class(x), "labels_df")
-    if (is.data.frame(x)) {
+    if (isTRUE(attr(x, "print_as_df"))) {
         print (
-            x,
+            data.frame (
+                value = unname (x),
+                label = names (x)
+            ),
             row.names = FALSE
         )
     }
