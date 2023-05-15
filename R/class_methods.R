@@ -50,6 +50,14 @@
 }
 
 #' @export
+`[.labels_df` <- function (x, i, ...) {
+  result <- NextMethod()
+  attr(result, "print_as_df") <- attr(x, "print_as_df")
+  class(result) <- class(x)
+  return(result)
+}
+
+#' @export
 `c.declared` <- function (...) {
   dots <- list (...)
   declared <- unlist (lapply (dots, is.declared))
@@ -171,6 +179,22 @@
 }
 
 #' @export
+`head.labels_df` <- function (x, n = 6L, ...) {
+  lx <- length (x)
+  if (n < 0) {
+    n <- lx - abs (n)
+  }
+  n <- min (n, lx)
+  if (n < 1) {
+    result <- x[0]
+  }
+  result <- x[seq (n)]
+  attr(result, "print_as_df") <- attr(x, "print_as_df")
+  class(result) <- class(x)
+  return(result)
+}
+
+#' @export
 `tail.declared` <- function (x, n = 6L, ...) {
   if (n < 1) {
     n <- 6L
@@ -178,6 +202,20 @@
   lx <- length (x)
   n <- min (n, lx)
   x[seq (lx - n + 1, lx)]
+}
+
+#' @export
+`tail.labels_df` <- function (x, n = 6L, ...) {
+  if (n < 1) {
+    n <- 6L
+  }
+  lx <- length (x)
+  n <- min (n, lx)
+  result <- x[seq (lx - n + 1, lx)]
+
+  attr(result, "print_as_df") <- attr(x, "print_as_df")
+  class(result) <- class(x)
+  return(result)
 }
 
 #' @export

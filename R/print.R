@@ -75,9 +75,15 @@
 }
 
 
+#' @export
 `print.labels_df` <- function(x, ...) {
+    if (is.null(x)) {
+        return(NULL)
+    }
     class(x) <- setdiff(class(x), "labels_df")
-    if (isTRUE(attr(x, "print_as_df"))) {
+    print_as_df <- isTRUE(attr(x, "print_as_df"))
+    attr(x, "print_as_df") <- NULL
+    if (print_as_df) {
         print (
             data.frame (
                 value = unname (x),
