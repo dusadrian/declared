@@ -392,11 +392,13 @@
       [1] "Function value_labels() is deprecated, use labels()\n"
       
       $output
-      [1] "Good  Bad   DK " "   1    5   -1 "
+      [1] " value label" "     1  Good" "     5   Bad" "    -1    DK"
       
       $value
-      Good  Bad   DK 
-         1    5   -1 
+       value label
+           1  Good
+           5   Bad
+          -1    DK
       
 
 ---

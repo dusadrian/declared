@@ -32,16 +32,20 @@
     Code
       labels(x)
     Output
-      Good  Bad   DK 
-         1    5   -1 
+       value label
+           1  Good
+           5   Bad
+          -1    DK
 
 ---
 
     Code
       labels(x, prefixed = TRUE)
     Output
-      [1] Good  [5] Bad  [-1] DK 
-             1        5       -1 
+       value    label
+           1 [1] Good
+           5  [5] Bad
+          -1  [-1] DK
 
 ---
 
@@ -63,8 +67,10 @@
     Code
       labels(hx)
     Output
-      Good  Bad   DK 
-         1    5   -1 
+       value label
+           1  Good
+           5   Bad
+          -1    DK
 
 ---
 
@@ -85,12 +91,16 @@
       labels(dfd)
     Output
       $x
-      Good  Bad   DK 
-         1    5   -1 
+       value label
+           1  Good
+           5   Bad
+          -1    DK
       
       $hx
-      Good  Bad   DK 
-         1    5   -1 
+       value label
+           1  Good
+           5   Bad
+          -1    DK
       
 
 ---
@@ -99,11 +109,15 @@
       labels(dfd, prefixed = TRUE)
     Output
       $x
-      [1] Good  [5] Bad  [-1] DK 
-             1        5       -1 
+       value    label
+           1 [1] Good
+           5  [5] Bad
+          -1  [-1] DK
       
       $hx
-      [1] Good  [5] Bad  [-1] DK 
-             1        5       -1 
+       value    label
+           1 [1] Good
+           5  [5] Bad
+          -1  [-1] DK
       
 

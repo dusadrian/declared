@@ -13,12 +13,15 @@ fx <- factor(
   labels = c("Good", 2:4, "Bad", "DK")
 )
 
+attr(value_labels, "print_as_df") <- TRUE
+class(value_labels) <- c("labels_df", class(value_labels))
+
 test_that("declared() works", {
   expect_true(inherits(x, "declared"))
   
   expect_equal(
     labels(x),
-    c("Good" = 1, "Bad" = 5, "DK" = -1)
+    value_labels
   )
   
   expect_equal(
@@ -69,10 +72,14 @@ xrec <- admisc::recode(
   values = c(-1, 1, 2)
 )
 
+lxrec <- labels(declared(xrec))
+class(lxrec) <- setdiff(class(lxrec), "labels_df")
+attr(lxrec, "print_as_df") <- NULL
+
 test_that(
   "if the values already have a labels attribute, declared() recognizes it", {
   expect_equal(
-    labels(declared(xrec)),
+    lxrec,
     attr(xrec, "labels", exact = TRUE)
   )
 })

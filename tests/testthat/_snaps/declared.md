@@ -18,8 +18,10 @@
     Code
       labels(x)
     Output
-      Good  Bad   DK 
-         1    5   -1 
+       value label
+           1  Good
+           5   Bad
+          -1    DK
 
 ---
 
@@ -42,24 +44,36 @@
     Code
       labels(declared(fx, na_values = 6))
     Output
-      Good    2    3    4  Bad   DK 
-         1    2    3    4    5    6 
+       value label
+           1  Good
+           2     2
+           3     3
+           4     4
+           5   Bad
+           6    DK
 
 ---
 
     Code
       labels(declared(fx, na_values = "DK"))
     Output
-      Good    2    3    4  Bad   DK 
-         1    2    3    4    5    6 
+       value label
+           1  Good
+           2     2
+           3     3
+           4     4
+           5   Bad
+           6    DK
 
 ---
 
     Code
       labels(declared(fx, na_values = 6, llevels = TRUE))
     Output
-      Good  Bad   DK 
-         1    5    6 
+       value label
+           1  Good
+           5   Bad
+           6    DK
 
 ---
 
