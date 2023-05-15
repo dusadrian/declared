@@ -12,7 +12,7 @@ or to declare such values if they are present in the data."><!-- mathjax --><scr
     
     <a class="navbar-brand me-2" href="../index.html">declared</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.20.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.21</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -93,9 +93,9 @@ extents of the range of missing values (for <code>label</code>).</p></dd>
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>The function <code>labels()</code> is a adaptation of the base function to the objects
 of class <code>declared</code>. In addition to the regular arguments, it has two
-additional (logical) arguments called <code>prefixed</code>, to retrieve the value
-labels, prefixed with their values, and <code>df</code>, to print the result as a data
-frame.</p>
+additional (logical) arguments called <code>prefixed</code> (FALSE by default), to
+retrieve the value labels prefixed with their values, and <code>print_as_df</code>
+(TRUE by default) to print the result as a data frame.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -124,12 +124,16 @@ frame.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     -1    DK</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">labels</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Good  Bad   DK </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    1    5   -1 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  value label</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      1  Good</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      5   Bad</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     -1    DK</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">labels</span><span class="op">(</span><span class="va">x</span>, prefixed <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] Good  [5] Bad  [-1] DK </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        1        5       -1 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  value    label</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      1 [1] Good</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      5  [5] Bad</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     -1  [-1] DK</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">labels</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Good"</span> <span class="op">=</span> <span class="fl">1</span>, <span class="st">"Bad"</span> <span class="op">=</span> <span class="fl">5</span>, <span class="st">"DK"</span> <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>, <span class="st">"Not applicable"</span> <span class="op">=</span> <span class="op">-</span><span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
