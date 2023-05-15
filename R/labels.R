@@ -197,7 +197,9 @@ labels.declared <- function (
 
     attr (labels, "print_as_df") <- isTRUE (print_as_df)
       
-    return (structure (labels, class = c ("labels_df", class (labels))))
+    return (
+      structure (labels, class = unique (c ("labels_df", class (labels))))
+    )
 }
 
 
@@ -218,7 +220,9 @@ labels.haven_labelled_spss <- function (
 
     attr (labels, "print_as_df") <- isTRUE (print_as_df)
       
-    return (structure (labels, class = c ("labels_df", class (labels))))
+    return (
+      structure (labels, class = unique (c ("labels_df", class (labels))))
+    )
 }
 
 
