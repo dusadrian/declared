@@ -187,8 +187,9 @@
   n <- min (n, lx)
   if (n < 1) {
     result <- x[0]
+  } else {
+    result <- x[seq (n)]
   }
-  result <- x[seq (n)]
   attr(result, "print_as_df") <- attr(x, "print_as_df")
   class(result) <- class(x)
   return(result)
