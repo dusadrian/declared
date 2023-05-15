@@ -3,7 +3,7 @@
 `w_IQR` <- function (
     x, wt = NULL, na.rm = FALSE, ...
 ) {
-    unclass(diff (
+    unname(unclass(diff (
         w_quantile(
             x,
             wt = wt,
@@ -12,5 +12,5 @@
             names = FALSE,
             ... = ...
         )
-    ))
+    )))
 }
