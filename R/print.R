@@ -77,9 +77,6 @@
 
 #' @export
 `print.labels_df` <- function(x, ...) {
-    if (is.null(x)) {
-        return(NULL)
-    }
     class(x) <- setdiff(class(x), "labels_df")
     print_as_df <- isTRUE(attr(x, "print_as_df"))
     attr(x, "print_as_df") <- NULL
