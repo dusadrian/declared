@@ -186,6 +186,11 @@ labels.declared <- function (
     object, prefixed = FALSE, print_as_df = TRUE, ...
   ) {
     labels <- attr (object, "labels", exact = TRUE)
+    
+    if (is.null(labels)) {
+      return(NULL)
+    }
+
     if (isTRUE(prefixed)) {
       names (labels) <- paste0 ("[", labels, "] ", names (labels))
     }
@@ -202,6 +207,11 @@ labels.haven_labelled_spss <- function (
   ) {
     
     labels <- attr (object, "labels", exact = TRUE)
+    
+    if (is.null(labels)) {
+      return(NULL)
+    }
+
     if (isTRUE(prefixed)) {
       names (labels) <- paste0 ("[", labels, "] ", names (labels))
     }
