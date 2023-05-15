@@ -1,3 +1,4 @@
+library(declared)
 set.seed(12345)
 
 x <- declared(
@@ -109,6 +110,12 @@ z <- declared(
     na_values = c(-1, 1, 5)
 )
 
+z2 <- declared(
+    c(1:5, -1),
+    labels = c(Good = 1, Bad = 5, DK = -1),
+    na_range = c(-5, -1)
+)
+
 
 cx1 <- declared(
   x = sample(
@@ -136,6 +143,8 @@ test_that("likely_measurement() works", {
   expect_equal(likely_measurement(y), "quantitative")
 
   expect_equal(likely_measurement(z), "")
+
+  expect_equal(likely_measurement(z2), "categorical")
 
   expect_equal(likely_measurement(cx1), "")
 
@@ -357,7 +366,4 @@ test_that("tests have the same output", {
   expect_snapshot(trimstr_(" foo ", what = "+"))
   expect_snapshot(hasTag_(c(minustag, NA, atag)))
   expect_snapshot(hasTag_(c(bigminustag, atag)))
-  expect_snapshot(getTag_(c(atag, NA, minustag)))
-  expect_snapshot(hasTag_(makeTag_("-a"), "-a"))
-  expect_snapshot(hasTag_(makeTag_("-ab"), "-ab"))
 })

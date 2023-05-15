@@ -198,3 +198,40 @@
           1       2       3    144.306   500     500  
       
 
+---
+
+    Code
+      print(labels(xl))
+    Output
+       value label
+           1  Good
+         500   Bad
+          -1    DK
+
+---
+
+    Code
+      print(labels(xl, print_as_df = FALSE))
+    Output
+      Good  Bad   DK 
+         1  500   -1 
+
+# very many labels are truncated at print
+
+    Code
+      print(xlarge)
+    Output
+      <declared<integer>[25]>
+       [1]  1  6  2  9  4  3  3  6  2  9  8  9  5  8  4  5 10  9  5  8  7  9  6  6  7
+      
+      Labels:
+       value label
+           1    A1
+           2    A2
+           3    A3
+           4    A4
+           5    A5
+           6    A6
+           7    A7
+      # ... plus 3 more labels, use labels() to print them all.
+

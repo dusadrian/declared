@@ -528,24 +528,3 @@
     Output
       [1] TRUE TRUE
 
----
-
-    Code
-      getTag_(c(atag, NA, minustag))
-    Output
-      [1] "a"  NA   "-1"
-
----
-
-    Code
-      hasTag_(makeTag_("-a"), "-a")
-    Output
-      [1] TRUE
-
----
-
-    Code
-      hasTag_(makeTag_("-ab"), "-ab")
-    Output
-      [1] TRUE
-

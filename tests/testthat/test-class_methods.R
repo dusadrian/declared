@@ -176,6 +176,24 @@ x11 <- declared(
   na_values = -1
 )
 
+x12 <- declared(
+  c(2, 2:5, -1),
+  labels = c(VeryGood = 1, Good = 2, SoSo = 3, Bad = 4, VeryBad = 5, DK = -1),
+  na_values = -1
+)
+
+lx1 <- labels(x12)
+lx2 <- lx1[0]
+
+test_that("labels are indexed", {
+  expect_length(lx1[-1], 5)
+  expect_length(head(lx1), 6)
+  expect_length(tail(lx1), 6)
+  expect_length(head(lx1, n = -1), 5)
+  expect_length(tail(lx1, n = -1), 6)
+  expect_length(head(lx2), 0)
+})
+
 test_that("all.equal.declared works", {
   expect_true(all.equal(x, c(1:5, -1)))
 
@@ -285,7 +303,6 @@ test_that("mathematical operations work for declared objects", {
 
   expect_length(Re(x), 6)
 })
-
 
 test_that("tests have the same output", {
   expect_snapshot(x)

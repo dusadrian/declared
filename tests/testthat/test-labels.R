@@ -141,5 +141,12 @@ test_that("tests have the same output", {
 
 
 label(x) <- NULL
+labels(x) <- NULL
 label(hx) <- NULL
+labels(hx) <- NULL
 label(dfd) <- NULL
+
+test_that("labels() return NULL if not defined", {
+  expect_equal(labels(x), NULL)
+  expect_equal(labels(hx), NULL)
+})

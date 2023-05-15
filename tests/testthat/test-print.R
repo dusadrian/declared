@@ -131,4 +131,18 @@ test_that("tests have the same output", {
   expect_snapshot(cat("w_table(1:101) # for the output below:"))
   expect_snapshot_error(print(w_table(1:101)))
   expect_snapshot(print(w_summary(xl)))
+  expect_snapshot(print(labels(xl)))
+  expect_snapshot(print(labels(xl, print_as_df = FALSE)))
+})
+
+lbls <- 1:10
+names(lbls) <- paste("A", lbls, sep = "")
+
+xlarge <- declared(
+  sample(c(1:10), 25, replace = TRUE),
+  labels = lbls
+)
+
+test_that("very many labels are truncated at print", {
+  expect_snapshot(print(xlarge))
 })
