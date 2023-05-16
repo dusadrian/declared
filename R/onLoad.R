@@ -596,7 +596,7 @@
         ) {
             if (is.declared (x)) {
                 levels <- match.arg (levels)
-                labels <- attr (x, "labels")
+                labels <- attr (x, "labels", exact = TRUE)
                 nv <- names_values (x, drop_na = drop_na)
 
                 if (isFALSE (drop_na)) {
