@@ -68,23 +68,23 @@ table(as.factor(undeclare(dfm$Opinion)), useNA = "ifany")
 ```
 
 The dedicated function `w_table()`{.R} does the same thing by automatically
-recognizing objects of class `"declared"`{.R}, additionally printing more detailed
-information:
+recognizing objects of class `"declared"`{.R}, additionally printing more
+detailed information:
 
 ```{r}
 w_table(dfm$Opinion, values = TRUE)
 ```
 
-The prefix `w_`{.R} from the function name stands for "weighted", this being another
-example of functionality where the declared missing values play a different role
-than the empty, base NA missing values.
+The prefix `w_`{.R} from the function name stands for "weighted", this being
+another example of functionality where the declared missing values play a
+different role than the empty, base NA missing values.
 
 It is important to differentiate between frequency weights, on one hand, and
 other probability based, post-stratification weights on one other, the later
-being thoroughly treated by the specialized package **survey**. The `w_`{.R} family
-of functions are solely dealing with frequency weights, to allow corrections in
-descriptive statistics, such as the tables of frequencies and other similar
-descriptive measures for both categorical and numeric variables.
+being thoroughly treated by the specialized package **survey**. The `w_`{.R}
+family of functions are solely dealing with frequency weights, to allow
+corrections in descriptive statistics, such as the tables of frequencies and
+other similar descriptive measures for both categorical and numeric variables.
 
 To exemplify, a frequency weights variable is constructed, to correct for the
 distributions of gender by males and females, as well as the theoretical

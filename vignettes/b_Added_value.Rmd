@@ -45,8 +45,9 @@ x2 == -91
 x2 == "Missing"
 ```
 
-Similar methods have been added to the primitive functions `"<"`{.R}, `">"`{.R} and
-`"!="`{.R} etc., to allow a fully functional collection of subsetting possibilities.
+Similar methods have been added to the primitive functions `"<"`{.R}, `">"`{.R}
+and `"!="`{.R} etc., to allow a fully functional collection of subsetting
+possibilities.
 
 Combining on this type of vector creates an object of the same class:
 
@@ -63,7 +64,8 @@ labels(x2) <- c("Does not know" = -92, "Not responded" = -91)
 x2
 ```
 
-The value `-92` is now properly labelled, and can further be declared missing. Such declarations do not necessarily have to use the main function
+The value `-92` is now properly labelled, and can further be declared missing.
+Such declarations do not necessarily have to use the main function
 `declared()`{.R}, due to the separate functions `missing_values()`{.R} and
 `missing_range()`{.R}:
 
@@ -77,19 +79,20 @@ To ease the smooth inter-operation with packages **haven** and **labelled**, the
 following functions are of interest: `undeclare()`{.R}, `as.haven()`{.R} and
 `as.declared()`{.R}.
 
-The function `undeclare()`{.R} replaces the NAs with their declared missing values.
-The result is still an object of class `"declared"`{.R}, but all missing values (and
-missing range) are stripped off the vector, and values are presented as they have
-been collected. All other attributes of interest (variable and value labels) are
-retained and printed accordingly. Activating the argument `drop`{.R} eliminates all
-classes and attributes, returning a regular R object:
+The function `undeclare()`{.R} replaces the NAs with their declared missing
+values. The result is still an object of class `"declared"`{.R}, but all missing
+values (and missing range) are stripped off the vector, and values are presented
+as they have been collected. All other attributes of interest (variable and
+value labels) are retained and printed accordingly. Activating the argument
+`drop`{.R} eliminates all classes and attributes, returning a regular R object:
 
 ```{r undeclare}
 undeclare(x2, drop = TRUE)
 ```
 
 The function `as.haven()`{.R} coerces the resulting object to the class
-`"haven_labelled_spss"`{.R}, and the function `as.declared()`{.R} reverses the process:
+`"haven_labelled_spss"`{.R}, and the function `as.declared()`{.R} reverses the
+process:
 
 ```{r haven}
 xh <- as.haven(x2)
@@ -139,10 +142,14 @@ sort(x3, na.last = TRUE, decreasing = TRUE, empty.last = FALSE)
 ```
 
 All types of variables (categorical and numerical) can have declared missing
-values. There are situations when values are not missing randomly but with a specific reason. In social research, respondents often can not or do not want to provide an answer for a certain question, be it categories of opinions or pure numerical answers like age, income, etc.
+values. There are situations when values are not missing randomly but with a
+specific reason. In social research, respondents often can not or do not want to
+provide an answer for a certain question, be it categories of opinions or pure
+numerical answers like age, income, etc.
 
-Base R has a clear distinction between numerical and categorical variables. For the latter, R provides a special type of object called `factor`{.R}.
-The following object simulates such a categorical variable, for instance
+Base R has a clear distinction between numerical and categorical variables. For
+the latter, R provides a special type of object called `factor`{.R}. The
+following object simulates such a categorical variable, for instance
 political orientation:
 
 ```{r}
@@ -167,9 +174,12 @@ x5 <- factor(
 x5
 ```
 
-The base factors provide no possibility to assign specific values for the specific categories, and most importantly, they do not differentiate between valid values and (declared) missing values. To make the functionality consistent with the base
-treatment of NA values, coercing to factors defaults to dropping the declared
-missing values because of the default value of the argument `drop_na`:
+The base factors provide no possibility to assign specific values for the
+specific categories, and most importantly, they do not differentiate between
+valid values and (declared) missing values. To make the functionality consistent
+with the base treatment of `NA`{.R} values, coercing to factors defaults to
+dropping the declared missing values because of the default value of the
+argument `drop_na`{.R}:
 
 ```{r}
 as.factor(x4)
@@ -179,18 +189,18 @@ as.factor(x4, drop_na = TRUE)
 as.factor(drop_na(x4))
 ```
 
-Converting the declared missing values to factor levels is something for which the
-function `undeclare()`{.R} proves useful, and switching between factors and 
+Converting the declared missing values to factor levels is something for which
+the function `undeclare()`{.R} proves useful, and switching between factors and 
 declared objects, preserving the declared missing values, is now straightforward:
 
 ```{r}
 as.factor(undeclare(x4))
 ```
 
-This is almost identical, but differs from `x5` with respect to the level orders.
-It happens because the missing value -91, coerced to a valid value, becomes the
-first in the order of the categories while normally, a categorical variable displays
-the valid values first, and the missing values last.
+This is almost identical, but differs from `x5` with respect to the level
+orders. It happens because the missing value -91, coerced to a valid value,
+becomes the first in the order of the categories while normally, a categorical
+variable displays the valid values first, and the missing values last.
 
 If the original order is important, the argument `drop_na` can be deactivated:
 
@@ -227,7 +237,9 @@ as.character(undeclare(x4))
 as.character(x4, drop_na = FALSE)
 ```
 
-The base factors store the categories using numeric values, which is also the most often scenario for the declared objects. But this is not at all mandatory, as the declared objects are also able to ingest character objects:
+The base factors store the categories using numeric values, which is also the
+most often scenario for the declared objects. But this is not at all mandatory,
+as the declared objects are also able to ingest character objects:
 
 ```{r}
 x6 <- declared(
