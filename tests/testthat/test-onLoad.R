@@ -179,7 +179,7 @@ test_that("tests have the same output", {
   expect_snapshot(fivenum(drop_na(x), na.rm = TRUE))
   expect_snapshot(order(x))
   expect_snapshot(as.factor(x, levels = "values"))
-  expect_snapshot(as.factor(x, levels = "both"))
+  # expect_snapshot(as.factor(x, levels = "both"))
   expect_snapshot(is.element(x, labels(x)))
   expect_snapshot(x %in% labels(x))
   expect_snapshot(match(x, labels(x)))

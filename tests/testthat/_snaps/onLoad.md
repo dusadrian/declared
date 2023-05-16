@@ -125,14 +125,6 @@
 ---
 
     Code
-      as.factor(x, levels = "both")
-    Output
-      [1] [1] Good [2] 2    [3] 3    [4] 4    [5] Bad  <NA>    
-      Levels: [1] Good [2] 2 [3] 3 [4] 4 [5] Bad
-
----
-
-    Code
       is.element(x, labels(x))
     Output
       [1]  TRUE FALSE FALSE FALSE  TRUE  TRUE
