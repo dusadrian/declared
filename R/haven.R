@@ -96,7 +96,7 @@
     pN_labels <- TRUE
     if (has_labels) {
         if (length(setdiff(labels, na_values)) > 0) {
-            pN_labels <- possibleNumeric_ (labels[setdiff(labels, na_values)])
+            pN_labels <- possibleNumeric_ (setdiff(labels, na_values))
         }
     }
 
