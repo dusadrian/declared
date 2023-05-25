@@ -87,8 +87,8 @@
     Code
       as.declared(hs)
     Output
-      <declared<character>[6]>
-      [1]    1     2     3     4     5  NA(a)
+      <declared<integer>[6]>
+      [1]     1     2     3     4     5 NA(a)
       Missing values: a
       
       Labels:
