@@ -183,3 +183,37 @@ SEXP _getTag(SEXP x) {
     UNPROTECT(1);
     return out;
 }
+
+
+
+SEXP _anyTagged(SEXP x) {
+    int n = Rf_length(x);
+    SEXP out = PROTECT(Rf_allocVector(LGLSXP, 1));
+    LOGICAL(out)[0] = 0;
+
+    int i = 0;
+    
+    while (!LOGICAL(out)[0] && i < n) {
+        if (TYPEOF(x) == REALSXP) {
+            double xi = REAL(x)[i];
+            if (isnan(xi)) {
+                ieee_double y;
+                y.value = xi;
+
+                Rboolean firstminus = signbit(xi);
+                
+                char test[16 + 8 * firstminus];
+                if (firstminus) {
+                    test[0] = CHAR(mkChar("-"))[0];
+                }
+
+                test[firstminus] = y.byte[TAG_BYTE];
+                LOGICAL(out)[0] = test[0] != '\0';
+            }
+        }
+        i += 1;
+    }
+
+    UNPROTECT(1);
+    return out;
+}

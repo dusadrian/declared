@@ -701,6 +701,28 @@ NULL
 }
 
 
+#' @rdname declared_internal
+#' @keywords internal
+#' @export
+`anyTagged_` <- function(x) {
+    if (is.data.frame(x)) {
+        i <- 1
+        tagged <- FALSE
+        while(!tagged & i <= ncol(x)) {
+            tagged <- Recall(x[[i]])
+            i <- i + 1
+        }
+        return(tagged)
+    }
+
+    if (is.double(x)) {
+        return(.Call("_anyTagged", x, PACKAGE = "declared"))
+    }
+    
+    return(FALSE)
+}
+
+
 `numdec_` <- function (x, each = FALSE, na.rm = TRUE, maxdec = 15) {
 
     maxdec <- min (15, maxdec)

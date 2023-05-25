@@ -10,6 +10,7 @@
 \alias{makeTag_}
 \alias{hasTag_}
 \alias{getTag_}
+\alias{anyTagged_}
 \title{declared internal functions}
 \usage{
 format_declared(x, digits = getOption("digits"))
@@ -34,6 +35,8 @@ makeTag_(...)
 hasTag_(x, tag = NULL)
 
 getTag_(x)
+
+anyTagged_(x)
 }
 \description{
 Functions to be used internally, only by developers and
