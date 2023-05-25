@@ -153,10 +153,16 @@ declared.default <- function (
       labels <- asNumeric_ (labels)
     }
     else {
-      x <- as.character (x, values = TRUE)
       labels <- as.character (labels, values = TRUE)
-      xchar <- TRUE
-      na_range <- NULL
+
+      if (length(setdiff(labels, na_values)) > 0) {
+        xchar <- !possibleNumeric_ (setdiff(labels, na_values))
+      }
+
+      if (xchar) {
+        x <- as.character (x, values = TRUE)
+        na_range <- NULL
+      }
     }
     names (labels) <- nms
 

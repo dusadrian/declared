@@ -35,7 +35,13 @@
   na_range <- attr (x, "na_range")
   labels <- attr (x, "labels", exact = TRUE)
   label <- attr (x, "label", exact = TRUE)
-  format_spss <- attr (x, "format.spss") # necessary for DDIwR::convert
+
+  #---------------------------------------
+  # necessary for DDIwR::convert
+  format_spss <- attr (x, "format.spss")
+  format_stata <- attr (x, "format.stata")
+  format_sas <- attr (x, "format.sas")
+  #---------------------------------------
 
   if (!inherits (x, "haven_labelled_spss")) {
     tagged <- hasTag_ (x)
@@ -65,7 +71,16 @@
   }
 
   attributes (x) <- NULL
-  attr (x, "xchar") <- is.character (x)
+  pnx <- possibleNumeric_ (setdiff(x, na_values)) | all (is.na (x))
+
+  charlabels <- FALSE
+  if (!is.null (labels)) {
+    if (length (setdiff (labels, na_values)) > 0) {
+      charlabels <- !possibleNumeric_ (setdiff(labels, na_values))
+    }
+  }
+
+  attr (x, "xchar") <- !pnx | charlabels
   missingValues (x)[is.element (x, misvals)] <- x[is.element (x, misvals)]
 
   attr (x, "na_values") <- na_values
@@ -73,6 +88,8 @@
   attr (x, "labels") <- labels
   attr (x, "label") <- label
   attr (x, "format.spss") <- format_spss
+  attr (x, "format.stata") <- format_stata
+  attr (x, "format.sas") <- format_sas
 
   return (x)
 }
