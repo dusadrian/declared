@@ -42,7 +42,8 @@ w_table(
   values = FALSE,
   valid = TRUE,
   observed = TRUE,
-  margin = NULL
+  margin = NULL,
+  vlabel = FALSE
 )
 
 w_var(x, wt = NULL, method = NULL, na.rm = TRUE)
@@ -78,6 +79,8 @@ if any missing values are present}
 
 \item{margin}{Numeric, indicating the margin to calculate crosstab
 proportions: 0 from the total, 1 from row totals and 2 from column totals}
+
+\item{vlabel}{Logical, print the variable label, if existing}
 }
 \value{
 A vector of (weighted) values.

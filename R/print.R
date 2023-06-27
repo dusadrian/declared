@@ -77,8 +77,8 @@
 
 #' @export
 `print.labels_df` <- function(x, ...) {
-    class(x) <- setdiff(class(x), "labels_df")
-    print_as_df <- isTRUE(attr(x, "print_as_df"))
+    class (x) <- setdiff (class (x), "labels_df")
+    print_as_df <- isTRUE (attr (x, "print_as_df"))
     attr(x, "print_as_df") <- NULL
     if (print_as_df) {
         print (
@@ -90,7 +90,7 @@
         )
     }
     else {
-        print(x)
+        print (x)
     }
 }
 
@@ -98,9 +98,12 @@
 #' @export
 `print.w_table` <- function (x, force = FALSE, startend = TRUE, ...) {
     toprint <- attr (x, "toprint")
-    achar <- rawToChar (as.raw (c (195, 130)))
-    irv <- c (194, 180)
-    tick <- unlist (strsplit (rawToChar (as.raw (irv)), split = ""))
+    xlabel <- attr (toprint, "xlabel")
+    ylabel <- attr (toprint, "ylabel")
+    attr (toprint, "xlabel") <- NULL
+    attr (toprint, "ylabel") <- NULL
+    achar <- "\u00c2"
+    tick <- tick <- c("\u00b4", "\u0060")
     tick <- c (paste0 (achar, "'"), paste0 (achar, tick), tick)
 
     if (x[1] != as.matrix(toprint)[1]) {
@@ -119,7 +122,15 @@
     else {
         x <- toprint
 
-        if (is.matrix(x)) { # crosstab
+        if (!is.null (xlabel)) {
+            cat (xlabel, "\n")
+        }
+
+        if (!is.null (ylabel)) {
+            cat (ylabel, "\n")
+        }
+
+        if (is.matrix (x)) { # crosstab
 
             rnms <- strsplit (rownames (x), split = "_-_")
 

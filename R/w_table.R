@@ -167,10 +167,12 @@
 #'
 #' @param margin Numeric, indicating the margin to calculate crosstab
 #' proportions: 0 from the total, 1 from row totals and 2 from column totals
+#'
+#' @param vlabel Logical, print the variable label, if existing
 #' @export
 `w_table` <- function (
     x, y = NULL, wt = NULL, values = FALSE, valid = TRUE, observed = TRUE,
-    margin = NULL
+    margin = NULL, vlabel = FALSE
 ) {
 
     if (inherits (x, "haven_labelled")) {
@@ -187,9 +189,10 @@
     crosstab <- !is.null (y)
 
     valid <- isTRUE (valid) && any (is.na (x))
+    xlabel <- attr (x, "label", exact = TRUE)
 
     if (inherits (x, "declared")) {
-        xvallab <- names_values (x) # arranges missing values at the end
+        xvallab <- names_values (x, observed = observed) # arranges missing values at the end
         xna_values <- attr (xvallab, "missing")
         # x <- factor (as.character (x), levels = names (xvallab))
         # sometimes (e.g. ISCO codifications in ESS) there are identical labels
@@ -223,6 +226,8 @@
         if (length (x) != length (y)) {
             stopError_ ("Lengths of 'x' and 'y' differ.")
         }
+
+        ylabel <- attr (y, "label", exact = TRUE)
 
         if (inherits (y, "declared")) {
             yvallab <- names_values (y)
@@ -313,6 +318,12 @@
             toprint <- round(100 * toprint, 1)
         }
 
+        if (isTRUE (vlabel)) {
+            attr (toprint, "xlabel") <- xlabel
+            if (crosstab) {
+                attr (toprint, "ylabel") <- ylabel
+            }
+        }
         attr (toprint, "xvalues") <- isTRUE (values) & xvalues
         attr (toprint, "yvalues") <- isTRUE (values) & yvalues
 
@@ -358,6 +369,12 @@
             toprint$cpd <- cumsum (toprint$per)
         }
 
+        if (isTRUE (vlabel)) {
+            attr (toprint, "xlabel") <- xlabel
+            if (crosstab) {
+                attr (toprint, "ylabel") <- ylabel
+            }
+        }
         attr (toprint, "labels") <- labels
         attr (toprint, "values") <- as.vector (xvallab)
         attr (toprint, "show_values") <- values & xvalues
