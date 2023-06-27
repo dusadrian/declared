@@ -332,9 +332,7 @@
 
         if (isTRUE (vlabel)) {
             attr (toprint, "xlabel") <- xlabel
-            if (crosstab) {
-                attr (toprint, "ylabel") <- ylabel
-            }
+            attr (toprint, "ylabel") <- ylabel
         }
         attr (toprint, "xvalues") <- isTRUE (values) & xvalues
         attr (toprint, "yvalues") <- isTRUE (values) & yvalues
@@ -383,9 +381,6 @@
 
         if (isTRUE (vlabel)) {
             attr (toprint, "xlabel") <- xlabel
-            if (crosstab) {
-                attr (toprint, "ylabel") <- ylabel
-            }
         }
         attr (toprint, "labels") <- labels
         attr (toprint, "values") <- as.vector (xvallab)

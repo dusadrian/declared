@@ -110,12 +110,13 @@
         if (pN_na_values) {
             all_na_values <- asNumeric_ (all_na_values)
         }
-        else if (is.double (x)) {
+        else if (is.numeric (x)) {
             if (length (setdiff (na_values, c (letters, LETTERS))) > 0) {
                 admisc::stopError ("Tagged NAs can only be created for single letter declared missing values.")
             }
 
             spss <- FALSE
+            attrx$na_values <- NULL
             tagged_na_values <- makeTag_ (na_values)
             pN_na_values <- TRUE # tagged NAs are numeric alright
             all_na_values <- tagged_na_values[match(all_na_values, na_values)]
@@ -148,7 +149,7 @@
             attrx$labels <- copy_labels
         }
 
-        if (has_na_values) {
+        if (has_na_values & spss) {
             if (is.null(tagged_na_values)) {
                 na_values <- as.numeric (na_values)
             }
