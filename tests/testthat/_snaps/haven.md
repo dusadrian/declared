@@ -97,3 +97,32 @@
            c    Right
            z Apolitic
 
+---
+
+    Code
+      cm1
+    Output
+      <declared<integer>[6]>
+      [1]     1     2     3     4     5 NA(a)
+      Missing values: a
+      
+      Labels:
+       value label
+           1  Good
+           5   Bad
+           a    DK
+
+---
+
+    Code
+      as.haven(cm1)
+    Output
+      <labelled<double>[6]>
+      [1]     1     2     3     4     5 NA(a)
+      
+      Labels:
+       value label
+           1  Good
+           5   Bad
+       NA(a)    DK
+

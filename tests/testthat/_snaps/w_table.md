@@ -287,3 +287,32 @@
         Total  114   101   215 
       
 
+---
+
+    Code
+      using(DF, w_table(Gender, vlabel = TRUE))
+    Output
+      Respodent's gender 
+      
+              fre    rel   per   cpd
+              ----------------------
+        Males 119  0.553  55.3  55.3 
+      Females  96  0.447  44.7 100.0 
+              ----------------------
+              215  1.000 100.0
+      
+
+---
+
+    Code
+      using(DF, w_table(Gender, Area, vlabel = TRUE))
+    Output
+      Respodent's gender 
+      Respodent's area 
+      
+              Rural Urban Total
+        Males   50    69   119 
+      Females   39    57    96 
+        Total   89   126   215 
+      
+

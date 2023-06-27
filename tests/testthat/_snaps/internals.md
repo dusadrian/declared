@@ -264,8 +264,6 @@
     Output
       Good    2    3    4  Bad 
          1    2    3    4    5 
-      attr(,"missing")
-      numeric(0)
 
 ---
 
@@ -286,6 +284,26 @@
 
     Code
       names_values(xr)
+    Output
+      Good    2    3    4  Bad   DK 
+         1    2    3    4    5   -1 
+      attr(,"missing")
+      [1] -1
+
+---
+
+    Code
+      names_values(incx)
+    Output
+      Good    2    4  Bad   DK 
+         1    2    4    5   -1 
+      attr(,"missing")
+      [1] -1
+
+---
+
+    Code
+      names_values(incx, observed = FALSE)
     Output
       Good    2    3    4  Bad   DK 
          1    2    3    4    5   -1 

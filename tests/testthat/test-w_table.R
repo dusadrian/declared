@@ -29,10 +29,12 @@ x4 <- declared(
 DF <- data.frame(
     Area = declared(
         sample(1:2, 215, replace = TRUE, prob = c(0.45, 0.55)),
+        label = "Respodent's area",
         labels = c(Rural = 1, Urban = 2)
     ),
     Gender = declared(
         sample(1:2, 215, replace = TRUE, prob = c(0.55, 0.45)),
+        label = "Respodent's gender",
         labels = c(Males = 1, Females = 2)
     ),
     Age = sample(18:90, 215, replace = TRUE),
@@ -130,4 +132,6 @@ test_that("tests have the same output", {
   expect_snapshot(using(DF, w_table(Gender, wt = fweight), split.by = Area))
   expect_snapshot(using(DF, w_table(Gender, Area)))
   expect_snapshot(using(DF, w_table(Gender, Area, wt = fweight)))
+  expect_snapshot(using(DF, w_table(Gender, vlabel = TRUE)))
+  expect_snapshot(using(DF, w_table(Gender, Area, vlabel = TRUE)))
 })

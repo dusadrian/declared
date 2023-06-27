@@ -29,8 +29,27 @@ cx <- declared(
   na_values = "z"
 )
 
+cm1 <- declared(
+  x = c(1:5, "a"),
+  labels = c(Good = 1, Bad = 5, DK = "a"),
+  na_values = "a"
+)
+
+cm2 <- declared(
+  x = c(1:5, "aa"),
+  labels = c(Good = 1, Bad = 5, DK = "aa"),
+  na_values = "aa"
+)
+
+hcm1 <- haven::labelled(
+  x = c(1:5, haven::tagged_na("a")),
+  labels = c(Good = 1, Bad = 5, DK = haven::tagged_na("a"))
+)
+
 test_that("as.haven() works", {
   expect_equal(as.haven(x), hx)
+
+  expect_equal(as.haven(cm1), hcm1)
 
   expect_equal(as.haven(1:5, interactive = FALSE), as.integer(1:5))
 
@@ -39,6 +58,8 @@ test_that("as.haven() works", {
   expect_true(inherits(as.haven(hs), "haven_labelled"))
 
   expect_message(as.haven(1:5), "no automatic class method conversion")
+
+  expect_error(as.haven(cm2))
 
   expect_message(
     as.haven(1:5, interactive = TRUE, vname_ = "A"),
@@ -114,4 +135,6 @@ test_that("tests have the same output", {
     as.haven(dfd, only_declared = FALSE, interactive = TRUE),
     variant = R_variant
   )
+  expect_snapshot(cm1)
+  expect_snapshot(as.haven(cm1))
 })

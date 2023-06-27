@@ -91,12 +91,11 @@
       print(proportions(w_table(xl, DF$Area)))
     Output
                 Rural      Urban
-      Good 0.05581395 0.06976744
-      2    0.06046512 0.11627907
-      3    0.06511628 0.09302326
-      4    0.08372093 0.07441860
-      Bad  0.08837209 0.15813953
-      DK   0.06046512 0.07441860
+      Good 0.06451613 0.08064516
+      2    0.06989247 0.13440860
+      3    0.07526882 0.10752688
+      4    0.09677419 0.08602151
+      Bad  0.10215054 0.18279570
 
 ---
 
@@ -110,8 +109,7 @@
           3   3    14      20      34  
           4   4    18      16      34  
         Bad 500    19      34      53  
-         DK  -1    13      16      29  
-      Total        89     126     215  
+      Total        76     110     186  
       
 
 ---
@@ -119,6 +117,20 @@
     Code
       print(with(DF, w_table(Gender, Area)))
     Output
+      
+              Rural Urban Total
+        Males   50    69   119 
+      Females   39    57    96 
+        Total   89   126   215 
+      
+
+---
+
+    Code
+      print(with(DF, w_table(Gender, Area, vlabel = TRUE)))
+    Output
+      Respodent's gender 
+      Respodent's area 
       
               Rural Urban Total
         Males   50    69   119 

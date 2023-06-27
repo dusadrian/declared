@@ -7,14 +7,28 @@ x <- declared(
   na_values = -1
 )
 
+incx <- declared(
+  c(1, 2, 4, 5, -1),
+  labels = c(Good = 1, Bad = 5, DK = -1),
+  na_values = -1
+)
+
+tx <- c(1:5, makeTag_("a"))
+
+
+test_that("anyTagged_() works", {
+  expect_false(anyTagged_(x))
+  expect_true(anyTagged_(tx))
+  expect_true(anyTagged_(data.frame(tx)))
+})
+
+
 
 test_that("format_declared() works", {
   expect_length(format_declared(x), 6)
 
   expect_error(format_declared(list(A = 1)))
 })
-
-
 
 
 test_that("order_declared() works", {
@@ -182,6 +196,81 @@ bigtag <- makeTag_(99)
 bigminustag <- makeTag_(-99)
 
 
+
+test_that("tests have the same output", {
+  expect_snapshot(x)
+  expect_snapshot(format_declared(x))
+  expect_snapshot(order_declared(x))
+  expect_snapshot(order_declared(x, na.last = TRUE))
+  expect_snapshot(order_declared(x, na.last = FALSE))
+  expect_snapshot(order_declared(c(x, NA), na.last = FALSE, empty.last = TRUE))
+  expect_snapshot(order_declared(c(x, NA), na.last = TRUE, empty.last = FALSE))
+  expect_snapshot(likely_type(1:5))
+  expect_snapshot(likely_type(c(1:5, 2.0)))
+  expect_snapshot(likely_type("a"))
+  expect_snapshot(likely_type(as.complex(1)))
+  expect_snapshot(check_measurement("nominal"))
+  expect_snapshot(check_measurement("ordinal"))
+  expect_snapshot(check_measurement("qualitative"))
+  expect_snapshot(check_measurement("interval"))
+  expect_snapshot(check_measurement("ratio"))
+  expect_snapshot(check_measurement("discrete"))
+  expect_snapshot(check_measurement("continuous"))
+  expect_snapshot(check_measurement("metric"))
+  expect_snapshot(check_measurement("numeric"))
+  expect_snapshot(check_measurement("interval, discrete"))
+  expect_snapshot(likely_measurement(x))
+  expect_snapshot(y)
+  expect_snapshot(likely_measurement(y))
+  expect_snapshot(z)
+  expect_snapshot(likely_measurement(z))
+  expect_snapshot(cx1)
+  expect_snapshot(likely_measurement(cx1))
+  expect_snapshot(cx2)
+  expect_snapshot(likely_measurement(cx2))
+  expect_snapshot(names_values(x))
+  expect_snapshot(names_values(x, drop_na = TRUE))
+  expect_snapshot(xr)
+  expect_snapshot(names_values(xr))
+  expect_snapshot(names_values(incx))
+  expect_snapshot(names_values(incx, observed = FALSE))
+  expect_snapshot(declared(1:5, labels = c(A = 1)))
+  expect_snapshot(
+    declared(1:10, labels = c(A = 1), na_values = 9, na_range = c(8, 10))
+  )
+  expect_snapshot(declared(1:5, labels = c(A = 1), na_range = c(8, 10)))
+  expect_snapshot(possibleNumeric_(rep(NA, 5)))
+  expect_snapshot(possibleNumeric_(rep(TRUE, 5)))
+  expect_snapshot(possibleNumeric_(xr))
+  expect_snapshot(possibleNumeric_(1:5, each = TRUE))
+  expect_snapshot(wholeNumeric_(xr))
+  expect_snapshot(wholeNumeric_(1:5, each = TRUE))
+  expect_snapshot(tryCatchWEM_(order_declared(list(A = 1))))
+  expect_snapshot(tryCatchWEM_(value_labels(x), capture = TRUE))
+  expect_snapshot(
+    tryCatchWEM_(as.declared(1:5, interactive = TRUE), capture = TRUE)
+  )
+  expect_snapshot(padLeft_("foo", 5))
+  expect_snapshot(padRight_("foo", 5))
+  expect_snapshot(padBoth_("foo", 5))
+  expect_snapshot(hasTag_(bigtag, ""))
+  expect_snapshot(hasTag_(c(atag, NA), "a"))
+  expect_snapshot(getTag_(onetag))
+  decx <- c(12, 12.3, 12.34)
+  expect_snapshot(decx)
+  expect_snapshot(numdec_(decx))
+  expect_snapshot(numdec_(decx, each = TRUE))
+  decx2 <- c("-.1", " 2.75 ", "12", "B", NA, "2e-05", "100.00")
+  expect_snapshot(decx2)
+  expect_snapshot(numdec_(decx2))
+  expect_snapshot(numdec_(decx2, each = TRUE))
+  expect_snapshot(trimstr_(" foo ", what = " "))
+  expect_snapshot(trimstr_(" foo ", what = "+"))
+  expect_snapshot(hasTag_(c(minustag, NA, atag)))
+  expect_snapshot(hasTag_(c(bigminustag, atag)))
+})
+
+
 test_that("internal non exported functions work", {
   expect_error(coerceMode_(list(A = 1)))
 
@@ -288,82 +377,4 @@ test_that("internal non exported functions work", {
   # expect_true(hasTag_(makeTag_("-a"), "-a"))
 
   # expect_true(hasTag_(makeTag_("-ab"), "-ab"))
-})
-
-
-
-test_that("tests have the same output", {
-  expect_snapshot(x)
-  expect_snapshot(format_declared(x))
-  expect_snapshot(order_declared(x))
-  expect_snapshot(order_declared(x, na.last = TRUE))
-  expect_snapshot(order_declared(x, na.last = FALSE))
-  expect_snapshot(order_declared(c(x, NA), na.last = FALSE, empty.last = TRUE))
-  expect_snapshot(order_declared(c(x, NA), na.last = TRUE, empty.last = FALSE))
-  expect_snapshot(likely_type(1:5))
-  expect_snapshot(likely_type(c(1:5, 2.0)))
-  expect_snapshot(likely_type("a"))
-  expect_snapshot(likely_type(as.complex(1)))
-  expect_snapshot(check_measurement("nominal"))
-  expect_snapshot(check_measurement("ordinal"))
-  expect_snapshot(check_measurement("qualitative"))
-  expect_snapshot(check_measurement("interval"))
-  expect_snapshot(check_measurement("ratio"))
-  expect_snapshot(check_measurement("discrete"))
-  expect_snapshot(check_measurement("continuous"))
-  expect_snapshot(check_measurement("metric"))
-  expect_snapshot(check_measurement("numeric"))
-  expect_snapshot(check_measurement("interval, discrete"))
-  expect_snapshot(likely_measurement(x))
-  expect_snapshot(y)
-  expect_snapshot(likely_measurement(y))
-  expect_snapshot(z)
-  expect_snapshot(likely_measurement(z))
-  expect_snapshot(cx1)
-  expect_snapshot(likely_measurement(cx1))
-  expect_snapshot(cx2)
-  expect_snapshot(likely_measurement(cx2))
-  expect_snapshot(names_values(x))
-  expect_snapshot(names_values(x, drop_na = TRUE))
-  xr <- declared(
-    c(1:5, -1),
-    labels = c(Good = 1, Bad = 5, DK = -1),
-    na_range = c(-5, -1)
-  )
-  expect_snapshot(xr)
-  expect_snapshot(names_values(xr))
-  expect_snapshot(declared(1:5, labels = c(A = 1)))
-  expect_snapshot(
-    declared(1:10, labels = c(A = 1), na_values = 9, na_range = c(8, 10))
-  )
-  expect_snapshot(declared(1:5, labels = c(A = 1), na_range = c(8, 10)))
-  expect_snapshot(possibleNumeric_(rep(NA, 5)))
-  expect_snapshot(possibleNumeric_(rep(TRUE, 5)))
-  expect_snapshot(possibleNumeric_(xr))
-  expect_snapshot(possibleNumeric_(1:5, each = TRUE))
-  expect_snapshot(wholeNumeric_(xr))
-  expect_snapshot(wholeNumeric_(1:5, each = TRUE))
-  expect_snapshot(tryCatchWEM_(order_declared(list(A = 1))))
-  expect_snapshot(tryCatchWEM_(value_labels(x), capture = TRUE))
-  expect_snapshot(
-    tryCatchWEM_(as.declared(1:5, interactive = TRUE), capture = TRUE)
-  )
-  expect_snapshot(padLeft_("foo", 5))
-  expect_snapshot(padRight_("foo", 5))
-  expect_snapshot(padBoth_("foo", 5))
-  expect_snapshot(hasTag_(bigtag, ""))
-  expect_snapshot(hasTag_(c(atag, NA), "a"))
-  expect_snapshot(getTag_(onetag))
-  decx <- c(12, 12.3, 12.34)
-  expect_snapshot(decx)
-  expect_snapshot(numdec_(decx))
-  expect_snapshot(numdec_(decx, each = TRUE))
-  decx2 <- c("-.1", " 2.75 ", "12", "B", NA, "2e-05", "100.00")
-  expect_snapshot(decx2)
-  expect_snapshot(numdec_(decx2))
-  expect_snapshot(numdec_(decx2, each = TRUE))
-  expect_snapshot(trimstr_(" foo ", what = " "))
-  expect_snapshot(trimstr_(" foo ", what = "+"))
-  expect_snapshot(hasTag_(c(minustag, NA, atag)))
-  expect_snapshot(hasTag_(c(bigminustag, atag)))
 })

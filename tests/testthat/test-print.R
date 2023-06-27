@@ -51,10 +51,12 @@ x4 <- declared(
 DF <- data.frame(
     Area = declared(
         sample(1:2, 215, replace = TRUE, prob = c(0.45, 0.55)),
+        label = "Respodent's area",
         labels = c(Rural = 1, Urban = 2)
     ),
     Gender = declared(
         sample(1:2, 215, replace = TRUE, prob = c(0.55, 0.45)),
+        label = "Respodent's gender",
         labels = c(Males = 1, Females = 2)
     ),
     Age = sample(18:90, 215, replace = TRUE),
@@ -123,6 +125,7 @@ test_that("tests have the same output", {
   expect_snapshot(print(proportions(w_table(xl, DF$Area))))
   expect_snapshot(print(w_table(xl, DF$Area, values = TRUE)))
   expect_snapshot(print(with(DF, w_table(Gender, Area))))
+  expect_snapshot(print(with(DF, w_table(Gender, Area, vlabel = TRUE))))
   expect_snapshot(print(with(DF, w_table(Gender, values = TRUE))))
   expect_snapshot(
     print(with(DF, w_table(Gender, values = TRUE)), show_values = FALSE)
