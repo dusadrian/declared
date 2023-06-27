@@ -72,8 +72,8 @@ as x}
 
 \item{values}{Logical, print the values in the table rows}
 
-\item{valid}{Logical, print the percent distribution for non-missing values,
-if any missing values are present}
+\item{valid}{Logical, print separate percent distribution for valid values,
+if any missing values are present; for cross tables, use valid values only}
 
 \item{observed}{Logical, print the observed categories only}
 

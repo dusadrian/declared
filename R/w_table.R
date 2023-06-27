@@ -161,7 +161,7 @@
 #' @param values Logical, print the values in the table rows
 #'
 #' @param valid Logical, print separate percent distribution for valid values,
-#' if any missing values are present; for crosstables, use only the valid values
+#' if any missing values are present; for cross tables, use valid values only
 #'
 #' @param observed Logical, print the observed categories only
 #'
