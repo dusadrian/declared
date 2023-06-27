@@ -160,8 +160,8 @@
 #'
 #' @param values Logical, print the values in the table rows
 #'
-#' @param valid Logical, print the percent distribution for non-missing values,
-#' if any missing values are present
+#' @param valid Logical, print separate percent distribution for valid values,
+#' if any missing values are present; for crosstables, use only the valid values
 #'
 #' @param observed Logical, print the observed categories only
 #'
@@ -188,11 +188,19 @@
     xvalues <- yvalues <- TRUE
     crosstab <- !is.null (y)
 
-    valid <- isTRUE (valid) && any (is.na (x))
+    if (!crosstab) {
+        valid <- isTRUE (valid) && any (is.na (x))
+    }
+
     xlabel <- attr (x, "label", exact = TRUE)
 
     if (inherits (x, "declared")) {
-        xvallab <- names_values (x, observed = observed) # arranges missing values at the end
+        # names_values () arranges missing values at the end
+        xvallab <- names_values (
+            x,
+            drop_na = crosstab && isTRUE (valid),
+            observed = observed
+        )
         xna_values <- attr (xvallab, "missing")
         # x <- factor (as.character (x), levels = names (xvallab))
         # sometimes (e.g. ISCO codifications in ESS) there are identical labels
@@ -230,7 +238,11 @@
         ylabel <- attr (y, "label", exact = TRUE)
 
         if (inherits (y, "declared")) {
-            yvallab <- names_values (y)
+            yvallab <- names_values (
+                y,
+                drop_na = crosstab && isTRUE (valid),
+                observed = observed
+            )
             yna_values <- attr (yvallab, "missing")
             y <- factor (
                 paste (
