@@ -326,7 +326,7 @@ NULL
 
 #' @rdname declared_internal
 #' @export
-`names_values` <- function (x, drop_na = FALSE) {
+`names_values` <- function (x, drop_na = FALSE, observed = TRUE) {
 
     if (!inherits (x, "declared") & !inherits (x, "haven_labelled_spss")) {
         stopError_ (
@@ -371,6 +371,24 @@ NULL
 
     xnotmis <- sort (x[!xmis])
     xmis <- sort (x[xmis])
+
+    if (isFALSE (observed) && is.numeric (labels)) {
+        lnotmis <- length(xnotmis)
+        labels_notmis <- setdiff(labels, na_values)
+        if (labels_notmis[2] < 16) {
+            # there should be an upper limit for tables of frequencies
+            if (
+                length (labels_notmis) == 2 &&
+                xnotmis[1] == labels_notmis[1] &&
+                xnotmis[lnotmis] == labels_notmis[2] &&
+                lnotmis != (labels_notmis[2] + labels_notmis[1] == 0)
+            ) {
+                # Likert type response scale, with labels only for the
+                # first and last values
+                xnotmis <- seq(labels_notmis[1], labels_notmis[2])
+            }
+        }
+    }
 
     if (length (xmis) > 0) {
         names (xmis) <- xmis
@@ -509,9 +527,7 @@ NULL
         x <- as.character (x)
     }
 
-    irv <- c (194, 160)
-    multibyte_space <- rawToChar (as.raw (irv))
-    x <- gsub (multibyte_space, " ", x)
+    x <- gsub ("\u00a0", " ", x) # multibyte space
 
     multibyte <- grepl ("[^!-~ ]", x)
     if (any (multibyte)) {
@@ -542,9 +558,7 @@ NULL
         return (as.numeric (x))
     }
 
-    irv <- c (194, 160)
-    multibyte_space <- rawToChar (as.raw (irv))
-    x <- gsub (multibyte_space, " ", x)
+    x <- gsub ("\u00a0", " ", x) # multibyte space
 
     result <- rep (NA, length (x))
     multibyte <- grepl ("[^!-~ ]", x)
@@ -779,16 +793,13 @@ NULL
 
 
 `trimstr_` <- function (x, what = " ", side = "both") {
-    irv <- c (194, 160)
-    multibyte_space <- rawToChar (as.raw (irv))
-
     if (is.element (what, c ("*", "+"))) {
         what <- paste ("\\", what, sep = "")
     }
 
     what <- ifelse (
         identical (what, " "),
-        paste0 ("[[:space:]|", multibyte_space, "]"),
+        paste0 ("[[:space:]|", "\u00a0", "]"), # plus the multibyte space
         what
     )
 

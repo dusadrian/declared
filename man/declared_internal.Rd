@@ -28,7 +28,7 @@ value_labels(...)
 
 variable_label(...)
 
-names_values(x, drop_na = FALSE)
+names_values(x, drop_na = FALSE, observed = TRUE)
 
 makeTag_(...)
 
