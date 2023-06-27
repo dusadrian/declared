@@ -371,6 +371,9 @@ NULL
 
     xnotmis <- sort (x[!xmis])
     xmis <- sort (x[xmis])
+    if (all (is.element (xmis, na_values))) {
+        xmis <- na_values
+    }
 
     if (isFALSE (observed) && is.numeric (labels)) {
         lnotmis <- length(xnotmis)
