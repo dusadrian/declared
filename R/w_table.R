@@ -248,6 +248,20 @@
 
         nmy <- getName_ (funargs$y)
 
+        ncharx <- nchar (nmx)
+        nchary <- nchar (nmy)
+        if (length(c (ncharx + nchary)) > 0) {
+            nchars <- max (nchar (c (nmx, nmy)))
+        }
+
+        if (length(ncharx) > 0 && ncharx > 0) {
+            nmx <- padLeft_ (nmx, nchars - ncharx)
+        }
+
+        if (length(nchary) > 0 && nchary > 0) {
+            nmy <- padLeft_ (nmy, nchars - nchary)
+        }
+
         if (inherits (y, "declared")) {
             yvallab <- names_values (
                 y,
