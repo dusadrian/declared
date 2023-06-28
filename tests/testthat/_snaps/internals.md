@@ -65,7 +65,7 @@
 ---
 
     Code
-      likely_type(c(1:5, 2))
+      likely_type(c(1:5, 2.1))
     Output
       [1] "<numeric>"
 

@@ -67,7 +67,7 @@ test_that("variable_label() is deprecated", {
 
 
 test_that("likely_type() works", {
-  expect_true(grepl("numeric", likely_type(c(1:5, 2.0))))
+  expect_true(grepl("numeric", likely_type(c(1:5, 2.1))))
 
   expect_true(grepl("integer", likely_type(1:5)))
 
@@ -206,7 +206,7 @@ test_that("tests have the same output", {
   expect_snapshot(order_declared(c(x, NA), na.last = FALSE, empty.last = TRUE))
   expect_snapshot(order_declared(c(x, NA), na.last = TRUE, empty.last = FALSE))
   expect_snapshot(likely_type(1:5))
-  expect_snapshot(likely_type(c(1:5, 2.0)))
+  expect_snapshot(likely_type(c(1:5, 2.1)))
   expect_snapshot(likely_type("a"))
   expect_snapshot(likely_type(as.complex(1)))
   expect_snapshot(check_measurement("nominal"))

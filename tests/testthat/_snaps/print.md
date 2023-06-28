@@ -129,8 +129,8 @@
     Code
       print(with(DF, w_table(Gender, Area, vlabel = TRUE)))
     Output
-      Respodent's gender 
-      Respodent's area 
+      Gender: Respodent's gender 
+      Area: Respodent's area 
       
               Rural Urban Total
         Males   50    69   119 
