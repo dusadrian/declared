@@ -175,6 +175,15 @@
     margin = NULL, vlabel = FALSE
 ) {
 
+    funargs <- lapply(
+        lapply(
+            match.call(), deparse)[-1],
+            function(x) gsub("'|\"|[[:space:]]", "", x
+        )
+    )
+
+    nmx <- getName_ (funargs$x)
+    
     if (inherits (x, "haven_labelled")) {
         x <- as.declared (x)
     }
@@ -198,7 +207,7 @@
         # names_values () arranges missing values at the end
         xvallab <- names_values (
             x,
-            drop_na = crosstab && isTRUE (valid),
+            drop_na = isTRUE (valid) & crosstab,
             observed = observed
         )
         xna_values <- attr (xvallab, "missing")
@@ -236,6 +245,8 @@
         }
 
         ylabel <- attr (y, "label", exact = TRUE)
+
+        nmy <- getName_ (funargs$y)
 
         if (inherits (y, "declared")) {
             yvallab <- names_values (
@@ -331,8 +342,8 @@
         }
 
         if (isTRUE (vlabel)) {
-            attr (toprint, "xlabel") <- xlabel
-            attr (toprint, "ylabel") <- ylabel
+            attr (toprint, "xlabel") <- paste(nmx, xlabel, sep = ": ")
+            attr (toprint, "ylabel") <- paste(nmy, ylabel, sep = ": ")
         }
         attr (toprint, "xvalues") <- isTRUE (values) & xvalues
         attr (toprint, "yvalues") <- isTRUE (values) & yvalues
@@ -380,7 +391,7 @@
         }
 
         if (isTRUE (vlabel)) {
-            attr (toprint, "xlabel") <- xlabel
+            attr (toprint, "xlabel") <- paste(nmx, xlabel, sep = ": ")
         }
         attr (toprint, "labels") <- labels
         attr (toprint, "values") <- as.vector (xvallab)
