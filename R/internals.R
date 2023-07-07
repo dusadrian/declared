@@ -116,7 +116,7 @@ NULL
     type <- NULL
     if (is.numeric (x)) {
         type <- "numeric"
-        if (is.integer (x) || wholeNumeric_ (x)) {
+        if (!anyTagged_(x) && (is.integer (x) || wholeNumeric_ (x))) {
             type <- "integer"
         }
     }
@@ -900,8 +900,7 @@ NULL
              # "A","B" or A,B
             ptn <- substring (ptn, 3, nchar(ptn) - 1)
         }
-
-        postring <- grepl ("'|\"", ptn)
+        
         ptn <- gsub ("'|\"|]|\ ", "", ptn)
 
         ptn <- unlist (strsplit (ptn, split = ","))
@@ -919,16 +918,9 @@ NULL
                 result <- nms[as.numeric (ptn)]
             }
         }
-        else {
-            # it's a name
-            if (postring) {
+        else if (length (nms) > 0) {
+            if (all (is.element (ptn, nms))) {
                 return (ptn)
-            }
-
-            if (length (nms) > 0) {
-                if (all (is.element (ptn, nms))) {
-                    return (ptn)
-                }
             }
         }
     }
