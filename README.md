@@ -20,16 +20,16 @@ social science microdata, particularly labelled data. While there are
 excellent packages available for these purposes, such as
 [haven](https://haven.tidyverse.org/) and
 [labelled](http://larmarange.github.io/labelled/), they have some
-fundamental design features that run, in some situations, against the
-user’s expectations. This has a lot to do with the treatment of declared
+fundamental design features that run, in some situations, against
+users' expectations. This has a lot to do with the treatment of declared
 missing values, that are instrumental for the social sciences. The aim
-of `declared` is to offer an alternative class, `declared()`, whilst
-ensuring as much compatibility as possible with these packages popular
-packages.
+of `declared` is to offer an alternative class called `"declared"`, whilst
+ensuring as much compatibility as possible with these popular packages.
 
 ## Installation
 
-You can install the development version of declared using this command:
+The development version of package `declared` can be installed using this
+command:
 
 ``` r
 install.packages("declared", repos = "dusadrian.r-universe.dev")
