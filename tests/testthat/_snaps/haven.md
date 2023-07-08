@@ -47,7 +47,7 @@
     Code
       as.haven(x)
     Output
-      <labelled_spss<double>[6]>
+      <labelled_spss<integer>[6]>
       [1]  1  2  3  4  5 -1
       Missing values: -1
       

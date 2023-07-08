@@ -378,3 +378,32 @@ test_that("internal non exported functions work", {
 
   # expect_true(hasTag_(makeTag_("-ab"), "-ab"))
 })
+
+
+foo <- function(x, y, object = FALSE) {
+  funargs <- lapply(
+    lapply(
+      match.call(), deparse)[-1],
+      function(x) gsub("'|\"|[[:space:]]", "", x
+    )
+  )
+
+  return(c(
+    getName_(funargs$x, object = object),
+    getName_(funargs$y, object = object)
+  ))
+}
+
+dfx <- data.frame(x = x, incx = x)
+
+
+test_that("getName_() works", {
+  expect_equal(foo(x, incx), c("x", "incx"))
+  expect_equal(foo(dfx$x, dfx$incx), c("x", "incx"))
+  expect_equal(foo(dfx[["x"]], dfx[["incx"]]), c("x", "incx"))
+  expect_equal(foo(dfx[, c("x", "incx")]), c("x", "incx"))
+  expect_equal(foo(dfx[, c(1, 2)]), c("x", "incx"))
+  expect_equal(foo(dfx$x, object = TRUE), "dfx")
+  expect_equal(foo(dfx[, c(1, 2)], object = TRUE), "dfx")
+  expect_equal(foo("dfx"), "dfx")
+})

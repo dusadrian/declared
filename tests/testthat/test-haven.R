@@ -14,7 +14,7 @@ hs <- haven::labelled(
 
 
 hx <- haven::labelled_spss(
-  c(1:5, -1),
+  as.integer(c(1:5, -1)),
   labels = c(Good = 1, Bad = 5, DK = -1),
   na_values = -1
 )
@@ -46,6 +46,13 @@ hcm1 <- haven::labelled(
   labels = c(Good = 1, Bad = 5, DK = haven::tagged_na("a"))
 )
 
+xr <- declared(
+  c(1:5, -7, -9),
+  labels = c(Good = 1, Bad = 5, DK = -7, NR = -9),
+  na_range = c(-7, -9)
+)
+
+
 test_that("as.haven() works", {
   expect_equal(as.haven(x), hx)
 
@@ -65,6 +72,8 @@ test_that("as.haven() works", {
     as.haven(1:5, interactive = TRUE, vname_ = "A"),
     "no automatic class method conversion"
   )
+
+  expect_true(inherits(as.haven(xr), "integer"))
 })
 
 
@@ -75,7 +84,7 @@ test_that("as.haven() works for data.frames", {
   expect_true(inherits(as.haven(dfd), "data.frame"))
 
   expect_true(inherits(as.haven(dfd, interactive = TRUE), "data.frame"))
-  
+
   expect_true(
     inherits(
       suppressMessages(as.haven(dfd, only_declared = FALSE)),
@@ -107,7 +116,7 @@ test_that("as_factor.declared() works", {
 
 test_that("zap_labels.declared() and zap_missing.declared() work", {
   expect_identical(haven::zap_labels(x), c(1:5, NA))
-  
+
   expect_null(
     attr(
       haven::zap_missing(x),
