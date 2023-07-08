@@ -66,6 +66,7 @@
 #' @export
 `as.haven.declared` <- function (x, ...) {
     attrx <- attributes (x)
+    declared_is_integer <- is.integer(x)
 
     # this is necessary to replace those values
     # (because of the "[<-.declared" method)
@@ -83,32 +84,39 @@
     na_values <- attrx$na_values
     has_na_values <- !is.null(na_values)
 
+    na_range <- attrx$na_range
+    has_na_range <- !is.null(na_range)
+    pN_na_range <- possibleNumeric_ (na_range)
+
     labels <- attrx$labels
     has_labels <- !is.null(labels)
 
     tagged_na_values <- NULL
     pN_na_values <- possibleNumeric_ (na_values)
 
-    if (has_na_values & pN_na_values) {
+    if (has_na_values && pN_na_values) {
         na_values <- asNumeric_ (na_values)
     }
 
-    pN_labels <- TRUE
     if (has_labels) {
+        pN_labels <- TRUE
         if (length(setdiff(labels, na_values)) > 0) {
             pN_labels <- possibleNumeric_ (setdiff(labels, na_values))
+            if (!pN_labels) {
+                x <- as.character (x)
+            }
         }
     }
 
-    if (!pN_labels) {
-        x <- as.character (x)
-    }
 
     if (has_na_index) {
-        all_na_values <- names (na_index)
+        na_index_values <- names (na_index)
 
-        if (pN_na_values) {
-            all_na_values <- asNumeric_ (all_na_values)
+        if (pN_na_values | pN_na_range) {
+            na_index_values <- asNumeric_ (na_index_values)
+            if (likely_type (na_index_values) == "<integer>") {
+                na_index_values <- as.integer(na_index_values)
+            }
         }
         else if (is.numeric (x)) {
             if (length (setdiff (na_values, c (letters, LETTERS))) > 0) {
@@ -119,14 +127,15 @@
             attrx$na_values <- NULL
             tagged_na_values <- makeTag_ (na_values)
             pN_na_values <- TRUE # tagged NAs are numeric alright
-            all_na_values <- tagged_na_values[match(all_na_values, na_values)]
+            na_index_values <- tagged_na_values[match(na_index_values, na_values)]
+            attrx$class <- setdiff(attrx$class, "integer")
         }
 
-        x[na_index] <- all_na_values
+        x[na_index] <- na_index_values
     }
 
-    
-    if (is.numeric (x) & pN_labels & pN_na_values) {
+
+    if (is.numeric (x) & pN_labels & (pN_na_values | is.null(na_values))) {
 
         if (has_labels) {
             copy_labels <- numeric (length (labels))
@@ -150,12 +159,7 @@
         }
 
         if (has_na_values & spss) {
-            if (is.null(tagged_na_values)) {
-                na_values <- as.numeric (na_values)
-            }
-            else {
-                na_values <- tagged_na_values
-            }
+            na_values <- as.numeric (na_values)
             names (na_values) <- names (attrx$na_values)
             attrx$na_values <- na_values
         }
@@ -175,31 +179,44 @@
             attrx$labels <- labels
         }
     }
-    #------------------------------------------
 
     attrx$na_index <- NULL
-    # attrx$class <- c (
-    #     "haven_labelled_spss", "haven_labelled", "vctrs_vctr",
-    #     setdiff (attrx$class, "declared")
-    # )
-
-    #------------------------------------------
-    # detour until ReadStat deals with integers
     attrx$class <- setdiff (
         attrx$class,
         c ("declared", "double", "integer", "character")
     )
 
-    attrx$class <- unique (c (
-        "haven_labelled", "vctrs_vctr",
-        attrx$class,
-        class (x)
-    ))
-
     if (spss) {
-        attrx$class <- c ("haven_labelled_spss", attrx$class)
+        if (declared_is_integer && grepl("integer", likely_type (x))) {
+            x <- as.integer (x)
+            attrx$class <- c ("integer", attrx$class)
+
+            if (has_na_values) {
+                class (attrx$na_values) <- "integer"
+            }
+
+            if (has_labels) {
+                class (attrx$labels) <- "integer"
+            }
+
+            if (has_na_range && all(attrx$na_range > -Inf) && all(attrx$na_range < Inf)) {
+                class (attrx$na_range) <- "integer"
+            }
+        }
+
+        attrx$class <- unique (c (
+            "haven_labelled_spss",  "haven_labelled", "vctrs_vctr",
+            attrx$class,
+            class (x)
+        ))
     }
-    #------------------------------------------
+    else {
+        attrx$class <- unique (c (
+            "haven_labelled", "vctrs_vctr",
+            attrx$class,
+            class (x)
+        ))
+    }
 
     attributes (x) <- attrx
     return (x)
