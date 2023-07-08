@@ -735,7 +735,7 @@ NULL
     if (is.double(x)) {
         return(.Call("_anyTagged", x, PACKAGE = "declared"))
     }
-    
+
     return(FALSE)
 }
 
@@ -820,12 +820,12 @@ NULL
 `getName_` <- function(x, object = FALSE) {
     result <- rep ("", length (x))
     x <- as.vector (gsub ("1-", "", gsub ("[[:space:]]", "", x)))
-                            
+
     condsplit <- unlist (strsplit (x, split = ""))
 
     startpos <- 0
     keycode <- ""
-    
+
     if (any (condsplit == "]")) {
         startpos <- max (which (condsplit == "]"))
         keycode <- "]"
@@ -845,10 +845,10 @@ NULL
         if (object) {
             return (substring (x, 1, min (which (condsplit == "$")) - 1))
         }
-        
+
         # else
         result <- substring (x, startpos + 1)
-        
+
     }
     else if (identical (keycode, "]")) {
         # ex. dd[,c("A","B")]
@@ -900,7 +900,7 @@ NULL
              # "A","B" or A,B
             ptn <- substring (ptn, 3, nchar(ptn) - 1)
         }
-        
+
         ptn <- gsub ("'|\"|]|\ ", "", ptn)
 
         ptn <- unlist (strsplit (ptn, split = ","))
@@ -913,7 +913,7 @@ NULL
         if (possibleNumeric_ (ptn)) {
             # it's a number (an index)
             # see if it has column names
-            
+
             if (length (nms) > 0) {
                 result <- nms[as.numeric (ptn)]
             }
