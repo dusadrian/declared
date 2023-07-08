@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">declared</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.21</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -166,7 +166,7 @@ reverses the process:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">xh</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/as.haven.html">as.haven</a></span><span class="op">(</span><span class="va">x2</span><span class="op">)</span></span>
 <span><span class="va">xh</span></span>
-<span><span class="co">#&gt; &lt;labelled_spss&lt;double&gt;[7]&gt;</span></span>
+<span><span class="co">#&gt; &lt;labelled_spss&lt;integer&gt;[7]&gt;</span></span>
 <span><span class="co">#&gt; [1]   1   2   3   4   5 -91 -91</span></span>
 <span><span class="co">#&gt; Missing values: -91, -92</span></span>
 <span><span class="co">#&gt; Missing range:  [-95, -91]</span></span>
@@ -283,9 +283,9 @@ factor:</p>
 <p>The base factors provide no possibility to assign specific values for
 the specific categories, and most importantly, they do not differentiate
 between valid values and (declared) missing values. To make the
-functionality consistent with the base treatment of NA values, coercing
+functionality consistent with the base treatment of <code class="sourceCode r"><span class="cn">NA</span></code> values, coercing
 to factors defaults to dropping the declared missing values because of
-the default value of the argument <code>drop_na</code>:</p>
+the default value of the argument <code class="sourceCode r">drop_na</code>:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">x4</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] Left   Middle Right  &lt;NA&gt;  </span></span>

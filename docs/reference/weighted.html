@@ -14,7 +14,7 @@ adapted to objects of class "declared" (see Details below)'><!-- mathjax --><scr
     
     <a class="navbar-brand me-2" href="../index.html">declared</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.21</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -85,7 +85,8 @@ adapted to objects of class <code>"declared"</code> (see Details below)</p>
 <span>  values <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  valid <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  observed <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  margin <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  margin <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  vlabel <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">w_var</span><span class="op">(</span><span class="va">x</span>, wt <span class="op">=</span> <span class="cn">NULL</span>, method <span class="op">=</span> <span class="cn">NULL</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
@@ -135,8 +136,8 @@ as x</p></dd>
 
 
 <dt>valid</dt>
-<dd><p>Logical, print the percent distribution for non-missing values,
-if any missing values are present</p></dd>
+<dd><p>Logical, print separate percent distribution for valid values,
+if any missing values are present; for cross tables, use valid values only</p></dd>
 
 
 <dt>observed</dt>
@@ -146,6 +147,10 @@ if any missing values are present</p></dd>
 <dt>margin</dt>
 <dd><p>Numeric, indicating the margin to calculate crosstab
 proportions: 0 from the total, 1 from row totals and 2 from column totals</p></dd>
+
+
+<dt>vlabel</dt>
+<dd><p>Logical, print the variable label, if existing</p></dd>
 
 </dl></div>
     <div class="section level2">
