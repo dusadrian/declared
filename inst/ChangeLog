@@ -1,8 +1,8 @@
 Version 0.22
     o Improved treatment of extended missing values, via imported haven objects
+    o w_table() now correctly display the missing values, in the declared order
     o New argument "vlabel" in function w_table(), to print the variable label,
       if present
-    o w_table() now correctly display the missing values, in the declared order
 
 Version 0.21
     o Function declared() now recognize a "labels" attribute of the input
