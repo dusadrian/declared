@@ -100,6 +100,9 @@ test_that("print.w_table method works", {
   )
 
   test <- capture.output(print(w_table(c(1:5, NA))))
+  test <- capture.output(print(with(DF, w_table(Gender, Area, vlabel = TRUE))))
+  test <- capture.output(print(with(DF, w_table(Gender, vlabel = TRUE))))
+  test <- capture.output(print(labels(xl, print_as_df = FALSE)))
 
   expect_error(
     capture.output(print(w_table(1:101))),

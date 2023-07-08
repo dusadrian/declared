@@ -179,6 +179,8 @@ xr <- declared(
 test_that("names_values() works", {
   expect_length(names_values(x), 6)
 
+  expect_length(names_values(x, observed = FALSE), 6)
+
   expect_length(names_values(xr), 6)
 
   expect_length(names_values(x, drop_na = TRUE), 5)
