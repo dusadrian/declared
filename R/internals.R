@@ -308,6 +308,11 @@ NULL
         }
 
         if (!is.null (na_range)) {
+            na_range <- range (na_range)
+            if (length (unique (na_range)) != 2) {
+                stopError_ ("`na_range` must have two unique values.")
+            }
+
             uniques <- sort (unique (x[x >= na_range[1] & x <= na_range[2]]))
             if (length (uniques) == 0) {
                 uniques <- na_range
