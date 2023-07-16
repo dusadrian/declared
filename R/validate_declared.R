@@ -33,9 +33,9 @@
       (is.character (x) && is.character (na_range)) ||
       (is.numeric (x) && is.numeric (na_range))
 
-    if (!type_ok || length (na_range) != 2) {
+    if (!type_ok || length (unique (na_range)) != 2) {
       stopError_ (
-        "`na_range` must be a vector of length two of the same type as `x`."
+        "`na_range` must have two unique values of the same type as `x`."
       )
     }
 
