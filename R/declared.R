@@ -195,11 +195,8 @@ declared.default <- function (
 
   validate_declared (x, labels, label, na_values, na_range)
 
+  na_range <- sort (na_range)
   misvals <- all_missing_values (x, na_values, na_range, labels)
-
-  if (!is.null (na_range)) {
-    na_range <- sort (na_range)
-  }
 
   attr (x, "xchar") <- xchar
   missingValues (x)[is.element (x, misvals)] <- x[is.element (x, misvals)]
