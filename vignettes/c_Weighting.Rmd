@@ -121,7 +121,7 @@ custom one was needed to identify (and weight) the declared missing values.
 In the same spirit, many other similar functions are provided such as
 `w_mean()`{.R}, `w_var()`{.R}, `w_sd()`{.R} etc., and the list will likely grow
 in the future. They are similar to the base package counterparts, with a single
-difference: the argument `na.rm`{.R} is activated by default, with or without
+difference: the argument `na.rm` is activated by default, with or without
 weighting. This is an informed decision about which users are alerted in the
 functions' respective help pages.
 

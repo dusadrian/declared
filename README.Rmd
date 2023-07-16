@@ -57,7 +57,7 @@ mean(x1)
 
 Instead of using the `labelled::labelled()`{.R} class or its inherited version
 in `haven`, the `declared` package offers a similar class that behaves more as
-it is expected--because it interprets certain "missing" values `NA`{.R} codes as
+it is expected--because it interprets certain "missing" values `NA` codes as
 existing, declared missing values.
 
 ```{r example}

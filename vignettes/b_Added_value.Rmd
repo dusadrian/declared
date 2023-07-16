@@ -177,7 +177,7 @@ x5
 The base factors provide no possibility to assign specific values for the
 specific categories, and most importantly, they do not differentiate between
 valid values and (declared) missing values. To make the functionality consistent
-with the base treatment of `NA`{.R} values, coercing to factors defaults to
+with the base treatment of `NA` values, coercing to factors defaults to
 dropping the declared missing values because of the default value of the
 argument `drop_na`{.R}:
 
@@ -239,7 +239,7 @@ as.character(x4, drop_na = FALSE)
 
 The base factors store the categories using numeric values, which is also the
 most often scenario for the declared objects. But this is not at all mandatory,
-as the declared objects are also able to ingest character objects:
+as the declared objects are also able to ingest character vectors:
 
 ```{r}
 x6 <- declared(
