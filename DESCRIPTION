@@ -1,6 +1,6 @@
 Package: declared
 Title: Functions for Declared Missing Values
-Version: 0.22
+Version: 0.23
 Authors@R: 
     c(
         person(
@@ -45,6 +45,6 @@ Suggests:
 Language: en-US
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.2.3.9000
 VignetteBuilder: knitr
 Config/testthat/edition: 3
