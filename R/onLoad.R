@@ -747,18 +747,22 @@
                 stop ("invalid 'use' argument")
             }
 
-            if (is.data.frame(x)) {
-                x <- as.matrix(x)
-            }
-            else {
-                stopifnot(is.atomic (x))
+            if (!is.null (x)) {
+                if (is.data.frame (x)) {
+                    x <- as.matrix (x)
+                }
+                else {
+                    stopifnot(is.atomic (x))
+                }
             }
 
-            if (is.data.frame(y)) {
-                y <- as.matrix(y)
-            }
-            else {
-                stopifnot(is.atomic (y))
+            if (!is.null(y)) {
+                if (is.data.frame (y)) {
+                    y <- as.matrix (y)
+                }
+                else {
+                    stopifnot(is.atomic (y))
+                }
             }
 
             eval (parse (

@@ -16,8 +16,9 @@
   }
 
   if (
-    !is.null (label) &&
-    (!is.atomic (label) || !is.character (label) || length (label) != 1)
+    !is.null (label) && !(
+      is.atomic (label) && is.character (label) && length (label) == 1
+    )
   ) {
     stopError_ ("`label` must be a character vector of length one.")
   }

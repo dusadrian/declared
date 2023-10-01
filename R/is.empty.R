@@ -41,7 +41,7 @@
 #'
 #' @export
 `is.empty` <- function (x) {
-  if (!is.atomic (x)) {
+  if (is.null (x) || !is.atomic (x)) {
     stopError_ ("'x' should be an atomic vector.")
   }
 

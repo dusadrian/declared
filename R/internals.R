@@ -8,7 +8,7 @@ NULL
 #' @keywords internal
 #' @export
 `format_declared` <- function (x, digits = getOption ("digits")) {
-  if (!is.atomic (x)) {
+  if (is.null (x) || !is.atomic (x)) {
     stopError_ ("`x` has to be a vector.")
   }
 
@@ -465,7 +465,7 @@ NULL
 
 `coerceMode_` <- function (x) {
 
-    if (!is.atomic (x)) {
+    if (is.null (x) || !is.atomic (x)) {
         stopError_ ("The input is not atomic.")
     }
 
@@ -692,7 +692,9 @@ NULL
     }
 
     if (
-        !is.null (tag) && (!is.atomic (tag) || length (tag) > 1 || is.na (tag))
+        !is.null (tag) && !(
+            is.atomic (tag) && length (tag) == 1 && !is.na (tag)
+        )
     ) {
         stopError_ ("`tag` should be a vector of length 1.")
     }

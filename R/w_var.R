@@ -11,7 +11,9 @@
     }
 
     if (
-        !(is.atomic (x) && (is.numeric (x) || is.complex (x) || is.logical (x)))
+        is.null (x) || !is.atomic (x) || !(
+            is.numeric (x) || is.complex (x) || is.logical (x)
+        )
     ) {
         stopError_ ("'x' should be an atomic vector with finite values.")
     }
@@ -28,7 +30,11 @@
         return (var (x, na.rm = na.rm))
     }
 
-    if (!(is.atomic (wt) && all (is.finite (na.omit (wt))))) {
+    if (
+        !is.null (wt) && !(
+            is.atomic (wt) && all (is.finite (na.omit (wt)))
+        )
+    ) {
         stopError_ ("'wt' should be an atomic vector with finite values.")
     }
 

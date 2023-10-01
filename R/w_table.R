@@ -183,12 +183,12 @@
     )
 
     nmx <- getName_ (funargs$x)
-    
+
     if (inherits (x, "haven_labelled")) {
         x <- as.declared (x)
     }
 
-    if (!is.atomic (x)) {
+    if (is.null (x) || !is.atomic (x)) {
         stopError_ ("'x' should be an atomic vector.")
     }
 
@@ -293,7 +293,11 @@
     }
 
 
-    if (!(is.atomic (wt) && all (is.finite (na.omit (wt))))) {
+    if (
+        !is.null (wt) && !(
+            is.atomic (wt) && all (is.finite (na.omit (wt)))
+        )
+    ) {
         stopError_ ("'wt' should be an atomic vector with finite values.")
     }
 

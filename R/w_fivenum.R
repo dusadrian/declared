@@ -9,7 +9,11 @@
         x <- as.declared (x)
     }
 
-    if (!(is.atomic (x) && is.numeric (x))) {
+    if (
+        is.null (x) || !(
+            is.atomic (x) && is.numeric (x)
+        )
+    ) {
         stopError_ ("'x' should be an atomic numerical vector.")
     }
 
@@ -29,7 +33,11 @@
         return (fvn)
     }
 
-    if (!(is.atomic (wt) && all (is.finite (na.omit (wt))))) {
+    if (
+        !is.null (wt) && !(
+            is.atomic (wt) && all (is.finite (na.omit (wt)))
+        )
+    ) {
         stopError_ ("'wt' should be an atomic vector with finite values.")
     }
 

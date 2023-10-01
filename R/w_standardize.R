@@ -7,7 +7,9 @@
     }
 
     if (
-        !(is.atomic (x) && (is.numeric (x) || is.complex (x) || is.logical (x)))
+        is.null (x) || !is.atomic (x) || !(
+            is.numeric (x) || is.complex (x) || is.logical (x)
+        )
     ) {
         warning ("'x' should be a numerical / logical vector: returning NA")
         return (NA_real_)
@@ -26,7 +28,11 @@
         wt <- rep (1, length (x))
     }
 
-    if (!(is.atomic (wt) && all (is.finite (na.omit (wt))))) {
+    if (
+        !is.null (wt) && !(
+            is.atomic (wt) && all (is.finite (na.omit (wt)))
+        )
+    ) {
         stopError_ ("'wt' should be an atomic vector with finite values.")
     }
 
