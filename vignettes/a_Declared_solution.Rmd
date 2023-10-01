@@ -139,7 +139,7 @@ because activating the argument `na.rm` will return the correct result.
 Explaining the importance of the class method requires a discussion about the
 base R decision to have this argument deactivated by default. This is most
 likely to alert users about possible problems in the data since a default value
-of `TRUE` {.R} would obscure such problems; the mean is calculated irrespective
+of `TRUE` would obscure such problems; the mean is calculated irrespective
 of potentially problematic `NA` values.
 
 This is where differentiating between empty and declared missing values proves
