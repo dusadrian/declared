@@ -1,6 +1,7 @@
 #' @docType package
 #'
 #' @name declared_package
+#' @aliases declared-package
 #'
 #' @title Functions for Declared Missing Values
 #'
@@ -23,8 +24,8 @@
 #' \tabular{ll}{
 #'   Package: \tab declared\cr
 #'   Type: \tab Package\cr
-#'   Version: \tab 0.22\cr
-#'   Date: \tab 2023-07-07\cr
+#'   Version: \tab 0.23\cr
+#'   Date: \tab 2023-10-01\cr
 #'   License: \tab GPL-v3\cr
 #' }
 #'
