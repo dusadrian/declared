@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">declared</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -131,8 +131,8 @@ should be <em>missing</em>). However:</p>
 <p>This means the value 99 did play an active role despite being
 identified as “missing”. In an ideal world, the expected mean would be
 3, or at best, employ the argument <code class="sourceCode r">na.rm <span class="ot">=</span> <span class="cn">TRUE</span></code>
-if the result is <code class="sourceCode r"><span class="cn">NA</span></code> because of the
-declared missing value.</p>
+if the result is <code>NA</code> because of the declared missing
+value.</p>
 <p>A solution to this problem is offered by package
 <strong>labelled</strong>, which has a function called <code class="sourceCode r"><span class="fu">user_na_to_na</span>()</code>:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
@@ -150,8 +150,7 @@ operations:</p>
 <ul>
 <li><p>converting the (already) declared user missing values,
 and</p></li>
-<li><p>employing the <code class="sourceCode r">na.rm</code>
-argument.</p></li>
+<li><p>employing the <code>na.rm</code> argument.</p></li>
 </ul>
 <p>This should not be necessary, especially if (and it is extremely
 likely that) users may forget the declared missing values are not
@@ -161,8 +160,7 @@ should be done after declaring the missing values may not realize more
 is needed.</p>
 <p>To solve this problem, the <strong>declared</strong> package creates
 a similar object, where declared missing values are stored (hence
-interpreted as) regular <code class="sourceCode r"><span class="cn">NA</span></code> missing values in
-R.</p>
+interpreted as) regular <code>NA</code> missing values in R.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/dusadrian/declared" class="external-link">declared</a></span><span class="op">)</span></span>
 <span><span class="va">x2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/declared.html">declared</a></span><span class="op">(</span></span>
@@ -181,34 +179,34 @@ R.</p>
 <p>The print method makes it obvious the value <code>-91</code> is not a
 regular number but an actual missing value. More importantly, this type
 of storage circumvents the need to convert user-defined missing values
-to regular <code class="sourceCode r"><span class="cn">NA</span></code>
-values since they are already stored as regular NA values. The average
-value is calculated simply as follows:</p>
+to regular <code>NA</code> values since they are already stored as
+regular NA values. The average value is calculated simply as
+follows:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">x2</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 3</span></span></code></pre></div>
 <p>Notice that neither <code class="sourceCode r"><span class="fu">user_na_to_na</span>()</code>, nor
 employing <code class="sourceCode r">na.rm <span class="ot">=</span> <span class="cn">TRUE</span></code>
-are necessary, and, despite being stored as an <code class="sourceCode r"><span class="cn">NA</span></code> value, the value
-<code>99</code> is not equivalent to an <em>empty cell</em>. The
-information still exists, but it is simply ignored in the
+are necessary, and, despite being stored as an <code>NA</code> value,
+the value <code>99</code> is not equivalent to an <em>empty cell</em>.
+The information still exists, but it is simply ignored in the
 calculations.</p>
 <p>At first glance, providing a class method for this function seems
-unnecessary because activating the argument <code class="sourceCode r">na.rm</code> will return the correct result.
-Explaining the importance of the class method requires a discussion
-about the base R decision to have this argument deactivated by default.
-This is most likely to alert users about possible problems in the data
-since a default value of <code>TRUE</code> {.R} would obscure such
-problems; the mean is calculated irrespective of potentially problematic
-<code class="sourceCode r"><span class="cn">NA</span></code> values.</p>
+unnecessary because activating the argument <code>na.rm</code> will
+return the correct result. Explaining the importance of the class method
+requires a discussion about the base R decision to have this argument
+deactivated by default. This is most likely to alert users about
+possible problems in the data since a default value of <code>TRUE</code>
+would obscure such problems; the mean is calculated irrespective of
+potentially problematic <code>NA</code> values.</p>
 <p>This is where differentiating between empty and declared missing
 values proves valuable. The declared missing values are neither
 problematic nor signal potential problems in the data, given that once a
 reason is declared, it is already known why a particular value is
 missing.</p>
-<p>The genuinely problematic values are the empty <code class="sourceCode r"><span class="cn">NA</span></code> values, and the
-custom class method still allows identifying such values if they
-exist:</p>
+<p>The genuinely problematic values are the empty <code>NA</code>
+values, and the custom class method still allows identifying such values
+if they exist:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">x2</span>, <span class="cn">NA</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] NA</span></span>
@@ -244,14 +242,13 @@ oriented, base functions such as <code class="sourceCode r"><span class="fu">na.
 doing a bad thing: the very same result is obtained, just via a
 different route. Package <strong>declared</strong> was created as an
 alternative to the design philosophy of these packages, with a
-fundamental difference. Instead of treating existing values as missing,
-the <strong>declared</strong> package interprets missing values as
-existing.</p>
+fundamental difference: instead of interpreting existing values as
+missing, the missing values are interpreted as existing.</p>
 <p>It does so by storing an additional attribute containing the
-positions (indexes) of the regular <code class="sourceCode r"><span class="cn">NA</span></code> values in the
-object, which should be treated as missing, and, even more so, to be
-interpreted as a particular missing response category, as specified in
-the value labels attribute.</p>
+positions (indexes) of the regular <code>NA</code> values in the object,
+which should be treated as missing, and, even more so, to be interpreted
+as a particular missing response category, as specified in the value
+labels attribute.</p>
 </div>
   </main>
 </div>

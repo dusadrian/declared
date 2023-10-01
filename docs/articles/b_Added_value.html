@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">declared</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -283,9 +283,9 @@ factor:</p>
 <p>The base factors provide no possibility to assign specific values for
 the specific categories, and most importantly, they do not differentiate
 between valid values and (declared) missing values. To make the
-functionality consistent with the base treatment of <code class="sourceCode r"><span class="cn">NA</span></code> values, coercing
-to factors defaults to dropping the declared missing values because of
-the default value of the argument <code class="sourceCode r">drop_na</code>:</p>
+functionality consistent with the base treatment of <code>NA</code>
+values, coercing to factors defaults to dropping the declared missing
+values because of the default value of the argument <code class="sourceCode r">drop_na</code>:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">x4</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] Left   Middle Right  &lt;NA&gt;  </span></span>
@@ -350,7 +350,7 @@ by either of the following two commands:</p>
 <p>The base factors store the categories using numeric values, which is
 also the most often scenario for the declared objects. But this is not
 at all mandatory, as the declared objects are also able to ingest
-character objects:</p>
+character vectors:</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x6</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/declared.html">declared</a></span><span class="op">(</span></span>
 <span>  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span></span>
