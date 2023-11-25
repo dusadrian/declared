@@ -219,10 +219,13 @@ w_sd(DF$Age)
 # Weighting: observed proportions
 op <- proportions(with(DF, table(Gender, Area)))
 
-# Theoretical proportions: 53\% Rural, and 50\% Females
-tp <- rep(c(0.53, 0.47), each = 2) * rep(c(0.498, 0.502), 2) / op
+# Theoretical proportions: 53\% Rural, and 50.2\% Females
+tp <- rep(c(0.53, 0.47), each = 2) * rep(c(0.498, 0.502), 2)
 
-DF$fweight <- tp[match(10 * DF$Area + DF$Gender, c(11, 12, 21, 22))]
+# Corrections by strata
+fweights <- tp / op
+
+DF$fweight <- fweights[match(10 * DF$Area + DF$Gender, c(11, 12, 21, 22))]
 
 with(DF, w_table(Gender, wt = fweight))
 
