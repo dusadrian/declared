@@ -103,7 +103,7 @@
     attr (toprint, "xlabel") <- NULL
     attr (toprint, "ylabel") <- NULL
     achar <- "\u00c2"
-    tick <- tick <- c("\u00b4", "\u0060")
+    tick <- c ("\u00b4", "\u0060", "\u2018", "\u2019") # ticks and single quotes
     tick <- c (paste0 (achar, "'"), paste0 (achar, tick), tick)
 
     if (x[1] != as.matrix(toprint)[1]) {
