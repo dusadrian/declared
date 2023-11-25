@@ -340,23 +340,23 @@ NULL
     }
 
     na_values <- attr (x, "na_values")
+    attrx <- attributes (x)
+    labels <- getElement(attrx, "labels")
 
     if (drop_na) {
-        attr (x, "na_index") <- NULL
-        attr (x, "na_values") <- NULL
-        attrx <- attributes (x)
-        if (!is.null (attrx$labels)) {
-            attrx$labels <- attrx$labels[!is.element (attrx$labels, na_values)]
+        attrx$na_index <- NULL
+        attrx$na_values <- NULL
+
+        if (!is.null (labels)) {
+            labels <- labels[!is.element (labels, na_values)]
+            attrx$labels <- labels
         }
         attributes (x) <- NULL
     }
     else {
-        attrx <- attributes (x)
         x <- undeclare (x, drop = TRUE)
     }
 
-    # attrx[["labels"]] is the equivalent of attr (x, "labels", exact = TRUE)
-    labels <- attrx[["labels"]]
     x <- c (x, unname (labels))
     x <- x[!duplicated (x)]
     xmis <- logical (length (x))
@@ -382,7 +382,7 @@ NULL
 
     if (isFALSE (observed) && is.numeric (labels)) {
         lnotmis <- length(xnotmis)
-        labels_notmis <- setdiff(labels, na_values)
+        labels_notmis <- labels[!is.element(labels, na_values)]
         if (labels_notmis[2] < 16) {
             # there should be an upper limit for tables of frequencies
             if (
@@ -396,6 +396,11 @@ NULL
                 xnotmis <- seq(labels_notmis[1], labels_notmis[2])
             }
         }
+    }
+    
+    wd <- which(duplicated(labels))
+    if (length(wd) > 0) {
+        labels <- labels[-wd]
     }
 
     if (length (xmis) > 0) {
