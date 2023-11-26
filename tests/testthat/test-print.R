@@ -152,3 +152,17 @@ xlarge <- declared(
 test_that("very many labels are truncated at print", {
   expect_snapshot(print(xlarge))
 })
+
+
+
+tst <- declared(
+  c(rep(NA, 5)),
+  labels = c(A = 1, Refusal = -91),
+  na_values = -91
+)
+
+tstable <- w_table(tst)
+
+test_that("w_table works with a variable having all values NA", {
+  expect_snapshot(print(tstable))
+})

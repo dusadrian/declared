@@ -316,3 +316,17 @@
         Total   89   126   215 
       
 
+# w_table works with a variable having all values NA
+
+    Code
+      w_table(tst)
+    Output
+      
+         fre    rel   per   vld   cpd
+         ----------------------------
+      --
+      NA   5  1.000 100.0 
+         ----------------------------
+           5  1.000 100.0
+      
+

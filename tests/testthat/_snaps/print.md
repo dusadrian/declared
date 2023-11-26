@@ -247,3 +247,17 @@
            7    A7
       # ... plus 3 more labels, use labels() to print them all.
 
+# w_table works with a variable having all values NA
+
+    Code
+      print(tstable)
+    Output
+      
+         fre    rel   per   vld   cpd
+         ----------------------------
+      --
+      NA   5  1.000 100.0 
+         ----------------------------
+           5  1.000 100.0
+      
+

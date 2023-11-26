@@ -135,3 +135,13 @@ test_that("tests have the same output", {
   expect_snapshot(using(DF, w_table(Gender, vlabel = TRUE)))
   expect_snapshot(using(DF, w_table(Gender, Area, vlabel = TRUE)))
 })
+
+tst <- declared(
+  c(rep(NA, 5)),
+  labels = c(A = 1, Refusal = -91),
+  na_values = -91
+)
+
+test_that("w_table works with a variable having all values NA", {
+  expect_snapshot(w_table(tst))
+})
