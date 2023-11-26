@@ -150,8 +150,6 @@
             stringsAsFactors = FALSE,
             factor.exclude = TRUE
         ) {
-
-
             match.names <- function (clabs, nmi) {
                 if (identical (clabs, nmi)) NULL
                 else if (

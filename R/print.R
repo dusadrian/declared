@@ -106,7 +106,7 @@
     tick <- c ("\u00b4", "\u0060", "\u2018", "\u2019") # ticks and single quotes
     tick <- c (paste0 (achar, "'"), paste0 (achar, tick), tick)
 
-    if (x[1] != as.matrix(toprint)[1]) {
+    if (!all(is.na(x)) && x[1] != as.matrix(toprint)[1]) {
         # this means the original table was altered. e.g. proportions (tbl)
         class (x) <- setdiff (class (x), c ("w_table", "array"))
         names (dimnames (x)) <- NULL
