@@ -24,7 +24,7 @@
 #' \tabular{ll}{
 #'   Package: \tab declared\cr
 #'   Type: \tab Package\cr
-#'   Version: \tab 0.23.1\cr
+#'   Version: \tab 0.23.2\cr
 #'   Date: \tab 2023-11-25\cr
 #'   License: \tab GPL-v3\cr
 #' }
