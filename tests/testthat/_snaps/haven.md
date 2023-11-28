@@ -126,3 +126,16 @@
            5   Bad
        NA(a)    DK
 
+# declared missing values with no labels are still printed as haven
+
+    Code
+      dnl
+    Output
+              A
+      1       1
+      2       2
+      3       3
+      4       4
+      5       5
+      6 NA(-91)
+

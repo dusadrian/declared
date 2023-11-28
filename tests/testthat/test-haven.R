@@ -147,3 +147,9 @@ test_that("tests have the same output", {
   expect_snapshot(cm1)
   expect_snapshot(as.haven(cm1))
 })
+
+dnl <- data.frame(A = declared(c(1:5, -91), na_values = -91))
+
+test_that("declared missing values with no labels are still printed as haven", {
+  expect_snapshot(dnl)
+})
