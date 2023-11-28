@@ -97,6 +97,8 @@
     if (has_na_values && pN_na_values) {
         na_values <- asNumeric_ (na_values)
     }
+    
+    pN_labels <- FALSE
 
     if (has_labels) {
         pN_labels <- TRUE
