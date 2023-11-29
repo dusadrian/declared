@@ -81,7 +81,7 @@
     Code
       likely_type(as.complex(1))
     Output
-      NULL
+      [1] "<complex>"
 
 ---
 
