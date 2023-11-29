@@ -19,6 +19,7 @@
             "\n"
         )
     )
+    
     if (length (x) > 0) {
         print (noquote (format_declared (x)), ...)
 

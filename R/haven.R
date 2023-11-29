@@ -67,6 +67,7 @@
 `as.haven.declared` <- function (x, ...) {
     attrx <- attributes (x)
     declared_is_integer <- is.integer(x)
+    type <- likely_type(x)
 
     # this is necessary to replace those values
     # (because of the "[<-.declared" method)
@@ -189,7 +190,7 @@
     )
 
     if (spss) {
-        if (declared_is_integer && grepl("integer", likely_type (x))) {
+        if (declared_is_integer && grepl("integer", type)) {
             x <- as.integer (x)
             attrx$class <- c ("integer", attrx$class)
 
