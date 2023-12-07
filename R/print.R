@@ -6,15 +6,19 @@
     }
 
     measurement <- attr (x, "measurement")
-
     # type <- likely_type (x)
     cat (
         paste0 (
-            "<declared",
+            "<declared<",
             # ifelse (is.null (measurement), "", paste0 (", ", measurement)),
             # ifelse (is.null (type), "", paste0 (", ", type)),
-            likely_type (x),
-            "[", length (x), "]>",
+            # likely_type (x),
+            ifelse (
+                isTRUE (attr (x, "date")),
+                "Date",
+                setdiff (class (x), "declared")[1]
+            ),
+            ">[", length (x), "]>",
             label,
             "\n"
         )
