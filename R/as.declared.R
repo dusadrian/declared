@@ -35,6 +35,7 @@
   na_range <- attr (x, "na_range")
   labels <- attr (x, "labels", exact = TRUE)
   label <- attr (x, "label", exact = TRUE)
+  xdate <- is.element ("Date", class (x))
 
   #---------------------------------------
   # necessary for DDIwR::convert
@@ -43,13 +44,20 @@
   format_sas <- attr (x, "format.sas")
   #---------------------------------------
 
-  if (!inherits (x, "haven_labelled_spss")) {
-    tagged <- hasTag_ (x)
-    attributes (x) <- NULL
+  declared_nas <- NULL
 
-    if (any (tagged)) {
-      x[tagged] <- getTag_ (x[tagged])
+  if (!inherits (x, "haven_labelled_spss")) {
+    na_index <- which (hasTag_ (x))
+    if (length (na_index) > 0) {
+      declared_nas <- getTag_ (x[na_index])
+      x[na_index] <- NA
+      names(na_index) <- declared_nas
     }
+    else {
+      na_index <- NULL
+    }
+    
+    attributes (x) <- NULL
 
     if (!is.null (labels)) {
       nms <- names (labels)
@@ -60,18 +68,26 @@
         na_values <- sort (unname (labels[tagged]))
       }
 
-      labels <- coerceMode_ (labels)
+      # labels <- coerceMode_ (labels)
       names (labels) <- nms
     }
 
-    misvals <- na_values
+    misvals <- unique (sort (c (na_values, declared_nas)))
   }
   else {
     misvals <- all_missing_values (unclass (x))
+    na_index <- which (is.element (x, misvals))
+    if (length (na_index) > 0) {
+      names (na_index) <- x[na_index]
+      x[na_index] <- NA
+    }
+    else {
+      na_index <- NULL
+    }
   }
 
   attributes (x) <- NULL
-  pnx <- possibleNumeric_ (setdiff(x, na_values)) | all (is.na (x))
+  pnx <- possibleNumeric_ (x) | all (is.na (x))
 
   charlabels <- FALSE
   if (!is.null (labels)) {
@@ -80,9 +96,7 @@
     }
   }
 
-  attr (x, "xchar") <- !pnx | charlabels
-  missingValues (x)[is.element (x, misvals)] <- x[is.element (x, misvals)]
-
+  attr (x, "na_index") <- na_index
   attr (x, "na_values") <- na_values
   attr (x, "na_range") <- na_range
   attr (x, "labels") <- labels
@@ -90,6 +104,9 @@
   attr (x, "format.spss") <- format_spss
   attr (x, "format.stata") <- format_stata
   attr (x, "format.sas") <- format_sas
+  attr (x, "measurement") <- check_measurement (dots$measurement)
+  attr (x, "date") <- xdate
+  class(x) <- unique (c ("declared", class (x)))
 
   return (x)
 }

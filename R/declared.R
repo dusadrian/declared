@@ -116,6 +116,8 @@ declared.default <- function (
     x, labels = NULL, na_values = NULL, na_range = NULL, label = NULL,
     measurement = NULL, llevels = FALSE, ...
 ) {
+  
+  xdate <- inherits(x, "Date")
   if (is.factor (x)) {
     nms <- levels (x)
     if (is.null (labels)) {
@@ -149,7 +151,15 @@ declared.default <- function (
 
   if (!is.null (labels)) {
     nms <- names (labels)
-    if (possibleNumeric_ (labels) && (possibleNumeric_ (x) | all (is.na (x)))) {
+    if (xdate && !possibleNumeric_ (labels)) {
+      stopError_ ("For date objects, the labels should be numeric.")
+    }
+    
+    if (
+      possibleNumeric_ (labels) && (
+        xdate | possibleNumeric_ (x) | all (is.na (x))
+      )
+    ) {
       labels <- asNumeric_ (labels)
     }
     else {
@@ -164,6 +174,7 @@ declared.default <- function (
         na_range <- NULL
       }
     }
+
     names (labels) <- nms
 
     # 2023.05.08 rationale, ex. ESS10 (integrated data file) has a variable
@@ -176,6 +187,10 @@ declared.default <- function (
   }
 
   if (!is.null (na_values)) {
+    if (xdate && !possibleNumeric_ (na_values)) {
+      stopError_ ("For date objects, the declared NA values should be numeric.")
+    }
+    
     if (possibleNumeric_ (na_values) & !xchar) {
       na_values <- asNumeric_ (na_values)
     }
@@ -184,29 +199,50 @@ declared.default <- function (
     }
   }
 
-  if ((possibleNumeric_ (x) | all (is.na (x))) & !xchar) {
-    x <- asNumeric_ (x)
+  na_range <- sort (na_range)
+  if (!is.null (na_range)) {
+    if (xdate && !possibleNumeric_ (na_range)) {
+      stopError_ ("For date objects, the declared NA range should be numeric.")
+    }
+  }
+  if (!xdate) {
+    attributes (x) <- NULL
+    validate_declared (x, labels, label, na_values, na_range)
+  }
+
+  misvals <- all_missing_values (x, na_values, na_range, labels)
+
+  # attr (x, "xdate") <- xdate
+  na_index <- which(is.element(x, misvals))
+  
+  if (length(na_index) > 0) {
+    declared_nas <- x[na_index]
+    if (xdate) {
+      declared_nas <- as.numeric (declared_nas)
+    }
+    
+    x[na_index] <- NA
+    names(na_index) <- declared_nas
   }
   else {
+    na_index <- NULL
+  }
+
+  if ((possibleNumeric_ (x) || all (is.na (x))) & !xchar) {
+    x <- asNumeric_ (x)
+  }
+  else if (!xdate) {
     x <- as.character (x, values = TRUE)
   }
 
-  attributes (x) <- NULL
-
-  validate_declared (x, labels, label, na_values, na_range)
-
-  na_range <- sort (na_range)
-  misvals <- all_missing_values (x, na_values, na_range, labels)
-
-  attr (x, "xchar") <- xchar
-  missingValues (x)[is.element (x, misvals)] <- x[is.element (x, misvals)]
-
+  attr (x, "na_index") <- na_index
   attr (x, "na_values") <- na_values
   attr (x, "na_range") <- na_range
   attr (x, "labels") <- labels
   attr (x, "label") <- label
+  attr (x, "date") <- xdate
 
   attr (x, "measurement") <- check_measurement (measurement)
-
+  class(x) <- unique (c ("declared", class (x)))
   return (x)
 }

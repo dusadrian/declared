@@ -66,27 +66,32 @@
 #' @export
 `as.haven.declared` <- function (x, ...) {
     attrx <- attributes (x)
-    declared_is_integer <- is.integer(x)
-    type <- likely_type(x)
+    attrx$class <- c ("haven_labelled", "vctrs_vctr")
+    
+    declared_is_integer <- is.integer (x)
+    xdate <- inherits(x, "Date")
 
     # this is necessary to replace those values
     # (because of the "[<-.declared" method)
     attributes (x) <- NULL # or x <- unclass (x), but I find this cleaner
 
     spss <- TRUE
-    if (possibleNumeric_ (x) || all (is.na (x))) {
-        x <- as.double(x)
+    if (xdate) {
+        attr (x, "class") <- "Date"
+    }
+    else if (possibleNumeric_ (x) || all (is.na (x))) { # this excludes dates
+        x <- as.double (x)
         attr (x, "class") <- "double"
     }
 
     na_index <- attrx$na_index
-    has_na_index <- !is.null(na_index)
+    has_na_index <- !is.null (na_index)
 
     na_values <- attrx$na_values
-    has_na_values <- !is.null(na_values)
+    has_na_values <- !is.null (na_values)
 
     na_range <- attrx$na_range
-    has_na_range <- !is.null(na_range)
+    has_na_range <- !is.null (na_range)
     pN_na_range <- possibleNumeric_ (na_range)
 
     labels <- attrx$labels
@@ -98,13 +103,11 @@
     if (has_na_values && pN_na_values) {
         na_values <- asNumeric_ (na_values)
     }
-    
     pN_labels <- FALSE
-
     if (has_labels) {
         pN_labels <- TRUE
-        if (length(setdiff(labels, na_values)) > 0) {
-            pN_labels <- possibleNumeric_ (setdiff(labels, na_values))
+        if (length (setdiff (labels, na_values)) > 0) {
+            pN_labels <- possibleNumeric_ (setdiff (labels, na_values))
             if (!pN_labels) {
                 x <- as.character (x)
             }
@@ -117,13 +120,10 @@
 
         if (pN_na_values | pN_na_range) {
             na_index_values <- asNumeric_ (na_index_values)
-            if (likely_type (na_index_values) == "<integer>") {
-                na_index_values <- as.integer(na_index_values)
-            }
         }
         else if (is.numeric (x)) {
             if (length (setdiff (na_values, c (letters, LETTERS))) > 0) {
-                admisc::stopError ("Tagged NAs can only be created for single letter declared missing values.")
+                stopError_ ("Tagged NAs can only be created for single letter declared missing values.")
             }
 
             spss <- FALSE
@@ -137,8 +137,11 @@
         x[na_index] <- na_index_values
     }
 
-
-    if (is.numeric (x) & pN_labels & (pN_na_values | is.null(na_values))) {
+    if (
+        xdate | is.numeric (x) &
+        (pN_labels | !has_labels) &
+        (pN_na_values | is.null(na_values))
+    ) {
 
         if (has_labels) {
             copy_labels <- numeric (length (labels))
@@ -184,43 +187,32 @@
     }
 
     attrx$na_index <- NULL
-    attrx$class <- setdiff (
-        attrx$class,
-        c ("declared", "double", "integer", "character")
-    )
 
     if (spss) {
-        if (declared_is_integer && grepl("integer", type)) {
+        attrx$class <- c ("haven_labelled_spss", attrx$class)
+        
+        if (declared_is_integer) {
             x <- as.integer (x)
-            attrx$class <- c ("integer", attrx$class)
 
             if (has_na_values) {
-                class (attrx$na_values) <- "integer"
+                # class (attrx$na_values) <- "integer"
+                attrx$na_values <- as.integer (attrx$na_values)
             }
 
             if (has_labels) {
-                class (attrx$labels) <- "integer"
+                nms <- names (attrx$labels)
+                attrx$labels <- as.integer (attrx$labels)
+                names (attrx$labels) <- nms
             }
 
             if (has_na_range && all(attrx$na_range > -Inf) && all(attrx$na_range < Inf)) {
-                class (attrx$na_range) <- "integer"
+                attrx$na_range <- as.integer (attrx$na_range)
             }
         }
-
-        attrx$class <- unique (c (
-            "haven_labelled_spss",  "haven_labelled", "vctrs_vctr",
-            attrx$class,
-            class (x)
-        ))
-    }
-    else {
-        attrx$class <- unique (c (
-            "haven_labelled", "vctrs_vctr",
-            attrx$class,
-            class (x)
-        ))
     }
 
+    attrx$class <- c (attrx$class, class (x))
+    attrx$date <- NULL
     attributes (x) <- attrx
     return (x)
 }
@@ -272,12 +264,14 @@
 `as_factor.declared` <- function (
     x, levels = c ("default", "labels", "values", "both"), ordered = FALSE, ...
 ) {
-  haven::as_factor (
-    as.haven (x),
-    levels = levels,
-    ordered = ordered,
-    ... = ...
-  )
+    eval(parse(text = paste(
+        "haven::as_factor (",
+        "    as.haven (x),",
+        "    levels = levels,",
+        "    ordered = ordered,",
+        "    ... = ...",
+        ")"
+    )))
 }
 
 `zap_labels.declared` <- function (x) {
@@ -285,6 +279,7 @@
     attr (x, "na_index") <- NULL
     attr (x, "na_values") <- NULL
     attr (x, "na_range") <- NULL
+    attr (x, "date") <- NULL
     class (x) <- NULL
 
     return (x)
@@ -294,6 +289,7 @@
     attr (x, "na_index") <- NULL
     attr (x, "na_values") <- NULL
     attr (x, "na_range") <- NULL
+    attr (x, "date") <- NULL
 
     return (x)
 }
