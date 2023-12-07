@@ -56,7 +56,7 @@ label.default <- function (x) {
 
 
 #' @export
-label.haven_labelled_spss <- function (x) {
+label.haven_labelled <- function (x) {
   attr (x, "label", exact = TRUE)
 }
 
@@ -100,7 +100,7 @@ label.data.frame <- function (x) {
 
 
 #' @export
-`label<-.haven_labelled_spss` <- function (x, ..., value) {
+`label<-.haven_labelled` <- function (x, ..., value) {
   if (!is.null (value) && length (value) > 1) {
     stopError_ ("`value` should be a single character string or NULL.")
   }
@@ -204,7 +204,7 @@ labels.declared <- function (
 
 
 #' @export
-labels.haven_labelled_spss <- function (
+labels.haven_labelled <- function (
     object, prefixed = FALSE, print_as_df = TRUE, ...
   ) {
     
@@ -256,7 +256,7 @@ labels.data.frame <- function (object, ...) {
 
 
 #' @export
-`labels<-.haven_labelled_spss` <- function (x, value) {
+`labels<-.haven_labelled` <- function (x, value) {
   attr (x, "labels") <- value
   return (x)
 }
