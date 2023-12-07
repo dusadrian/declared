@@ -3,7 +3,8 @@
 }
 
 `na_values<-.declared` <- function (x, value) {
-    declared (undeclare (x),
+    declared (
+        x = undeclare (x),
         labels = attr (x, "labels", exact = TRUE),
         na_values = value,
         na_range = attr (x, "na_range", exact = TRUE),
@@ -16,7 +17,8 @@
 }
 
 `na_range<-.declared` <- function (x, value) {
-    declared (undeclare (x),
+    declared (
+        x = undeclare (x),
         labels = attr (x, "labels", exact = TRUE),
         na_values = attr (x, "na_values", exact = TRUE),
         na_range = value,
@@ -194,22 +196,26 @@
     x <- as.haven (x)
     levels <- match.arg (levels)
     sort_levels <- match.arg (sort_levels)
-    labelled::to_factor (
-      x, levels = levels, ordered = ordered, nolabel_to_na = nolabel_to_na,
-      sort_levels = sort_levels, decreasing = decreasing,
-      drop_unused_labels = drop_unused_labels, user_na_to_na = user_na_to_na,
-      strict = strict, unclass = unclass, ... = ...
-    )
+    eval(parse(text = paste(
+        "labelled::to_factor (",
+        "    x, levels = levels, ordered = ordered, sort_levels = sort_levels,",
+        "    nolabel_to_na = nolabel_to_na, decreasing = decreasing,",
+        "    drop_unused_labels = drop_unused_labels, strict = strict,",
+        "    user_na_to_na = user_na_to_na, unclass = unclass, ... = ...",
+        ")"
+    )))
 }
 
 `to_character.declared` <- function (x, levels = c ("labels", "values",
     "prefixed"), nolabel_to_na = FALSE, user_na_to_na = FALSE, ...) {
     x <- as.haven (x)
     levels <- match.arg (levels)
-    labelled::to_character (
-      x, levels = levels, nolabel_to_na = nolabel_to_na,
-      user_na_to_na = user_na_to_na, ... = ...
-    )
+    eval(parse(text = paste(
+        "labelled::to_character (",
+        "    x, levels = levels, nolabel_to_na = nolabel_to_na,",
+        "    user_na_to_na = user_na_to_na, ... = ...",
+        ")"
+    )))
 }
 
 `copy_labels.declared` <- function (from, to, .strict = TRUE) {
