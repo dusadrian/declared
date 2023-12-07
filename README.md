@@ -72,7 +72,7 @@ x2 <- declared(
 )
 
 print(x2)
-#> <declared<integer>[6]>
+#> <declared<numeric>[6]>
 #> [1]       1       2       3       4       5 NA(-91)
 #> Missing values: -91
 #> 
