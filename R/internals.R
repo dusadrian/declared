@@ -13,20 +13,19 @@ NULL
     }
 
     if (
-        length(intersect(
-            c ("Date", "POSIXct", "POSIXt", "POSIXlt"),
-            class (x)
-        )) == 0
-    ) {
-        out <- format (unclass (x), digits = digits)
+        is.element("Date", class (x)) || isTRUE (attr (x, "date"))) {
+        class (x) <- "Date"
+        out <- as.character (x)
     }
     else {
-        class(x) <- setdiff(class(x), "declared")
-        out <- as.character(x)
+        out <- format (unclass (x), digits = digits)
     }
 
     na_index <- attr (x, "na_index")
-    out[na_index] <- paste0 ("NA(", names (na_index), ")")
+
+    if (!is.null (na_index)) {
+        out[na_index] <- paste0 ("NA(", names (na_index), ")")
+    }
 
     # format again to make sure all elements have same width
     return (format (out, justify = "right"))
@@ -123,14 +122,15 @@ NULL
     label(...)
 }
 
+
 `likely_type` <- function (x) {
     type <- NULL
     others <- setdiff (class (x), "declared")
-    
+
     if (length (others) > 0) {
         type <- others[1]
     }
-    
+
     if (identical(type, "numeric")) {
         if (!anyTagged_ (x) && (is.integer (x) || wholeNumeric_ (x))) {
             type <- "integer"
@@ -410,7 +410,7 @@ NULL
             }
         }
     }
-    
+
     wd <- which(duplicated(labels))
     if (length(wd) > 0) {
         labels <- labels[-wd]
