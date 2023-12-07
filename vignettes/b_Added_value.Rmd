@@ -2,8 +2,8 @@
 title: "b. Added value"
 output:
   rmarkdown::html_vignette:
-#    highlight: "declared.theme"
-#    css: "declared.css"
+   highlight: "declared.theme"
+   css: "declared.css"
 vignette: >
   %\VignetteIndexEntry{b. Added value}
   %\VignetteEncoding{UTF-8}
@@ -183,7 +183,6 @@ argument `drop_na`{.R}:
 
 ```{r}
 as.factor(x4)
-as.factor(x4, drop_na = TRUE)
 
 # essentially acting as:
 as.factor(drop_na(x4))
@@ -262,6 +261,6 @@ special types of missing values, employing this new object type of class
 Factors and `haven`{.R} objects have default coercion methods, but not all types
 of objects can be automatically coerced to this class. To meet this possibility,
 the main functions `declared()`{.R}, `as.declared()`{.R}, `undeclare()`{.R} and
-`drop_na()`{.R} are all generic, allowing full flexibility for any other package
-to create custom (coercion) methods for different classes of objects, thus
+`drop_na()`{.R} are all generic, allowing full  flexibility for any other
+packages to create custom (coercion) methods for different object classes, thus
 facilitating and encouraging a widespread use.
