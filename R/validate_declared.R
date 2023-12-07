@@ -1,8 +1,13 @@
 `validate_declared` <- function (x = double(), labels = NULL, label = NULL,
                                 na_values = NULL, na_range = NULL, ...) {
 
-  if (!is.numeric (x) && !is.character (x) && !all (is.na (x))) {
-    stopError_ ("`x` must be a numeric or a character vector.")
+  if (
+    !is.numeric (x) &&
+    !is.character (x) &&
+    !inherits (x, "Date") &&
+    !all (is.na (x))
+  ) {
+    stopError_ ("`x` must be a numeric, character or a Date vector.")
   }
 
   if (!is.null (labels)) {
