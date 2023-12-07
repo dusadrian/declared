@@ -3,7 +3,7 @@
     Code
       x
     Output
-      <declared<integer>[6]> Label for variable x
+      <declared<numeric>[6]> Label for variable x
       [1]      1      2      3      4      5 NA(-1)
       Missing values: -1
       
@@ -55,7 +55,7 @@
     Code
       labelled::drop_unused_value_labels(x)
     Output
-      <declared<integer>[6]> Label for variable x
+      <declared<numeric>[6]> Label for variable x
       [1]      1      2      3      4      5 NA(-1)
       Missing values: -1
       
@@ -84,7 +84,7 @@
     Code
       labelled::sort_val_labels(x)
     Output
-      <declared<integer>[6]> Label for variable x
+      <declared<numeric>[6]> Label for variable x
       [1]      1      2      3      4      5 NA(-1)
       Missing values: -1
       
@@ -99,7 +99,7 @@
     Code
       labelled::sort_val_labels(x, according_to = "labels")
     Output
-      <declared<integer>[6]> Label for variable x
+      <declared<numeric>[6]> Label for variable x
       [1]      1      2      3      4      5 NA(-1)
       Missing values: -1
       
@@ -128,7 +128,7 @@
     Code
       labelled::remove_labels(x)
     Output
-      <declared<integer>[6]>
+      <declared<numeric>[6]>
       [1]      1      2      3      4      5 NA(-1)
       Missing values: -1
 
@@ -137,7 +137,7 @@
     Code
       labelled::remove_user_na(x)
     Output
-      <declared<integer>[6]> Label for variable x
+      <declared<numeric>[6]> Label for variable x
       [1]  1  2  3  4  5 NA
       
       Labels:

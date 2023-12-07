@@ -3,7 +3,7 @@
     Code
       x
     Output
-      <declared<integer>[7]>
+      <declared<numeric>[7]>
       [1]      2      1      2      3      4      5 NA(-1)
       Missing values: -1
       

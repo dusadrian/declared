@@ -3,7 +3,7 @@
     Code
       x
     Output
-      <declared<integer>[6]>
+      <declared<numeric>[6]>
       [1]      1      2      3      4      5 NA(-1)
       Missing values: -1
       
@@ -86,7 +86,7 @@
     Code
       x2
     Output
-      <declared<integer>[215]>
+      <declared<numeric>[215]>
         [1] -91   3   6   3   7 -91   5   1   3   2   7 -91   7   4   3   3   7   2
        [19]   6   5   4   1   6   4 -91   3   3   3   6   1   3   5   4   4   3   5
        [37]   7 -91   4   1   4   1   1   7   5   5   1   2   1   7   7   6   1   5
@@ -130,7 +130,7 @@
     Code
       x4
     Output
-      <declared<integer>[215]>
+      <declared<numeric>[215]>
         [1]       5       3       4       7       6      NA       5      NA      NA
        [10]       3       4       7       6       3      NA      NA       1       6
        [19] NA(-91) NA(-91)      NA       7       7       2 NA(-91)       4 NA(-91)

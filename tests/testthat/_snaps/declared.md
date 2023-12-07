@@ -3,7 +3,7 @@
     Code
       x
     Output
-      <declared<integer>[6]>
+      <declared<numeric>[6]>
       [1]      1      2      3      4      5 NA(-1)
       Missing values: -1
       
@@ -96,4 +96,17 @@
       is.character(xc)
     Output
       [1] TRUE
+
+---
+
+    Code
+      xdate
+    Output
+      <declared<Date>[2]>
+      [1] 2023-12-06     NA(-1)
+      Missing values: -1
+      
+      Labels:
+       value label
+          -1    DK
 

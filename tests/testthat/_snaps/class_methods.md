@@ -3,7 +3,7 @@
     Code
       x
     Output
-      <declared<integer>[6]>
+      <declared<numeric>[6]>
       [1]      1      2      3      4      5 NA(-1)
       Missing values: -1
       
@@ -55,7 +55,7 @@
     Code
       na.omit(x)
     Output
-      <declared<integer>[5]>
+      <declared<numeric>[5]>
       [1] 1 2 3 4 5
       Missing values: -1
       
@@ -74,13 +74,15 @@
       attr(,"labels")
       Good  Bad   DK 
          1    5   -1 
+      attr(,"date")
+      [1] FALSE
 
 ---
 
     Code
       na.exclude(x)
     Output
-      <declared<integer>[5]>
+      <declared<numeric>[5]>
       [1] 1 2 3 4 5
       Missing values: -1
       
@@ -95,7 +97,7 @@
     Code
       c(x, 2, -1)
     Output
-      <declared<integer>[8]>
+      <declared<numeric>[8]>
       [1]      1      2      3      4      5 NA(-1)      2 NA(-1)
       Missing values: -1
       
@@ -110,7 +112,7 @@
     Code
       x7
     Output
-      <declared<integer>[9]>
+      <declared<numeric>[9]>
       [1] NA(-92)       1       2       3       4       5 NA(-91)      NA NA(-91)
       Missing values: -92, -91
 
@@ -146,7 +148,7 @@
     Code
       x8
     Output
-      <declared<integer>[8]>
+      <declared<numeric>[8]>
       [1] NA(-92)       1       2       3       4       5      NA NA(-91)
       Missing values: -92, -91
 

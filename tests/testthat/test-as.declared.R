@@ -15,6 +15,11 @@ hs <- haven::labelled(
   labels = c(Good = 1, Bad = 5, DK = haven::tagged_na("a"))
 )
 
+hn <- haven::labelled(
+  c(1:5), # no tagged NAs
+  labels = c(Good = 1, Bad = 5)
+)
+
 fx <- factor(
   c(1:5, -1),
   levels = c(1:5, -1),
@@ -102,4 +107,5 @@ test_that("tests have the same output", {
   expect_snapshot(as.declared(dfh))
   expect_snapshot(dfd)
   expect_snapshot(as.declared(dfd, interactive = TRUE))
+  expect_snapshot(as.declared(hn))
 })

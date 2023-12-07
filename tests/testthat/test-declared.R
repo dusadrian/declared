@@ -7,6 +7,12 @@ x <- declared(
   na_values = -1
 )
 
+xdate <- declared(
+  c(as.Date("2023-12-06"), -1),
+  labels = c(DK = -1),
+  na_values = -1
+)
+
 fx <- factor(
   values,
   levels = values,
@@ -136,6 +142,22 @@ test_that("character values in labels coerce x to character", {
   expect_true(is.character(xc))
 })
 
+
+test_that("labels and na_values should be numeric for Date objects", {
+  expect_error(declared(
+      c(as.Date("2023-12-06"), -1),
+      labels = c(DK = "a"),
+      na_values = -1
+  ))
+  
+  expect_error(declared(
+      c(as.Date("2023-12-06"), -1),
+      labels = c(DK = -1),
+      na_values = "a"
+  ))
+})
+
+
 test_that("tests have the same output", {
   expect_snapshot(x)
   expect_snapshot(labels(x))
@@ -146,4 +168,5 @@ test_that("tests have the same output", {
   expect_snapshot(labels(declared(fx, na_values = 6, llevels = TRUE)))
   expect_snapshot(xc)
   expect_snapshot(is.character(xc))
+  expect_snapshot(xdate)
 })

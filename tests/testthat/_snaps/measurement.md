@@ -3,7 +3,7 @@
     Code
       x
     Output
-      <declared<integer>[7]> Test variable
+      <declared<numeric>[7]> Test variable
       [1] NA(-2)      1      2      3      4      5 NA(-1)
       Missing values: -1, -2
       
@@ -25,7 +25,7 @@
     Code
       x2
     Output
-      <declared<integer>[7]> Test variable
+      <declared<numeric>[7]> Test variable
       [1] NA(-2)      1      2      3      4      5 NA(-1)
       Missing values: -1, -2
       
@@ -47,7 +47,7 @@
     Code
       numx
     Output
-      <declared<integer>[20]> Respondent's age
+      <declared<numeric>[20]> Respondent's age
        [1] 57 56 55 47 18 89 29 20 26 31 30 81 37 33 79 77 49 42 53 55
       Missing values: -91
       
@@ -67,7 +67,7 @@
     Code
       numx2
     Output
-      <declared<integer>[20]> Respondent's age
+      <declared<numeric>[20]> Respondent's age
        [1] 57 56 55 47 18 89 29 20 26 31 30 81 37 33 79 77 49 42 53 55
       Missing values: -91
       

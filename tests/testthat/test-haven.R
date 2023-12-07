@@ -6,6 +6,12 @@ x <- declared(
   na_values = -1
 )
 
+intx <- declared( # simulate integer variables
+  c(1:6),
+  labels = c(Good = 1, Bad = 5, DK = 6),
+  na_values = 6
+)
+
 
 hs <- haven::labelled(
   c(1:5, -1),
@@ -14,7 +20,7 @@ hs <- haven::labelled(
 
 
 hx <- haven::labelled_spss(
-  as.integer(c(1:5, -1)),
+  c(1:5, -1),
   labels = c(Good = 1, Bad = 5, DK = -1),
   na_values = -1
 )
@@ -60,6 +66,8 @@ test_that("as.haven() works", {
 
   expect_equal(as.haven(1:5, interactive = FALSE), as.integer(1:5))
 
+  expect_true(inherits(as.haven(intx), "haven_labelled"))
+
   expect_true(inherits(as.haven(cx), "haven_labelled"))
 
   expect_true(inherits(as.haven(hs), "haven_labelled"))
@@ -73,7 +81,7 @@ test_that("as.haven() works", {
     "no automatic class method conversion"
   )
 
-  expect_true(inherits(as.haven(xr), "integer"))
+  expect_true(inherits(as.haven(xr), "double"))
 })
 
 
@@ -115,7 +123,7 @@ test_that("as_factor.declared() works", {
 
 
 test_that("zap_labels.declared() and zap_missing.declared() work", {
-  expect_identical(haven::zap_labels(x), c(1:5, NA))
+  expect_identical(haven::zap_labels(x), c(1:5, NA_real_))
 
   expect_null(
     attr(

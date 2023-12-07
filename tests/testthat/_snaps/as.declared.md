@@ -3,7 +3,7 @@
     Code
       x
     Output
-      <declared<integer>[6]>
+      <declared<numeric>[6]>
       [1]      1      2      3      4      5 NA(-1)
       Missing values: -1
       
@@ -55,7 +55,7 @@
     Code
       as.declared(fx)
     Output
-      <declared<integer>[6]>
+      <declared<numeric>[6]>
       [1] 1 2 3 4 5 6
       
       Labels:
@@ -72,7 +72,7 @@
     Code
       as.declared(hx)
     Output
-      <declared<integer>[6]>
+      <declared<numeric>[6]>
       [1]      1      2      3      4      5 NA(-1)
       Missing values: -1
       
@@ -87,7 +87,7 @@
     Code
       as.declared(hs)
     Output
-      <declared<integer>[6]>
+      <declared<numeric>[6]>
       [1]     1     2     3     4     5 NA(a)
       Missing values: a
       
@@ -148,4 +148,17 @@
       4      4 4 4
       5      5 5 5
       6 NA(-1) 6 6
+
+---
+
+    Code
+      as.declared(hn)
+    Output
+      <declared<integer>[5]>
+      [1] 1 2 3 4 5
+      
+      Labels:
+       value label
+           1  Good
+           5   Bad
 

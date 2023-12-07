@@ -18,7 +18,7 @@
     Output
       # A data frame: 6 x 2
         x            hx          
-        <int+lbl>    <int+lbl>   
+        <dbl+lbl>    <dbl+lbl>   
       1  1 [Good]     1 [Good]   
       2  2            2          
       3  3            3          
@@ -33,7 +33,7 @@
     Output
       # A data frame: 6 x 2
         x            hx          
-        <int+lbl>    <int+lbl>   
+        <dbl+lbl>    <dbl+lbl>   
       1  1 [Good]     1 [Good]   
       2  2            2          
       3  3            3          
@@ -48,7 +48,7 @@
     Output
       # A data frame: 6 x 2
         x            hx          
-        <int+lbl>    <int+lbl>   
+        <dbl+lbl>    <dbl+lbl>   
       1  1 [Good]     1 [Good]   
       2  2            2          
       3  3            3          
@@ -63,7 +63,7 @@
     Output
       # A data frame: 6 x 2
         x            hx          
-        <int+lbl>    <int+lbl>   
+        <dbl+lbl>    <dbl+lbl>   
       1  1 [Good]     1 [Good]   
       2  2            2          
       3  3            3          

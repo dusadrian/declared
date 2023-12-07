@@ -10,7 +10,7 @@
     Code
       undeclare(x)
     Output
-      <declared<integer>[6]> Variable label
+      <declared<numeric>[6]> Variable label
       [1]  1  2  3  4  5 -1
       
       Labels:
@@ -38,7 +38,7 @@
     Code
       drop_na(x)
     Output
-      <declared<integer>[6]> Variable label
+      <declared<numeric>[6]> Variable label
       [1]  1  2  3  4  5 NA
       
       Labels:

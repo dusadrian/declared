@@ -3,7 +3,7 @@
     Code
       x
     Output
-      <declared<integer>[6]>
+      <declared<numeric>[6]>
       [1]      1      2      3      4      5 NA(-1)
       Missing values: -1
       
@@ -165,7 +165,7 @@
     Code
       y
     Output
-      <declared<integer>[6]>
+      <declared<numeric>[6]>
       [1]  NA(1)      2      3      4  NA(5) NA(-1)
       Missing values: -1, 1, 5
       
@@ -270,7 +270,7 @@
     Code
       xr
     Output
-      <declared<integer>[6]>
+      <declared<numeric>[6]>
       [1]      1      2      3      4      5 NA(-1)
       Missing range:  [-5, -1]
       

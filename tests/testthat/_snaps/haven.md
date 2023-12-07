@@ -3,7 +3,7 @@
     Code
       x
     Output
-      <declared<integer>[6]>
+      <declared<numeric>[6]>
       [1]      1      2      3      4      5 NA(-1)
       Missing values: -1
       
@@ -33,7 +33,7 @@
     Code
       haven::zap_missing(x)
     Output
-      <declared<integer>[6]>
+      <declared<numeric>[6]>
       [1]  1  2  3  4  5 NA
       
       Labels:
@@ -47,7 +47,7 @@
     Code
       as.haven(x)
     Output
-      <labelled_spss<integer>[6]>
+      <labelled_spss<double>[6]>
       [1]  1  2  3  4  5 -1
       Missing values: -1
       
@@ -102,7 +102,7 @@
     Code
       cm1
     Output
-      <declared<integer>[6]>
+      <declared<numeric>[6]>
       [1]     1     2     3     4     5 NA(a)
       Missing values: a
       
