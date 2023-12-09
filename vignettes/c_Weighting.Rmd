@@ -86,7 +86,7 @@ family of functions are solely dealing with frequency weights, to allow
 corrections in descriptive statistics, such as the tables of frequencies and
 other similar descriptive measures for both categorical and numeric variables.
 
-To exemplify, a frequency weights variable is constructed, to correct for the
+To exemplify, a frequency weight variable is constructed, to correct for the
 distributions of gender by males and females, as well as the theoretical
 distribution by residential areas differentiating between urban and rural
 settlements.
@@ -97,7 +97,9 @@ op <- with(dfm, proportions(table(Gender, Area)))
 
 # Theoretical / population proportions:
 # 53% Rural, and 50% Females
-weights <- rep(c(0.53, 0.47), each = 2) * rep(0.5, 4) / op
+tp <- rep(c(0.53, 0.47), each = 2) * rep(0.5, 4)
+
+weights <- tp / op
 
 dfm$fweight <- weights[
   match(10 * dfm$Area + dfm$Gender, c(11, 12, 21, 22))

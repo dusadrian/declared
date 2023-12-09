@@ -254,9 +254,9 @@ x6 <- declared(
 x6
 ```
 
-Either as a character, numeric or categorical, it is possible to declare and use
-special types of missing values, employing this new object type of class
-`"declared"`{.R}.
+Either as a character, numeric, categorical, or even a Date variable, it is
+possible to declare and use special types of missing values, employing this new
+object type of class `"declared"`{.R}.
 
 Factors and `haven`{.R} objects have default coercion methods, but not all types
 of objects can be automatically coerced to this class. To meet this possibility,
