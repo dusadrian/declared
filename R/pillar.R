@@ -160,6 +160,7 @@
     ret
 }
 
+#' @export
 `format.pillar_shaft_declared_num` <- function (x, width, ...) {
     vshort <- x$val$disp_short
     vfull <- x$val$disp_full
@@ -183,6 +184,7 @@
     ))
 }
 
+#' @export
 `format.pillar_shaft_declared_chr` <- function (x, width, ...) {
     if (width >= max (x$val$wid_full + x$lbl$wid_short)) {
         lbl_width <- width - x$val$wid_full
