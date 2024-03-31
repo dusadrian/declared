@@ -1,4 +1,5 @@
-#' @docType package
+#' @keywords internal
+#' "_PACKAGE"
 #'
 #' @name declared_package
 #' @aliases declared-package
@@ -24,8 +25,8 @@
 #' \tabular{ll}{
 #'   Package: \tab declared\cr
 #'   Type: \tab Package\cr
-#'   Version: \tab 0.24\cr
-#'   Date: \tab 2023-12-07\cr
+#'   Version: \tab 0.24.1\cr
+#'   Date: \tab 2024-03-31\cr
 #'   License: \tab GPL-v3\cr
 #' }
 #'
