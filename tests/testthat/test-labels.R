@@ -1,4 +1,4 @@
-
+local_edition(3)
 lbls <- c(Good = 1, Bad = 5, DK = -1)
 
 x <- declared(
@@ -13,11 +13,11 @@ class(lbls) <- c("labels_df", class(lbls))
 
 test_that("labels works in declared()", {
   expect_identical(attr(x, "label"), "Variable label")
-  
+
   expect_identical(label(x), attr(x, "label"))
-  
+
   expect_identical(labels(x), lbls)
-  
+
   expect_false(identical(labels(x), labels(x, prefixed = TRUE)))
 })
 
@@ -27,11 +27,11 @@ label(x2) <- "Another variable label"
 labels(x2) <- c(Good = 1, Neutral = 3, Bad = 5, DK = -1)
 test_that("labels<-.declared work", {
   expect_named(labels(x2))
-  
+
   expect_false(identical(labels(x), labels(x2)))
-  
+
   expect_false(identical(label(x), label(x2)))
-  
+
   expect_error(label(x) <- c("A", "B"))
 })
 
@@ -44,9 +44,9 @@ hx <- haven::labelled_spss(
 )
 test_that("labels work for both declared and haven classes", {
   expect_identical(label(x), label(hx))
-  
+
   expect_identical(labels(x), labels(hx))
-  
+
   expect_false(identical(labels(hx), labels(hx, prefixed = TRUE)))
 })
 
@@ -56,7 +56,7 @@ label(hx2) <- "Another variable label"
 labels(hx2) <- c(Good = 1, Neutral = 3, Bad = 5, DK = -1)
 test_that("labels<- work for both declared and haven classes", {
   expect_false(identical(label(hx), label(hx2)))
-  
+
   expect_false(identical(labels(hx), labels(hx2)))
 })
 
@@ -106,22 +106,22 @@ label(x2, irrelevant = TRUE) <- "Variable label"
 label(dfd, irrelevant = TRUE) <- list(x = "Label for x", hx = "Label for hx")
 test_that("argument ... has no effect on label<-()", {
   expect_identical(label(x), label(x2))
-  
+
   expect_false(identical(label(x), label(dfd$x)))
 })
 
 
 test_that("errors work for label(s)(<-)", {
   expect_error(label(x) <- c("A", "B"))
-  
+
   expect_error(label(hx) <- c("A", "B"))
-  
+
   expect_error(label(dfd) <- c("A", "B"))
-  
+
   expect_error(label(dfd) <- list(x = "Label for x"))
-  
+
   expect_error(label(dx) <- list(A = "A"))
-  
+
   expect_error(label(dx) <- c("A", "B"))
 })
 

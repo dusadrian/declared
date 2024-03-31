@@ -1,3 +1,4 @@
+local_edition(3)
 x <- declared(
   c(1:5, -1),
   labels = c(Good = 1, Bad = 5, DK = -1),
@@ -8,9 +9,9 @@ test_that("as.character.declared works", {
   expect_equal(as.character(x)[6], NA_character_)
 
   expect_equal(as.character(x, values = TRUE)[6], NA_character_)
-  
+
   expect_equal(as.character(x, drop_na = FALSE)[6], "DK")
-  
+
   expect_equal(as.character(x, drop_na = FALSE, nolabels = TRUE)[6], "DK")
 
   expect_equal(as.character(x, values = TRUE, drop_na = FALSE)[6], "-1")
@@ -48,7 +49,7 @@ test_that("c.declared works", {
   expect_length(c(x, x), 12)
 
   expect_error(c(x, x2), "Labels must be unique")
-  
+
   expect_length(c(x3, x4), 12)
 
   expect_length(c(x, x3), 12)
@@ -92,7 +93,7 @@ test_that("sort.declared works", {
   expect_false(
     any(is.na(sort(x7)))
   )
-  
+
   expect_false(
     is.na(sort(x7, na.last = TRUE)[1])
   )
@@ -122,7 +123,7 @@ test_that("duplicated.declared works", {
 
 test_that("head.declared and tail.declared work", {
   expect_length(head(x, n = -2), 4)
-  
+
   expect_length(head(x, n = -7), 0)
 
   expect_true(identical(head(x7), head(x8)))

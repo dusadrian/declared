@@ -1,3 +1,4 @@
+local_edition(3)
 x <- declared(
     c(1:2, -91),
     labels = c(Good = 1, Bad = 2, Missing = -91),
@@ -6,7 +7,7 @@ x <- declared(
 
 test_that("is.empty() works", {
   expect_error(is.empty(list(A = 1)), "should be an atomic vector")
-  
+
   expect_error(is.empty(data.frame(x)))
 
   expect_equal(is.empty(x), rep(FALSE, 3))

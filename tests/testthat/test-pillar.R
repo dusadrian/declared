@@ -1,3 +1,4 @@
+local_edition(3)
 x <- declared(
   c(1:5, -1),
   labels = c(Good = 1, Bad = 5, DK = -1),
@@ -62,7 +63,7 @@ test_that("format works on pillar for declared objects", {
     ),
     10
   )
-  
+
   expect_equal(
     nchar(
       capture.output(format(px, 100))[2]
@@ -80,7 +81,7 @@ test_that("format works on pillar for declared character objects", {
     ),
     10
   )
-  
+
   expect_equal(
     nchar(
       capture.output(format(pcx, 100))[2]

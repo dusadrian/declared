@@ -1,4 +1,4 @@
-
+local_edition(3)
 test_that("validate_declared() works", {
   expect_error(validate_declared(as.complex(1:6)))
 

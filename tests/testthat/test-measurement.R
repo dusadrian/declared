@@ -1,3 +1,4 @@
+local_edition(3)
 x <- declared(
     c(-2, 1:5, -1),
     labels = c(Good = 1, Bad = 5, DK = -1),

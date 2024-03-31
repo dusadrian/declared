@@ -1,3 +1,4 @@
+local_edition(3)
 x <- declared(
   label = "Variable label",
   c(1:5, -1),
@@ -40,14 +41,14 @@ test_that("undeclare() works on data.frames", {
 
 test_that("drop() works", {
   expect_equal(drop(x), as.integer(c(1:5, NA)))
-  
+
   expect_equal(undeclare(x, drop = TRUE), drop(undeclare(x)))
 })
 
 
 test_that("drop_na() works", {
   expect_null(attr(drop_na(x), "na_index"))
-  
+
   expect_false(identical(
     attr(drop_na(x), "labels"),
     attr(x, "labels")

@@ -1,3 +1,4 @@
+local_edition(3)
 x <- declared(
   c(1:5, -1),
   labels = c(Good = 1, Bad = 5, DK = -1),
@@ -23,7 +24,7 @@ test_that("as.factor.declared() works", {
       levels(as.factor(undeclare(x)))
     ))
   )
-  
+
   expect_setequal(
     levels(as.factor(undeclare(x))),
     levels(as.factor(x, drop_na = FALSE))

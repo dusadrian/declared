@@ -1,3 +1,4 @@
+local_edition(3)
 set.seed(12345)
 
 x <- declared(
@@ -40,16 +41,16 @@ test_that("labelled functions work for declared objects", {
   expect_equal(labelled::val_label(x, 1), "Goodish")
 
   expect_equal(labelled::val_label(x, 1, prefixed = TRUE), "[1] Goodish")
-  
+
   expect_error(labelled::val_label(x, 1:2), "should be a single value")
-  
+
   expect_error(
     labelled::val_label(x, 1) <- c("A", "B"),
     "should be a single character string"
   )
 
   expect_null(labelled::val_label(x, 2))
-  
+
   expect_error(
     labelled::val_label(x, 1:2) <- "A",
     "should be a single value"

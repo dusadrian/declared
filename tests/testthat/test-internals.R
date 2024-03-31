@@ -1,3 +1,4 @@
+local_edition(3)
 library(declared)
 set.seed(12345)
 

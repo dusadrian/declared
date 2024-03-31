@@ -1,4 +1,4 @@
-
+local_edition(3)
 x <- declared(
   c(1:5, -1),
   labels = c(Good = 1, Bad = 5, DK = -1),
@@ -15,11 +15,11 @@ hx <- haven::labelled_spss(
 
 test_that("w_mean() works", {
   expect_equal(w_mean(x), 3)
-  
+
   expect_equal(w_mean(hx), 3)
-  
+
   expect_error(w_mean(x, wt = "A"))
-  
+
   expect_warning(
     w_mean("A"),
     "should be a numerical / logical"

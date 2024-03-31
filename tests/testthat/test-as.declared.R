@@ -1,3 +1,4 @@
+local_edition(3)
 x <- declared(
   c(1:5, -1),
   labels = c(Good = 1, Bad = 5, DK = -1),
@@ -36,7 +37,7 @@ test_that("as.declared() works", {
   )
 
   expect_equal(as.declared(hx), x)
-  
+
   expect_true(
     inherits(
       as.declared(data.frame(x = 1:2, y = c("a", "b"))),
@@ -88,7 +89,7 @@ test_that("as.declared works interactively", {
     as.declared(1:5, interactive = TRUE),
     "no automatic class method conversion"
   )
-  
+
   expect_message(
     as.declared(1:5, interactive = TRUE, vname_ = "C"),
     "no automatic class method conversion"

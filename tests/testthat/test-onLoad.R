@@ -1,3 +1,4 @@
+local_edition(3)
 declared:::.onLoad()
 # context("onLoad")
 
@@ -42,7 +43,7 @@ test_that("onLoad functions work", {
   test <- capture.output(print(dfd, max = 5))
   test <- capture.output(print(dfd, row.names = FALSE))
   expect_error(print(dfd, max = Inf))
-  
+
   test <- capture.output(format(dfd[, -seq(1, 4)]))
   test <- rbind(dfd, dfd)
   expect_error(
@@ -64,12 +65,12 @@ test_that("onLoad functions work", {
   ldfd <- as.list(dfd)
   test <- rbind(dfd, ldfd)
   test <- rbind(dfd, as.list(dfd[1, , drop = FALSE]))
-  
+
   ldfd$x <- ldfd$x[-1]
   expect_error(rbind(dfd, ldfd), "variables should have the same length")
   test <- suppressWarnings(rbind(dfd, rep(1, 4)))
   expect_warning(rbind(dfd, list(1, 3, 1, "Bad")), "invalid factor level")
-  
+
   dfd2 <- dfd
   dfd2$x <- as.matrix(dfd2$x)
   test <- rbind(dfd2, dfd)

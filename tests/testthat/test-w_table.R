@@ -1,4 +1,4 @@
-
+local_edition(3)
 x <- declared(
   c(1:5, -1),
   labels = c(Good = 1, Bad = 5, DK = -1),
@@ -103,15 +103,15 @@ test_that("w_table() works", {
   expect_error(w_table(x, wt = Inf))
 
   expect_error(w_table(x, wt = 1))
-  
+
   expect_error(with(DF, w_table(Gender, Area[-1], wt = fweight)))
 
   expect_error(with(DF, w_table(Gender, Area, margin = 3)))
-  
+
   expect_error(with(DF, w_table(Gender, list(A = 1))))
-  
+
   expect_error(w_table(list(A = 1)))
-  
+
   expect_error(with(DF, w_table(Gender, list(A = 1), wt = fweight)))
 })
 

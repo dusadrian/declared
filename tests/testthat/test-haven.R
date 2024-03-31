@@ -1,3 +1,4 @@
+local_edition(3)
 set.seed(12345)
 
 x <- declared(
