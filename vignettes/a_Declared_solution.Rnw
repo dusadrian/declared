@@ -1,0 +1,41 @@
+%\VignetteEngine{Sweave}
+
+\documentclass{article}
+\begin{document}
+
+\title{a. Motivation for the declared package}
+\author{Adrian Dusa}
+\maketitle
+
+The R ecosystem already has some very good packages that deal with labelled
+objects. In particular, the inter-connected packages \textbf{haven} and
+\textbf{labelled} provide all the functionality most users would ever need.
+
+As nice and useful as these packages are, it has become apparent they have some
+fundamental design features that run, in some situations, against users'
+expectations. This often relates to the treatment of declared missing values
+that are instrumental for the social sciences.
+
+The following minimal example (adapted from the vignette in package **haven**)
+illustrates the situation:
+
+<<example-code-1, echo=TRUE>>=
+library(haven)
+x1 <- labelled_spss(
+    x = c(1:5, -91),
+    labels = c("Missing" = -91),
+    na_value = -91
+)
+@
+
+The printed objects from this package nicely display some properties:
+
+<<example-code-1, echo=TRUE>>=
+library(haven)
+x1
+@
+
+\section*{Introduction}
+This is the first Sweave vignette using the \texttt{MySweavePackage}.
+
+\end{document}

@@ -1,15 +1,15 @@
 ---
 title: "a. Motivation for the declared package"
-output: 
+output:
   rmarkdown::html_vignette:
-   highlight: "declared.theme"
-   css: "declared.css"
+    highlight: "declared.theme"
+    css: "declared.css"
 vignette: >
   %\VignetteIndexEntry{a. Motivation for the declared package}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
-editor_options: 
-  markdown: 
+editor_options:
+  markdown:
     wrap: 80
 ---
 
@@ -67,14 +67,14 @@ is.na(x1)
 ```
 
 But when calculating a mean, for instance, the normal expectation is that value
-99 would not play any role in the calculations (since it should be *missing*).
+`-91` would not play any role in the calculations (since it should be *missing*).
 However:
 
 ```{r}
 mean(x1)
 ```
 
-This means the value 99 did play an active role despite being identified as
+This means the value `-91` did play an active role despite being identified as
 "missing". In an ideal world, the expected mean would be 3, or at best, employ
 the argument `na.rm = TRUE`{.R} if the result is `NA` because of the
 declared missing value.
@@ -90,10 +90,31 @@ mean(
 )
 ```
 
+A similar behavior is observed into another package **memisc**, that also deals
+with labels and missing values:
+```{r message=FALSE}
+library(memisc)
+memx <- c(1:5, -91)
+labels(memx) <- c("Missing" = -91)
+missing.values(memx) <- -91
+
+mean(memx)
+```
+
+Here too, despite being declared as missing, the value `-91` still plays a role
+in calculating the mean. It has to be coerced to numeric to really convert that
+value to `NA`:
+```{r}
+mean(
+  as.numeric(memx),
+  na.rm = TRUE
+)
+```
+
 
 ## The declared solution
 
-While solving the problem, this above solution forces two additional operations:
+While solving the problem, the above solutions force two additional operations:
 
 -   converting the (already) declared user missing values, and
 
@@ -122,7 +143,7 @@ x2
 The print method makes it obvious the value `-91` is not a regular number but an
 actual missing value. More importantly, this type of storage circumvents the
 need to convert user-defined missing values to regular `NA` values since
-they are already stored as regular NA values. The average value is calculated
+they are already stored as regular `NA` values. The average value is calculated
 simply as follows:
 
 ```{r}
@@ -130,7 +151,7 @@ mean(x2)
 ```
 
 Notice that neither `user_na_to_na()`{.R}, nor employing `na.rm = TRUE`{.R} are
-necessary, and, despite being stored as an `NA` value, the value `99` is not
+necessary, and, despite being stored as an `NA` value, the value `-91` is not
 equivalent to an *empty cell*. The information still exists, but it is simply
 ignored in the calculations.
 
@@ -177,12 +198,12 @@ functions such as `na.omit()`{.R} or `na.exclude()`{.R}:
 na.omit(x2)
 ```
 
-It should be made obvious the excellent packages **haven** and **labelled** are
-not inherently doing a bad thing: the very same result is obtained, just via a
-different route. Package **declared** was created as an alternative to the
-design philosophy of these packages, with a fundamental difference: instead of
-interpreting existing values as missing, the missing values are interpreted as
-existing.
+It should be made obvious the excellent packages **memisc**, **haven** and
+**labelled** are not inherently doing a bad thing: the very same result is
+obtained, just via a different route. Package **declared** was created as an
+alternative to the design philosophy of these packages, with a fundamental
+difference: instead of interpreting existing values as missing, the missing
+values are interpreted as existing.
 
 It does so by storing an additional attribute containing the positions (indexes)
 of the regular `NA` values in the object, which should be treated as

@@ -2,8 +2,8 @@
 title: "b. Added value"
 output:
   rmarkdown::html_vignette:
-   highlight: "declared.theme"
-   css: "declared.css"
+    highlight: "declared.theme"
+    css: "declared.css"
 vignette: >
   %\VignetteIndexEntry{b. Added value}
   %\VignetteEncoding{UTF-8}
