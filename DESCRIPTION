@@ -1,7 +1,7 @@
 Package: declared
 Title: Functions for Declared Missing Values
-Version: 0.24
-Authors@R: 
+Version: 0.24.1
+Authors@R:
     c(
         person(
             "Adrian", "Dusa",
@@ -20,8 +20,8 @@ URL: https://github.com/dusadrian/declared
 BugReports: https://github.com/dusadrian/declared/issues
 Description: A zero dependency package containing functions to declare labels
     and missing values, coupled with associated functions to create (weighted)
-    tables of frequencies and various other summary measures. 
-    Some of the base functions have been rewritten to make use of the specific 
+    tables of frequencies and various other summary measures.
+    Some of the base functions have been rewritten to make use of the specific
     information about the missing values, most importantly to distinguish
     between empty NA and declared NA values.
     Some functions have similar functionality with the corresponding ones from
@@ -35,6 +35,7 @@ Suggests:
     haven,
     knitr,
     labelled,
+    memisc,
     pillar,
     rmarkdown,
     spelling,
@@ -45,6 +46,6 @@ Suggests:
 Language: en-US
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3.9000
+RoxygenNote: 7.3.1
 VignetteBuilder: knitr
 Config/testthat/edition: 3
