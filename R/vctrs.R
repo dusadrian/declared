@@ -3,6 +3,43 @@
 # labelled and pillar  these functions will be registered when or if the package
 # vctrs is loaded
 
+`vec_proxy.declared` <- function (x, ...) {
+    return (undeclare(x, drop=TRUE))
+}
+
+`vec_restore.declared` <- function(x, to, ...) {
+    new_attrs <- attributes(to)
+
+    misvals <- all_missing_values (
+        x,
+        new_attrs$na_values,
+        new_attrs$na_range,
+        new_attrs$labels
+    )
+
+    na_index <- which(is.element(x, misvals))
+
+    if (length(na_index) > 0) {
+      declared_nas <- x[na_index]
+
+      if (new_attrs$date) {
+        declared_nas <- as.numeric (declared_nas)
+      }
+
+      x[na_index] <- NA
+      names(na_index) <- declared_nas
+    }
+    else {
+      na_index <- NULL
+    }
+
+    new_attrs$na_index <- na_index
+
+    attributes(x) <- new_attrs
+
+    return (x)
+}
+
 `vec_ptype_abbr.declared` <- function (x, ...) {
     command <- "vctrs::vec_ptype_abbr(vctrs::vec_data(unclass (undeclare (x))))"
     return (

@@ -828,6 +828,8 @@
 
     register_S3_method("vctrs", "vec_ptype_abbr", "declared")
     register_S3_method("vctrs", "vec_ptype_full", "declared")
+    register_S3_method("vctrs", "vec_proxy", "declared")
+    register_S3_method("vctrs", "vec_restore", "declared")
     # register_S3_method("vctrs", "vec_ptype2", "declared")
 
     register_S3_method("vroom", "output_column", "declared")
