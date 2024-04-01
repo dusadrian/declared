@@ -68,15 +68,17 @@
     x[na_index] <- names (na_index)
     x <- coerceMode_ (x)
   }
-
   attrx$na_index <- NULL
   attrx$na_values <- NULL
   attrx$na_range <- NULL
 
   if (isFALSE (drop)) {
+    if (!is.numeric(x) & any(is.element(attrx$class, c("numeric", "integer", "double")))) {
+      attrx$class <- c("declared", class(x))
+    }
     attributes (x) <- attrx
   }
-  
+
   return (x)
 }
 
