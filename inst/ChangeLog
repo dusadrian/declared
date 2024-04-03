@@ -1,3 +1,9 @@
+Version 0.25
+    o Fixed bug in undeclare() with numeric values and character (declared)
+      missing values (thanks to Kyle Husmann for the report)
+    o New methods for vec_proxy() and vec_restore() for objects of class
+      "declared" (thanks to Kyle Husmann for the PR)
+
 Version 0.24
     o Objects of class "Date" are now accepted as input for a declared object.
     o The package no longer automatically coerces from numeric to integer.
