@@ -1,4 +1,5 @@
 Version 0.25
+    o Improved function sum() for declared objects
     o Fixed bug in undeclare() with numeric values and character (declared)
       missing values (thanks to Kyle Husmann for the report)
     o New methods for vec_proxy() and vec_restore() for objects of class
