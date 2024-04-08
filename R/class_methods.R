@@ -471,26 +471,50 @@
 
 #' @export
 `cumsum.declared` <- function (x) {
+  na_index <- attr (x, "na_index")
+  y <- rep (NA, length (x))
   attributes (x) <- NULL
-  .Primitive ("cumsum")(x)
+  if (!is.null (na_index)) {
+    x <- x[-na_index]
+  }
+  y[setdiff (seq (length (y)), na_index)] <- cumsum (x)
+  return(y)
 }
 
 #' @export
 `cumprod.declared` <- function (x) {
+  na_index <- attr (x, "na_index")
+  y <- rep (NA, length (x))
   attributes (x) <- NULL
-  .Primitive ("cumprod")(x)
+  if (!is.null (na_index)) {
+    x <- x[-na_index]
+  }
+  y[setdiff (seq (length (y)), na_index)] <- cumprod (x)
+  return(y)
 }
 
 #' @export
 `cummax.declared` <- function (x) {
+  na_index <- attr (x, "na_index")
+  y <- rep (NA, length (x))
   attributes (x) <- NULL
-  .Primitive ("cummax")(x)
+  if (!is.null (na_index)) {
+    x <- x[-na_index]
+  }
+  y[setdiff (seq (length (y)), na_index)] <- cummax (x)
+  return(y)
 }
 
 #' @export
 `cummin.declared` <- function (x) {
+  na_index <- attr (x, "na_index")
+  y <- rep (NA, length (x))
   attributes (x) <- NULL
-  .Primitive ("cummin")(x)
+  if (!is.null (na_index)) {
+    x <- x[-na_index]
+  }
+  y[setdiff (seq (length (y)), na_index)] <- cummin (x)
+  return(y)
 }
 
 

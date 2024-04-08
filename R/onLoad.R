@@ -693,6 +693,23 @@
                 0L
             ) > 0L
         }
+
+        do.call ("unlockBinding", list (sym = "sum", env = env))
+
+        env$sum <- function (..., na.rm = FALSE) {
+            dots <- lapply (list (...), function(x) {
+                if (inherits (x, "declared")) {
+                    na_index <- attr (x, "na_index")
+                    if (!is.null (na_index)) {
+                        x <- x[-na_index]
+                    }
+                    attributes (x) <- NULL
+                }
+                return (x)
+            })
+
+            do.call(.Primitive ("sum"), c(dots, na.rm = na.rm))
+        }
     }
 
     if (unlockEnvironment_ (asNamespace("stats"))) {
