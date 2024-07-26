@@ -2,14 +2,14 @@
 title: "b. Added value"
 output:
   rmarkdown::html_vignette:
-#     highlight: "declared.theme"
-#     css: "declared.css"
+    highlight: "declared.theme"
+    css: "declared.css"
 vignette: >
   %\VignetteIndexEntry{b. Added value}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
-editor_options: 
-  markdown: 
+editor_options:
+  markdown:
     wrap: 80
 ---
 
@@ -55,7 +55,7 @@ x2
 #> <declared<numeric>[7]>
 #> [1]       1       2       3       4       5 NA(-91) NA(-91)
 #> Missing values: -91
-#> 
+#>
 #> Labels:
 #>  value   label
 #>    -91 Missing
@@ -72,7 +72,7 @@ x2
 #> <declared<numeric>[7]>
 #> [1]       1       2       3       4       5 NA(-91) NA(-91)
 #> Missing values: -91
-#> 
+#>
 #> Labels:
 #>  value   label
 #>    -91 Missing
@@ -92,7 +92,7 @@ x2
 #> [1]       1       2       3       4       5 NA(-91) NA(-91)
 #> Missing values: -91, -92
 #> Missing range:  [-95, -91]
-#> 
+#>
 #> Labels:
 #>  value   label
 #>    -91 Missing
@@ -127,7 +127,7 @@ xh
 #> [1]   1   2   3   4   5 -91 -91
 #> Missing values: -91, -92
 #> Missing range:  [-95, -91]
-#> 
+#>
 #> Labels:
 #>  value   label
 #>    -91 Missing
@@ -137,7 +137,7 @@ as.declared(xh)
 #> [1]       1       2       3       4       5 NA(-91) NA(-91)
 #> Missing values: -91, -92
 #> Missing range:  [-95, -91]
-#> 
+#>
 #> Labels:
 #>  value   label
 #>    -91 Missing
@@ -167,13 +167,13 @@ If users prefer a tibble instead of a data frame, the objects of class
 ```r
 tibble::as_tibble(dfm)
 #> # A tibble: 7 × 2
-#>   x1    x2                
-#>   <chr> <int+lbl>         
-#> 1 a       1               
-#> 2 b       2               
-#> 3 c       3               
-#> 4 d       4               
-#> 5 e       5               
+#>   x1    x2
+#>   <chr> <int+lbl>
+#> 1 a       1
+#> 2 b       2
+#> 3 c       3
+#> 4 d       4
+#> 5 e       5
 #> 6 f     -91 (NA) [Missing]
 #> 7 g     -91 (NA) [Missing]
 ```
@@ -239,7 +239,7 @@ x4
 #> <declared<numeric>[4]> Respondent's political orientation
 #> [1]       1       2       3 NA(-91)
 #> Missing values: -91
-#> 
+#>
 #> Labels:
 #>  value    label
 #>      1     Left
@@ -272,17 +272,17 @@ argument `drop_na`{.R}:
 
 ```r
 as.factor(x4)
-#> [1] Left   Middle Right  <NA>  
+#> [1] Left   Middle Right  <NA>
 #> Levels: Left Middle Right
 
 # essentially acting as:
 as.factor(drop_na(x4))
-#> [1] Left   Middle Right  <NA>  
+#> [1] Left   Middle Right  <NA>
 #> Levels: Left Middle Right
 ```
 
 Converting the declared missing values to factor levels is something for which
-the function `undeclare()`{.R} proves useful, and switching between factors and 
+the function `undeclare()`{.R} proves useful, and switching between factors and
 declared objects, preserving the declared missing values, is now straightforward:
 
 
@@ -318,7 +318,7 @@ as.declared(x5, na_values = 4)
 #> <declared<numeric>[4]>
 #> [1]     1     2     3 NA(4)
 #> Missing values: 4
-#> 
+#>
 #> Labels:
 #>  value    label
 #>      1     Left
@@ -369,10 +369,10 @@ x6 <- declared(
 
 x6
 #> <declared<character>[20]>
-#>  [1]    b     c  NA(z)    b  NA(z) NA(z)    b     a     c  NA(z) NA(z)    b     b     c     b     c 
+#>  [1]    b     c  NA(z)    b  NA(z) NA(z)    b     a     c  NA(z) NA(z)    b     b     c     b     c
 #> [17]    b     b     a  NA(z)
 #> Missing values: z
-#> 
+#>
 #> Labels:
 #>  value    label
 #>      a     Left
