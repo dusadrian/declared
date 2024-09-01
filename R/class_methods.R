@@ -279,10 +279,6 @@
 
 #' @export
 `summary.declared` <- function (object, ...) {
-  na_index <- attr (object, "na_index")
-  if (!is.null (na_index)) {
-    object[na_index] <- NA
-  }
   object <- unclass (object)
   NextMethod()
 }
@@ -472,49 +468,45 @@
 #' @export
 `cumsum.declared` <- function (x) {
   na_index <- attr (x, "na_index")
-  y <- rep (NA, length (x))
   attributes (x) <- NULL
-  if (!is.null (na_index)) {
-    x <- x[-na_index]
+  if (is.null (na_index)) {
+    return(cumsum (x))
   }
-  y[setdiff (seq (length (y)), na_index)] <- cumsum (x)
-  return(y)
+  x[-na_index] <- cumsum (x[-na_index])
+  return(x)
 }
 
 #' @export
 `cumprod.declared` <- function (x) {
   na_index <- attr (x, "na_index")
-  y <- rep (NA, length (x))
   attributes (x) <- NULL
-  if (!is.null (na_index)) {
-    x <- x[-na_index]
+  if (is.null (na_index)) {
+    return(cumprod (x))
   }
-  y[setdiff (seq (length (y)), na_index)] <- cumprod (x)
-  return(y)
+  x[-na_index] <- cumprod (x[-na_index])
+  return(x)
 }
 
 #' @export
 `cummax.declared` <- function (x) {
   na_index <- attr (x, "na_index")
-  y <- rep (NA, length (x))
   attributes (x) <- NULL
-  if (!is.null (na_index)) {
-    x <- x[-na_index]
+  if (is.null (na_index)) {
+    return(cummax (x))
   }
-  y[setdiff (seq (length (y)), na_index)] <- cummax (x)
-  return(y)
+  x[-na_index] <- cummax (x[-na_index])
+  return(x)
 }
 
 #' @export
 `cummin.declared` <- function (x) {
   na_index <- attr (x, "na_index")
-  y <- rep (NA, length (x))
   attributes (x) <- NULL
-  if (!is.null (na_index)) {
-    x <- x[-na_index]
+  if (is.null (na_index)) {
+    return(cummin (x))
   }
-  y[setdiff (seq (length (y)), na_index)] <- cummin (x)
-  return(y)
+  x[-na_index] <- cummin (x[-na_index])
+  return(x)
 }
 
 
