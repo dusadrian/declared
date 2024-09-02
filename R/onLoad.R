@@ -703,7 +703,11 @@
                     if (!is.null (na_index)) {
                         x <- x[-na_index]
                     }
+                    xdate <- isTRUE (attr (x, "date"))
                     attributes (x) <- NULL
+                    if (xdate) {
+                        x <- as.Date (x)
+                    }
                 }
                 return (x)
             })
