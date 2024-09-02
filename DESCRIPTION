@@ -1,6 +1,6 @@
 Package: declared
 Title: Functions for Declared Missing Values
-Version: 0.24.3
+Version: 0.24.4
 Authors@R:
     c(
         person(
