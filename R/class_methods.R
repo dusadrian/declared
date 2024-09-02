@@ -1,29 +1,46 @@
 #' @export
 `as.character.declared` <- function (
-  x, drop_na = TRUE, values = FALSE, nolabels = FALSE, ...
+    x, drop_na = TRUE, values = FALSE, nolabels = FALSE, ...
 ) {
 
-  allabels <- names_values (x, drop_na = drop_na)
-  labels <- labels (x)
+    allabels <- names_values (x, drop_na = drop_na)
+    labels <- labels (x)
+    attrx <- attributes (x)
 
-  # x <- undeclare (x, drop = TRUE)
-  if (isFALSE (drop_na)) {
-    x <- undeclare (x)
-  }
+    if (isFALSE (drop_na)) {
+        x <- undeclare (x)
+    }
+    attributes (x) <- NULL
 
-  attributes (x) <- NULL
+    if (isTRUE (attrx$date)) {
+        if (is.null (attrx$na_index) & !is.null(labels)) {
+            # in Date objects, only the missing values can possibly have labels
+            attrx$na_index <- rep(1, length(labels)) # positions don't matter
+            names (attrx$na_index) <- labels # the labels do matter
+        }
+        missing <- is.element (allabels, names(attrx$na_index))
+        nms <- names (allabels)
+        if (any(!missing)) {
+            nms[!missing] <- as.character (as.Date (as.numeric (nms[!missing])))
+        }
+        allabels[!missing] <- as.character (as.Date (allabels[!missing]))
+        names (allabels) <- nms
 
-  if (isTRUE (values)) {
-    return (as.character (x))
-  }
+        xmissing <- is.element (x, allabels[missing])
+        x[!xmissing] <- as.character (as.Date (x[!xmissing]))
+    }
 
-  x <- names (allabels)[match (x, allabels)]
+    if (isTRUE (values)) {
+        return (as.character (x))
+    }
 
-  if (isTRUE (nolabels)) {
-    x[!is.element (x, names (labels))] <- NA
-  }
+    x <- names (allabels)[match (x, allabels)]
 
-  return (x)
+    if (isTRUE (nolabels)) {
+        x[!is.element (x, names (labels))] <- NA
+    }
+
+    return (x)
 }
 
 #' @export
@@ -43,7 +60,12 @@
   attrx <- attributes (x)
   value <- undeclare (value)
   x <- undeclare (x)
+  xdate <- isTRUE (attrx$date)
+  attributes (x) <- NULL
   x <- NextMethod()
+  if (xdate) {
+    x <- as.Date (x)
+  }
   declared (
     x, attrx[["labels"]], attrx$na_values, attrx$na_range, attrx[["label"]]
   )
@@ -238,6 +260,10 @@
 #' @export
 `na.fail.declared` <- function (object, ...)  {
   object <- unclass (object)
+  if (isTRUE (attr (object, "date"))) {
+    attributes (object) <- NULL
+    object <- as.Date (object)
+  }
   NextMethod()
 }
 
@@ -264,6 +290,10 @@
     x <- x[-na_index]
   }
   x <- unclass (x)
+  if (isTRUE (attr (x, "date"))) {
+    attributes (x) <- NULL
+    x <- as.Date (x)
+  }
   NextMethod()
 }
 
@@ -274,12 +304,20 @@
     x <- x[-na_index]
   }
   x <- unclass (x)
+  if (isTRUE (attr (x, "date"))) {
+    attributes (x) <- NULL
+    x <- as.Date (x)
+  }
   NextMethod()
 }
 
 #' @export
 `summary.declared` <- function (object, ...) {
   object <- unclass (object)
+  if (isTRUE (attr (object, "date"))) {
+    attributes (object) <- NULL
+    object <- as.Date (object)
+  }
   NextMethod()
 }
 
@@ -312,163 +350,162 @@
 }
 
 
-
 # Math operations
 
 #' @export
 `abs.declared` <- function (x) {
-  attributes (x) <- NULL
+  x <- check_date (x)
   .Primitive ("abs")(x)
 }
 
 #' @export
 `sign.declared` <- function (x) {
-  attributes (x) <- NULL
+  x <- check_date (x)
   .Primitive ("sign")(x)
 }
 
 #' @export
 `sqrt.declared` <- function (x) {
-  attributes (x) <- NULL
+  x <- check_date (x)
   .Primitive ("sqrt")(x)
 }
 
 #' @export
 `floor.declared` <- function (x) {
-  attributes (x) <- NULL
+  x <- check_date (x)
   .Primitive ("floor")(x)
 }
 
 #' @export
 `ceiling.declared` <- function (x) {
-  attributes (x) <- NULL
+  x <- check_date (x)
   .Primitive ("ceiling")(x)
 }
 
 #' @export
 `trunc.declared` <- function (x, ...) {
-  attributes (x) <- NULL
+  x <- check_date (x)
   .Primitive ("trunc")(x, ...)
 }
 
 #' @export
 `round.declared` <- function (x, digits = 0) {
-  attributes (x) <- NULL
+  x <- check_date (x)
   .Primitive ("round")(x, digits)
 }
 
 #' @export
 `signif.declared` <- function (x, digits = 0) {
-  attributes (x) <- NULL
+  x <- check_date (x)
   .Primitive ("signif")(x, digits)
 }
 
 #' @export
 `exp.declared` <- function (x) {
-  attributes (x) <- NULL
+  x <- check_date (x)
   .Primitive ("exp")(x)
 }
 
 #' @export
 `log.declared` <- function (x, base = exp(1)) {
-  attributes (x) <- NULL
+  x <- check_date (x)
   .Primitive ("log")(x, base)
 }
 
 #' @export
 `expm1.declared` <- function (x) {
-  attributes (x) <- NULL
+  x <- check_date (x)
   .Primitive ("expm1")(x)
 }
 
 #' @export
 `log1p.declared` <- function (x) {
-  attributes (x) <- NULL
+  x <- check_date (x)
   .Primitive ("log1p")(x)
 }
 
 #' @export
 `cos.declared` <- function (x) {
-  attributes (x) <- NULL
+  x <- check_date (x)
   .Primitive ("cos")(x)
 }
 
 #' @export
 `sin.declared` <- function (x) {
-  attributes (x) <- NULL
+  x <- check_date (x)
   .Primitive ("sin")(x)
 }
 
 #' @export
 `tan.declared` <- function (x) {
-  attributes (x) <- NULL
+  x <- check_date (x)
   .Primitive ("tan")(x)
 }
 
 #' @export
 `cospi.declared` <- function (x) {
-  attributes (x) <- NULL
+  x <- check_date (x)
   .Primitive ("cospi")(x)
 }
 
 #' @export
 `sinpi.declared` <- function (x) {
-  attributes (x) <- NULL
+  x <- check_date (x)
   .Primitive ("sinpi")(x)
 }
 
 #' @export
 `tanpi.declared` <- function (x) {
-  attributes (x) <- NULL
+  x <- check_date (x)
   .Primitive ("tanpi")(x)
 }
 
 #' @export
 `acos.declared` <- function (x) {
-  attributes (x) <- NULL
+  x <- check_date (x)
   .Primitive ("acos")(x)
 }
 
 #' @export
 `asin.declared` <- function (x) {
-  attributes (x) <- NULL
+  x <- check_date (x)
   .Primitive ("asin")(x)
 }
 
 #' @export
 `atan.declared` <- function (x) {
-  attributes (x) <- NULL
+  x <- check_date (x)
   .Primitive ("atan")(x)
 }
 
 #' @export
 `lgamma.declared` <- function (x) {
-  attributes (x) <- NULL
+  x <- check_date (x)
   .Primitive ("lgamma")(x)
 }
 
 #' @export
 `gamma.declared` <- function (x) {
-  attributes (x) <- NULL
+  x <- check_date (x)
   .Primitive ("gamma")(x)
 }
 
 #' @export
 `digamma.declared` <- function (x) {
-  attributes (x) <- NULL
+  x <- check_date (x)
   .Primitive ("digamma")(x)
 }
 
 #' @export
 `trigamma.declared` <- function (x) {
-  attributes (x) <- NULL
+  x <- check_date (x)
   .Primitive ("trigamma")(x)
 }
 
 #' @export
 `cumsum.declared` <- function (x) {
   na_index <- attr (x, "na_index")
-  attributes (x) <- NULL
+  x <- check_date (x)
   if (is.null (na_index)) {
     return(cumsum (x))
   }
@@ -479,7 +516,7 @@
 #' @export
 `cumprod.declared` <- function (x) {
   na_index <- attr (x, "na_index")
-  attributes (x) <- NULL
+  x <- check_date (x)
   if (is.null (na_index)) {
     return(cumprod (x))
   }
@@ -490,7 +527,7 @@
 #' @export
 `cummax.declared` <- function (x) {
   na_index <- attr (x, "na_index")
-  attributes (x) <- NULL
+  x <- check_date (x)
   if (is.null (na_index)) {
     return(cummax (x))
   }
@@ -501,7 +538,7 @@
 #' @export
 `cummin.declared` <- function (x) {
   na_index <- attr (x, "na_index")
-  attributes (x) <- NULL
+  x <- check_date (x)
   if (is.null (na_index)) {
     return(cummin (x))
   }
@@ -514,10 +551,10 @@
 # Arithmetic operations
 #' @export
 `+.declared` <- function (e1, e2) {
-  attributes (e1) <- NULL
+  e1 <- check_date (e1)
   if (!missing(e2)) {
     if (is.declared (e2)) {
-      attributes (e2) <- NULL
+      e2 <- check_date (e2)
     }
   }
   .Primitive ("+")(e1, e2)
@@ -525,10 +562,10 @@
 
 #' @export
 `-.declared` <- function (e1, e2) {
-  attributes (e1) <- NULL
+  e1 <- check_date (e1)
   if (!missing(e2)) {
     if (is.declared (e2)) {
-      attributes (e2) <- NULL
+      e2 <- check_date (e2)
     }
   }
   .Primitive ("-")(e1, e2)
@@ -536,10 +573,10 @@
 
 #' @export
 `*.declared` <- function (e1, e2) {
-  attributes (e1) <- NULL
+  e1 <- check_date (e1)
   if (!missing(e2)) {
     if (is.declared (e2)) {
-      attributes (e2) <- NULL
+      e2 <- check_date (e2)
     }
   }
   .Primitive ("*")(e1, e2)
@@ -547,10 +584,10 @@
 
 #' @export
 `/.declared` <- function (e1, e2) {
-  attributes (e1) <- NULL
+  e1 <- check_date (e1)
   if (!missing(e2)) {
     if (is.declared (e2)) {
-      attributes (e2) <- NULL
+      e2 <- check_date (e2)
     }
   }
   .Primitive ("/")(e1, e2)
@@ -558,10 +595,10 @@
 
 #' @export
 `^.declared` <- function (e1, e2) {
-  attributes (e1) <- NULL
+  e1 <- check_date (e1)
   if (!missing(e2)) {
     if (is.declared (e2)) {
-      attributes (e2) <- NULL
+      e2 <- check_date (e2)
     }
   }
   .Primitive ("^")(e1, e2)
@@ -569,10 +606,10 @@
 
 #' @export
 `%%.declared` <- function (e1, e2) {
-  attributes (e1) <- NULL
+  e1 <- check_date (e1)
   if (!missing(e2)) {
     if (is.declared (e2)) {
-      attributes (e2) <- NULL
+      e2 <- check_date (e2)
     }
   }
   .Primitive ("%%")(e1, e2)
@@ -580,10 +617,10 @@
 
 #' @export
 `%/%.declared` <- function (e1, e2) {
-  attributes (e1) <- NULL
+  e1 <- check_date (e1)
   if (!missing(e2)) {
     if (is.declared (e2)) {
-      attributes (e2) <- NULL
+      e2 <- check_date (e2)
     }
   }
   .Primitive ("%/%")(e1, e2)
@@ -591,10 +628,10 @@
 
 #' @export
 `&.declared` <- function (e1, e2) {
-  attributes (e1) <- NULL
+  e1 <- check_date (e1)
   if (!missing(e2)) {
     if (is.declared (e2)) {
-      attributes (e2) <- NULL
+      e2 <- check_date (e2)
     }
   }
   .Primitive ("&")(e1, e2)
@@ -602,10 +639,10 @@
 
 #' @export
 `|.declared` <- function (e1, e2) {
-  attributes (e1) <- NULL
+  e1 <- check_date (e1)
   if (!missing(e2)) {
     if (is.declared (e2)) {
-      attributes (e2) <- NULL
+      e2 <- check_date (e2)
     }
   }
   .Primitive ("|")(e1, e2)
@@ -613,7 +650,7 @@
 
 #' @export
 `!.declared` <- function (x) {
-  attributes (x) <- NULL
+  x <- check_date (x)
   .Primitive ("!")(x)
 }
 
@@ -722,31 +759,31 @@ if (!missing(e2)) {
 
 #' @export
 `Arg.declared` <- function (z) {
-  attributes (z) <- NULL
+  z <- check_date (z)
   .Primitive ("Arg")(z)
 }
 
 #' @export
 `Conj.declared` <- function (z) {
-  attributes (z) <- NULL
+  z <- check_date (z)
   .Primitive ("Conj")(z)
 }
 
 #' @export
 `Im.declared` <- function (z) {
-  attributes (z) <- NULL
+  z <- check_date (z)
   .Primitive ("Im")(z)
 }
 
 #' @export
 `Mod.declared` <- function (z) {
-  attributes (z) <- NULL
+  z <- check_date (z)
   .Primitive ("Mod")(z)
 }
 
 #' @export
 `Re.declared` <- function (z) {
-  attributes (z) <- NULL
+  z <- check_date (z)
   .Primitive ("Re")(z)
 }
 

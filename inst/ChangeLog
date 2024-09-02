@@ -1,4 +1,5 @@
 Version 0.25
+    o Adapted class methods for declared objects with "Date" inputs
     o Improved function sum() for declared objects
     o Fixed bug in undeclare() with numeric values and character (declared)
       missing values (thanks to Kyle Husmann for the report)
@@ -6,8 +7,8 @@ Version 0.25
       "declared" (thanks to Kyle Husmann for the PR)
 
 Version 0.24
-    o Objects of class "Date" are now accepted as input for a declared object.
-    o The package no longer automatically coerces from numeric to integer.
+    o Objects of class "Date" are now accepted as input for a declared object
+    o The package no longer automatically coerces from numeric to integer
     o Improved version of w_table() for duplicated labels
     o Bug fix in as.haven() for declared missing values with no labels
       (thanks to Marijana Glavica for the report)
