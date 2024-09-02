@@ -553,7 +553,9 @@ NULL
         x <- as.character (x)
     }
 
-    x <- gsub ("\u00a0", " ", x) # multibyte space
+    if (!all (is.na (x))) {
+        x <- gsub ("\u00a0", " ", x) # multibyte space
+    }
 
     multibyte <- grepl ("[^!-~ ]", x)
     if (any (multibyte)) {
@@ -584,10 +586,15 @@ NULL
         return (as.numeric (x))
     }
 
-    x <- gsub ("\u00a0", " ", x) # multibyte space
+    if (!all (is.na (x))) {
+        x <- gsub ("\u00a0", " ", x) # multibyte space
+    }
 
     result <- rep (NA, length (x))
-    multibyte <- grepl ("[^!-~ ]", x)
+    multibyte <- logical (length (x))
+    if (!all (is.na (x))) {
+        multibyte <- grepl ("[^!-~ ]", x)
+    }
 
     attributes (x) <- NULL
 
@@ -684,7 +691,7 @@ NULL
 
 
 `unlockEnvironment_` <- function (env) {
-     .Call ("_unlockEnvironment", env, PACKAGE = "declared")
+    .Call ("_unlockEnvironment", env, PACKAGE = "declared")
 }
 
 
@@ -841,7 +848,6 @@ NULL
 }
 
 
-
 `getName_` <- function(x, object = FALSE) {
     result <- rep ("", length (x))
     x <- as.vector (gsub ("1-", "", gsub ("[[:space:]]", "", x)))
@@ -955,3 +961,14 @@ NULL
 
     return (gsub (",|'|\"|[[:space:]]", "", result))
 }
+
+
+check_date <- function (x) {
+    xdate <- isTRUE (attr (x, "date"))
+    attributes (x) <- NULL
+    if (xdate) {
+        x <- as.Date (x)
+    }
+    return (x)
+}
+
