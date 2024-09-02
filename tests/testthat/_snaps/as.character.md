@@ -69,3 +69,24 @@
     Output
       [1] "1"  "2"  "3"  "4"  "5"  "-1"
 
+---
+
+    Code
+      as.character(undeclare(xdate))
+    Output
+      [1] "2023-12-06" "DK"        
+
+---
+
+    Code
+      as.character(undeclare(xdate), drop_na = FALSE)
+    Output
+      [1] "2023-12-06" "DK"        
+
+---
+
+    Code
+      as.character(undeclare(xdate), drop_na = FALSE, values = TRUE)
+    Output
+      [1] "2023-12-06" "-1"        
+

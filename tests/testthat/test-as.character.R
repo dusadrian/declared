@@ -5,6 +5,12 @@ x <- declared(
   na_values = -1
 )
 
+xdate <- declared(
+  c(as.Date("2023-12-06"), -1),
+  labels = c(DK = -1),
+  na_values = -1
+)
+
 
 test_that("as.character.declared() works", {
   expect_identical(
@@ -21,6 +27,16 @@ test_that("as.character.declared() works", {
   expect_identical(
     as.character(x, drop_na = FALSE),
     as.character(undeclare(x))
+  )
+
+  expect_identical(
+    as.character(xdate, drop_na = FALSE),
+    as.character(undeclare(xdate))
+  )
+
+  expect_identical(
+    as.character(xdate, drop_na = FALSE, values = TRUE),
+    as.character(undeclare(xdate), values = TRUE)
   )
 })
 
@@ -50,4 +66,7 @@ test_that("tests have the same output", {
   expect_snapshot(as.character(drop_na(x)))
   expect_snapshot(as.character(undeclare(x)))
   expect_snapshot(as.character(undeclare(x), values = TRUE))
+  expect_snapshot(as.character(undeclare(xdate)))
+  expect_snapshot(as.character(undeclare(xdate), drop_na = FALSE))
+  expect_snapshot(as.character(undeclare(xdate), drop_na = FALSE, values = TRUE))
 })
