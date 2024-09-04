@@ -8,8 +8,8 @@
 <meta name="description" content="declared">
 <title>a. Motivation for the declared package • declared</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="a. Motivation for the declared package">
 <meta property="og:description" content="declared">
@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">declared</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.24</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -123,14 +123,14 @@ as missing with:</p>
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">x1</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] FALSE FALSE FALSE FALSE FALSE  TRUE</span></span></code></pre></div>
 <p>But when calculating a mean, for instance, the normal expectation is
-that value 99 would not play any role in the calculations (since it
-should be <em>missing</em>). However:</p>
+that value <code>-91</code> would not play any role in the calculations
+(since it should be <em>missing</em>). However:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">x1</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] -12.66667</span></span></code></pre></div>
-<p>This means the value 99 did play an active role despite being
-identified as “missing”. In an ideal world, the expected mean would be
-3, or at best, employ the argument <code class="sourceCode r">na.rm <span class="ot">=</span> <span class="cn">TRUE</span></code>
+<p>This means the value <code>-91</code> did play an active role despite
+being identified as “missing”. In an ideal world, the expected mean
+would be 3, or at best, employ the argument <code class="sourceCode r">na.rm <span class="ot">=</span> <span class="cn">TRUE</span></code>
 if the result is <code>NA</code> because of the declared missing
 value.</p>
 <p>A solution to this problem is offered by package
@@ -142,10 +142,31 @@ value.</p>
 <span>  na.rm <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 3</span></span></code></pre></div>
+<p>A similar behavior is observed into another package
+<strong>memisc</strong>, that also deals with labels and missing
+values:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://memisc.elff.eu" class="external-link">memisc</a></span><span class="op">)</span></span>
+<span><span class="va">memx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="op">-</span><span class="fl">91</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/labels.html">labels</a></span><span class="op">(</span><span class="va">memx</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Missing"</span> <span class="op">=</span> <span class="op">-</span><span class="fl">91</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://melff.github.io/memisc/reference/value-filters.html" class="external-link">missing.values</a></span><span class="op">(</span><span class="va">memx</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="fl">91</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">memx</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] -12.66667</span></span></code></pre></div>
+<p>Here too, despite being declared as missing, the value
+<code>-91</code> still plays a role in calculating the mean. It has to
+be coerced to numeric to really convert that value to
+<code>NA</code>:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">memx</span><span class="op">)</span>,</span>
+<span>  na.rm <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 3</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="the-declared-solution">The declared solution<a class="anchor" aria-label="anchor" href="#the-declared-solution"></a>
 </h2>
-<p>While solving the problem, this above solution forces two additional
+<p>While solving the problem, the above solutions force two additional
 operations:</p>
 <ul>
 <li><p>converting the (already) declared user missing values,
@@ -161,7 +182,7 @@ is needed.</p>
 <p>To solve this problem, the <strong>declared</strong> package creates
 a similar object, where declared missing values are stored (hence
 interpreted as) regular <code>NA</code> missing values in R.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/dusadrian/declared" class="external-link">declared</a></span><span class="op">)</span></span>
 <span><span class="va">x2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/declared.html">declared</a></span><span class="op">(</span></span>
 <span>  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="op">-</span><span class="fl">91</span><span class="op">)</span>,</span>
@@ -180,15 +201,15 @@ interpreted as) regular <code>NA</code> missing values in R.</p>
 regular number but an actual missing value. More importantly, this type
 of storage circumvents the need to convert user-defined missing values
 to regular <code>NA</code> values since they are already stored as
-regular NA values. The average value is calculated simply as
-follows:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+regular <code>NA</code> values. The average value is calculated simply
+as follows:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">x2</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 3</span></span></code></pre></div>
 <p>Notice that neither <code class="sourceCode r"><span class="fu">user_na_to_na</span>()</code>, nor
 employing <code class="sourceCode r">na.rm <span class="ot">=</span> <span class="cn">TRUE</span></code>
 are necessary, and, despite being stored as an <code>NA</code> value,
-the value <code>99</code> is not equivalent to an <em>empty cell</em>.
+the value <code>-91</code> is not equivalent to an <em>empty cell</em>.
 The information still exists, but it is simply ignored in the
 calculations.</p>
 <p>At first glance, providing a class method for this function seems
@@ -207,7 +228,7 @@ missing.</p>
 <p>The genuinely problematic values are the empty <code>NA</code>
 values, and the custom class method still allows identifying such values
 if they exist:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">x2</span>, <span class="cn">NA</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] NA</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">x2</span>, <span class="cn">NA</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
@@ -217,18 +238,18 @@ function <code class="sourceCode r"><span class="fu">is.na</span>()</code>, as w
 all related functions such as <code class="sourceCode r"><span class="fu">anyNA</span>()</code> etc., are
 unaware and can not differentiate between empty and declared missing
 values:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">x2</span>, <span class="cn">NA</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] FALSE FALSE FALSE FALSE FALSE  TRUE  TRUE</span></span></code></pre></div>
 <p>To overcome this situation, package <strong>declared</strong>
 complementary provides an additional function to account for the
 difference:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/is.empty.html">is.empty</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">x2</span>, <span class="cn">NA</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] FALSE FALSE FALSE FALSE FALSE FALSE  TRUE</span></span></code></pre></div>
 <p>All missing values, empty and declared, play well with the NA
 oriented, base functions such as <code class="sourceCode r"><span class="fu">na.omit</span>()</code> or <code class="sourceCode r"><span class="fu">na.exclude</span>()</code>:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/na.fail.html" class="external-link">na.omit</a></span><span class="op">(</span><span class="va">x2</span><span class="op">)</span></span>
 <span><span class="co">#&gt; &lt;declared&lt;numeric&gt;[5]&gt;</span></span>
 <span><span class="co">#&gt; [1] 1 2 3 4 5</span></span>
@@ -238,12 +259,13 @@ oriented, base functions such as <code class="sourceCode r"><span class="fu">na.
 <span><span class="co">#&gt;  value   label</span></span>
 <span><span class="co">#&gt;    -91 Missing</span></span></code></pre></div>
 <p>It should be made obvious the excellent packages
-<strong>haven</strong> and <strong>labelled</strong> are not inherently
-doing a bad thing: the very same result is obtained, just via a
-different route. Package <strong>declared</strong> was created as an
-alternative to the design philosophy of these packages, with a
-fundamental difference: instead of interpreting existing values as
-missing, the missing values are interpreted as existing.</p>
+<strong>memisc</strong>, <strong>haven</strong> and
+<strong>labelled</strong> are not inherently doing a bad thing: the very
+same result is obtained, just via a different route. Package
+<strong>declared</strong> was created as an alternative to the design
+philosophy of these packages, with a fundamental difference: instead of
+interpreting existing values as missing, the missing values are
+interpreted as existing.</p>
 <p>It does so by storing an additional attribute containing the
 positions (indexes) of the regular <code>NA</code> values in the object,
 which should be treated as missing, and, even more so, to be interpreted
