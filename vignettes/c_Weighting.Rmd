@@ -8,8 +8,8 @@ vignette: >
   %\VignetteIndexEntry{c. Weighting (declared) values}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
-editor_options:
-  markdown:
+editor_options: 
+  markdown: 
     wrap: 80
 ---
 
@@ -19,7 +19,7 @@ editor_options:
 For the examples in this vignette, the following data frame is created:
 
 
-```r
+``` r
 library(declared)
 
 n <- 1234
@@ -52,10 +52,10 @@ missing values by default, but they can be revealed by using the `useNA`{.R}
 argument:
 
 
-```r
+``` r
 table(dfm$Opinion, useNA = "ifany")
-#>
-#>  Very bad       Bad   Neither      Good Very good      <NA>
+#> 
+#>  Very bad       Bad   Neither      Good Very good      <NA> 
 #>       180       170       188       171       162       363
 ```
 
@@ -64,10 +64,10 @@ Since "Opinion" is the equivalent of a categorical variable, this can be
 improved through a custom built coercion to the base `factor`{.R} class:
 
 
-```r
+``` r
 table(as.factor(undeclare(dfm$Opinion)), useNA = "ifany")
-#>
-#> Don't know   Very bad        Bad    Neither       Good  Very good       <NA>
+#> 
+#> Don't know   Very bad        Bad    Neither       Good  Very good       <NA> 
 #>        180        180        170        188        171        162        183
 ```
 
@@ -76,19 +76,19 @@ recognizing objects of class `"declared"`{.R}, additionally printing more
 detailed information:
 
 
-```r
+``` r
 w_table(dfm$Opinion, values = TRUE)
-#>
+#> 
 #>                 fre    rel   per   vld   cpd
 #>                -----------------------------
-#>   Very bad   1  180  0.146  14.6  20.7  20.7
-#>        Bad   2  170  0.138  13.8  19.5  40.2
-#>    Neither   3  188  0.152  15.2  21.6  61.8
-#>       Good   4  171  0.139  13.9  19.6  81.4
-#>  Very good   5  162  0.131  13.1  18.6 100.0
+#>   Very bad   1  180  0.146  14.6  20.7  20.7 
+#>        Bad   2  170  0.138  13.8  19.5  40.2 
+#>    Neither   3  188  0.152  15.2  21.6  61.8 
+#>       Good   4  171  0.139  13.9  19.6  81.4 
+#>  Very good   5  162  0.131  13.1  18.6 100.0 
 #>          ------
-#> Don't know -91  180  0.146  14.6
-#>             NA  183  0.148  14.8
+#> Don't know -91  180  0.146  14.6 
+#>             NA  183  0.148  14.8 
 #>                -----------------------------
 #>                1234  1.000 100.0
 ```
@@ -110,7 +110,7 @@ distribution by residential areas differentiating between urban and rural
 settlements.
 
 
-```r
+``` r
 # Observed proportions
 op <- with(dfm, proportions(table(Gender, Area)))
 
@@ -129,19 +129,19 @@ The updated frequency table, this time using the frequency weights, can be
 constructed by passing the weights to the argument `wt`{.R}:
 
 
-```r
+``` r
 with(dfm, w_table(Opinion, wt = fweight, values = TRUE))
-#>
+#> 
 #>                 fre    rel   per   vld   cpd
 #>                -----------------------------
-#>   Very bad   1  179  0.145  14.5  20.5  20.5
-#>        Bad   2  167  0.135  13.5  19.2  39.7
-#>    Neither   3  187  0.152  15.2  21.4  61.1
-#>       Good   4  171  0.139  13.9  19.6  80.7
-#>  Very good   5  168  0.136  13.6  19.3 100.0
+#>   Very bad   1  179  0.145  14.5  20.5  20.5 
+#>        Bad   2  167  0.135  13.5  19.2  39.7 
+#>    Neither   3  187  0.152  15.2  21.4  61.1 
+#>       Good   4  171  0.139  13.9  19.6  80.7 
+#>  Very good   5  168  0.136  13.6  19.3 100.0 
 #>          ------
-#> Don't know -91  179  0.145  14.5
-#>             NA  183  0.148  14.8
+#> Don't know -91  179  0.145  14.5 
+#>             NA  183  0.148  14.8 
 #>                -----------------------------
 #>                1234  1.000 100.0
 ```
