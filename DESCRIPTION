@@ -1,6 +1,6 @@
 Package: declared
 Title: Functions for Declared Missing Values
-Version: 0.24.4
+Version: 0.25
 Authors@R:
     c(
         person(
@@ -32,6 +32,7 @@ License: GPL (>= 3)
 Suggests:
     admisc (> 0.31),
     covr,
+    dplyr,
     haven,
     knitr,
     labelled,
