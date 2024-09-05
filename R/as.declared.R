@@ -53,10 +53,7 @@
       x[na_index] <- NA
       names(na_index) <- declared_nas
     }
-    else {
-      na_index <- NULL
-    }
-    
+
     attributes (x) <- NULL
 
     if (!is.null (labels)) {
@@ -73,16 +70,12 @@
     }
 
     misvals <- unique (sort (c (na_values, declared_nas)))
-  }
-  else {
+  } else {
     misvals <- all_missing_values (unclass (x))
     na_index <- which (is.element (x, misvals))
     if (length (na_index) > 0) {
       names (na_index) <- x[na_index]
       x[na_index] <- NA
-    }
-    else {
-      na_index <- NULL
     }
   }
 
@@ -96,7 +89,9 @@
     }
   }
 
-  attr (x, "na_index") <- na_index
+  if (length (na_index) > 0) {
+    attr (x, "na_index") <- na_index
+  }
   attr (x, "na_values") <- na_values
   attr (x, "na_range") <- na_range
   attr (x, "labels") <- labels

@@ -21,20 +21,13 @@
     )
 }
 
-# `vec_ptype2.declared` <- function (x, y, ...) {
-#     command <- paste (
-#         "vctrs::vec_ptype2(unclass (undeclare (x)),",
-#         "vctrs::vec_data(unclass (undeclare (y))), ...)"
-#     )
-#     eval (parse (text = command))
-# }
-
 `vec_proxy.declared` <- function (x, ...) {
     return (undeclare (x, drop = TRUE))
 }
 
 `vec_restore.declared` <- function(x, to, ...) {
     attrs <- attributes(to)
+    todate <- isTRUE(attrs$date)
 
     misvals <- all_missing_values (
         x,
@@ -48,18 +41,31 @@
     if (length(na_index) > 0) {
         declared_nas <- x[na_index]
 
-        if (attrs$date) {
+        if (todate) {
             declared_nas <- as.numeric (declared_nas)
         }
 
         x[na_index] <- NA
         names (na_index) <- declared_nas
-    }
-    else {
+    } else {
         na_index <- NULL
     }
 
     attrs$na_index <- na_index
+    if (possibleNumeric_ (x)) {
+        x <- as.numeric (x)
+        if (inherits (to, "integer")) {
+            x <- as.integer (x)
+        }
+    }
     attributes(x) <- attrs
     return (x)
 }
+
+# `vec_ptype2.declared` <- function (x, y, ...) {
+#     command <- paste (
+#         "vctrs::vec_ptype2(unclass (undeclare (x)),",
+#         "vctrs::vec_data(unclass (undeclare (y))), ...)"
+#     )
+#     eval (parse (text = command))
+# }

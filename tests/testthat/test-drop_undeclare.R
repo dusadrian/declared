@@ -6,6 +6,14 @@ x <- declared(
   na_values = -1
 )
 
+
+xc <- declared(
+  c(1:5, "a"),
+  labels = c(Good = 1, Bad = 5, DK = "a"),
+  na_values = "a"
+)
+
+
 hx <- haven::labelled_spss(
   label = "Variable label",
   c(1:5, -1),
@@ -25,7 +33,7 @@ attr(ux, "na_index") <- NULL
 attr(ux, "na_values") <- NULL
 attr(ux, "na_range") <- NULL
 na_index <- attr(x, "na_index")
-ux[na_index] <- names(na_index) # automatically coerced to numeric
+ux[na_index] <- as.integer(names(na_index))
 
 test_that("undeclare() works", {
   expect_equal(undeclare(x), ux)
@@ -76,4 +84,5 @@ test_that("tests have the same output", {
   expect_snapshot(drop_na(hx))
   expect_snapshot(drop_na(dfd))
   expect_snapshot(drop_na(dfd, drop_labels = TRUE))
+  expect_snapshot(undeclare(xc))
 })

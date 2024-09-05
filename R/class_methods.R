@@ -285,12 +285,13 @@
 
 #' @export
 `mean.declared` <- function (x, ...) {
+  xdate <- isTRUE (attr (x, "date"))
   na_index <- attr (x, "na_index")
   if (!is.null (na_index)) {
     x <- x[-na_index]
   }
   x <- unclass (x)
-  if (isTRUE (attr (x, "date"))) {
+  if (xdate) {
     attributes (x) <- NULL
     x <- as.Date (x)
   }
@@ -299,12 +300,13 @@
 
 #' @export
 `median.declared` <- function (x, na.rm = FALSE, ...) {
+  xdate <- isTRUE (attr (x, "date"))
   na_index <- attr (x, "na_index")
   if (!is.null (na_index)) {
     x <- x[-na_index]
   }
   x <- unclass (x)
-  if (isTRUE (attr (x, "date"))) {
+  if (xdate) {
     attributes (x) <- NULL
     x <- as.Date (x)
   }

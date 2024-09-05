@@ -18,7 +18,7 @@
     Code
       head(x)
     Output
-      <declared<integer>[6]>
+      <declared<numeric>[6]>
       [1]      1      2      3      4      5 NA(-1)
       Missing values: -1
       
@@ -33,7 +33,7 @@
     Code
       tail(x)
     Output
-      <declared<integer>[6]>
+      <declared<numeric>[6]>
       [1]      1      2      3      4      5 NA(-1)
       Missing values: -1
       
@@ -121,7 +121,7 @@
     Code
       sort(x7)
     Output
-      <declared<integer>[5]>
+      <declared<numeric>[5]>
       [1] 1 2 3 4 5
       Missing values: -92, -91
 
@@ -130,7 +130,7 @@
     Code
       sort(x7, na.last = TRUE)
     Output
-      <declared<integer>[9]>
+      <declared<numeric>[9]>
       [1]       1       2       3       4       5 NA(-92) NA(-91) NA(-91)      NA
       Missing values: -92, -91
 
@@ -139,7 +139,7 @@
     Code
       sort(x7, na.last = FALSE)
     Output
-      <declared<integer>[9]>
+      <declared<numeric>[9]>
       [1]      NA NA(-92) NA(-91) NA(-91)       1       2       3       4       5
       Missing values: -92, -91
 
@@ -171,7 +171,7 @@
     Code
       unique(x8)
     Output
-      <declared<integer>[8]>
+      <declared<numeric>[8]>
       [1] NA(-92)       1       2       3       4       5      NA NA(-91)
       Missing values: -92, -91
 

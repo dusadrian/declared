@@ -85,3 +85,17 @@
       5  5  5
       6 NA -1
 
+---
+
+    Code
+      undeclare(xc)
+    Output
+      <declared<character>[6]>
+      [1] 1 2 3 4 5 a
+      
+      Labels:
+       value label
+           1  Good
+           5   Bad
+           a    DK
+

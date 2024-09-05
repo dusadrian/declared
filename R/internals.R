@@ -12,12 +12,10 @@ NULL
         stopError_ ("`x` has to be a vector.")
     }
 
-    if (
-        is.element("Date", class (x)) || isTRUE (attr (x, "date"))) {
+    if (inherits (x, "Date") || isTRUE (attr (x, "date"))) {
         class (x) <- "Date"
         out <- as.character (x)
-    }
-    else {
+    } else {
         out <- format (unclass (x), digits = digits)
     }
 
@@ -137,11 +135,12 @@ NULL
         }
     }
 
-    if (!is.null (type)) {
+    ## all declared objects have a second class
+    # if (!is.null (type)) {
         return (paste0 ("<", type, ">"))
-    }
+    # }
 
-    return (type)
+    # return (type)
 }
 
 
@@ -329,8 +328,7 @@ NULL
             uniques <- sort (unique (x[x >= na_range[1] & x <= na_range[2]]))
             if (length (uniques) == 0) {
                 uniques <- na_range
-            }
-            else {
+            } else {
                 uniques <- sort (unique (c (uniques, na_range)))
             }
 
@@ -352,8 +350,8 @@ NULL
         )
     }
 
-    na_values <- attr (x, "na_values")
     attrx <- attributes (x)
+    na_values <- getElement(attrx, "na_values")
     labels <- getElement(attrx, "labels")
 
     if (drop_na) {
@@ -374,8 +372,8 @@ NULL
     x <- x[!duplicated (x)]
     xmis <- logical (length (x))
 
-    na_values <- attrx$na_values
-    na_range <- attrx$na_range
+    na_values <- getElement(attrx, "na_values")
+    na_range <- getElement(attrx, "na_range")
 
 
     if (!is.null (na_values)) {
@@ -753,22 +751,22 @@ NULL
 #' @rdname declared_internal
 #' @keywords internal
 #' @export
-`anyTagged_` <- function(x) {
-    if (is.data.frame(x)) {
+`anyTagged_` <- function (x) {
+    if (is.data.frame (x)) {
         i <- 1
         tagged <- FALSE
-        while(!tagged & i <= ncol(x)) {
-            tagged <- Recall(x[[i]])
+        while (!tagged & i <= ncol (x)) {
+            tagged <- Recall (x[[i]])
             i <- i + 1
         }
-        return(tagged)
+        return (tagged)
     }
 
-    if (is.double(x)) {
-        return(.Call("_anyTagged", x, PACKAGE = "declared"))
+    if (is.double (x)) {
+        return (.Call ("_anyTagged", x, PACKAGE = "declared"))
     }
 
-    return(FALSE)
+    return (FALSE)
 }
 
 

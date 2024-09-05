@@ -5,6 +5,22 @@ x <- declared(
   na_values = -1
 )
 
+nx <- declared(
+  c(1:5), # missing values
+  labels = c(Good = 1, Bad = 5)
+)
+
+
+xdate <- declared(
+  as.Date(c(19967:19970, -1)),
+  labels = c(DK = -1),
+  na_values = -1
+)
+
+# modify values to test if "[.declared<-" works
+xdate[1] <- -1
+xdate[5] <- 19971 # 2024-09-05
+
 test_that("as.character.declared works", {
   expect_equal(as.character(x)[6], NA_character_)
 
@@ -145,6 +161,8 @@ test_that("na.omit.declared works", {
 test_that("na.fail.declared works", {
   expect_error(na.fail(x), "missing values in object")
 
+  expect_error(na.fail(xdate), "missing values in object")
+
   expect_length(na.fail(undeclare(x)), 6)
 })
 
@@ -159,9 +177,13 @@ test_that("na.exclude.declared works", {
 test_that("summaries for declared work", {
   expect_equal(mean(x), 3)
 
+  expect_equal(mean(xdate), median(xdate))
+
   expect_equal(median(x), 3)
 
   expect_length(summary(x), 7)
+
+  expect_length(summary(xdate), 6) # not 7 because of the Date class
 })
 
 
@@ -208,6 +230,8 @@ test_that("all.equal.declared works", {
 test_that("mathematical operations work for declared objects", {
   expect_equal(abs(x), as.integer(c(1:5, NA)))
 
+  expect_error(abs(xdate))
+
   expect_equal(sign(x), c(rep(1, 5), NA))
 
   expect_length(sqrt(x), 6)
@@ -252,11 +276,19 @@ test_that("mathematical operations work for declared objects", {
 
   expect_length(cumsum(x), 6)
 
+  expect_length(cumsum(nx), 5)
+
   expect_length(cumprod(x), 6)
+
+  expect_length(cumprod(nx), 5)
 
   expect_length(cummax(x), 6)
 
+  expect_length(cummax(nx), 5)
+
   expect_length(cummin(x), 6)
+
+  expect_length(cummin(nx), 5)
 
   expect_length(x + x, 6)
 

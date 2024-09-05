@@ -144,7 +144,7 @@ test_that("character values in labels coerce x to character", {
 })
 
 
-test_that("labels and na_values should be numeric for Date objects", {
+test_that("labels and missing values should be numeric for Date objects", {
   expect_error(declared(
       c(as.Date("2023-12-06"), -1),
       labels = c(DK = "a"),
@@ -155,6 +155,12 @@ test_that("labels and na_values should be numeric for Date objects", {
       c(as.Date("2023-12-06"), -1),
       labels = c(DK = -1),
       na_values = "a"
+  ))
+
+  expect_error(declared(
+      c(as.Date("2023-12-06"), -1),
+      labels = c(DK = -1),
+      na_range = c("a", "b")
   ))
 })
 

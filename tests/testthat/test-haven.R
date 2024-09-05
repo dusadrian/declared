@@ -54,7 +54,13 @@ hcm1 <- haven::labelled(
 )
 
 xr <- declared(
-  c(1:5, -7, -9),
+  x = c(1:5, -7, -9),
+  labels = c(Good = 1, Bad = 5, DK = -7, NR = -9),
+  na_range = c(-7, -9)
+)
+
+xri <- declared(
+  x = as.integer(c(1:5, -7, -9)),
   labels = c(Good = 1, Bad = 5, DK = -7, NR = -9),
   na_range = c(-7, -9)
 )
@@ -83,6 +89,8 @@ test_that("as.haven() works", {
   )
 
   expect_true(inherits(as.haven(xr), "double"))
+
+  expect_true(inherits(as.haven(xri), "integer"))
 })
 
 

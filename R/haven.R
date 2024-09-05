@@ -67,7 +67,7 @@
 `as.haven.declared` <- function (x, ...) {
     attrx <- attributes (x)
     attrx$class <- c ("haven_labelled", "vctrs_vctr")
-    
+
     declared_is_integer <- is.integer (x)
     xdate <- inherits(x, "Date")
 
@@ -76,10 +76,7 @@
     attributes (x) <- NULL # or x <- unclass (x), but I find this cleaner
 
     spss <- TRUE
-    if (xdate) {
-        attr (x, "class") <- "Date"
-    }
-    else if (possibleNumeric_ (x) || all (is.na (x))) { # this excludes dates
+    if (possibleNumeric_ (x) || all (is.na (x))) { # this excludes dates
         x <- as.double (x)
         attr (x, "class") <- "double"
     }
@@ -103,6 +100,7 @@
     if (has_na_values && pN_na_values) {
         na_values <- asNumeric_ (na_values)
     }
+
     pN_labels <- FALSE
     if (has_labels) {
         pN_labels <- TRUE
@@ -120,8 +118,7 @@
 
         if (pN_na_values | pN_na_range) {
             na_index_values <- asNumeric_ (na_index_values)
-        }
-        else if (is.numeric (x)) {
+        } else if (is.numeric (x)) {
             if (length (setdiff (na_values, c (letters, LETTERS))) > 0) {
                 stopError_ ("Tagged NAs can only be created for single letter declared missing values.")
             }
@@ -129,7 +126,7 @@
             spss <- FALSE
             attrx$na_values <- NULL
             tagged_na_values <- makeTag_ (na_values)
-            pN_na_values <- TRUE # tagged NAs are numeric alright
+            pN_na_values <- TRUE # tagged_na_values are now numeric
             na_index_values <- tagged_na_values[match(na_index_values, na_values)]
             attrx$class <- setdiff(attrx$class, "integer")
         }
@@ -169,8 +166,7 @@
             names (na_values) <- names (attrx$na_values)
             attrx$na_values <- na_values
         }
-    }
-    else {
+    } else {
         x <- as.character (x)
 
         if (!is.null (na_values)) {
@@ -188,9 +184,9 @@
 
     attrx$na_index <- NULL
 
-    if (spss) {
+    if (spss) { # deactivated above if tagged NAs
         attrx$class <- c ("haven_labelled_spss", attrx$class)
-        
+
         if (declared_is_integer) {
             x <- as.integer (x)
 

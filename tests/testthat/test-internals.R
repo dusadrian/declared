@@ -8,6 +8,16 @@ x <- declared(
   na_values = -1
 )
 
+xdl <- x
+# create duplicated labels
+attr(xdl, "labels") <- c(Good = 1, Good = 1, Bad = 5, DK = -1)
+
+xdate <- declared(
+  c(as.Date("2023-12-06"), -1),
+  labels = c(DK = -1),
+  na_values = -1
+)
+
 incx <- declared(
   c(1, 2, 4, 5, -1),
   labels = c(Good = 1, Bad = 5, DK = -1),
@@ -19,6 +29,7 @@ tx <- c(1:5, makeTag_("a"))
 
 test_that("anyTagged_() works", {
   expect_false(anyTagged_(x))
+  expect_false(anyTagged_(as.integer(x)))
   expect_true(anyTagged_(tx))
   expect_true(anyTagged_(data.frame(tx)))
 })
@@ -26,6 +37,7 @@ test_that("anyTagged_() works", {
 
 test_that("all_missing_values() works", {
   expect_equal(all_missing_values(c(1:5, -91), na_values = -91), -91)
+  expect_equal(all_missing_values(1:5, na_range = c(-9, -1)), c(-9, -1))
   expect_equal(
     all_missing_values(c(1:5, -91), na_range = c(-91, -99)),
     all_missing_values(c(1:5, -91), na_range = c(-99, -91))
@@ -36,6 +48,8 @@ test_that("all_missing_values() works", {
 
 test_that("format_declared() works", {
   expect_length(format_declared(x), 6)
+
+  expect_length(format_declared(xdate), 2)
 
   expect_error(format_declared(list(A = 1)))
 })
@@ -81,9 +95,11 @@ test_that("likely_type() works", {
 
   expect_true(grepl("integer", likely_type(1:5)))
 
+  expect_true(grepl("integer", likely_type(as.double(1:5))))
+
   expect_true(grepl("character", likely_type("a")))
 
-  # expect_null(likely_type(as.complex(1)))
+  # expect_equal(likely_type(as.complex(1)))
 })
 
 
@@ -187,7 +203,7 @@ xr <- declared(
 
 
 test_that("names_values() works", {
-  expect_length(names_values(x), 6)
+  expect_equal(names_values(x), names_values(xdl))
 
   expect_length(names_values(x, observed = FALSE), 6)
 
@@ -285,6 +301,8 @@ test_that("tests have the same output", {
 
 test_that("internal non exported functions work", {
   expect_error(coerceMode_(list(A = 1)))
+
+  expect_true(inherits(coerceMode_(as.character(1:5)), "integer"))
 
   expect_false(possibleNumeric_(rep(NA, 5)))
 
