@@ -109,33 +109,33 @@ missing values are the tables of frequencies. The base function <code class="sou
 missing values by default, but they can be revealed by using the <code class="sourceCode r">useNA</code> argument:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">dfm</span><span class="op">$</span><span class="va">Opinion</span>, useNA <span class="op">=</span> <span class="st">"ifany"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  Very bad       Bad   Neither      Good Very good      &lt;NA&gt; </span></span>
+<span><span class="co">#&gt;</span></span>
+<span><span class="co">#&gt;  Very bad       Bad   Neither      Good Very good      &lt;NA&gt;</span></span>
 <span><span class="co">#&gt;       180       170       188       171       162       363</span></span></code></pre></div>
 <p>However, it does not differentiate between empty and declared missing
 values. Since “Opinion” is the equivalent of a categorical variable,
 this can be improved through a custom built coercion to the base <code class="sourceCode r">factor</code> class:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="fu"><a href="../reference/drop_undeclare.html">undeclare</a></span><span class="op">(</span><span class="va">dfm</span><span class="op">$</span><span class="va">Opinion</span><span class="op">)</span><span class="op">)</span>, useNA <span class="op">=</span> <span class="st">"ifany"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Don't know   Very bad        Bad    Neither       Good  Very good       &lt;NA&gt; </span></span>
+<span><span class="co">#&gt;</span></span>
+<span><span class="co">#&gt; Don't know   Very bad        Bad    Neither       Good  Very good       &lt;NA&gt;</span></span>
 <span><span class="co">#&gt;        180        180        170        188        171        162        183</span></span></code></pre></div>
 <p>The dedicated function <code class="sourceCode r"><span class="fu">w_table</span>()</code> does the
 same thing by automatically recognizing objects of class <code class="sourceCode r"><span class="st">"declared"</span></code>,
 additionally printing more detailed information:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/weighted.html">w_table</a></span><span class="op">(</span><span class="va">dfm</span><span class="op">$</span><span class="va">Opinion</span>, values <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;</span></span>
 <span><span class="co">#&gt;                 fre    rel   per   vld   cpd</span></span>
 <span><span class="co">#&gt;                -----------------------------</span></span>
-<span><span class="co">#&gt;   Very bad   1  180  0.146  14.6  20.7  20.7 </span></span>
-<span><span class="co">#&gt;        Bad   2  170  0.138  13.8  19.5  40.2 </span></span>
-<span><span class="co">#&gt;    Neither   3  188  0.152  15.2  21.6  61.8 </span></span>
-<span><span class="co">#&gt;       Good   4  171  0.139  13.9  19.6  81.4 </span></span>
-<span><span class="co">#&gt;  Very good   5  162  0.131  13.1  18.6 100.0 </span></span>
+<span><span class="co">#&gt;   Very bad   1  180  0.146  14.6  20.7  20.7</span></span>
+<span><span class="co">#&gt;        Bad   2  170  0.138  13.8  19.5  40.2</span></span>
+<span><span class="co">#&gt;    Neither   3  188  0.152  15.2  21.6  61.8</span></span>
+<span><span class="co">#&gt;       Good   4  171  0.139  13.9  19.6  81.4</span></span>
+<span><span class="co">#&gt;  Very good   5  162  0.131  13.1  18.6 100.0</span></span>
 <span><span class="co">#&gt;          ------</span></span>
-<span><span class="co">#&gt; Don't know -91  180  0.146  14.6 </span></span>
-<span><span class="co">#&gt;             NA  183  0.148  14.8 </span></span>
+<span><span class="co">#&gt; Don't know -91  180  0.146  14.6</span></span>
+<span><span class="co">#&gt;             NA  183  0.148  14.8</span></span>
 <span><span class="co">#&gt;                -----------------------------</span></span>
 <span><span class="co">#&gt;                1234  1.000 100.0</span></span></code></pre></div>
 <p>The prefix <code class="sourceCode r">w_</code> from the function
@@ -171,17 +171,17 @@ urban and rural settlements.</p>
 can be constructed by passing the weights to the argument <code class="sourceCode r">wt</code>:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">dfm</span>, <span class="fu"><a href="../reference/weighted.html">w_table</a></span><span class="op">(</span><span class="va">Opinion</span>, wt <span class="op">=</span> <span class="va">fweight</span>, values <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;</span></span>
 <span><span class="co">#&gt;                 fre    rel   per   vld   cpd</span></span>
 <span><span class="co">#&gt;                -----------------------------</span></span>
-<span><span class="co">#&gt;   Very bad   1  179  0.145  14.5  20.5  20.5 </span></span>
-<span><span class="co">#&gt;        Bad   2  167  0.135  13.5  19.2  39.7 </span></span>
-<span><span class="co">#&gt;    Neither   3  187  0.152  15.2  21.4  61.1 </span></span>
-<span><span class="co">#&gt;       Good   4  171  0.139  13.9  19.6  80.7 </span></span>
-<span><span class="co">#&gt;  Very good   5  168  0.136  13.6  19.3 100.0 </span></span>
+<span><span class="co">#&gt;   Very bad   1  179  0.145  14.5  20.5  20.5</span></span>
+<span><span class="co">#&gt;        Bad   2  167  0.135  13.5  19.2  39.7</span></span>
+<span><span class="co">#&gt;    Neither   3  187  0.152  15.2  21.4  61.1</span></span>
+<span><span class="co">#&gt;       Good   4  171  0.139  13.9  19.6  80.7</span></span>
+<span><span class="co">#&gt;  Very good   5  168  0.136  13.6  19.3 100.0</span></span>
 <span><span class="co">#&gt;          ------</span></span>
-<span><span class="co">#&gt; Don't know -91  179  0.145  14.5 </span></span>
-<span><span class="co">#&gt;             NA  183  0.148  14.8 </span></span>
+<span><span class="co">#&gt; Don't know -91  179  0.145  14.5</span></span>
+<span><span class="co">#&gt;             NA  183  0.148  14.8</span></span>
 <span><span class="co">#&gt;                -----------------------------</span></span>
 <span><span class="co">#&gt;                1234  1.000 100.0</span></span></code></pre></div>
 <p>Except for the empty NA values, for which the weights cannot be

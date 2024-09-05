@@ -109,7 +109,7 @@ class:</p>
 <span><span class="co">#&gt; &lt;declared&lt;numeric&gt;[7]&gt;</span></span>
 <span><span class="co">#&gt; [1]       1       2       3       4       5 NA(-91) NA(-91)</span></span>
 <span><span class="co">#&gt; Missing values: -91</span></span>
-<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;</span></span>
 <span><span class="co">#&gt; Labels:</span></span>
 <span><span class="co">#&gt;  value   label</span></span>
 <span><span class="co">#&gt;    -91 Missing</span></span></code></pre></div>
@@ -123,7 +123,7 @@ or add/change value labels:</p>
 <span><span class="co">#&gt; &lt;declared&lt;numeric&gt;[7]&gt;</span></span>
 <span><span class="co">#&gt; [1]       1       2       3       4       5 NA(-91) NA(-91)</span></span>
 <span><span class="co">#&gt; Missing values: -91</span></span>
-<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;</span></span>
 <span><span class="co">#&gt; Labels:</span></span>
 <span><span class="co">#&gt;  value   label</span></span>
 <span><span class="co">#&gt;    -91 Missing</span></span></code></pre></div>
@@ -136,11 +136,11 @@ the separate functions <code class="sourceCode r"><span class="fu">missing_value
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/missing_values.html">missing_values</a></span><span class="op">(</span><span class="va">x2</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">91</span>, <span class="op">-</span><span class="fl">92</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/missing_values.html">missing_range</a></span><span class="op">(</span><span class="va">x2</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">91</span>, <span class="op">-</span><span class="fl">95</span><span class="op">)</span></span>
 <span><span class="va">x2</span></span>
-<span><span class="co">#&gt; &lt;declared&lt;integer&gt;[7]&gt;</span></span>
+<span><span class="co">#&gt; &lt;declared&lt;numeric&gt;[7]&gt;</span></span>
 <span><span class="co">#&gt; [1]       1       2       3       4       5 NA(-91) NA(-91)</span></span>
 <span><span class="co">#&gt; Missing values: -91, -92</span></span>
 <span><span class="co">#&gt; Missing range:  [-95, -91]</span></span>
-<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;</span></span>
 <span><span class="co">#&gt; Labels:</span></span>
 <span><span class="co">#&gt;  value   label</span></span>
 <span><span class="co">#&gt;    -91 Missing</span></span></code></pre></div>
@@ -165,21 +165,21 @@ reverses the process:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">xh</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/as.haven.html">as.haven</a></span><span class="op">(</span><span class="va">x2</span><span class="op">)</span></span>
 <span><span class="va">xh</span></span>
-<span><span class="co">#&gt; &lt;labelled_spss&lt;integer&gt;[7]&gt;</span></span>
+<span><span class="co">#&gt; &lt;labelled_spss&lt;double&gt;[7]&gt;</span></span>
 <span><span class="co">#&gt; [1]   1   2   3   4   5 -91 -91</span></span>
 <span><span class="co">#&gt; Missing values: -91, -92</span></span>
 <span><span class="co">#&gt; Missing range:  [-95, -91]</span></span>
-<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;</span></span>
 <span><span class="co">#&gt; Labels:</span></span>
 <span><span class="co">#&gt;  value   label</span></span>
 <span><span class="co">#&gt;    -91 Missing</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/declared.html">as.declared</a></span><span class="op">(</span><span class="va">xh</span><span class="op">)</span></span>
-<span><span class="co">#&gt; &lt;declared&lt;integer&gt;[7]&gt;</span></span>
+<span><span class="co">#&gt; &lt;declared&lt;numeric&gt;[7]&gt;</span></span>
 <span><span class="co">#&gt; [1]       1       2       3       4       5 NA(-91) NA(-91)</span></span>
 <span><span class="co">#&gt; Missing values: -91, -92</span></span>
 <span><span class="co">#&gt; Missing range:  [-95, -91]</span></span>
-<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;</span></span>
 <span><span class="co">#&gt; Labels:</span></span>
 <span><span class="co">#&gt;  value   label</span></span>
 <span><span class="co">#&gt;    -91 Missing</span></span></code></pre></div>
@@ -203,13 +203,13 @@ properly formatted in a similar way to those from package
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="va">dfm</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # A tibble: 7 × 2</span></span>
-<span><span class="co">#&gt;   x1    x2                </span></span>
-<span><span class="co">#&gt;   &lt;chr&gt; &lt;int+lbl&gt;         </span></span>
-<span><span class="co">#&gt; 1 a       1               </span></span>
-<span><span class="co">#&gt; 2 b       2               </span></span>
-<span><span class="co">#&gt; 3 c       3               </span></span>
-<span><span class="co">#&gt; 4 d       4               </span></span>
-<span><span class="co">#&gt; 5 e       5               </span></span>
+<span><span class="co">#&gt;   x1    x2</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt; &lt;dbl+lbl&gt;</span></span>
+<span><span class="co">#&gt; 1 a       1</span></span>
+<span><span class="co">#&gt; 2 b       2</span></span>
+<span><span class="co">#&gt; 3 c       3</span></span>
+<span><span class="co">#&gt; 4 d       4</span></span>
+<span><span class="co">#&gt; 5 e       5</span></span>
 <span><span class="co">#&gt; 6 f     -91 (NA) [Missing]</span></span>
 <span><span class="co">#&gt; 7 g     -91 (NA) [Missing]</span></span></code></pre></div>
 <p>Special challenges are associated with sorting and ordering the
@@ -220,21 +220,21 @@ declared objects, where not all missing values are treated the same.</p>
 <span>  na_value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">92</span>, <span class="op">-</span><span class="fl">91</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/sort.html" class="external-link">sort</a></span><span class="op">(</span><span class="va">x3</span>, na.last <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; &lt;declared&lt;integer&gt;[9]&gt;</span></span>
+<span><span class="co">#&gt; &lt;declared&lt;numeric&gt;[9]&gt;</span></span>
 <span><span class="co">#&gt; [1]       1       2       3       4       5 NA(-92) NA(-91) NA(-91)      NA</span></span>
 <span><span class="co">#&gt; Missing values: -92, -91</span></span></code></pre></div>
 <p>Sorting in decreasing order applies the same order to the missing
 values:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/sort.html" class="external-link">sort</a></span><span class="op">(</span><span class="va">x3</span>, na.last <span class="op">=</span> <span class="cn">TRUE</span>, decreasing <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; &lt;declared&lt;integer&gt;[9]&gt;</span></span>
+<span><span class="co">#&gt; &lt;declared&lt;numeric&gt;[9]&gt;</span></span>
 <span><span class="co">#&gt; [1]       5       4       3       2       1 NA(-91) NA(-91) NA(-92)      NA</span></span>
 <span><span class="co">#&gt; Missing values: -92, -91</span></span></code></pre></div>
 <p>This custom function benefits from an additional argument <code class="sourceCode r">empty.last</code> (internally passed to the
 ordering function), to allow sorting within the missing values:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/sort.html" class="external-link">sort</a></span><span class="op">(</span><span class="va">x3</span>, na.last <span class="op">=</span> <span class="cn">TRUE</span>, decreasing <span class="op">=</span> <span class="cn">TRUE</span>, empty.last <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; &lt;declared&lt;integer&gt;[9]&gt;</span></span>
+<span><span class="co">#&gt; &lt;declared&lt;numeric&gt;[9]&gt;</span></span>
 <span><span class="co">#&gt; [1]       5       4       3       2       1      NA NA(-91) NA(-91) NA(-92)</span></span>
 <span><span class="co">#&gt; Missing values: -92, -91</span></span></code></pre></div>
 <p>All types of variables (categorical and numerical) can have declared
@@ -259,7 +259,7 @@ such a categorical variable, for instance political orientation:</p>
 <span><span class="co">#&gt; &lt;declared&lt;numeric&gt;[4]&gt; Respondent's political orientation</span></span>
 <span><span class="co">#&gt; [1]       1       2       3 NA(-91)</span></span>
 <span><span class="co">#&gt; Missing values: -91</span></span>
-<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;</span></span>
 <span><span class="co">#&gt; Labels:</span></span>
 <span><span class="co">#&gt;  value    label</span></span>
 <span><span class="co">#&gt;      1     Left</span></span>
@@ -285,12 +285,12 @@ values, coercing to factors defaults to dropping the declared missing
 values because of the default value of the argument <code class="sourceCode r">drop_na</code>:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">x4</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] Left   Middle Right  &lt;NA&gt;  </span></span>
+<span><span class="co">#&gt; [1] Left   Middle Right  &lt;NA&gt;</span></span>
 <span><span class="co">#&gt; Levels: Left Middle Right</span></span>
 <span></span>
 <span><span class="co"># essentially acting as:</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="fu"><a href="../reference/drop_undeclare.html">drop_na</a></span><span class="op">(</span><span class="va">x4</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] Left   Middle Right  &lt;NA&gt;  </span></span>
+<span><span class="co">#&gt; [1] Left   Middle Right  &lt;NA&gt;</span></span>
 <span><span class="co">#&gt; Levels: Left Middle Right</span></span></code></pre></div>
 <p>Converting the declared missing values to factor levels is something
 for which the function <code class="sourceCode r"><span class="fu">undeclare</span>()</code> proves
@@ -318,7 +318,7 @@ declared labelled objects:</p>
 <span><span class="co">#&gt; &lt;declared&lt;numeric&gt;[4]&gt;</span></span>
 <span><span class="co">#&gt; [1]     1     2     3 NA(4)</span></span>
 <span><span class="co">#&gt; Missing values: 4</span></span>
-<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;</span></span>
 <span><span class="co">#&gt; Labels:</span></span>
 <span><span class="co">#&gt;  value    label</span></span>
 <span><span class="co">#&gt;      1     Left</span></span>
@@ -358,10 +358,10 @@ character vectors:</p>
 <span></span>
 <span><span class="va">x6</span></span>
 <span><span class="co">#&gt; &lt;declared&lt;character&gt;[20]&gt;</span></span>
-<span><span class="co">#&gt;  [1]    b     c  NA(z)    b  NA(z) NA(z)    b     a     c  NA(z) NA(z)    b     b     c </span></span>
+<span><span class="co">#&gt;  [1]    b     c  NA(z)    b  NA(z) NA(z)    b     a     c  NA(z) NA(z)    b     b     c</span></span>
 <span><span class="co">#&gt; [15]    b     c     b     b     a  NA(z)</span></span>
 <span><span class="co">#&gt; Missing values: z</span></span>
-<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;</span></span>
 <span><span class="co">#&gt; Labels:</span></span>
 <span><span class="co">#&gt;  value    label</span></span>
 <span><span class="co">#&gt;      a     Left</span></span>
