@@ -2,8 +2,8 @@
 title: "a. Motivation for the declared package"
 output:
   rmarkdown::html_vignette:
-    highlight: "declared.theme"
-    css: "declared.css"
+    # highlight: "declared.theme"
+    # css: "declared.css"
 vignette: >
   %\VignetteIndexEntry{a. Motivation for the declared package}
   %\VignetteEngine{knitr::rmarkdown}
@@ -50,7 +50,7 @@ x1
 #> <labelled_spss<double>[6]>
 #> [1]   1   2   3   4   5 -91
 #> Missing values: -91
-#> 
+#>
 #> Labels:
 #>  value   label
 #>    -91 Missing
@@ -157,7 +157,7 @@ x2
 #> <declared<numeric>[6]>
 #> [1]       1       2       3       4       5 NA(-91)
 #> Missing values: -91
-#> 
+#>
 #> Labels:
 #>  value   label
 #>    -91 Missing
@@ -232,7 +232,7 @@ na.omit(x2)
 #> <declared<numeric>[5]>
 #> [1] 1 2 3 4 5
 #> Missing values: -91
-#> 
+#>
 #> Labels:
 #>  value   label
 #>    -91 Missing

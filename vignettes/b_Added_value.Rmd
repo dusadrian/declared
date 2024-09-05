@@ -2,14 +2,14 @@
 title: "b. Added value"
 output:
   rmarkdown::html_vignette:
-    highlight: "declared.theme"
-    css: "declared.css"
+    # highlight: "declared.theme"
+    # css: "declared.css"
 vignette: >
   %\VignetteIndexEntry{b. Added value}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
-editor_options: 
-  markdown: 
+editor_options:
+  markdown:
     wrap: 80
 ---
 
@@ -55,7 +55,7 @@ x2
 #> <declared<numeric>[7]>
 #> [1]       1       2       3       4       5 NA(-91) NA(-91)
 #> Missing values: -91
-#> 
+#>
 #> Labels:
 #>  value   label
 #>    -91 Missing
@@ -72,7 +72,7 @@ x2
 #> <declared<numeric>[7]>
 #> [1]       1       2       3       4       5 NA(-91) NA(-91)
 #> Missing values: -91
-#> 
+#>
 #> Labels:
 #>  value   label
 #>    -91 Missing
@@ -88,11 +88,11 @@ Such declarations do not necessarily have to use the main function
 missing_values(x2) <- c(-91, -92)
 missing_range(x2) <- c(-91, -95)
 x2
-#> <declared<integer>[7]>
+#> <declared<numeric>[7]>
 #> [1]       1       2       3       4       5 NA(-91) NA(-91)
 #> Missing values: -91, -92
 #> Missing range:  [-95, -91]
-#> 
+#>
 #> Labels:
 #>  value   label
 #>    -91 Missing
@@ -123,21 +123,21 @@ process:
 ``` r
 xh <- as.haven(x2)
 xh
-#> <labelled_spss<integer>[7]>
+#> <labelled_spss<double>[7]>
 #> [1]   1   2   3   4   5 -91 -91
 #> Missing values: -91, -92
 #> Missing range:  [-95, -91]
-#> 
+#>
 #> Labels:
 #>  value   label
 #>    -91 Missing
 
 as.declared(xh)
-#> <declared<integer>[7]>
+#> <declared<numeric>[7]>
 #> [1]       1       2       3       4       5 NA(-91) NA(-91)
 #> Missing values: -91, -92
 #> Missing range:  [-95, -91]
-#> 
+#>
 #> Labels:
 #>  value   label
 #>    -91 Missing
@@ -167,13 +167,13 @@ If users prefer a tibble instead of a data frame, the objects of class
 ``` r
 tibble::as_tibble(dfm)
 #> # A tibble: 7 × 2
-#>   x1    x2                
-#>   <chr> <int+lbl>         
-#> 1 a       1               
-#> 2 b       2               
-#> 3 c       3               
-#> 4 d       4               
-#> 5 e       5               
+#>   x1    x2
+#>   <chr> <dbl+lbl>
+#> 1 a       1
+#> 2 b       2
+#> 3 c       3
+#> 4 d       4
+#> 5 e       5
 #> 6 f     -91 (NA) [Missing]
 #> 7 g     -91 (NA) [Missing]
 ```
@@ -188,7 +188,7 @@ x3 <- declared(
   na_value = c(-92, -91)
 )
 sort(x3, na.last = TRUE)
-#> <declared<integer>[9]>
+#> <declared<numeric>[9]>
 #> [1]       1       2       3       4       5 NA(-92) NA(-91) NA(-91)      NA
 #> Missing values: -92, -91
 ```
@@ -198,7 +198,7 @@ Sorting in decreasing order applies the same order to the missing values:
 
 ``` r
 sort(x3, na.last = TRUE, decreasing = TRUE)
-#> <declared<integer>[9]>
+#> <declared<numeric>[9]>
 #> [1]       5       4       3       2       1 NA(-91) NA(-91) NA(-92)      NA
 #> Missing values: -92, -91
 ```
@@ -210,7 +210,7 @@ missing values:
 
 ``` r
 sort(x3, na.last = TRUE, decreasing = TRUE, empty.last = FALSE)
-#> <declared<integer>[9]>
+#> <declared<numeric>[9]>
 #> [1]       5       4       3       2       1      NA NA(-91) NA(-91) NA(-92)
 #> Missing values: -92, -91
 ```
@@ -239,7 +239,7 @@ x4
 #> <declared<numeric>[4]> Respondent's political orientation
 #> [1]       1       2       3 NA(-91)
 #> Missing values: -91
-#> 
+#>
 #> Labels:
 #>  value    label
 #>      1     Left
@@ -272,17 +272,17 @@ argument `drop_na`{.R}:
 
 ``` r
 as.factor(x4)
-#> [1] Left   Middle Right  <NA>  
+#> [1] Left   Middle Right  <NA>
 #> Levels: Left Middle Right
 
 # essentially acting as:
 as.factor(drop_na(x4))
-#> [1] Left   Middle Right  <NA>  
+#> [1] Left   Middle Right  <NA>
 #> Levels: Left Middle Right
 ```
 
 Converting the declared missing values to factor levels is something for which
-the function `undeclare()`{.R} proves useful, and switching between factors and 
+the function `undeclare()`{.R} proves useful, and switching between factors and
 declared objects, preserving the declared missing values, is now straightforward:
 
 
@@ -318,7 +318,7 @@ as.declared(x5, na_values = 4)
 #> <declared<numeric>[4]>
 #> [1]     1     2     3 NA(4)
 #> Missing values: 4
-#> 
+#>
 #> Labels:
 #>  value    label
 #>      1     Left
@@ -369,10 +369,10 @@ x6 <- declared(
 
 x6
 #> <declared<character>[20]>
-#>  [1]    b     c  NA(z)    b  NA(z) NA(z)    b     a     c  NA(z) NA(z)    b     b     c     b     c     b 
-#> [18]    b     a  NA(z)
+#>  [1]    b     c  NA(z)    b  NA(z) NA(z)    b     a     c  NA(z) NA(z)    b     b     c
+#> [15]    b     c     b     b     a  NA(z)
 #> Missing values: z
-#> 
+#>
 #> Labels:
 #>  value    label
 #>      a     Left
