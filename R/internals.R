@@ -688,9 +688,9 @@ NULL
 }
 
 
-`unlockEnvironment_` <- function (env) {
-    .Call ("_unlockEnvironment", env, PACKAGE = "declared")
-}
+# `unlockEnvironment_` <- function (env) {
+#     .Call ("_unlockEnvironment", env, PACKAGE = "declared")
+# }
 
 
 #' @rdname declared_internal

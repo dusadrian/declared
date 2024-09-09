@@ -378,7 +378,7 @@ test_that("internal non exported functions work", {
 
   expect_false(hasTag_(bigtag, ""))
 
-  expect_true(unlockEnvironment_(asNamespace("stats")))
+  # expect_true(unlockEnvironment_(asNamespace("stats")))
 
   x <- c(12, 12.3, 12.34)
 

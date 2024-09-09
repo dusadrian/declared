@@ -12,7 +12,7 @@
         )
     )
 
-    if (unlockEnvironment_ (asNamespace("base"))) {
+    # if (unlockEnvironment_ (asNamespace("base"))) {
 
         env <- as.environment("package:base")
         do.call ("unlockBinding", list (sym = "print.data.frame", env = env))
@@ -714,9 +714,9 @@
 
             do.call(.Primitive ("sum"), c(dots, na.rm = na.rm))
         }
-    }
+    # }
 
-    if (unlockEnvironment_ (asNamespace("stats"))) {
+    # if (unlockEnvironment_ (asNamespace("stats"))) {
 
         env <- as.environment("package:stats")
 
@@ -817,7 +817,7 @@
                 0.5 * (x[floor (d)] + x[ceiling(d)])
             }
         }
-    }
+    # }
 
     register_S3_method("labelled", "na_values", "declared")
     register_S3_method("labelled", "na_values<-", "declared")
