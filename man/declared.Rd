@@ -51,7 +51,7 @@ labels}
 \code{declared()} and \code{as.declared()} return labelled vector of class
 "declared". When applied to a data frame, \code{as.declared()} will return a
 corresponding data frame with declared variables. \code{is.declared()} and
-\code{anyNAdeclared} return a logical value.
+\code{anyNAdeclared()} return a logical value.
 }
 \description{
 The labelled vectors are mainly used to analyse social science data,
@@ -135,4 +135,8 @@ as.character(x)
 
 # Returning values instead of categories
 as.character(x, values = TRUE)
+
+anyNAdeclared(x) # contains declared missing values
+
+anyNAdeclared(c(1:5, NA)) # no declared missing values
 }

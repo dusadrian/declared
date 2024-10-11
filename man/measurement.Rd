@@ -24,8 +24,8 @@ Functions to extract information about the measurement levels of a variable
 }
 \details{
 This function creates an attribute called \code{"measurement"} to a declared
-This object, as an optional feature, at this point for purely aesthetic
-reasons. attribute might become useful in the future to (automatically)
+object. This is an optional feature, at this point for purely aesthetic
+reasons, but it might become useful in the future to (automatically)
 determine if a declared object is suitable for a certain statistical
 analysis, for instance regression requires quantitative variables, while some
 declared objects are certainly categorical despite using numbers to denote

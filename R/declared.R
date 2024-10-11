@@ -50,7 +50,7 @@
 #' @return `declared()` and `as.declared()` return labelled vector of class
 #' "declared". When applied to a data frame, `as.declared()` will return a
 #' corresponding data frame with declared variables. `is.declared()` and
-#' `anyNAdeclared` return a logical value.
+#' `anyNAdeclared()` return a logical value.
 #' @examples
 #'
 #' x <- declared(
@@ -83,6 +83,10 @@
 #'
 #' # Returning values instead of categories
 #' as.character(x, values = TRUE)
+#'
+#' anyNAdeclared(x) # contains declared missing values
+#'
+#' anyNAdeclared(c(1:5, NA)) # no declared missing values
 #' @param x A numeric vector to label, or a declared labelled vector
 #' (for `undeclare`)
 #' @param labels A named vector or `NULL`. The vector should be the same type
@@ -116,7 +120,7 @@ declared.default <- function (
     x, labels = NULL, na_values = NULL, na_range = NULL, label = NULL,
     measurement = NULL, llevels = FALSE, ...
 ) {
-  
+
   xdate <- inherits(x, "Date")
   if (is.factor (x)) {
     nms <- levels (x)
@@ -154,7 +158,7 @@ declared.default <- function (
     if (xdate && !possibleNumeric_ (labels)) {
       stopError_ ("For date objects, the labels should be numeric.")
     }
-    
+
     if (
       possibleNumeric_ (labels) && (
         xdate | possibleNumeric_ (x) | all (is.na (x))
@@ -190,7 +194,7 @@ declared.default <- function (
     if (xdate && !possibleNumeric_ (na_values)) {
       stopError_ ("For date objects, the declared NA values should be numeric.")
     }
-    
+
     if (possibleNumeric_ (na_values) & !xchar) {
       na_values <- asNumeric_ (na_values)
     }
@@ -214,13 +218,13 @@ declared.default <- function (
 
   # attr (x, "xdate") <- xdate
   na_index <- which(is.element(x, misvals))
-  
+
   if (length(na_index) > 0) {
     declared_nas <- x[na_index]
     if (xdate) {
       declared_nas <- as.numeric (declared_nas)
     }
-    
+
     x[na_index] <- NA
     names(na_index) <- declared_nas
   }
