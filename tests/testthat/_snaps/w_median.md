@@ -103,19 +103,19 @@
       using(DF, w_median(Age), split.by = Gender & Children)
     Output
       
-                 w_median
-        Males, 0   59.0  
-        Males, 1   43.0  
-        Males, 2   59.0  
-        Males, 3   50.0  
-        Males, 4   52.0  
-        Males, 5   55.0  
-      Females, 0   65.0  
-      Females, 1   56.5  
-      Females, 2   50.0  
-      Females, 3   65.0  
-      Females, 4   58.0  
-      Females, 5   48.0  
+                w_median
+        Males,0   59.0  
+        Males,1   43.0  
+        Males,2   59.0  
+        Males,3   50.0  
+        Males,4   52.0  
+        Males,5   55.0  
+      Females,0   65.0  
+      Females,1   56.5  
+      Females,2   50.0  
+      Females,3   65.0  
+      Females,4   58.0  
+      Females,5   48.0  
       
 
 ---
@@ -124,18 +124,18 @@
       using(DF, w_median(Age, wt = fweight), split.by = Gender & Children)
     Output
       
-                 w_median
-        Males, 0  59.921 
-        Males, 1  43.508 
-        Males, 2  60.100 
-        Males, 3  50.592 
-        Males, 4  54.888 
-        Males, 5  57.031 
-      Females, 0  68.585 
-      Females, 1  55.310 
-      Females, 2  50.000 
-      Females, 3  70.483 
-      Females, 4  58.262 
-      Females, 5  52.525 
+                w_median
+        Males,0  59.921 
+        Males,1  43.508 
+        Males,2  60.100 
+        Males,3  50.592 
+        Males,4  54.888 
+        Males,5  57.031 
+      Females,0  68.585 
+      Females,1  55.310 
+      Females,2  50.000 
+      Females,3  70.483 
+      Females,4  58.262 
+      Females,5  52.525 
       
 

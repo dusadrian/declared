@@ -23,7 +23,7 @@
             "\n"
         )
     )
-    
+
     if (length (x) > 0) {
         print (noquote (format_declared (x)), ...)
 
@@ -248,7 +248,7 @@
                     flag = " "
                 )
                 labels[!is.na (labels)][values == labels[!is.na (labels)]] <- ""
-                rnms[!is.na (labels)] <- paste (labels[!is.na (labels)], values)
+                rnms[!is.na (labels)] <- paste (values, labels[!is.na (labels)])
             }
 
             rnms[is.na (labels)] <- "NA"
@@ -257,7 +257,7 @@
             # rnms <- sprintf (paste0 ("% ", max.nchar.cases, "s"), rnms)
             for (i in seq (length (rnms))) {
                 if (nchar (rnms[i]) < max.nchar.cases) {
-                    rnms[i] <- padLeft_ (
+                    rnms[i] <- padRight_ (
                         rnms[i], max.nchar.cases - nchar (rnms[i])
                     )
                     # rnms[i] <- paste (
@@ -279,7 +279,7 @@
                 ),
                 ""
             )
-            
+
             x$rel <- formatC (x$rel, digits = 3, format = "f")
             rel <- sprintf ("% 5s", x$rel)
             x$per <- formatC (x$per, digits = 1, format = "f")
@@ -293,10 +293,10 @@
 
             miseparator <- paste (
                 c (
-                    rep (
-                        " ",
-                        ifelse (max.nchar.cases > 5, max.nchar.cases - 5, 0)
-                    ),
+                    # rep (
+                    #     " ",
+                    #     ifelse (max.nchar.cases > 5, max.nchar.cases - 5, 0)
+                    # ),
                     rep (
                         "-",
                         min (max.nchar.cases, 5) + 1 * (sums[1] >= 1000)

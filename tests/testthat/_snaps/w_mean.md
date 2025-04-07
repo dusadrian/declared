@@ -103,19 +103,19 @@
       using(DF, w_mean(Age), split.by = Gender & Children)
     Output
       
-                 w_mean
-        Males, 0 57.391
-        Males, 1 48.062
-        Males, 2 56.560
-        Males, 3 50.600
-        Males, 4 54.190
-        Males, 5 56.526
-      Females, 0 54.833
-      Females, 1 55.600
-      Females, 2 51.609
-      Females, 3 61.909
-      Females, 4 56.316
-      Females, 5 52.667
+                w_mean
+        Males,0 57.391
+        Males,1 48.062
+        Males,2 56.560
+        Males,3 50.600
+        Males,4 54.190
+        Males,5 56.526
+      Females,0 54.833
+      Females,1 55.600
+      Females,2 51.609
+      Females,3 61.909
+      Females,4 56.316
+      Females,5 52.667
       
 
 ---
@@ -124,18 +124,18 @@
       using(DF, w_mean(Age, wt = fweight), split.by = Gender & Children)
     Output
       
-                 w_mean
-        Males, 0 56.859
-        Males, 1 48.358
-        Males, 2 57.741
-        Males, 3 50.892
-        Males, 4 54.719
-        Males, 5 56.671
-      Females, 0 57.081
-      Females, 1 54.653
-      Females, 2 51.695
-      Females, 3 63.214
-      Females, 4 56.302
-      Females, 5 53.765
+                w_mean
+        Males,0 56.859
+        Males,1 48.358
+        Males,2 57.741
+        Males,3 50.892
+        Males,4 54.719
+        Males,5 56.671
+      Females,0 57.081
+      Females,1 54.653
+      Females,2 51.695
+      Females,3 63.214
+      Females,4 56.302
+      Females,5 53.765
       
 
