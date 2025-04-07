@@ -1,7 +1,9 @@
 #' @title Labelled vectors with declared missing values
+#'
 #' @description
 #' The labelled vectors are mainly used to analyse social science data,
 #' and the missing values declaration is an important step in the analysis.
+#'
 #' @details
 #' The `declared` objects are very similar to the `haven_labelled_spss` objects
 #' from package \bold{haven}. It has exactly the same arguments, but it features
@@ -47,10 +49,12 @@
 #' variables, and additionally recognizes `"nominal"` and `"ordinal"` as
 #' categorical, and similarly recognizes `"interval"`, `"ratio"`,
 #' `"discrete"` and `"continuous"` as quantitative.
+#'
 #' @return `declared()` and `as.declared()` return labelled vector of class
 #' "declared". When applied to a data frame, `as.declared()` will return a
 #' corresponding data frame with declared variables. `is.declared()` and
 #' `anyNAdeclared()` return a logical value.
+#'
 #' @examples
 #'
 #' x <- declared(

@@ -112,7 +112,7 @@
 #' @export
 `drop_na.default` <- function (x, drop_labels = TRUE) {
   # do nothing
-  x
+  return(x)
 }
 
 
