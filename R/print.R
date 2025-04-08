@@ -242,12 +242,12 @@
             rnms <- labels
 
             if (show_values) {
+                labels[!is.na (labels)][values == labels[!is.na (labels)]] <- ""
                 values <- formatC (
                     as.character (values),
                     digits = max (nchar (values)) - 1,
                     flag = " "
                 )
-                labels[!is.na (labels)][values == labels[!is.na (labels)]] <- ""
                 rnms[!is.na (labels)] <- paste (values, labels[!is.na (labels)])
             }
 
