@@ -23,10 +23,15 @@
     }
 
     x <- w_quantile (
-      x, wt = wt, probs = 0.5, na.rm = na.rm, ... = ...
+        x, wt = wt, probs = 0.5, na.rm = na.rm, ... = ...
     )
 
     attributes (x) <- NULL
 
     return (x)
+}
+
+#' @export
+`wmedian` <- function (...) {
+    w_median(...)
 }

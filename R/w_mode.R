@@ -46,3 +46,8 @@
 
     return (fmode)
 }
+
+#' @export
+`wmode` <- function (...) {
+    w_mode(...)
+}

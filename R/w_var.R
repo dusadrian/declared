@@ -76,3 +76,8 @@
 
     return (sum (wt * (x - wmean)^2)/(sumwt - 1))
 }
+
+#' @export
+`wvar` <- function (...) {
+    w_var(...)
+}

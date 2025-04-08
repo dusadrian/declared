@@ -41,3 +41,8 @@
         w_sd (x, wt = wt, na.rm = na.rm)
     )
 }
+
+#' @export
+`wstandardize` <- function (...) {
+    w_standardize(...)
+}

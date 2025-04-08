@@ -89,3 +89,8 @@
 
     return (sum (wt * x)/sumwt)
 }
+
+#' @export
+`wmean` <- function (...) {
+    w_mean(...)
+}

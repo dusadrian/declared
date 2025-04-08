@@ -1,3 +1,6 @@
+Version 0.26
+    o Weighted functions now have a "w" alias, e.g. wmean()
+
 Version 0.25
     o Adapted class methods for declared objects with "Date" inputs
     o Improved function sum() for declared objects

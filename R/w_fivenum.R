@@ -66,3 +66,8 @@
     class (fvn) <- c ("fobject", class (fvn))
     return (fvn)
 }
+
+#' @export
+`wfivenum` <- function (...) {
+    w_fivenum(...)
+}

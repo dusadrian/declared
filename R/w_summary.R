@@ -22,3 +22,8 @@
     class (wsum) <- c ("fobject", class (wsum))
     return (wsum)
 }
+
+#' @export
+`wsummary` <- function (...) {
+    w_summary(...)
+}

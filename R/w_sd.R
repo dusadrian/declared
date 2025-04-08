@@ -5,3 +5,8 @@
 ) {
     return (sqrt (w_var (x = x, wt = wt, method = method, na.rm = na.rm)))
 }
+
+#' @export
+`wsd` <- function (...) {
+    w_sd(...)
+}

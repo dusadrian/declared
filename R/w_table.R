@@ -203,7 +203,7 @@
     if (!crosstab) {
         valid <- isTRUE (valid) && any (is.na (x))
     }
-    
+
     xlabel <- attr (x, "label", exact = TRUE)
     allnax <- all (is.na (x))
 
@@ -280,7 +280,7 @@
                     drop_na = crosstab && isTRUE (valid),
                     observed = observed
                 )
-                yna_values <- attr (yvallab, "missing")            
+                yna_values <- attr (yvallab, "missing")
 
                 y <- factor (
                     paste (
@@ -404,7 +404,7 @@
 
         toprint$rel <- proportions (toprint$fre)
         toprint$per <- toprint$rel * 100
-        
+
         if (valid & (length (missing) > 0 | any (is.na (labels)))) {
             vld <- toprint$fre
             nalabels <- is.element (xvallab, xna_values)
@@ -450,4 +450,9 @@
     attr (orig, "toprint") <- toprint
     class (orig) <- c ("w_table", class (orig))
     return (orig)
+}
+
+#' @export
+`wtable` <- function (...) {
+    w_table(...)
 }

@@ -87,3 +87,8 @@
     class (qs) <- c ("fobject", class (qs))
     return (qs)
 }
+
+#' @export
+`wquantile` <- function (...) {
+    w_quantile(...)
+}

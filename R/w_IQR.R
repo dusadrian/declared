@@ -14,3 +14,8 @@
         )
     )))
 }
+
+#' @export
+`wIQR` <- function (...) {
+    w_IQR(...)
+}
