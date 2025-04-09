@@ -139,20 +139,19 @@
 
             rnms <- strsplit (rownames (x), split = "_-_")
 
-            xlabels <- unlist (lapply (rnms, "[[", 1))
-            max.nchar.xlabels <- max (nchar (encodeString (xlabels)))
-            for (i in seq (length (xlabels))) {
-                if (nchar (xlabels[i]) < max.nchar.xlabels) {
-                    xlabels[i] <- padLeft_ (
-                        xlabels[i], max.nchar.xlabels - nchar (xlabels[i])
-                    )
-                }
-            }
+            xlabels <- sapply (rnms, tail, 1)
+            # max.nchar.xlabels <- max (nchar (encodeString (xlabels)))
+            # for (i in seq (length (xlabels))) {
+            #     if (nchar (xlabels[i]) < max.nchar.xlabels) {
+            #         xlabels[i] <- padLeft_ (
+            #             xlabels[i], max.nchar.xlabels - nchar (xlabels[i])
+            #         )
+            #     }
+            # }
 
             if (attr (x, "xvalues")) {
                 # -length (rnms), because of "Total" which does not have a value
-                xvalues <- unlist (lapply (rnms[-length (rnms)], "[[", 2))
-                xvalues <- c (xvalues, "")
+                xvalues <- unlist (lapply (rnms[-length (rnms)], "[[", 1))
 
                 max.nchar.xvalues <- max (nchar (encodeString (xvalues)))
 
@@ -164,7 +163,8 @@
                     }
                 }
 
-                rnms <- paste (xlabels, xvalues)
+                xvalues <- c (xvalues, paste(rep(" ", max.nchar.xvalues), collapse = ""))
+                rnms <- paste (xvalues, xlabels)
             }
             else {
                 rnms <- xlabels
@@ -176,11 +176,11 @@
             if (attr (x, "yvalues")) {
                 cnms <- gsub ("_-_", " ", cnms)
             } else {
-                cnms <- unlist (lapply (
+                cnms <- sapply (
                     strsplit (cnms, split = "_-_"),
-                    "[[",
+                    tail,
                     1
-                ))
+                )
             }
 
             max.nchar.cols <- max (nchar (c (encodeString (cnms), x)))
@@ -240,18 +240,31 @@
             }
 
             rnms <- labels
+            max.nchar.values <- ifelse (length (values) > 0, max (nchar (values)), 0)
 
             if (show_values) {
                 labels[!is.na (labels)][values == labels[!is.na (labels)]] <- ""
                 values <- formatC (
                     as.character (values),
-                    digits = max (nchar (values)) - 1,
+                    digits = max.nchar.values - 1,
                     flag = " "
                 )
                 rnms[!is.na (labels)] <- paste (values, labels[!is.na (labels)])
             }
 
-            rnms[is.na (labels)] <- "NA"
+
+            if (max.nchar.values > 1) {
+                rnms[is.na (labels)] <- padLeft_ ("NA", max.nchar.values - 2)
+            } else {
+                if (max.nchar.values == 1) {
+                    rnms[!is.na (labels)] <- sapply (
+                        rnms[!is.na(labels)],
+                        padLeft_,
+                        max.nchar.values - 1
+                    )
+                }
+                rnms[is.na (labels)] <- "NA"
+            }
 
             max.nchar.cases <- max (nchar (encodeString (rnms)))
             # rnms <- sprintf (paste0 ("% ", max.nchar.cases, "s"), rnms)

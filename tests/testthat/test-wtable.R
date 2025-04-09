@@ -61,7 +61,7 @@ test_that("wtable() works", {
 
   expect_true(inherits(wtable(xc), "wtable"))
 
-  expect_true(inherits(wtable(x, values = TRUE), "wtable"))
+  expect_true(inherits(wtable(x, values = FALSE), "wtable"))
 
   expect_true(inherits(wtable(1:5), "wtable"))
 
@@ -119,7 +119,7 @@ library(admisc)
 test_that("tests have the same output", {
   expect_snapshot(x)
   expect_snapshot(wtable(x))
-  expect_snapshot(wtable(x, values = TRUE))
+  expect_snapshot(wtable(x, values = FALSE))
   expect_snapshot(fx)
   expect_snapshot(wtable(fx))
   expect_snapshot(x2)

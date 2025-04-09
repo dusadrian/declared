@@ -174,7 +174,7 @@
 #' @param vlabel Logical, print the variable label, if existing
 #' @export
 `wtable` <- function (
-    x, y = NULL, wt = NULL, values = FALSE, valid = TRUE, observed = TRUE,
+    x, y = NULL, wt = NULL, values = TRUE, valid = TRUE, observed = TRUE,
     margin = NULL, vlabel = FALSE
 ) {
 
@@ -226,11 +226,11 @@
             # print (head(paste (as.character (x), undeclare (x), sep = "_-_")))
             x <- factor (
                 paste (
-                    as.character (undeclare (x)),
                     undeclare (x, drop = TRUE),
+                    as.character (undeclare (x)),
                     sep = "_-_"
                 ),
-                levels = paste (names (xvallab), xvallab, sep = "_-_")
+                levels = paste (xvallab, names (xvallab), sep = "_-_")
             )
         }
     }
@@ -284,11 +284,11 @@
 
                 y <- factor (
                     paste (
-                        as.character (undeclare (y)),
                         undeclare (y, drop = TRUE),
+                        as.character (undeclare (y)),
                         sep = "_-_"
                     ),
-                    levels = paste (names (yvallab), yvallab, sep = "_-_")
+                    levels = paste (yvallab, names (yvallab), sep = "_-_")
                 )
             }
         }
@@ -376,8 +376,12 @@
         }
 
         if (isTRUE (vlabel)) {
-            attr (toprint, "xlabel") <- paste(nmx, xlabel, sep = ": ")
-            attr (toprint, "ylabel") <- paste(nmy, ylabel, sep = ": ")
+            if (!is.null (xlabel) & !is.null (ylabel)) {
+                attr (toprint, "xlabel") <- paste(nmx, xlabel, sep = ": ")
+                attr (toprint, "ylabel") <- paste(nmy, ylabel, sep = ": ")
+            } else {
+                message("Variable label(s) not available.")
+            }
         }
         attr (toprint, "xvalues") <- isTRUE (values) & xvalues
         attr (toprint, "yvalues") <- isTRUE (values) & yvalues
@@ -388,7 +392,7 @@
         labels <- NULL
         if (nrow(tbl) > 0) {
             labels <- rownames (tbl)
-            labels <- unlist (lapply (strsplit (labels, split = "_-_"), "[[", 1))
+            labels <- sapply (strsplit (labels, split = "_-_"), tail, 1)
         }
 
         if (any (is.na (x))) {

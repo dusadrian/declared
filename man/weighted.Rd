@@ -39,7 +39,7 @@ wtable(
   x,
   y = NULL,
   wt = NULL,
-  values = FALSE,
+  values = TRUE,
   valid = TRUE,
   observed = TRUE,
   margin = NULL,
