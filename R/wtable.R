@@ -457,8 +457,6 @@
 }
 
 #' @export
-`w_table` <- function (x, y = NULL, wt = NULL, values = FALSE, valid = TRUE, observed = TRUE,
-    margin = NULL, vlabel = FALSE) {
-    wtable(x = x, y = y, wt = wt, values = values, valid = valid, observed = observed,
-    margin = margin, vlabel = vlabel)
+`w_table` <- function (...) {
+    wtable(...)
 }
