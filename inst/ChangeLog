@@ -1,6 +1,7 @@
 Version 0.26
     o Weighted functions now have a default "w*" naming, with "w_*" still
       available as an alias, for backward compatibility
+    o Changed default for argument "values" in function wtable(), now TRUE
     o Tables of frequencies now print the values to the left of the labels
 
 Version 0.25
