@@ -101,7 +101,7 @@
 
 
 #' @export
-`print.w_table` <- function (x, force = FALSE, startend = TRUE, ...) {
+`print.wtable` <- function (x, force = FALSE, startend = TRUE, ...) {
     toprint <- attr (x, "toprint")
     xlabel <- attr (toprint, "xlabel")
     ylabel <- attr (toprint, "ylabel")
@@ -113,7 +113,7 @@
 
     if (!all(is.na(x)) && x[1] != as.matrix(toprint)[1]) {
         # this means the original table was altered. e.g. proportions (tbl)
-        class (x) <- setdiff (class (x), c ("w_table", "array"))
+        class (x) <- setdiff (class (x), c ("wtable", "array"))
         names (dimnames (x)) <- NULL
         attr (x, "toprint") <- NULL
         rownames (x) <- gsub (paste (tick, collapse = "|"), "'", rownames (x))

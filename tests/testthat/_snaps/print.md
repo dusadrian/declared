@@ -1,7 +1,7 @@
 # tests have the same output
 
     Code
-      print(w_table(xl))
+      print(wtable(xl))
     Output
       
            fre    rel   per   vld   cpd
@@ -20,7 +20,7 @@
 ---
 
     Code
-      print(w_table(c(xl, NA)))
+      print(wtable(c(xl, NA)))
     Output
       
            fre    rel   per   vld   cpd
@@ -40,7 +40,7 @@
 ---
 
     Code
-      print(w_table(xl, values = TRUE))
+      print(wtable(xl, values = TRUE))
     Output
       
                fre    rel   per   vld   cpd
@@ -59,7 +59,7 @@
 ---
 
     Code
-      print(proportions(w_table(xl)))
+      print(proportions(wtable(xl)))
     Output
            Good         2         3         4       Bad        DK 
       0.1255814 0.1767442 0.1581395 0.1581395 0.2465116 0.1348837 
@@ -88,7 +88,7 @@
 ---
 
     Code
-      print(proportions(w_table(xl, DF$Area)))
+      print(proportions(wtable(xl, DF$Area)))
     Output
                 Rural      Urban
       Good 0.06451613 0.08064516
@@ -100,7 +100,7 @@
 ---
 
     Code
-      print(w_table(xl, DF$Area, values = TRUE))
+      print(wtable(xl, DF$Area, values = TRUE))
     Output
       
                 Rural 1 Urban 2  Total 
@@ -115,7 +115,7 @@
 ---
 
     Code
-      print(with(DF, w_table(Gender, Area)))
+      print(with(DF, wtable(Gender, Area)))
     Output
       
               Rural Urban Total
@@ -127,7 +127,7 @@
 ---
 
     Code
-      print(with(DF, w_table(Gender, Area, vlabel = TRUE)))
+      print(with(DF, wtable(Gender, Area, vlabel = TRUE)))
     Output
       Gender: Respodent's gender 
         Area: Respodent's area 
@@ -141,7 +141,7 @@
 ---
 
     Code
-      print(with(DF, w_table(Gender, values = TRUE)))
+      print(with(DF, wtable(Gender, values = TRUE)))
     Output
       
                 fre    rel   per   cpd
@@ -155,7 +155,7 @@
 ---
 
     Code
-      print(with(DF, w_table(Gender, values = TRUE)), show_values = FALSE)
+      print(with(DF, wtable(Gender, values = TRUE)), show_values = FALSE)
     Output
       
               fre    rel   per   cpd
@@ -169,7 +169,7 @@
 ---
 
     Code
-      print(w_table(c(1:5, NA)))
+      print(wtable(c(1:5, NA)))
     Output
       
          fre    rel   per   vld   cpd
@@ -188,9 +188,9 @@
 ---
 
     Code
-      cat("w_table(1:101) # for the output below:")
+      cat("wtable(1:101) # for the output below:")
     Output
-      w_table(1:101) # for the output below:
+      wtable(1:101) # for the output below:
 
 ---
 
@@ -247,7 +247,7 @@
            7    A7
       # ... plus 3 more labels, use labels() to print them all.
 
-# w_table works with a variable having all values NA
+# wtable works with a variable having all values NA
 
     Code
       print(tstable)

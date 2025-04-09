@@ -80,33 +80,33 @@ xl <- declared(
 )
 
 
-test_that("print.w_table method works", {
-  test <- capture.output(print(w_table(xl)))
-  test <- capture.output(print(w_table(c(xl, NA))))
+test_that("print.wtable method works", {
+  test <- capture.output(print(wtable(xl)))
+  test <- capture.output(print(wtable(c(xl, NA))))
 
-  test <- capture.output(print(w_table(xl, values = TRUE)))
-  test <- capture.output(print(proportions(w_table(xl))))
+  test <- capture.output(print(wtable(xl, values = TRUE)))
+  test <- capture.output(print(proportions(wtable(xl))))
 
-  wdf <- with(DF, w_table(Gender, Area, values = TRUE))
+  wdf <- with(DF, wtable(Gender, Area, values = TRUE))
   test <- capture.output(print(wdf))
   test <- capture.output(print(proportions(wdf)))
 
-  test <- capture.output(print(proportions(w_table(xl, DF$Area))))
-  test <- capture.output(print(w_table(xl, DF$Area, values = TRUE)))
+  test <- capture.output(print(proportions(wtable(xl, DF$Area))))
+  test <- capture.output(print(wtable(xl, DF$Area, values = TRUE)))
 
-  test <- capture.output(print(with(DF, w_table(Gender, Area))))
-  test <- capture.output(print(with(DF, w_table(Gender, values = TRUE))))
+  test <- capture.output(print(with(DF, wtable(Gender, Area))))
+  test <- capture.output(print(with(DF, wtable(Gender, values = TRUE))))
   test <- capture.output(
-    print(with(DF, w_table(Gender, values = TRUE)), show_values = FALSE)
+    print(with(DF, wtable(Gender, values = TRUE)), show_values = FALSE)
   )
 
-  test <- capture.output(print(w_table(c(1:5, NA))))
-  test <- capture.output(print(with(DF, w_table(Gender, Area, vlabel = TRUE))))
-  test <- capture.output(print(with(DF, w_table(Gender, vlabel = TRUE))))
+  test <- capture.output(print(wtable(c(1:5, NA))))
+  test <- capture.output(print(with(DF, wtable(Gender, Area, vlabel = TRUE))))
+  test <- capture.output(print(with(DF, wtable(Gender, vlabel = TRUE))))
   test <- capture.output(print(labels(xl, print_as_df = FALSE)))
 
   expect_error(
-    capture.output(print(w_table(1:101))),
+    capture.output(print(wtable(1:101))),
     "looks like a lot of categories"
   )
 })
@@ -119,24 +119,24 @@ test_that("print.fobject method works", {
 
 
 test_that("tests have the same output", {
-  expect_snapshot(print(w_table(xl)))
-  expect_snapshot(print(w_table(c(xl, NA))))
-  expect_snapshot(print(w_table(xl, values = TRUE)))
-  expect_snapshot(print(proportions(w_table(xl))))
-  wdf <- with(DF, w_table(Gender, Area, values = TRUE))
+  expect_snapshot(print(wtable(xl)))
+  expect_snapshot(print(wtable(c(xl, NA))))
+  expect_snapshot(print(wtable(xl, values = TRUE)))
+  expect_snapshot(print(proportions(wtable(xl))))
+  wdf <- with(DF, wtable(Gender, Area, values = TRUE))
   expect_snapshot(print(wdf))
   expect_snapshot(print(proportions(wdf)))
-  expect_snapshot(print(proportions(w_table(xl, DF$Area))))
-  expect_snapshot(print(w_table(xl, DF$Area, values = TRUE)))
-  expect_snapshot(print(with(DF, w_table(Gender, Area))))
-  expect_snapshot(print(with(DF, w_table(Gender, Area, vlabel = TRUE))))
-  expect_snapshot(print(with(DF, w_table(Gender, values = TRUE))))
+  expect_snapshot(print(proportions(wtable(xl, DF$Area))))
+  expect_snapshot(print(wtable(xl, DF$Area, values = TRUE)))
+  expect_snapshot(print(with(DF, wtable(Gender, Area))))
+  expect_snapshot(print(with(DF, wtable(Gender, Area, vlabel = TRUE))))
+  expect_snapshot(print(with(DF, wtable(Gender, values = TRUE))))
   expect_snapshot(
-    print(with(DF, w_table(Gender, values = TRUE)), show_values = FALSE)
+    print(with(DF, wtable(Gender, values = TRUE)), show_values = FALSE)
   )
-  expect_snapshot(print(w_table(c(1:5, NA))))
-  expect_snapshot(cat("w_table(1:101) # for the output below:"))
-  expect_snapshot_error(print(w_table(1:101)))
+  expect_snapshot(print(wtable(c(1:5, NA))))
+  expect_snapshot(cat("wtable(1:101) # for the output below:"))
+  expect_snapshot_error(print(wtable(1:101)))
   expect_snapshot(print(w_summary(xl)))
   expect_snapshot(print(labels(xl)))
   expect_snapshot(print(labels(xl, print_as_df = FALSE)))
@@ -162,8 +162,8 @@ tst <- declared(
   na_values = -91
 )
 
-tstable <- w_table(tst)
+tstable <- wtable(tst)
 
-test_that("w_table works with a variable having all values NA", {
+test_that("wtable works with a variable having all values NA", {
   expect_snapshot(print(tstable))
 })
