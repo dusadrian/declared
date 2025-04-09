@@ -1,5 +1,7 @@
 Version 0.26
-    o Weighted functions now have a "w" alias, e.g. wmean()
+    o Weighted functions now have a default "w*" naming, with "w_*" still
+      available as an alias, for backward compatibility
+    o Tables of frequencies now print the values to the left of the labels
 
 Version 0.25
     o Adapted class methods for declared objects with "Date" inputs
