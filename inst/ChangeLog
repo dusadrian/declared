@@ -4,6 +4,7 @@ Version 0.26
     o Changed default for argument "values" in function wtable(), now TRUE
     o Tables of frequencies now print the values to the left of the labels
     o Extended weighted.mean() for objects of class "declared"
+    o Declared tables of frequencies now play nicely with dotchart()
 
 Version 0.25
     o Adapted class methods for declared objects with "Date" inputs
