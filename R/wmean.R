@@ -90,6 +90,8 @@
     return (sum (wt * x)/sumwt)
 }
 
+#' @rdname declared_internal
+#' @keywords internal
 #' @export
 `w_mean` <- function (...) {
     wmean(...)

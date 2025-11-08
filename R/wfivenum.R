@@ -67,6 +67,8 @@
     return (fvn)
 }
 
+#' @rdname declared_internal
+#' @keywords internal
 #' @export
 `w_fivenum` <- function (...) {
     wfivenum(...)

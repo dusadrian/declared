@@ -77,6 +77,8 @@
     return (sum (wt * (x - wmean)^2)/(sumwt - 1))
 }
 
+#' @rdname declared_internal
+#' @keywords internal
 #' @export
 `w_var` <- function (...) {
     wvar(...)

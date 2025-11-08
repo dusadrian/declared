@@ -456,6 +456,8 @@
     return (orig)
 }
 
+#' @rdname declared_internal
+#' @keywords internal
 #' @export
 `w_table` <- function (...) {
     wtable(...)

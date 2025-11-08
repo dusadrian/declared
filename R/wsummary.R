@@ -23,6 +23,8 @@
     return (wsum)
 }
 
+#' @rdname declared_internal
+#' @keywords internal
 #' @export
 `w_summary` <- function (...) {
     wsummary(...)

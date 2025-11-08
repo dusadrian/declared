@@ -298,9 +298,12 @@
   NextMethod()
 }
 
+
 # DO NOT use backticks for this function name
-# it breaks the roxygen2 documentation generation
+# it might break the roxygen2 documentation generating process
+
 #' @method weighted.mean declared
+#' @importFrom stats weighted.mean
 #' @export
 weighted.mean.declared <- function (x, w, ..., na.rm = FALSE) {
   xdate <- isTRUE (attr (x, "date"))

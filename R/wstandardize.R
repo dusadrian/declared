@@ -42,6 +42,8 @@
     )
 }
 
+#' @rdname declared_internal
+#' @keywords internal
 #' @export
 `w_standardize` <- function (...) {
     wstandardize(...)

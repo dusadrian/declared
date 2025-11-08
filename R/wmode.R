@@ -47,6 +47,8 @@
     return (fmode)
 }
 
+#' @rdname declared_internal
+#' @keywords internal
 #' @export
 `w_mode` <- function (...) {
     wmode(...)

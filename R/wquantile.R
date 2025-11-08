@@ -88,6 +88,8 @@
     return (qs)
 }
 
+#' @rdname declared_internal
+#' @keywords internal
 #' @export
 `w_quantile` <- function (...) {
     wquantile(...)

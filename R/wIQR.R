@@ -15,6 +15,8 @@
     )))
 }
 
+#' @rdname declared_internal
+#' @keywords internal
 #' @export
 `w_IQR` <- function (...) {
     wIQR(...)

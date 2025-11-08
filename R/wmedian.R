@@ -31,6 +31,8 @@
     return (x)
 }
 
+#' @rdname declared_internal
+#' @keywords internal
 #' @export
 `w_median` <- function (...) {
     wmedian(...)
