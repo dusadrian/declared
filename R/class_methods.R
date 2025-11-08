@@ -298,7 +298,11 @@
   NextMethod()
 }
 
-`weighted.mean.declared` <- function (x, w, ..., na.rm = FALSE) {
+# DO NOT use backticks for this function name
+# it breaks the roxygen2 documentation generation
+#' @method weighted.mean declared
+#' @export
+weighted.mean.declared <- function (x, w, ..., na.rm = FALSE) {
   xdate <- isTRUE (attr (x, "date"))
   na_index <- attr (x, "na_index")
   if (!is.null (na_index)) {

@@ -981,7 +981,12 @@
 
     register_S3_method("vroom", "output_column", "declared")
 
-    register_S3_method("stats", "weighted.mean", "declared")
+    # register_S3_method(
+    #     "stats",
+    #     "weighted.mean",
+    #     "declared",
+    #     fun = weighted_mean_declared
+    # )
 
     invisible()
 }
