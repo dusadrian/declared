@@ -3,7 +3,7 @@
 #include <R_ext/Rdynload.h>
 #include <R_ext/Boolean.h>
 
-/*
+
 // copied from: https://github.com/wch/r-source/blob/trunk/src/main/envir.c
 // as mentioned in https://gist.github.com/wch/3280369#file-unlockenvironment-r
 // https://cran.r-project.org/doc/manuals/r-devel/R-exts.html#Moving-into-C-API-compliance
@@ -20,7 +20,7 @@ SEXP _unlockEnvironment(SEXP env) {
     UNPROTECT(1);
     return result;
 }
-*/
+
 
 typedef union {
     double value;
