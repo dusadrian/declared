@@ -298,7 +298,6 @@
   NextMethod()
 }
 
-#' @export
 `weighted.mean.declared` <- function (x, w, ..., na.rm = FALSE) {
   xdate <- isTRUE (attr (x, "date"))
   na_index <- attr (x, "na_index")
