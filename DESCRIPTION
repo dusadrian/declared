@@ -1,6 +1,6 @@
 Package: declared
 Title: Functions for Declared Missing Values
-Version: 0.25.7
+Version: 0.25.8
 Authors@R:
     c(
         person(
@@ -29,6 +29,9 @@ Description: A zero dependency package containing functions to declare labels
     as possible with these packages, while offering an alternative in the
     objects of class "declared".
 License: GPL (>= 3)
+Imports:
+    stats,
+    utils
 Suggests:
     admisc (> 0.31),
     covr,
