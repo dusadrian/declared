@@ -819,6 +819,9 @@
         }
     # }
 
+    if (!is.element("package:graphics", search())) {
+        suppressPackageStartupMessages(library("graphics", warn.conflicts = FALSE))
+    }
     env <- as.environment("package:graphics")
 
     do.call ("unlockBinding", list (sym = "dotchart", env = env))
@@ -977,6 +980,8 @@
     # register_S3_method("vctrs", "vec_ptype2", "declared")
 
     register_S3_method("vroom", "output_column", "declared")
+
+    register_S3_method("stats", "weighted.mean", "declared")
 
     invisible()
 }
