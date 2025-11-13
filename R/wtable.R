@@ -233,6 +233,10 @@
                 levels = paste (xvallab, names (xvallab), sep = "_-_")
             )
         }
+        else {
+            xvalues <- FALSE
+            x <- undeclare (x, drop = TRUE)
+        }
     }
     else {
         xvalues <- FALSE
@@ -290,6 +294,10 @@
                     ),
                     levels = paste (yvallab, names (yvallab), sep = "_-_")
                 )
+            }
+            else {
+                yvalues <- FALSE
+                y <- undeclare (y, drop = TRUE)
             }
         }
         else {
@@ -389,6 +397,7 @@
         # class (toprint) <- c ("wtable", "matrix")
     }
     else {
+        only_na <- length (x) > 0 && isTRUE (allnax)
         labels <- NULL
         if (nrow(tbl) > 0) {
             labels <- rownames (tbl)
@@ -439,13 +448,23 @@
         attr (toprint, "show_values") <- values & xvalues
         attr (toprint, "na_values") <- xna_values
         attr (toprint, "valid") <- valid
+
+        if (only_na) {
+            nacount <- sum (is.na (x))
+            orig <- array (nacount, dim = c (1))
+            dimnames (orig) <- list (NA_character_)
+        }
     }
 
     if (is.matrix(orig)) {
-        rownames (orig) <- names (xvallab)
-        colnames (orig) <- names (yvallab)
+        if (length (xvallab)) {
+            rownames (orig) <- names (xvallab)
+        }
+        if (length (yvallab)) {
+            colnames (orig) <- names (yvallab)
+        }
     }
-    else {
+    else if (length (xvallab)) {
         names (orig) <- names (xvallab)
     }
 
