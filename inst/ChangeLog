@@ -18,7 +18,7 @@ Version 0.24
     o Objects of class "Date" are now accepted as input for a declared object
     o The package no longer automatically coerces from numeric to integer
     o Improved version of w_table() for duplicated labels
-    o Bug fix in as.haven() for declared missing values with no labels
+    o Fixed bug in as.haven() for declared missing values with no labels
       (thanks to Marijana Glavica for the report)
 
 Version 0.23
@@ -47,12 +47,12 @@ Version 0.21
 Version 0.20
     o Base functions is.element(), %in% and match() now properly recognize
       declared objects
-    o Bug fix affecting declared character objects, via as.character.declared()
+    o Fixed bug affecting declared character objects, via as.character.declared()
     o New functions anyNAempty() and anyNAdeclared()
 
 Version 0.19
     o More effort on meeting Good Practices for pkgcheck()
-    o Bug fix hapenning on r-devel, to silence CRAN errors
+    o Fixed bug hapenning on r-devel, to silence CRAN errors
 
 Version 0.18
     o Improved method for rbind() data frames, taking care of declared variables
@@ -77,7 +77,7 @@ Version 0.16
 
 Version 0.15
     o Class method for many / most primitive functions, with declared objects
-    o Bug fix in w_table() affecting zero frequency categories
+    o Fixed bug in w_table() affecting zero frequency categories
     o Dropped alias frtable() from function w_table()
     o New function is.empty(), testing the presence of undeclared missing values
     o Main function declare() is now generic, allowing flexibility to create
@@ -91,7 +91,7 @@ Version 0.13
     o Fixed w_mean() to weight negative values
     Thanks to an anonymous reviewer for reporting and suggesting the following:
     o New argument "drop" in function undeclare()
-    o Bug fix in the class methods for head() and tail()
+    o Fixed bug in the class methods for head() and tail()
     o Function declared now duly recognizes input factors
     o Extended as.factor() for objects of class "declared"
     o Added proper class methods for primitive arithmetic operations
@@ -134,7 +134,7 @@ Version 0.8
       operations, this is now left to the users' preference
 
 Version 0.7
-    o Bug fix saving declared data frames as .csv files
+    o Fixed bug saving declared data frames as .csv files
     o as.declared() now retains the "format.spss" attribute, if existing
 
 Version 0.6
