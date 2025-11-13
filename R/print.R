@@ -153,6 +153,12 @@
                 # -length (rnms), because of "Total" which does not have a value
                 xvalues <- unlist (lapply (rnms[-length (rnms)], "[[", 1))
 
+                # suppress duplicate labels (when label equals value)
+                if (length (xlabels) > 0) {
+                    idx <- seq_along (xvalues)
+                    xlabels[idx] <- ifelse (xlabels[idx] == xvalues, "", xlabels[idx])
+                }
+
                 max.nchar.xvalues <- max (nchar (encodeString (xvalues)))
 
                 for (i in seq (length (xvalues) - 1)) {
@@ -174,7 +180,20 @@
 
             cnms <- colnames (x)
             if (attr (x, "yvalues")) {
-                cnms <- gsub ("_-_", " ", cnms)
+                cnms <- vapply (
+                    strsplit (cnms, split = "_-_"),
+                    function(v) {
+                        if ( length(v) < 2) return(v)
+                        val <- v[1]
+                        lab <- v[length (v)]
+                        if (identical (val, lab)) {
+                            val
+                        } else {
+                            paste (val, lab)
+                        }
+                    },
+                    character(1L)
+                )
             } else {
                 cnms <- sapply (
                     strsplit (cnms, split = "_-_"),
