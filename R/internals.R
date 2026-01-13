@@ -239,30 +239,34 @@ NULL
 `likely_measurement` <- function (x) {
 
     labels <- attr (x, "labels", exact = TRUE)
-    na_values <- attr (x, "na_values")
-
-    na_range <- attr (x, "na_range")
-    if (!is.null(na_range)) {
-        na_values <- sort(union(
-            na_values,
-            seq(na_range[1], na_range[2])
-        ))
-    }
+    na_values <- attr (x, "na_values", exact = TRUE)
+    na_range <- attr (x, "na_range", exact = TRUE)
 
     x <- undeclare (x, drop = TRUE)
-
-    xnumeric <- possibleNumeric_ (x)
-    uniquevals <- unique (x)
+    numx <- possibleNumeric_ (x)
 
     if (length (labels) > 0) {
 
         # possibly a categorical variable
         # but even numeric variables can have labels (for missing values)
-        # unique values excepting the missing values
-        except_na <- setdiff (uniquevals, na_values)
+        # check unique labels except the missing values
+        except_na <- setdiff (labels, na_values)
+        numlabels <- possibleNumeric_ (labels)
 
-        if (all (is.element (labels, na_values))) {
-            if (xnumeric) {
+        if (length (except_na) > 0 && !is.null (na_range)) {
+            if (numlabels) {
+                except_na <- asNumeric_ (except_na)
+                except_na <- except_na[
+                    except_na < na_range[1] | except_na > na_range[2]
+                ]
+            } else {
+                # in principle this should not be possible, but just in case
+                return ("") # character, so cannot determine the measurement level
+            }
+        }
+
+        if (length (except_na) == 0) {
+            if (numlabels & numx) {
                 return ("quantitative")
             }
             else {
@@ -274,7 +278,7 @@ NULL
         return ("categorical")
     }
 
-    if (xnumeric) {
+    if (numx) {
         return ("quantitative")
     }
 
