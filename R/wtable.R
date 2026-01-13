@@ -168,14 +168,11 @@
 #'
 #' @param observed Logical, print the observed categories only
 #'
-#' @param margin Numeric, indicating the margin to calculate crosstab
-#' proportions: 0 from the total, 1 from row totals and 2 from column totals
-#'
 #' @param vlabel Logical, print the variable label, if existing
 #' @export
 `wtable` <- function (
     x, y = NULL, wt = NULL, values = TRUE, valid = TRUE, observed = TRUE,
-    margin = NULL, vlabel = FALSE
+    vlabel = FALSE
 ) {
 
     funargs <- lapply(
@@ -261,6 +258,7 @@
         allnay <- all (is.na (y))
 
         nmy <- getName_ (funargs$y)
+        dimnms <- c(nmx, nmy)
 
         ncharx <- nchar (nmx)
         nchary <- nchar (nmy)
@@ -357,31 +355,12 @@
     }
 
     if (crosstab) {
-        toprint <- tbl
 
-        if (length (margin)) {
-            if (!is.numeric (margin) || !is.element (margin, 0:2)) {
-                stopError_ ("'margin' should be a number between 0, 1 and 2.")
-            }
+        toprint <- orig <- tbl
+        names (dimnames (orig))  <- dimnms
 
-            toprint <- switch(margin + 1,
-                proportions (toprint),
-                proportions (toprint, 1),
-                proportions (toprint, 2)
-            )
-        }
-
-        if (is.null (margin) || margin != 1) {
-            toprint <- rbind (toprint, Total = colSums (toprint))
-        }
-
-        if (is.null (margin) || margin != 2) {
-            toprint <- cbind (toprint, Total = rowSums (toprint))
-        }
-
-        if (length (margin)) {
-            toprint <- round(100 * toprint, 1)
-        }
+        toprint <- rbind (toprint, Total = colSums (toprint))
+        toprint <- cbind (toprint, Total = rowSums (toprint))
 
         if (isTRUE (vlabel)) {
             if (!is.null (xlabel) & !is.null (ylabel)) {

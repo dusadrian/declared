@@ -42,7 +42,6 @@ wtable(
   values = TRUE,
   valid = TRUE,
   observed = TRUE,
-  margin = NULL,
   vlabel = FALSE
 )
 
@@ -76,9 +75,6 @@ as x}
 if any missing values are present; for cross tables, use valid values only}
 
 \item{observed}{Logical, print the observed categories only}
-
-\item{margin}{Numeric, indicating the margin to calculate crosstab
-proportions: 0 from the total, 1 from row totals and 2 from column totals}
 
 \item{vlabel}{Logical, print the variable label, if existing}
 }

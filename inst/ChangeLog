@@ -5,6 +5,8 @@ Version 0.26
     o Tables of frequencies now print the values to the left of the labels
     o Extended weighted.mean() for objects of class "declared"
     o Declared tables of frequencies now play nicely with dotchart()
+    o Improved internal function to check measurement levels
+    o Removed argument "margin" from function wtable()
 
 Version 0.25
     o Adapted class methods for declared objects with "Date" inputs

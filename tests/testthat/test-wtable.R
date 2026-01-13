@@ -81,13 +81,6 @@ test_that("wtable() works", {
 
   expect_true(
     inherits(
-      with(DF, wtable(Gender, Area, wt = fweight, margin = 1)),
-      "wtable"
-    )
-  )
-
-  expect_true(
-    inherits(
       with(DF, wtable(c(NA, Gender[-1]), Area)),
       "wtable"
     )
@@ -105,8 +98,6 @@ test_that("wtable() works", {
   expect_error(wtable(x, wt = 1))
 
   expect_error(with(DF, wtable(Gender, Area[-1], wt = fweight)))
-
-  expect_error(with(DF, wtable(Gender, Area, margin = 3)))
 
   expect_error(with(DF, wtable(Gender, list(A = 1))))
 
