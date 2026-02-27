@@ -116,7 +116,9 @@ test_that("declared() other methods work", {
 
   expect_true(all(summx[1:3] == c("Min." = 1, "1st Qu." = 2,  "Median" = 3)))
 
-  expect_true(summx["NA's"] == 1)
+  expect_true(length(summx) == 7) # NA's as the last one
+
+  expect_true(summx[length(summx)] == 1) # one NA value
 })
 
 
