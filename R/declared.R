@@ -45,7 +45,7 @@
 #' quantitative variables, while some declared objects are certainly categorical
 #' despite using numbers to denote categories.
 #'
-#' It distinguishes between `"categorial"` and `"quantitative"` types of
+#' It distinguishes between `"categorical"` and `"quantitative"` types of
 #' variables, and additionally recognizes `"nominal"` and `"ordinal"` as
 #' categorical, and similarly recognizes `"interval"`, `"ratio"`,
 #' `"discrete"` and `"continuous"` as quantitative.
