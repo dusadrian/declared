@@ -344,6 +344,7 @@ weighted.mean.declared <- function (x, w, ..., na.rm = FALSE) {
   NextMethod()
 }
 
+#' @method all.equal declared
 #' @export
 `all.equal.declared` <- function (target, current, ...) {
   na_index <- attr (target, "na_index")
