@@ -254,3 +254,68 @@ declared.default <- function (
   class(x) <- unique (c ("declared", class (x)))
   return (x)
 }
+
+
+#' @rdname declared_internal
+#' @keywords internal
+#
+# @description
+# `direct_declared()` is a low-level constructor for callers that already know
+# the final storage mode and metadata of the vector. It does not validate,
+# coerce, scan for missing codes, or replace values with `NA`.
+#
+# Callers are expected to pass a vector already stored in its final form, with
+# declared missing values already represented as `NA`, and with `na_index`
+# containing the original declared missing codes as names.
+#
+# @param x An atomic vector already in its final storage mode.
+# @param na_index An optional named numeric vector indicating which `NA`
+# positions correspond to declared missing values. The names should contain the
+# original missing codes.
+# @param na_values A vector of declared missing values metadata.
+# @param na_range A vector of length two describing the declared missing range.
+# @param labels A named vector of value labels.
+# @param label A short, human-readable description of the vector.
+# @param measurement Optional, user specified measurement level.
+# @param date Logical, whether `x` should be treated as a date vector.
+# @return A vector of class `"declared"`.
+#' @export
+direct_declared <- function (
+    x, na_index = NULL, na_values = NULL, na_range = NULL, labels = NULL,
+    label = NULL, measurement = NULL, date = inherits(x, "Date")
+) {
+  if (!is.atomic(x)) {
+    stopError_("`x` must be an atomic vector.")
+  }
+
+  if (!is.null(na_index) && !is.numeric(na_index)) {
+    stopError_("`na_index` must be a numeric vector of indices.")
+  }
+
+  if (!is.null(na_index) && is.null(names(na_index))) {
+    stopError_("`na_index` must have names.")
+  }
+
+  if (!is.null(label) && !(
+    is.atomic(label) && is.character(label) && length(label) == 1
+  )) {
+    stopError_("`label` must be a character vector of length one.")
+  }
+
+  if (!is.logical(date) || length(date) != 1) {
+    stopError_("`date` must be a logical vector of length one.")
+  }
+
+  .Call(
+    "_directDeclared",
+    x,
+    na_index,
+    na_values,
+    na_range,
+    labels,
+    label,
+    check_measurement(measurement),
+    date,
+    unique(c("declared", class(x)))
+  )
+}

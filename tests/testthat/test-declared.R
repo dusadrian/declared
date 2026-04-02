@@ -71,6 +71,41 @@ test_that("declared() works", {
 })
 
 
+test_that("direct_declared() trusts already normalized vectors", {
+  xdirect <- direct_declared(
+    c(1, 2, NA_real_),
+    na_index = c("-1" = 3),
+    na_values = -1,
+    labels = c(Good = 1, Better = 2, DK = -1),
+    label = "Imported variable",
+    measurement = "ordinal"
+  )
+
+  expect_true(inherits(xdirect, "declared"))
+  expect_equal(as.numeric(xdirect), c(1, 2, NA_real_))
+  expect_equal(attr(xdirect, "na_index"), c("-1" = 3))
+  expect_equal(attr(xdirect, "na_values"), -1)
+  expect_equal(attr(xdirect, "label"), "Imported variable")
+  expect_equal(attr(xdirect, "measurement"), "categorical, ordinal")
+  expect_equal(is.na(xdirect), c(FALSE, FALSE, TRUE))
+  expect_equal(xdirect == "DK", c(FALSE, FALSE, TRUE))
+})
+
+
+test_that("direct_declared() does not scan or replace values", {
+  xdirect <- direct_declared(
+    c(1, 2, -1),
+    na_index = c("-9" = 2),
+    na_values = -9,
+    labels = c(Good = 1, Better = 2, DK = -9)
+  )
+
+  expect_equal(as.numeric(xdirect), c(1, 2, -1))
+  expect_equal(attr(xdirect, "na_index"), c("-9" = 2))
+  expect_equal(is.na(xdirect), c(FALSE, FALSE, FALSE))
+})
+
+
 
 xrec <- admisc::recode(
   values,

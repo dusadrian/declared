@@ -27,6 +27,25 @@ typedef union {
     char byte[16];
 } ieee_double;
 
+SEXP _directDeclared(SEXP x, SEXP na_index, SEXP na_values, SEXP na_range,
+                     SEXP labels, SEXP label, SEXP measurement, SEXP date,
+                     SEXP class_) {
+    if (MAYBE_SHARED(x)) {
+        x = Rf_duplicate(x);
+    }
+
+    Rf_setAttrib(x, Rf_install("na_index"), na_index);
+    Rf_setAttrib(x, Rf_install("na_values"), na_values);
+    Rf_setAttrib(x, Rf_install("na_range"), na_range);
+    Rf_setAttrib(x, Rf_install("labels"), labels);
+    Rf_setAttrib(x, Rf_install("label"), label);
+    Rf_setAttrib(x, Rf_install("measurement"), measurement);
+    Rf_setAttrib(x, Rf_install("date"), date);
+    Rf_classgets(x, class_);
+
+    return x;
+}
+
 
 
 #ifdef WORDS_BIGENDIAN
