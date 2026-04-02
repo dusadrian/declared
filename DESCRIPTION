@@ -1,6 +1,6 @@
 Package: declared
 Title: Functions for Declared Missing Values
-Version: 0.25.11
+Version: 0.26
 Authors@R:
     c(
         person(
@@ -8,12 +8,6 @@ Authors@R:
             email = "dusa.adrian@unibuc.ro",
             role = c("aut", "cre", "cph"),
             comment = c(ORCID = "0000-0002-3525-9253")
-        ),
-        person(
-            "Daniel", "Antal",
-            email = "daniel.antal@dataobservatory.eu",
-            role = "ctb",
-            comment = c(ORCID = "0000-0001-7513-6760")
         )
     )
 URL: https://github.com/dusadrian/declared
@@ -50,6 +44,6 @@ Suggests:
 Language: en-US
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 VignetteBuilder: knitr
 Config/testthat/edition: 3

@@ -7,6 +7,7 @@ Version 0.26
     o Declared tables of frequencies now play nicely with dotchart()
     o Improved internal function to check measurement levels
     o Removed argument "margin" from function wtable()
+    o New internal function direct_declared()
 
 Version 0.25
     o Adapted class methods for declared objects with "Date" inputs
