@@ -76,6 +76,38 @@ test_that("as.declared.default() works", {
 })
 
 
+test_that("as.declared.default() restores stripped declared metadata", {
+  stripped <- x
+  class(stripped) <- "numeric"
+
+  restored <- as.declared(stripped)
+
+  expect_true(inherits(restored, "declared"))
+  expect_equal(restored, x)
+  expect_equal(attr(restored, "na_index"), attr(x, "na_index"))
+  expect_equal(attr(restored, "na_values"), attr(x, "na_values"))
+  expect_equal(attr(restored, "label"), attr(x, "label"))
+})
+
+
+test_that("as.declared.default() imports explicit metadata from plain vectors", {
+  plain <- c(1:5, NA_real_)
+  attr(plain, "na_index") <- c("-1" = 6)
+  attr(plain, "na_values") <- -1
+  attr(plain, "labels") <- c(Good = 1, Bad = 5, DK = -1)
+  attr(plain, "label") <- "Imported variable"
+
+  restored <- as.declared(plain)
+
+  expect_true(inherits(restored, "declared"))
+  expect_equal(as.numeric(restored), c(1:5, NA_real_))
+  expect_equal(attr(restored, "na_index"), c("-1" = 6))
+  expect_equal(attr(restored, "na_values"), -1)
+  expect_equal(attr(restored, "labels"), c(Good = 1, Bad = 5, DK = -1))
+  expect_equal(attr(restored, "label"), "Imported variable")
+})
+
+
 dfd$C <- 1:6
 test_that("as.declared works interactively", {
   expect_true(

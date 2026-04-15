@@ -10,6 +10,48 @@
 `as.declared.default` <- function (x, ...) {
   dots <- list (...)
   interactive <- isTRUE (dots$interactive)
+  labels <- attr (x, "labels", exact = TRUE)
+  na_index <- attr (x, "na_index", exact = TRUE)
+  na_values <- attr (x, "na_values", exact = TRUE)
+  na_range <- attr (x, "na_range", exact = TRUE)
+  label <- attr (x, "label", exact = TRUE)
+  measurement <- attr (x, "measurement", exact = TRUE)
+  xdate <- inherits (x, "Date") || isTRUE (attr (x, "date", exact = TRUE))
+
+  metadata_present <- any (!vapply (
+    list (labels, na_index, na_values, na_range, label, measurement),
+    is.null,
+    logical (1)
+  ))
+
+  if (metadata_present && (is.atomic (x) || inherits (x, "Date"))) {
+    normalized_na_index <- !is.null (na_index) &&
+      length (na_index) > 0 &&
+      all (na_index %in% seq_along (x)) &&
+      all (is.na (x[unname (na_index)]))
+
+    if (normalized_na_index) {
+      return (direct_declared(
+        x,
+        na_index = na_index,
+        na_values = na_values,
+        na_range = na_range,
+        labels = labels,
+        label = label,
+        measurement = measurement,
+        date = xdate
+      ))
+    }
+
+    return (declared(
+      x,
+      labels = labels,
+      na_values = na_values,
+      na_range = na_range,
+      label = label,
+      measurement = measurement
+    ))
+  }
 
   if (interactive) {
     msg <- "There is no automatic class method conversion for this type of"
