@@ -566,6 +566,13 @@ NULL
         x[multibyte] <- NA
     }
 
+    if (all(isna)) {
+        if (each) {
+            return(result)
+        }
+        return(FALSE)
+    }
+
     if (each) {
         x <- suppressWarnings (as.numeric (na.omit (x)))
         result[!isna] <- !is.na (x)
@@ -973,4 +980,3 @@ check_date <- function (x) {
     }
     return (x)
 }
-

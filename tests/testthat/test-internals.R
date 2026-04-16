@@ -54,6 +54,14 @@ test_that("format_declared() works", {
   expect_error(format_declared(list(A = 1)))
 })
 
+test_that("possibleNumeric_() does not treat multibyte-only strings as numeric", {
+  expect_false(possibleNumeric_("Zilier Ã\u0083Â®n construc?ii"))
+  expect_identical(
+    possibleNumeric_(c("Zilier Ã\u0083Â®n construc?ii", NA_character_), each = TRUE),
+    c(FALSE, NA)
+  )
+})
+
 
 test_that("order_declared() works", {
   expect_length(order_declared(x), 5)
