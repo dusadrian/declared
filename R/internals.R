@@ -514,25 +514,27 @@ NULL
 `possibleNumeric_` <- function (x, each = FALSE) {
 
     result <- rep (NA, length (x))
-    isna <- is.na (x)
+    nax <- is.na (x)
 
-    if (all (isna)) {
+    if (all (nax)) {
         if (each) {
             return (result)
         }
+
         return (FALSE)
     }
 
-    if (is.logical (x)) {
+    if (is.logical(x)) {
         if (each) {
             result <- logical (length (x))
-            result[isna] <- NA
+            result[nax] <- NA
             return (result)
         }
+
         return (FALSE)
     }
 
-    if (inherits (x, "haven_labelled") || inherits (x, "declared")) {
+    if (inherits (x, "haven_labelled") || inherits(x, "declared")) {
         num <- Recall (unclass (x), each = each)
 
         labels <- attr (x, "labels", exact = TRUE)
@@ -545,9 +547,10 @@ NULL
 
     if (is.numeric (x)) {
         if (each) {
-            result[!isna] <- TRUE
+            result[!nax] <- TRUE
             return (result)
         }
+
         return (TRUE)
     }
 
@@ -555,35 +558,47 @@ NULL
         x <- as.character (x)
     }
 
-    if (!all (is.na (x))) {
-        x <- gsub ("\u00a0", " ", x) # multibyte space
-    }
-
+    x <- gsub (
+        "\u00a0", # multibyte space
+        " ",
+        gsub (
+            "\u009d", # weird zero length character
+            "",
+            x
+        )
+    )
     multibyte <- grepl ("[^!-~ ]", x)
+
     if (any (multibyte)) {
-        isna[multibyte] <- TRUE
         result[multibyte] <- FALSE
-        x[multibyte] <- NA
     }
 
-    if (all(isna)) {
-        if (each) {
-            return(result)
-        }
-        return(FALSE)
+    if (sum (nax) < length (x)) {
+        eachx <- suppressWarnings (as.numeric (x[!nax & !multibyte]))
+        result[!nax & !multibyte] <- !is.na(eachx)
     }
 
-    if (each) {
-        x <- suppressWarnings (as.numeric (na.omit (x)))
-        result[!isna] <- !is.na (x)
+    if (each | length(x) == 1) {
         return (result)
     }
 
-    return (!any (is.na (suppressWarnings (as.numeric (na.omit (x))))))
+    return (all (result[!nax]))
 }
 
 
 `asNumeric_` <- function (x, levels = TRUE) {
+    if (inherits (x, "declared")) {
+        na_index <- attr (x, "na_index")
+        attributes (x) <- NULL
+
+        if (!is.null (na_index)) {
+            # Non-numeric missing codes naturally become NA after coercion.
+            x[na_index] <- suppressWarnings (as.numeric (names (na_index)))
+        }
+
+        return (Recall (x, levels = levels))
+    }
+
     if (is.numeric (x)) {
         return (x)
     }
@@ -627,7 +642,9 @@ NULL
     result[isna] <- NA
 
     if (all (isna) || is.logical (x)) {
-        # each is certainly TRUE
+        # each is certainly TRUE because if they are all missing or all logical
+        # it would not be numeric, which means the only condition continuing the
+        # function on line 636 is each = TRUE otherwise line 637 would stop
         return (result)
     }
 
@@ -639,7 +656,7 @@ NULL
     isna <- isna | isnax
     x <- x[!isna]
 
-    result[!isna] <- floor (x) == x
+    result[!isna] <- abs (x - round (x)) < .Machine$double.eps^0.5
 
     if (each) {
         return (result)

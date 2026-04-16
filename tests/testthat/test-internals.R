@@ -62,6 +62,24 @@ test_that("possibleNumeric_() does not treat multibyte-only strings as numeric",
   )
 })
 
+test_that("asNumeric_() restores declared missing codes before coercion", {
+  xchar <- declared(
+    c("1", "2", "DK"),
+    labels = c(Good = "1", Better = "2", DK = "DK"),
+    na_values = "DK"
+  )
+
+  expect_identical(asNumeric_(xchar), c(1, 2, NA_real_))
+
+  xnum <- declared(
+    c(1, 2, -91),
+    labels = c(Good = 1, Better = 2, DK = -91),
+    na_values = -91
+  )
+
+  expect_identical(asNumeric_(xnum), c(1, 2, -91))
+})
+
 
 test_that("order_declared() works", {
   expect_length(order_declared(x), 5)
