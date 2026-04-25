@@ -116,7 +116,15 @@
         class (x) <- setdiff (class (x), c ("wtable", "array"))
         names (dimnames (x)) <- NULL
         attr (x, "toprint") <- NULL
-        rownames (x) <- gsub (paste (tick, collapse = "|"), "'", rownames (x))
+        attr (x, "missing") <- NULL
+        if (is.null (dim (x))) {
+            names (x) <- gsub (paste (tick, collapse = "|"), "'", names (x))
+        }
+        else {
+            rownames (x) <- gsub (
+                paste (tick, collapse = "|"), "'", rownames (x)
+            )
+        }
         if (length (dimnames (x)) == 2) {
             colnames (x) <- gsub (
                 paste (tick, collapse = "|"), "'", colnames (x)

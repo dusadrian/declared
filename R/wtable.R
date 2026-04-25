@@ -195,6 +195,7 @@
     xvallab <- yvallab <- NULL
     xna_values <- yna_values <- NULL
     xvalues <- yvalues <- TRUE
+    missing_table <- NULL
     crosstab <- !is.null (y)
 
     if (!crosstab) {
@@ -392,6 +393,17 @@
             tbl <- tbl[tbl > 0]
         }
 
+        missing <- rep (FALSE, length (tbl))
+        if (length (xna_values) > 0) {
+            missing[seq_along (xvallab)] <- is.element (xvallab, xna_values)
+        }
+        missing <- missing | is.na (labels)
+        missing_table <- tbl[missing]
+        if (length (missing_table) > 0) {
+            names (missing_table) <- labels[missing]
+            names (missing_table)[is.na (names (missing_table))] <- "NA"
+        }
+
         toprint <- data.frame (fre = tbl)
 
         toprint$rel <- proportions (toprint$fre)
@@ -428,10 +440,13 @@
         attr (toprint, "na_values") <- xna_values
         attr (toprint, "valid") <- valid
 
+        orig <- tbl[!missing]
+        if (length (xvallab) > 0) {
+            xvallab <- xvallab[!is.element (xvallab, xna_values)]
+        }
+
         if (only_na) {
-            nacount <- sum (is.na (x))
-            orig <- array (nacount, dim = c (1))
-            dimnames (orig) <- list (NA_character_)
+            orig <- array (numeric (0), dim = c (0))
         }
     }
 
@@ -450,6 +465,9 @@
 
 
     attr (orig, "toprint") <- toprint
+    if (length (missing_table) > 0) {
+        attr (orig, "missing") <- missing_table
+    }
     class (orig) <- c ("wtable", class (orig))
     return (orig)
 }

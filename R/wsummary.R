@@ -12,11 +12,17 @@
 
     nas <- wtable (is.empty (x), wt = wt)
     rnms <- rownames (nas)
+    if (is.null (rnms)) {
+        rnms <- names (nas)
+    }
 
     names (wsum) <- c ("Min.", "1st Qu.", "Median", "Mean", "3rd Qu.", "Max.")
 
     if (any (rnms == "TRUE")) {
-        wsum <- c (wsum, "NA's" = attr (nas, "toprint")$fre[2])
+        wsum <- c (
+            wsum,
+            "NA's" = attr (nas, "toprint")$fre[which (rnms == "TRUE")[1]]
+        )
     }
 
     class (wsum) <- c ("fobject", class (wsum))

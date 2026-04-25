@@ -53,6 +53,15 @@ DF$fweight <- tp[match(10 * DF$Area + DF$Gender, c(11, 12, 21, 22))]
 test_that("wtable() works", {
   expect_true(inherits(wtable(x), "wtable"))
 
+  expect_equal(as.numeric(wtable(x)), as.numeric(table(x)))
+  expect_equal(names(wtable(x)), names(table(x)))
+  expect_equal(attr(wtable(x), "missing"), c(DK = 1))
+
+  xna <- c(x, NA)
+  expect_equal(as.numeric(wtable(xna)), as.numeric(table(xna)))
+  expect_equal(names(wtable(xna)), names(table(xna)))
+  expect_equal(attr(wtable(xna), "missing"), c(DK = 1, "NA" = 1))
+
   expect_true(inherits(wtable(c(x, NA)), "wtable"))
 
   expect_true(inherits(wtable(hx), "wtable"))
