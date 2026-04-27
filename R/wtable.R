@@ -478,3 +478,27 @@
 `w_table` <- function (...) {
     wtable(...)
 }
+
+
+#' @export
+#' @importFrom graphics barplot
+`barplot.wtable` <- function (height, ...) {
+    nms <- names (height)
+    dm <- dim (height)
+    dmnms <- dimnames (height)
+
+    attr (height, "toprint") <- NULL
+    attr (height, "missing") <- NULL
+    class (height) <- setdiff (class (height), "wtable")
+
+    if (is.null (dm)) {
+        height <- as.vector (height)
+        names (height) <- nms
+    }
+    else {
+        dim (height) <- dm
+        dimnames (height) <- dmnms
+    }
+
+    graphics::barplot (height, ...)
+}

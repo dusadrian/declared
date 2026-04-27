@@ -115,6 +115,14 @@ test_that("wtable() works", {
   expect_error(with(DF, wtable(Gender, list(A = 1), wt = fweight)))
 })
 
+test_that("wtable() works with barplot()", {
+  expect_silent(barplot(wtable(declared(1:5)), plot = FALSE))
+  expect_equal(
+    barplot(wtable(declared(1:5)), plot = FALSE),
+    barplot(as.numeric(wtable(declared(1:5))), plot = FALSE)
+  )
+})
+
 library(admisc)
 test_that("tests have the same output", {
   expect_snapshot(x)
