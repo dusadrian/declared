@@ -458,8 +458,11 @@
             colnames (orig) <- names (yvallab)
         }
     }
-    else if (length (xvallab)) {
-        names (orig) <- names (xvallab)
+    else {
+        orig <- array (orig, dim = length (orig))
+        if (length (xvallab)) {
+            dimnames (orig) <- list (names (xvallab))
+        }
     }
 
 
@@ -468,7 +471,7 @@
     if (length (missing_table) > 0) {
         attr (orig, "missing") <- missing_table
     }
-    class (orig) <- c ("wtable", class (orig))
+    class (orig) <- c ("wtable", "table")
     return (orig)
 }
 
@@ -477,28 +480,4 @@
 #' @export
 `w_table` <- function (...) {
     wtable(...)
-}
-
-
-#' @export
-#' @importFrom graphics barplot
-`barplot.wtable` <- function (height, ...) {
-    nms <- names (height)
-    dm <- dim (height)
-    dmnms <- dimnames (height)
-
-    attr (height, "toprint") <- NULL
-    attr (height, "missing") <- NULL
-    class (height) <- setdiff (class (height), "wtable")
-
-    if (is.null (dm)) {
-        height <- as.vector (height)
-        names (height) <- nms
-    }
-    else {
-        dim (height) <- dm
-        dimnames (height) <- dmnms
-    }
-
-    graphics::barplot (height, ...)
 }

@@ -16,3 +16,5 @@
 ^codemeta\.json$
 instructiuni.txt
 ^\.github
+^\.positai$
+^\.claude$

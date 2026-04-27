@@ -115,12 +115,20 @@ test_that("wtable() works", {
   expect_error(with(DF, wtable(Gender, list(A = 1), wt = fweight)))
 })
 
-test_that("wtable() works with barplot()", {
+test_that("wtable() works with base plots", {
+  expect_s3_class(wtable(declared(1:5)), "table")
+  expect_equal(dim(wtable(declared(1:5))), 5L)
   expect_silent(barplot(wtable(declared(1:5)), plot = FALSE))
   expect_equal(
     barplot(wtable(declared(1:5)), plot = FALSE),
     barplot(as.numeric(wtable(declared(1:5))), plot = FALSE)
   )
+
+  tmp <- tempfile(fileext = ".pdf")
+  grDevices::pdf(tmp)
+  on.exit(grDevices::dev.off())
+  on.exit(unlink(tmp), add = TRUE)
+  expect_silent(pie(wtable(declared(1:5))))
 })
 
 library(admisc)

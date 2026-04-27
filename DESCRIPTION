@@ -24,7 +24,6 @@ Description: A zero dependency package containing functions to declare labels
     objects of class "declared".
 License: GPL (>= 3)
 Imports:
-    graphics,
     stats,
     utils
 Suggests:
