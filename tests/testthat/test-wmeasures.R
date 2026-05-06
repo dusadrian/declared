@@ -71,6 +71,13 @@ test_that("wmeasures() works with data frames", {
       B = c(min = 2, max = 10)
     )
   )
+
+  skip_if_not_installed("admisc")
+
+  expect_equal(
+    unclass (admisc::using (DF, wmeasures (., measures = "n")))[, "n"],
+    c(A = 6, B = 5)
+  )
 })
 
 

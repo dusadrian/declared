@@ -543,12 +543,13 @@
 
     rnms <- rownames (x)
     width_rnms <- max (nchar (rnms))
+    row_prefix <- width_rnms > 0
 
     cat (ifelse (startend, "\n", ""))
     cat (
         paste0 (
             paste (rep (" ", width_rnms), collapse = ""),
-            ifelse (width_rnms > 0, " ", ""),
+            ifelse (row_prefix, " ", ""),
             paste (nms, collapse = "  "),
             "\n"
         )
@@ -556,8 +557,11 @@
 
     for (i in seq (nrow (x))) {
         cat (
-            padRight_ (rnms[i], width_rnms - nchar (rnms[i])),
-            " ",
+            ifelse (
+                row_prefix,
+                paste0 (padRight_ (rnms[i], width_rnms - nchar (rnms[i])), " "),
+                ""
+            ),
             paste (x[i, ], collapse = "  "),
             "\n",
             sep = ""

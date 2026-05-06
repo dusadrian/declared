@@ -153,6 +153,10 @@ should be employed.
 If no frequency weights are provided, the result is identical to the
 corresponding base functions.
 
+In an expression evaluated in the context of a data frame, such as
+\code{admisc::using()}, \code{.} can be used as a placeholder for all variables
+in the current dataset.
+
 The function \code{wquantile()} extensively borrowed ideas from packages
 \strong{\code{stats}} and \strong{\code{Hmisc}}, to ensure a constant interpolation that would
 produce the same quantiles if no weights are provided or if all
@@ -227,6 +231,8 @@ wtable(DF$Gender)
 wsd(DF$Age)
 
 wmeasures(DF[c("Age", "Children")], measures = c("n", "mean", "sd"))
+
+admisc::using(DF[c("Age", "Children")], wmeasures(., measures = "n"))
 
 
 # Weighting: observed proportions

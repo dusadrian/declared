@@ -1,11 +1,18 @@
 #' @rdname weighted
 #' @param measures A character vector or a named list of functions, identifying
 #' which measures to compute.
+#' @details In an expression evaluated in the context of a data frame, such as
+#' `admisc::using()`, `.` can be used as a placeholder for all variables in the
+#' current dataset.
 #' @export
 `wmeasures` <- function (
     x, measures = c ("n", "mean", "sd", "median", "var", "mode", "range"),
     wt = NULL, na.rm = TRUE, ...
 ) {
+
+    if (identical (substitute (x), quote (.))) {
+        x <- currentDataset_ (parent.frame ())
+    }
 
     measures <- parseMeasures_ (measures)
 
@@ -30,6 +37,32 @@
 
     class (result) <- c ("wmeasures", class (result))
     return (result)
+}
+
+`currentDataset_` <- function (envir) {
+
+    objects <- as.list (envir, all.names = FALSE)
+    is_column <- vapply (
+        objects,
+        function (x) {
+            !is.function (x) && !is.environment (x)
+        },
+        TRUE
+    )
+
+    objects <- objects[is_column]
+
+    if (!length (objects)) {
+        stopError_ ("Could not find a current dataset.")
+    }
+
+    lengths <- vapply (objects, NROW, integer (1))
+
+    if (length (unique (lengths)) != 1 || lengths[1] == 0) {
+        stopError_ ("Could not find a current dataset.")
+    }
+
+    return (as.data.frame (objects, optional = TRUE))
 }
 
 `parseMeasures_` <- function (measures) {
