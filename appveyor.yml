@@ -23,10 +23,22 @@ environment:
 # Adapt as necessary starting from here
 
 build_script:
-  - travis-tool.sh install_deps
+  - ps: |
+        $rtools45 = "C:\rtools45\x86_64-w64-mingw32.static.posix\bin"
+        $msys2 = "C:\rtools45\usr\bin"
+        $env:PATH = "$rtools45;$msys2;$env:PATH"
+        where.exe gcc
+        gcc --version
+        bash -lc "travis-tool.sh install_deps"
 
 test_script:
-  - travis-tool.sh run_tests
+  - ps: |
+        $rtools45 = "C:\rtools45\x86_64-w64-mingw32.static.posix\bin"
+        $msys2 = "C:\rtools45\usr\bin"
+        $env:PATH = "$rtools45;$msys2;$env:PATH"
+        where.exe gcc
+        gcc --version
+        bash -lc "travis-tool.sh run_tests"
 
 on_failure:
   - 7z a failure.zip *.Rcheck\*
