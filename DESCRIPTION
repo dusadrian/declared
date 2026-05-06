@@ -23,7 +23,6 @@ Description: A zero dependency package containing functions to declare labels
     as possible with these packages, while offering an alternative in the
     objects of class "declared".
 License: GPL (>= 3)
-SystemRequirements: USE_C99
 Imports:
     stats,
     utils
