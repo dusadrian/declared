@@ -134,7 +134,7 @@
 #'
 #' wsd(DF$Age)
 #'
-#' wmeasures(DF[c("Age", "Children")], measures = c("n", "mean", "sd"))
+#' wmeasures(DF[c("Age", "Children")], what = c("n", "mean", "sd"))
 #'
 #'
 #' # Weighting: observed proportions

@@ -1,12 +1,12 @@
 #' @rdname weighted
-#' @param measures A character vector or a named list of functions, identifying
-#' which measures to compute.
+#' @param what A character vector or a named list of functions, identifying
+#' what to compute.
 #' @details In an expression evaluated in the context of a data frame, such as
 #' `admisc::using()`, `.` can be used as a placeholder for all variables in the
 #' current dataset.
 #' @export
 `wmeasures` <- function (
-    x, measures = c ("n", "mean", "sd", "median", "var", "mode", "range"),
+    x, what = c ("n", "mode", "mean", "median", "range", "var", "sd"),
     wt = NULL, na.rm = TRUE, ...
 ) {
 
@@ -14,14 +14,14 @@
         x <- currentDataset_ (parent.frame ())
     }
 
-    measures <- parseMeasures_ (measures)
+    what <- parseWhat_ (what)
 
     if (is.data.frame (x)) {
         result <- do.call (rbind, lapply (
             x,
             function (y) {
                 calculateMeasures_ (
-                    y, measures = measures, wt = wt, na.rm = na.rm, ... = ...
+                    y, what = what, wt = wt, na.rm = na.rm, ... = ...
                 )
             }
         ))
@@ -32,7 +32,7 @@
     }
 
     result <- calculateMeasures_ (
-        x, measures = measures, wt = wt, na.rm = na.rm, ... = ...
+        x, what = what, wt = wt, na.rm = na.rm, ... = ...
     )
 
     class (result) <- c ("wmeasures", class (result))
@@ -65,7 +65,7 @@
     return (as.data.frame (objects, optional = TRUE))
 }
 
-`parseMeasures_` <- function (measures) {
+`parseWhat_` <- function (what) {
 
     builtin <- list (
         n = function (x, wt = NULL, na.rm = TRUE, ...) sum (!is.empty (x)),
@@ -84,8 +84,8 @@
         }
     )
 
-    if (is.character (measures)) {
-        key <- tolower (measures)
+    if (is.character (what)) {
+        key <- tolower (what)
         choices <- list (
             n = "n",
             mean = "mean",
@@ -105,22 +105,22 @@
             stopError_ ("Unknown measure name.")
         }
 
-        measures <- builtin[unlist (choices[key], use.names = FALSE)]
+        what <- builtin[unlist (choices[key], use.names = FALSE)]
     }
-    else if (is.function (measures)) {
-        measures <- list (measures)
+    else if (is.function (what)) {
+        what <- list (what)
     }
 
-    if (!is.list (measures) || !all (vapply (measures, is.function, TRUE))) {
+    if (!is.list (what) || !all (vapply (what, is.function, TRUE))) {
         stopError_ (
-            "Argument `measures` should be a character vector or a list of functions."
+            "Argument `what` should be a character vector or a list of functions."
         )
     }
 
-    nms <- names (measures)
+    nms <- names (what)
 
     if (is.null (nms)) {
-        nms <- rep ("", length (measures))
+        nms <- rep ("", length (what))
     }
 
     missing_names <- !nzchar (nms)
@@ -129,9 +129,9 @@
         nms[missing_names] <- paste0 ("Measure", which (missing_names))
     }
 
-    names (measures) <- nms
+    names (what) <- nms
 
-    return (measures)
+    return (what)
 }
 
 `drop_declared_missing_` <- function (x, wt = NULL) {
@@ -154,11 +154,11 @@
 }
 
 `calculateMeasures_` <- function (
-    x, measures, wt = NULL, na.rm = TRUE, ...
+    x, what, wt = NULL, na.rm = TRUE, ...
 ) {
 
     result <- vapply (
-        measures,
+        what,
         function (fun) {
             callMeasure_ (fun, x = x, wt = wt, na.rm = na.rm, ... = ...)
         },

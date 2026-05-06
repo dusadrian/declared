@@ -27,7 +27,7 @@ wmean(x, wt = NULL, trim = 0, na.rm = TRUE)
 
 wmeasures(
   x,
-  measures = c("n", "mean", "sd", "median", "var", "mode", "range"),
+  what = c("n", "mode", "mean", "median", "range", "var", "sd"),
   wt = NULL,
   na.rm = TRUE,
   ...
@@ -73,8 +73,8 @@ tables}
 of x before the mean is computed. Values of trim outside that range are
 taken as the nearest endpoint.}
 
-\item{measures}{A character vector or a named list of functions, identifying
-which measures to compute.}
+\item{what}{A character vector or a named list of functions, identifying
+what to compute.}
 
 \item{probs}{Numeric vector of probabilities with values in [0,1]}
 
@@ -102,6 +102,10 @@ frequency weights. These are reimplementations of various existing functions,
 adapted to objects of class \code{"declared"} (see Details below)
 }
 \details{
+In an expression evaluated in the context of a data frame, such as
+\code{admisc::using()}, \code{.} can be used as a placeholder for all variables in the
+current dataset.
+
 Weighted summaries
 
 A frequency table is usually performed for a categorical variable, displaying
@@ -152,10 +156,6 @@ should be employed.
 
 If no frequency weights are provided, the result is identical to the
 corresponding base functions.
-
-In an expression evaluated in the context of a data frame, such as
-\code{admisc::using()}, \code{.} can be used as a placeholder for all variables
-in the current dataset.
 
 The function \code{wquantile()} extensively borrowed ideas from packages
 \strong{\code{stats}} and \strong{\code{Hmisc}}, to ensure a constant interpolation that would
@@ -230,9 +230,7 @@ wtable(DF$Gender)
 
 wsd(DF$Age)
 
-wmeasures(DF[c("Age", "Children")], measures = c("n", "mean", "sd"))
-
-admisc::using(DF[c("Age", "Children")], wmeasures(., measures = "n"))
+wmeasures(DF[c("Age", "Children")], what = c("n", "mean", "sd"))
 
 
 # Weighting: observed proportions
