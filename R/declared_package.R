@@ -2,7 +2,6 @@
 "_PACKAGE"
 #'
 #' @name declared_package
-#' @aliases declared-package
 #'
 #' @title Functions for Declared Missing Values
 #'

@@ -2,7 +2,6 @@
 % Please edit documentation in R/declared_package.R
 \name{declared_package}
 \alias{declared_package}
-\alias{declared-package}
 \title{Functions for Declared Missing Values}
 \description{
 A set of functions to declare labels and missing values, coupled
