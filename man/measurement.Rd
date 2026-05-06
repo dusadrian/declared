@@ -78,8 +78,8 @@ measurement(x) <- "metric, discrete"
 
 }
 \seealso{
-Other labelling functions: 
+Other labelling functions:
 \code{\link{drop_undeclare}},
-\code{\link{labels}()}
+\code{\link{labels}}
 }
 \concept{labelling functions}

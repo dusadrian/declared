@@ -61,8 +61,8 @@ x
 
 }
 \seealso{
-Other labelling functions: 
+Other labelling functions:
 \code{\link{drop_undeclare}},
-\code{\link{measurement}()}
+\code{\link[=measurement]{measurement()}}
 }
 \concept{labelling functions}
