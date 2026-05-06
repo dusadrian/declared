@@ -29,7 +29,7 @@ build_script:
         $env:PATH = "$rtools45;$msys2;$env:PATH"
         where.exe gcc
         gcc --version
-        bash -lc "travis-tool.sh install_deps"
+        cmd /c "travis-tool.sh install_deps"
 
 test_script:
   - ps: |
@@ -38,7 +38,7 @@ test_script:
         $env:PATH = "$rtools45;$msys2;$env:PATH"
         where.exe gcc
         gcc --version
-        bash -lc "travis-tool.sh run_tests"
+        cmd /c "travis-tool.sh run_tests"
 
 on_failure:
   - 7z a failure.zip *.Rcheck\*
