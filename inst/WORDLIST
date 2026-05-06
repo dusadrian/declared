@@ -8,11 +8,11 @@ Stata
 adrian
 analyse
 codelist
-crosstab
 crosstabs
 dusa
 labelled
 labelling
+memisc
 microdata
 reimplementation
 reimplementations

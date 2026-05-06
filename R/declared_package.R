@@ -1,5 +1,5 @@
 #' @keywords internal
-#' "_PACKAGE"
+"_PACKAGE"
 #'
 #' @name declared_package
 #' @aliases declared-package

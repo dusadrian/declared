@@ -30,5 +30,3 @@ Adrian Dusa
 
 Maintainer: Adrian Dusa (dusa.adrian@unibuc.ro)
 }
-\keyword{"_PACKAGE"}
-\keyword{internal}
