@@ -30,8 +30,11 @@ typedef union {
 SEXP _directDeclared(SEXP x, SEXP na_index, SEXP na_values, SEXP na_range,
                      SEXP labels, SEXP label, SEXP measurement, SEXP date,
                      SEXP class_) {
+    int nprotect = 0;
+
     if (MAYBE_SHARED(x)) {
-        x = Rf_duplicate(x);
+        x = PROTECT(Rf_duplicate(x));
+        nprotect++;
     }
 
     Rf_setAttrib(x, Rf_install("na_index"), na_index);
@@ -43,6 +46,7 @@ SEXP _directDeclared(SEXP x, SEXP na_index, SEXP na_values, SEXP na_range,
     Rf_setAttrib(x, Rf_install("date"), date);
     Rf_classgets(x, class_);
 
+    UNPROTECT(nprotect);
     return x;
 }
 
