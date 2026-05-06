@@ -507,3 +507,92 @@
     cat (ifelse (startend, "\n", ""))
 
 }
+
+
+#' @export
+`print.wmeasures` <- function (x, startend = TRUE, digits = 3, ...) {
+
+    result <- x
+    class (x) <- setdiff (class (x), "wmeasures")
+
+    if (is.null (dim (x))) {
+        x <- matrix (x, nrow = 1, dimnames = list ("", names (x)))
+    }
+
+    nms <- colnames (x)
+    x <- matrix (
+        apply (x, 2, format_wmeasure_column_, digits = digits),
+        nrow = nrow (x),
+        dimnames = dimnames (x)
+    )
+
+    widths <- pmax (
+        nchar (encodeString (nms)),
+        apply (x, 2, function (y) max (nchar (y)))
+    )
+
+    for (i in seq_along (nms)) {
+        nms[i] <- padBoth_ (nms[i], widths[i] - nchar (nms[i]))
+        x[, i] <- mapply (
+            padLeft_,
+            x[, i],
+            widths[i] - nchar (x[, i]),
+            USE.NAMES = FALSE
+        )
+    }
+
+    rnms <- rownames (x)
+    width_rnms <- max (nchar (rnms))
+
+    cat (ifelse (startend, "\n", ""))
+    cat (
+        paste0 (
+            paste (rep (" ", width_rnms), collapse = ""),
+            ifelse (width_rnms > 0, " ", ""),
+            paste (nms, collapse = "  "),
+            "\n"
+        )
+    )
+
+    for (i in seq (nrow (x))) {
+        cat (
+            padRight_ (rnms[i], width_rnms - nchar (rnms[i])),
+            " ",
+            paste (x[i, ], collapse = "  "),
+            "\n",
+            sep = ""
+        )
+    }
+    cat (ifelse (startend, "\n", ""))
+
+    return (invisible (result))
+}
+
+
+`format_wmeasure_column_` <- function (x, digits = 3) {
+
+    result <- rep ("", length (x))
+    ok <- !is.na (x)
+
+    if (!any (ok)) {
+        return (result)
+    }
+
+    x <- round (as.numeric (x[ok]), digits)
+    ndec <- numdec_ (x, each = TRUE, maxdec = digits)
+    maxdec <- max (ndec, na.rm = TRUE)
+
+    result[ok] <- vapply (
+        seq_along (x),
+        function (i) {
+            value <- sprintf (paste0 ("%.", ndec[i], "f"), x[i])
+            if (maxdec > ndec[i]) {
+                value <- paste0 (value, paste (rep (" ", maxdec - ndec[i]), collapse = ""))
+            }
+            value
+        },
+        character (1)
+    )
+
+    return (result)
+}

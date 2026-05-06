@@ -62,8 +62,8 @@ undeclare(x, drop = TRUE)
 drop(undeclare(x))
 }
 \seealso{
-Other labelling functions: 
-\code{\link{labels}()},
-\code{\link{measurement}()}
+Other labelling functions:
+\code{\link{labels}},
+\code{\link[=measurement]{measurement()}}
 }
 \concept{labelling functions}

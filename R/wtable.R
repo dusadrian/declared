@@ -134,6 +134,8 @@
 #'
 #' wsd(DF$Age)
 #'
+#' wmeasures(DF[c("Age", "Children")], measures = c("n", "mean", "sd"))
+#'
 #'
 #' # Weighting: observed proportions
 #' op <- proportions(with(DF, table(Gender, Area)))
