@@ -42,6 +42,11 @@ test_that("wmeasures() works with vectors", {
   )
 
   expect_equal(
+    unclass (wmeasures(y, what = "iqr")),
+    c(iqr = wIQR(y))
+  )
+
+  expect_equal(
     unclass (wmeasures(x, what = "range")),
     c(min = 1, max = 5)
   )
@@ -70,6 +75,11 @@ test_that("wmeasures() works with data frames", {
       A = c(min = 1, max = 5),
       B = c(min = 2, max = 10)
     )
+  )
+
+  expect_equal(
+    unclass (wmeasures(DF, what = "iqr"))[, "iqr"],
+    c(A = wIQR(x, na.rm = TRUE), B = wIQR(DF$B, na.rm = TRUE))
   )
 
   skip_if_not_installed("admisc")

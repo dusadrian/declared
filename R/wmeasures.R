@@ -72,6 +72,7 @@
         mean = wmean,
         sd = wsd,
         median = wmedian,
+        iqr = wIQR,
         var = wvar,
         mode = wmode,
         min = function (x, wt = NULL, na.rm = TRUE, ...) {
@@ -93,6 +94,7 @@
             sd = "sd",
             stdev = "sd",
             median = "median",
+            iqr = "iqr",
             var = "var",
             variance = "var",
             mode = "mode",
