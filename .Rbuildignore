@@ -18,3 +18,4 @@ instructiuni.txt
 ^\.github
 ^\.positai$
 ^\.claude$
+^tests/testthat/test-admisc-sync\.R$
