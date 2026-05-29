@@ -51,7 +51,8 @@
   # attrx$label, if not existing, takes from attrx$labels
   # attrx[["label"]] is something like attr (x, "label", exact = TRUE)
   declared (
-    x, attrx[["labels"]], attrx$na_values, attrx$na_range, attrx[["label"]]
+    x, attrx[["labels"]], attrx$na_values, attrx$na_range, attrx[["label"]],
+    decimals = attrx$decimals
   )
 }
 
@@ -67,7 +68,8 @@
     x <- as.Date (x)
   }
   declared (
-    x, attrx[["labels"]], attrx$na_values, attrx$na_range, attrx[["label"]]
+    x, attrx[["labels"]], attrx$na_values, attrx$na_range, attrx[["label"]],
+    decimals = attrx$decimals
   )
 }
 
@@ -105,6 +107,16 @@
 
   na_range <- lapply (dots, function (x) attr (x, "na_range", exact = TRUE))
   nulls <- unlist (lapply (na_range, is.null))
+
+  decimals <- unique (unlist (lapply (dots, function (x) {
+    attr (x, "decimals", exact = TRUE)
+  })))
+  if (length (decimals) == 0) {
+    decimals <- NULL
+  }
+  else {
+    decimals <- max (decimals)
+  }
 
   if (all (nulls)) {
     na_range <- NULL
@@ -161,7 +173,8 @@
     labels = labels,
     na_values = na_values,
     na_range = na_range,
-    label = attr (dots[[which (declared)[1]]], "label", exact = TRUE)
+    label = attr (dots[[which (declared)[1]]], "label", exact = TRUE),
+    decimals = decimals
   ))
 }
 

@@ -51,6 +51,13 @@ test_that("format_declared() works", {
 
   expect_length(format_declared(xdate), 2)
 
+  xd <- declared(c(1, 1.2, 1.234, -1), na_values = -1, decimals = 2)
+  expect_equal(trimws(format_declared(xd)), c("1", "1.2", "1.23", "NA(-1)"))
+  expect_equal(as.vector(unclass(undeclare(xd))), c(1, 1.2, 1.234, -1))
+
+  xz <- declared(c(-0.004, 0.004), decimals = 2)
+  expect_equal(trimws(format_declared(xz)), c("0", "0"))
+
   expect_error(format_declared(list(A = 1)))
 })
 

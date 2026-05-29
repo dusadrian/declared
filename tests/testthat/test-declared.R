@@ -67,6 +67,13 @@ test_that("declared() works", {
 
   expect_length(labels(declared(fx, na_values = 6, llevels = TRUE)), 3)
 
+  xd <- declared(c(1, 1.234), decimals = 2)
+  expect_equal(attr(xd, "decimals"), 2L)
+  expect_equal(attr(xd[1], "decimals"), 2L)
+  expect_equal(attr(as.declared(unclass(xd)), "decimals"), 2L)
+  expect_error(declared(1:2, decimals = -1))
+  expect_error(declared(1:2, decimals = 1.5))
+
   expect_error(missing_range(x) <- 1:3)
 })
 
@@ -78,7 +85,8 @@ test_that("direct_declared() trusts already normalized vectors", {
     na_values = -1,
     labels = c(Good = 1, Better = 2, DK = -1),
     label = "Imported variable",
-    measurement = "ordinal"
+    measurement = "ordinal",
+    decimals = 2
   )
 
   expect_true(inherits(xdirect, "declared"))
@@ -87,6 +95,7 @@ test_that("direct_declared() trusts already normalized vectors", {
   expect_equal(attr(xdirect, "na_values"), -1)
   expect_equal(attr(xdirect, "label"), "Imported variable")
   expect_equal(attr(xdirect, "measurement"), "categorical, ordinal")
+  expect_equal(attr(xdirect, "decimals"), 2L)
   expect_equal(is.na(xdirect), c(FALSE, FALSE, TRUE))
   expect_equal(xdirect == "DK", c(FALSE, FALSE, TRUE))
 })

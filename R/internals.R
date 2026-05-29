@@ -15,6 +15,8 @@ NULL
     if (inherits (x, "Date") || isTRUE (attr (x, "date"))) {
         class (x) <- "Date"
         out <- as.character (x)
+    } else if (is.numeric (x) && !is.null (attr (x, "decimals"))) {
+        out <- format_decimals_ (unclass (x), attr (x, "decimals"))
     } else {
         out <- format (unclass (x), digits = digits)
     }
@@ -27,6 +29,16 @@ NULL
 
     # format again to make sure all elements have same width
     return (format (out, justify = "right"))
+}
+
+`format_decimals_` <- function (x, decimals) {
+    decimals <- check_decimals (decimals)
+    out <- formatC (x, digits = decimals, format = "f")
+    if (decimals > 0) {
+        out <- sub ("\\.?0+$", "", out)
+    }
+    out[out == "-0"] <- "0"
+    return (out)
 }
 
 #' @rdname declared_internal
@@ -233,6 +245,24 @@ NULL
     else {
         return (paste (c (mlevels[first], mlevels[cpos]), collapse = ", "))
     }
+}
+
+`check_decimals` <- function (x) {
+    if (is.null (x)) {
+        return (x)
+    }
+
+    if (
+        !is.numeric (x) ||
+        length (x) != 1 ||
+        is.na (x) ||
+        x < 0 ||
+        x != floor (x)
+    ) {
+        stopError_ ("`decimals` should be a single non-negative integer.")
+    }
+
+    return (as.integer (x))
 }
 
 

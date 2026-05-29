@@ -16,10 +16,11 @@
   na_range <- attr (x, "na_range", exact = TRUE)
   label <- attr (x, "label", exact = TRUE)
   measurement <- attr (x, "measurement", exact = TRUE)
+  decimals <- attr (x, "decimals", exact = TRUE)
   xdate <- inherits (x, "Date") || isTRUE (attr (x, "date", exact = TRUE))
 
   metadata_present <- any (!vapply (
-    list (labels, na_index, na_values, na_range, label, measurement),
+    list (labels, na_index, na_values, na_range, label, measurement, decimals),
     is.null,
     logical (1)
   ))
@@ -39,6 +40,7 @@
         labels = labels,
         label = label,
         measurement = measurement,
+        decimals = decimals,
         date = xdate
       ))
     }
@@ -49,7 +51,8 @@
       na_values = na_values,
       na_range = na_range,
       label = label,
-      measurement = measurement
+      measurement = measurement,
+      decimals = decimals
     ))
   }
 

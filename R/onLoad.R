@@ -99,9 +99,14 @@
             # -----------------------------------------------------
             # this function is also unchanged, except for this part:
             for (i in seq_len(nc)) {
-                if (is.declared (x[[i]]) && any (is.na (x[[i]]))) {
-                    # any (is.na ()) is necessary to guard against na.omit (),
-                    # for instance:
+                if (
+                    is.declared (x[[i]]) && (
+                        any (is.na (x[[i]])) ||
+                        !is.null (attr (x[[i]], "decimals", exact = TRUE))
+                    )
+                ) {
+                    # any (is.na ()) guards against na.omit (), for instance.
+                    # decimals is pure display metadata.
                     rval[[i]] <- format_declared (x[[i]])
                 }
                 else {
@@ -270,7 +275,8 @@
                             list (
                                 labels = attr (x, "labels", exact = TRUE),
                                 na_values = attr (x, "na_values"),
-                                na_range = attr (x, "na_range")
+                                na_range = attr (x, "na_range"),
+                                decimals = attr (x, "decimals", exact = TRUE)
                             )
                         })
                         ## code for declared
@@ -338,6 +344,14 @@
 
                             if (!is.null (na_range)) {
                                 lxi[[jj]]$na_range <- range(na_range)
+                            }
+
+                            decimals <- unique (unlist (c (
+                                lxi[[jj]]$decimals,
+                                attr (xij, "decimals", exact = TRUE)
+                            )))
+                            if (length (decimals) > 0) {
+                                lxi[[jj]]$decimals <- max (decimals)
                             }
                         }
                         ## code for declared
@@ -481,7 +495,8 @@
                         label = attr (value[[i]], "label", exact = TRUE),
                         labels = lxi[[i]]$labels,
                         na_values = lxi[[i]]$na_values,
-                        na_range = lxi[[i]]$na_range
+                        na_range = lxi[[i]]$na_range,
+                        decimals = lxi[[i]]$decimals
                     )
                 }
             }

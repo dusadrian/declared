@@ -18,13 +18,19 @@ y <- declared(
 )
 
 cx <- declared(
-  x = sample(
-    c("a", "b", "c", "z"),
-    20,
-    replace = TRUE
+  x = c(
+    "c", "a", "b", "a", "a", "z", "c", "b", "b", "b",
+    "a", "c", "c", "c", "z", "b", "b", "b", "a", "z"
   ),
   labels = c("Left" = "a", "Middle" = "b", "Right" = "c", "Apolitic" = "z"),
   na_values = "z"
+)
+
+xd <- declared(
+  c(1, 1.2, 1.234, -1),
+  labels = c(DK = -1),
+  na_values = -1,
+  decimals = 2
 )
 
 test_that("pillar method works", {
@@ -51,6 +57,8 @@ test_that("pillar method works", {
       "pillar_shaft"
     )
   )
+
+  expect_true(inherits(pillar::pillar_shaft(xd), "pillar_shaft"))
 })
 
 px <- pillar::pillar_shaft(undeclare(x), use_haven = FALSE)
@@ -70,6 +78,11 @@ test_that("format works on pillar for declared objects", {
     ),
     100
   )
+
+  expect_true(any (grepl (
+    "1.23",
+    capture.output (format (pillar::pillar_shaft (xd), 100))
+  )))
 })
 
 

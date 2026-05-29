@@ -102,6 +102,8 @@
 #' open ended
 #' @param label A short, human-readable description of the vector
 #' @param measurement Optional, user specified measurement level
+#' @param decimals Optional, maximum number of decimal places used for display
+#' only
 #' @param llevels Logical, when `x` is a factor only use those levels that have
 #' labels
 #' @param ... Other arguments used by various other methods
@@ -113,7 +115,7 @@ NULL
 #' @export
 declared <- function (
     x, labels = NULL, na_values = NULL, na_range = NULL, label = NULL,
-    measurement = NULL, llevels = FALSE, ...
+    measurement = NULL, decimals = NULL, llevels = FALSE, ...
 ) {
   UseMethod ("declared")
 }
@@ -122,7 +124,7 @@ declared <- function (
 #' @export
 declared.default <- function (
     x, labels = NULL, na_values = NULL, na_range = NULL, label = NULL,
-    measurement = NULL, llevels = FALSE, ...
+    measurement = NULL, decimals = NULL, llevels = FALSE, ...
 ) {
 
   xdate <- inherits(x, "Date")
@@ -251,6 +253,7 @@ declared.default <- function (
   attr (x, "date") <- xdate
 
   attr (x, "measurement") <- check_measurement (measurement)
+  attr (x, "decimals") <- check_decimals (decimals)
   class(x) <- unique (c ("declared", class (x)))
   return (x)
 }
@@ -277,12 +280,14 @@ declared.default <- function (
 # @param labels A named vector of value labels.
 # @param label A short, human-readable description of the vector.
 # @param measurement Optional, user specified measurement level.
+# @param decimals Optional, maximum number of decimal places used for display
+# only.
 # @param date Logical, whether `x` should be treated as a date vector.
 # @return A vector of class `"declared"`.
 #' @export
 direct_declared <- function (
     x, na_index = NULL, na_values = NULL, na_range = NULL, labels = NULL,
-    label = NULL, measurement = NULL, date = inherits(x, "Date")
+    label = NULL, measurement = NULL, decimals = NULL, date = inherits(x, "Date")
 ) {
   if (!is.atomic(x)) {
     stopError_("`x` must be an atomic vector.")
@@ -315,6 +320,7 @@ direct_declared <- function (
     labels,
     label,
     check_measurement(measurement),
+    check_decimals(decimals),
     date,
     unique(c("declared", class(x)))
   )

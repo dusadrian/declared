@@ -45,7 +45,14 @@ test_that("onLoad functions work", {
   expect_error(print(dfd, max = Inf))
 
   test <- capture.output(format(dfd[, -seq(1, 4)]))
+  dfd_dec <- data.frame(x = declared(c(1, 1.234), decimals = 2))
+  expect_equal(as.vector(trimws(format(dfd_dec)$x)), c("1", "1.23"))
+
   test <- rbind(dfd, dfd)
+  expect_equal(
+    attr(rbind(dfd_dec, dfd_dec)$x, "decimals", exact = TRUE),
+    2L
+  )
   expect_error(
     rbind(dfd, dfd[, -4]),
     "numbers of columns of arguments do not match"

@@ -82,6 +82,7 @@
            labels = attr (x, "labels", exact = TRUE),
            na_values = value,
            na_range = attr (x, "na_range", exact = TRUE),
-           label = attr (x, "label", exact = TRUE)
+           label = attr (x, "label", exact = TRUE),
+           decimals = attr (x, "decimals", exact = TRUE)
   )
 }

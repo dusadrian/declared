@@ -28,8 +28,8 @@ typedef union {
 } ieee_double;
 
 SEXP _directDeclared(SEXP x, SEXP na_index, SEXP na_values, SEXP na_range,
-                     SEXP labels, SEXP label, SEXP measurement, SEXP date,
-                     SEXP class_) {
+                     SEXP labels, SEXP label, SEXP measurement, SEXP decimals,
+                     SEXP date, SEXP class_) {
     int nprotect = 0;
 
     if (MAYBE_SHARED(x)) {
@@ -43,6 +43,7 @@ SEXP _directDeclared(SEXP x, SEXP na_index, SEXP na_values, SEXP na_range,
     Rf_setAttrib(x, Rf_install("labels"), labels);
     Rf_setAttrib(x, Rf_install("label"), label);
     Rf_setAttrib(x, Rf_install("measurement"), measurement);
+    Rf_setAttrib(x, Rf_install("decimals"), decimals);
     Rf_setAttrib(x, Rf_install("date"), date);
     Rf_classgets(x, class_);
 

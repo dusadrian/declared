@@ -10,7 +10,7 @@
 
     dots <- list (...)
 
-    if (!isFALSE (dots$use_haven)) {
+    if (!isFALSE (dots$use_haven) && is.null (attr (x, "decimals"))) {
       if (eval (parse (text = "requireNamespace('haven', quietly = TRUE)"))) {
           return (eval (parse (
             text = "pillar::pillar_shaft(as.haven (x))"
@@ -69,7 +69,15 @@
 }
 
 `num_disp_components` <- function (x, pillar, width) {
-    display <- format (pillar, width)
+    if (!is.null (attr (x, "decimals"))) {
+        display <- format (
+            format_decimals_ (unclass (undeclare (x)), attr (x, "decimals")),
+            justify = "right"
+        )
+    }
+    else {
+        display <- format (pillar, width)
+    }
     # Sometimes there's an extra leading space from pillar
     display <- trim_ws_lhs (display)
     # exponent notation formatting hinders stripping white space in NAs

@@ -16,6 +16,7 @@ declared(
   na_range = NULL,
   label = NULL,
   measurement = NULL,
+  decimals = NULL,
   llevels = FALSE,
   ...
 )
@@ -43,6 +44,9 @@ open ended}
 \item{label}{A short, human-readable description of the vector}
 
 \item{measurement}{Optional, user specified measurement level}
+
+\item{decimals}{Optional, maximum number of decimal places used for display
+only}
 
 \item{llevels}{Logical, when \code{x} is a factor only use those levels that have
 labels}

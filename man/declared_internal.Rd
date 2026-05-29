@@ -35,6 +35,7 @@ direct_declared(
   labels = NULL,
   label = NULL,
   measurement = NULL,
+  decimals = NULL,
   date = inherits(x, "Date")
 )
 
