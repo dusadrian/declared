@@ -1,8 +1,10 @@
 Version 0.27
-    o New function w_measures() to allow for multiple summaries
     o Moved missing values frequencies in the attributes, for functions
       wsummary() and w_table()
     o Fixed bug interpreting a multi-byte character value as missing
+    o New function w_measures() to allow for multiple summaries
+    o New optional argument "decimals" in function declared(), to assist
+      in values display
 
 Version 0.26
     o Weighted functions now have a default "w*" naming, with "w_*" still
