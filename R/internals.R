@@ -1027,3 +1027,99 @@ check_date <- function (x) {
     }
     return (x)
 }
+
+
+`xtfrm_declared` <- function (x, decreasing = FALSE, na.last = TRUE, empty.last = na.last) {
+    na_index <- attr (x, "na_index")
+    na_declared <- logical (length (x))
+    na_declared[na_index] <- TRUE
+    na_empty <- is.empty (x)
+    valid <- !is.na (x)
+
+    z <- numeric (length (x))
+
+    if (is.na (na.last)) {
+        z[na_declared | na_empty] <- NA
+        if (any (valid)) {
+            val <- undeclare (x, drop = TRUE)
+            r_v <- xtfrm (val)
+            r_v <- r_v - min (r_v[valid]) + 1
+            z[valid] <- r_v[valid]
+        }
+        return (z)
+    }
+
+    if (any (valid)) {
+        val <- undeclare (x, drop = TRUE)
+        r_v <- xtfrm (val)
+        r_v <- r_v - min (r_v[valid]) + 1
+        z[valid] <- r_v[valid]
+    }
+
+    if (any (na_declared)) {
+        nms <- names (na_index)
+        if (possibleNumeric_ (nms)) {
+            nms <- asNumeric_ (nms)
+        }
+        r_m_vals <- xtfrm (nms)
+        r_m_vals <- r_m_vals - min (r_m_vals) + 1
+        z[na_index] <- r_m_vals
+    }
+
+    if (any (na_empty)) {
+        z[na_empty] <- 1
+    }
+
+    if (isTRUE (na.last)) {
+        if (isTRUE (empty.last)) {
+            g_v <- 1
+            g_m <- 2
+            g_e <- 3
+        }
+        else {
+            g_v <- 1
+            g_e <- 2
+            g_m <- 3
+        }
+    }
+    else {
+        if (isTRUE (empty.last)) {
+            g_m <- 1
+            g_e <- 2
+            g_v <- 3
+        }
+        else {
+            g_e <- 1
+            g_m <- 2
+            g_v <- 3
+        }
+    }
+
+    shift <- 10 + length (x)
+
+    if (isFALSE (decreasing)) {
+        if (any (valid)) {
+            z[valid] <- z[valid] + (g_v - 1) * shift
+        }
+        if (any (na_declared)) {
+            z[na_declared] <- z[na_declared] + (g_m - 1) * shift
+        }
+        if (any (na_empty)) {
+            z[na_empty] <- z[na_empty] + (g_e - 1) * shift
+        }
+    }
+    else {
+        if (any (valid)) {
+            z[valid] <- z[valid] + (3 - g_v) * shift
+        }
+        if (any (na_declared)) {
+            z[na_declared] <- z[na_declared] + (3 - g_m) * shift
+        }
+        if (any (na_empty)) {
+            z[na_empty] <- z[na_empty] + (3 - g_e) * shift
+        }
+    }
+
+    return (z)
+}
+

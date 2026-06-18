@@ -409,6 +409,28 @@
 
             method <- match.arg (method)
 
+            has_declared <- any (vapply (z, is.declared, logical (1L)))
+            if (has_declared && length (z) > 1L) {
+                z <- lapply (z, function (x) {
+                    if (is.declared (x)) {
+                        return (xtfrm_declared (
+                            x,
+                            decreasing = decreasing,
+                            na.last = na.last,
+                            empty.last = empty.last
+                        ))
+                    }
+                    else if (is.object (x)) {
+                        return (as.vector (xtfrm (x)))
+                    }
+                    else {
+                        return (x)
+                    }
+                })
+                return (do.call ("order", c (z, list (na.last = na.last,
+                    decreasing = decreasing, method = method))))
+            }
+
             if (any (vapply (z, function (x) {
                     is.object(x) && !is.declared (x)
                 }, logical (1L)))) {

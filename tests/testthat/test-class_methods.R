@@ -401,3 +401,47 @@ test_that("tests have the same output", {
   expect_snapshot(Mod(x))
   expect_snapshot(Re(x))
 })
+
+
+test_that("anyDuplicated.declared works correctly", {
+  x <- declared (c (-92, 1:5, NA, -91), na_values = c (-92, -91))
+  expect_equal (anyDuplicated (x), 0L)
+
+  x_dup <- declared (c (-92, 1:5, NA, -91, 3, -92), na_values = c (-92, -91))
+  expect_equal (anyDuplicated (x_dup), 9L)
+})
+
+test_that("order() with multiple keys works with declared vectors", {
+  x1 <- declared (c (1, 1, -2, -1), na_values = c (-1, -2))
+  x2 <- c (4, 3, 2, 1)
+  expect_equal (order (x1, x2), c (2, 1, 3, 4))
+  expect_equal (order (x1, x2, decreasing = TRUE), c (1, 2, 4, 3))
+})
+
+test_that("rep.declared works correctly", {
+  x <- declared (c (1:3, -1), na_values = -1, labels = c (Good = 1, DK = -1))
+  rx <- rep (x, times = 2)
+  expect_true (inherits (rx, "declared"))
+  expect_equal (attr (rx, "na_values"), -1)
+  expect_equal (attr (rx, "na_index"), c ("-1" = 4, "-1" = 8))
+  expect_equal (labels (rx), labels (x))
+})
+
+test_that("as.Date.declared works correctly", {
+  x <- declared (c (19700, 19701, -1), na_values = -1, labels = c (DK = -1))
+  dx <- as.Date (x, origin = "1970-01-01")
+  expect_true (inherits (dx, "declared"))
+  expect_true (inherits (dx, "Date"))
+  expect_equal (attr (dx, "na_values"), -1)
+  expect_equal (attr (dx, "na_index"), c ("-1" = 3))
+})
+
+test_that("hyperbolic functions on declared vectors work correctly", {
+  x <- declared (c (1, 2, -1), na_values = -1)
+  expect_equal (cosh (x), c (cosh (1), cosh (2), NA_real_))
+  
+  xdate <- declared (as.Date (c (19967:19970, -1)), labels = c (DK = -1), na_values = -1)
+  expect_error (cosh (xdate))
+  expect_error (sinh (xdate))
+})
+

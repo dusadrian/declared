@@ -857,7 +857,87 @@ if (!missing(e2)) {
 }
 
 
+#' @export
+`anyDuplicated.declared` <- function (x, incomparables = FALSE, ...) {
+  x <- unclass (undeclare (x))
+  return (anyDuplicated (x, incomparables = incomparables, ...))
+}
+
+#' @export
+`rep.declared` <- function (x, ...) {
+  attrx <- attributes (x)
+  rep_val <- rep (undeclare (x, drop = TRUE), ...)
+  return (
+    declared (
+      rep_val,
+      labels = attrx$labels,
+      na_values = attrx$na_values,
+      na_range = attrx$na_range,
+      label = attrx[["label"]],
+      decimals = attrx$decimals
+    )
+  )
+}
+
+#' @export
+`as.Date.declared` <- function (x, ...) {
+  attrx <- attributes (x)
+  date_vals <- as.Date (undeclare (x, drop = TRUE), ...)
+  return (
+    declared (
+      date_vals,
+      labels = attrx$labels,
+      na_values = attrx$na_values,
+      na_range = attrx$na_range,
+      label = attrx[["label"]],
+      decimals = attrx$decimals
+    )
+  )
+}
+
+#' @export
+`xtfrm.declared` <- function (x) {
+  return (xtfrm_declared (x))
+}
+
+#' @export
+`cosh.declared` <- function (x) {
+  x <- check_date (x)
+  return (.Primitive ("cosh")(x))
+}
+
+#' @export
+`sinh.declared` <- function (x) {
+  x <- check_date (x)
+  return (.Primitive ("sinh")(x))
+}
+
+#' @export
+`tanh.declared` <- function (x) {
+  x <- check_date (x)
+  return (.Primitive ("tanh")(x))
+}
+
+#' @export
+`acosh.declared` <- function (x) {
+  x <- check_date (x)
+  return (.Primitive ("acosh")(x))
+}
+
+#' @export
+`asinh.declared` <- function (x) {
+  x <- check_date (x)
+  return (.Primitive ("asinh")(x))
+}
+
+#' @export
+`atanh.declared` <- function (x) {
+  x <- check_date (x)
+  return (.Primitive ("atanh")(x))
+}
+
+
 # TODO:
-# anyDuplicated () ?
 # cut() ?
 # diff() ?
+
