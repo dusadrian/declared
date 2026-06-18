@@ -824,7 +824,37 @@ if (!missing(e2)) {
   .Primitive ("Re")(z)
 }
 
+#' @export
+`format.declared` <- function (x, ..., justify = "none") {
+  if (any (is.na (x)) || !is.null (attr (x, "decimals", exact = TRUE))) {
+    dots <- list (...)
+    digits <- if (!is.null (dots$digits)) dots$digits else getOption ("digits")
+    return (format_declared (x, digits = digits))
+  }
 
+  class (x) <- setdiff (class (x), "declared")
+  return (format (x, ..., justify = justify))
+}
+
+#' @export
+`Summary.declared` <- function (..., na.rm = FALSE) {
+  dots <- lapply (list (...), function (x) {
+    if (inherits (x, "declared")) {
+      na_index <- attr (x, "na_index")
+      if (!is.null (na_index)) {
+        x <- x[-na_index]
+      }
+      xdate <- isTRUE (attr (x, "date"))
+      attributes (x) <- NULL
+      if (xdate) {
+        x <- as.Date (x)
+      }
+    }
+    return (x)
+  })
+
+  return (do.call (.Generic, c (dots, na.rm = na.rm)))
+}
 
 
 # TODO:
