@@ -30,7 +30,8 @@ typedef union {
 SEXP _directDeclared(SEXP x, SEXP na_index, SEXP na_values, SEXP na_range,
                      SEXP labels, SEXP label, SEXP measurement, SEXP decimals,
                      SEXP date, SEXP class_) {
-    int nprotect = 0;
+    int nprotect = 1;
+    x = PROTECT(x);
 
     if (MAYBE_SHARED(x)) {
         x = PROTECT(Rf_duplicate(x));
