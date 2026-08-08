@@ -1,3 +1,22 @@
+# Version 0.27
+    o Moved missing values frequencies in the attributes, for functions
+      wsummary() and wtable()
+    o Fixed bug interpreting a multi-byte character value as missing
+    o New function wmeasures() to allow for multiple summaries
+    o New optional argument "decimals" in function declared(), to assist
+      in values display
+
+# Version 0.26
+    o Weighted functions now have a default "w*" naming, with "w_*" still
+      available as an alias, for backward compatibility
+    o Changed default for argument "values" in function wtable(), now TRUE
+    o Tables of frequencies now print the values to the left of the labels
+    o Extended weighted.mean() for objects of class "declared"
+    o Declared tables of frequencies now play nicely with dotchart()
+    o Improved internal function to check measurement levels
+    o Removed argument "margin" from function wtable()
+    o New internal function direct_declared()
+
 # Version 0.25
     o Adapted class methods for declared objects with "`Date`" inputs
     o Improved function `sum()` for declared objects

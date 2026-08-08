@@ -1,8 +1,8 @@
 Version 0.27
     o Moved missing values frequencies in the attributes, for functions
-      wsummary() and w_table()
+      wsummary() and wtable()
     o Fixed bug interpreting a multi-byte character value as missing
-    o New function w_measures() to allow for multiple summaries
+    o New function wmeasures() to allow for multiple summaries
     o New optional argument "decimals" in function declared(), to assist
       in values display
 

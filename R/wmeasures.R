@@ -181,9 +181,3 @@
 
     return (do.call (fun, arguments))
 }
-
-#' @rdname weighted
-#' @export
-`w_measures` <- function (...) {
-    wmeasures(...)
-}

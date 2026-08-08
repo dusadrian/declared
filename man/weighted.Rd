@@ -7,7 +7,6 @@
 \alias{wfivenum}
 \alias{wmean}
 \alias{wmeasures}
-\alias{w_measures}
 \alias{wmedian}
 \alias{wmode}
 \alias{wquantile}
@@ -32,8 +31,6 @@ wmeasures(
   na.rm = TRUE,
   ...
 )
-
-w_measures(...)
 
 wmedian(x, wt = NULL, na.rm = TRUE, ...)
 
