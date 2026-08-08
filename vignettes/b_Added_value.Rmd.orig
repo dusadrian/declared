@@ -8,15 +8,16 @@ vignette: >
   %\VignetteIndexEntry{b. Added value}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
-editor_options: 
-  markdown: 
+editor_options:
+  markdown:
     wrap: 80
 ---
 
 ```{r vignettesetup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  error = FALSE
 )
 library(haven)
 set.seed(12345)
@@ -189,7 +190,7 @@ as.factor(drop_na(x4))
 ```
 
 Converting the declared missing values to factor levels is something for which
-the function `undeclare()`{.R} proves useful, and switching between factors and 
+the function `undeclare()`{.R} proves useful, and switching between factors and
 declared objects, preserving the declared missing values, is now straightforward:
 
 ```{r}

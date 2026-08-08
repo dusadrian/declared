@@ -71,7 +71,7 @@
             "underline": false
         },
         "BaseN": {
-            "text-color": "#AD0000",
+            "text-color": "#111111",
             "background-color": null,
             "bold": false,
             "italic": false,
@@ -162,7 +162,7 @@
             "underline": false
         },
         "Float": {
-            "text-color": "#AD0000",
+            "text-color": "#111111",
             "background-color": null,
             "bold": false,
             "italic": false,
@@ -197,7 +197,7 @@
             "underline": false
         },
         "DecVal": {
-            "text-color": "#AD0000",
+            "text-color": "#111111",
             "background-color": null,
             "bold": false,
             "italic": false,

@@ -67,15 +67,15 @@ Most functions are designed to be as similar as possible, for instance,
 
 ``` r
 labels(x2) <- c("Does not know" = -92, "Not responded" = -91)
-#> Error: unable to find an inherited method for function 'labels<-' for signature 'x = "declared", value = "numeric"'
 x2
 #> <declared<numeric>[7]>
 #> [1]       1       2       3       4       5 NA(-91) NA(-91)
 #> Missing values: -91
 #>
 #> Labels:
-#>  value   label
-#>    -91 Missing
+#>  value         label
+#>    -92 Does not know
+#>    -91 Not responded
 ```
 
 The value `-92` is now properly labelled, and can further be declared missing.
@@ -94,8 +94,9 @@ x2
 #> Missing range:  [-95, -91]
 #>
 #> Labels:
-#>  value   label
-#>    -91 Missing
+#>  value         label
+#>    -92 Does not know
+#>    -91 Not responded
 ```
 
 To ease the smooth inter-operation with packages **haven** and **labelled**, the
@@ -129,8 +130,9 @@ xh
 #> Missing range:  [-95, -91]
 #>
 #> Labels:
-#>  value   label
-#>    -91 Missing
+#>  value         label
+#>    -92 Does not know
+#>    -91 Not responded
 
 as.declared(xh)
 #> <declared<numeric>[7]>
@@ -139,8 +141,9 @@ as.declared(xh)
 #> Missing range:  [-95, -91]
 #>
 #> Labels:
-#>  value   label
-#>    -91 Missing
+#>  value         label
+#>    -92 Does not know
+#>    -91 Not responded
 ```
 
 The missing values are properly formatted, even inside the base data frame:
@@ -174,8 +177,8 @@ tibble::as_tibble(dfm)
 #> 3 c       3
 #> 4 d       4
 #> 5 e       5
-#> 6 f     -91 (NA) [Missing]
-#> 7 g     -91 (NA) [Missing]
+#> 6 f     -91 (NA) [Not responded]
+#> 7 g     -91 (NA) [Not responded]
 ```
 
 Special challenges are associated with sorting and ordering the declared
@@ -369,8 +372,8 @@ x6 <- declared(
 
 x6
 #> <declared<character>[20]>
-#>  [1]    b     c  NA(z)    b  NA(z) NA(z)    b     a     c  NA(z) NA(z)    b     b     c
-#> [15]    b     c     b     b     a  NA(z)
+#>  [1]    b     c  NA(z)    b  NA(z) NA(z)    b     a     c  NA(z) NA(z)    b
+#> [13]    b     c     b     c     b     b     a  NA(z)
 #> Missing values: z
 #>
 #> Labels:

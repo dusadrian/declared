@@ -1,0 +1,35 @@
+code.sourceCode span.fu,
+code.sourceCode span.fu a,
+code.sourceCode span.kw,
+code.sourceCode span.kw a {
+  color: #af2020 !important;
+  font-weight: bold;
+}
+
+code.sourceCode span.va,
+code.sourceCode span.va a {
+  color: #111111 !important;
+}
+
+code.sourceCode span.st {
+  color: #006699 !important;
+}
+
+code.sourceCode span.cn {
+  color: #8f5902 !important;
+}
+
+code.sourceCode span.bn,
+code.sourceCode span.dv,
+code.sourceCode span.fl {
+  color: #111111 !important;
+}
+
+code.sourceCode span.op,
+code.sourceCode span.ot {
+  color: #5e5e5e !important;
+}
+
+code.sourceCode span.co {
+  color: #006699 !important;
+}

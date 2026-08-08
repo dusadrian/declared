@@ -65,3 +65,4 @@ reference:
       - w_mean
       - w_median
       - w_mode
+      - wIQR

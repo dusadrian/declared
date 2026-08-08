@@ -132,6 +132,48 @@ pre:not([class]) {
   background-color: #f7f7f7;
 }
 
+/* R-only highr palette; keep these colours in sync with declared.theme. */
+code .hl.kwd {
+  color: #af2020;
+  font-weight: bold;
+}
+
+code .hl.kwa {
+  color: #00769e;
+}
+
+code .hl.kwb {
+  color: #5e5e5e;
+}
+
+code .hl.opt {
+  color: #5e5e5e;
+}
+
+code .hl.kwc {
+  color: #609620;
+}
+
+code .hl.num {
+  color: #111111;
+}
+
+code .hl.cn {
+  color: #8f5902;
+}
+
+code .hl.sng {
+  color: #006699;
+}
+
+code .hl.com {
+  color: #006699;
+}
+
+code .hl.def {
+  color: #111111;
+}
+
 code {
   font-family: Consolas, Monaco, 'Courier New', monospace;
   font-size: 85%;

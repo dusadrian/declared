@@ -16,7 +16,8 @@ editor_options:
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  error = FALSE
 )
 ```
 
@@ -72,8 +73,11 @@ recognizing objects of class `"declared"`{.R}, additionally printing more
 detailed information:
 
 ```{r}
-wtable(dfm$Opinion, values = TRUE)
+wtable(dfm$Opinion)
 ```
+
+Values are printed by default for declared objects, so the underlying codes
+remain visible alongside their labels.
 
 The prefix `w`{.R} from the function name stands for "weighted", this being
 another example of functionality where the declared missing values play a
@@ -110,7 +114,7 @@ The updated frequency table, this time using the frequency weights, can be
 constructed by passing the weights to the argument `wt`{.R}:
 
 ```{r}
-with(dfm, wtable(Opinion, wt = fweight, values = TRUE))
+with(dfm, wtable(Opinion, wt = fweight))
 ```
 
 Except for the empty NA values, for which the weights cannot be applied, almost
@@ -120,19 +124,29 @@ as "missing" values, the declared ones can and should also be weighted, with a
 very useful result. Other versions of weighted frequencies do exist in R, but a
 custom one was needed to identify (and weight) the declared missing values.
 
-In the same spirit, many other similar functions are provided such as
-`wmean()`{.R}, `wvar()`{.R}, `wsd()`{.R} etc., and the list will likely grow
-in the future. They are similar to the base package counterparts, with a single
-difference: the argument `na.rm` is activated by default, with or without
-weighting. This is an informed decision about which users are alerted in the
-functions' respective help pages.
+In the same spirit, the package provides `wmean()`{.R}, `wmedian()`{.R},
+`wmode()`{.R}, `wvar()`{.R}, `wsd()`{.R}, `wquantile()`{.R}, `wIQR()`{.R},
+`wfivenum()`{.R}, `wstandardize()`{.R}, and `wsummary()`{.R}. Multiple measures
+for one or more variables can be requested together with `wmeasures()`{.R}:
+
+```{r}
+wmeasures(
+  dfm[c("Age", "Children")],
+  what = c("n", "mean", "sd"),
+  wt = dfm$fweight
+)
+```
+
+These functions are adapted to declared objects. For the functions that have
+an `na.rm` argument, declared missing values are automatically excluded and
+`na.rm` controls the treatment of empty missing values; see the individual help
+pages for their defaults.
 
 The package **declared** was built with the specific intention to provide a
 lightweight, zero dependency resource in the R ecosystem. It contains an already
 extensive, robust and ready to use functionality that duly takes into account
 the difference between empty and declared missing values.
 
-It extends base R and opens up data analysis possibilities without precedent. By
-providing generic classes for all its objects and functions, package
-**declared** is easily extensible to any type of object, for both creation and
-coercion to class `"declared"`{.R}.
+It extends base R and opens up new data analysis possibilities. Its generic
+constructors and coercion helpers allow other packages to add methods for new
+object types, both for creation and coercion to class `"declared"`{.R}.

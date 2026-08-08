@@ -19,3 +19,4 @@ instructiuni.txt
 ^\.positai$
 ^\.claude$
 ^tests/testthat/test-admisc-sync\.R$
+^vignettes/precompile\.R$
