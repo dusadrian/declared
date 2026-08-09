@@ -34,7 +34,6 @@ completely missing with no reason.
 ## Examples
 
 ``` r
-
 x <- declared(
     c(1:2, -91),
     labels = c(Good = 1, Bad = 2, Missing = -91),

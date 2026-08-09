@@ -52,8 +52,9 @@ attributes.
 
 ## See also
 
-Other labelling functions: [`labels`](labels.md),
-[`measurement()`](measurement.md)
+Other labelling functions:
+[`labels`](https://dusadrian.github.io/declared/reference/labels.md),
+[`measurement()`](https://dusadrian.github.io/declared/reference/measurement.md)
 
 ## Examples
 

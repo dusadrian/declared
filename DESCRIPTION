@@ -10,7 +10,8 @@ Authors@R:
             comment = c(ORCID = "0000-0002-3525-9253")
         )
     )
-URL: https://github.com/dusadrian/declared
+URL: https://dusadrian.github.io/declared/,
+    https://github.com/dusadrian/declared
 BugReports: https://github.com/dusadrian/declared/issues
 Description: A zero dependency package containing functions to declare labels
     and missing values, coupled with associated functions to create (weighted)

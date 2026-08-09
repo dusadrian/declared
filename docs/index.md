@@ -18,14 +18,12 @@ The development version of package `declared` can be installed using
 this command:
 
 ``` r
-
 install.packages("declared", repos = "dusadrian.r-universe.dev")
 ```
 
 ## Example
 
 ``` r
-
 library(haven)
 x1 <- labelled_spss(
   x = c(1:5, -91),
@@ -54,7 +52,6 @@ interprets certain “missing” values `NA` codes as existing, declared
 missing values.
 
 ``` r
-
 library(declared)
 x2 <- declared(
   x = c(1:5, -91),

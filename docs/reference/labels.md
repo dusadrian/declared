@@ -45,8 +45,9 @@ default), to retrieve the value labels prefixed with their values, and
 
 ## See also
 
-Other labelling functions: [`drop_undeclare`](drop_undeclare.md),
-[`measurement()`](measurement.md)
+Other labelling functions:
+[`drop_undeclare`](https://dusadrian.github.io/declared/reference/drop_undeclare.md),
+[`measurement()`](https://dusadrian.github.io/declared/reference/measurement.md)
 
 ## Examples
 

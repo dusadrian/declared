@@ -46,8 +46,9 @@ and the words `"metric"` and `"numeric"` are treated as synonyms for
 
 ## See also
 
-Other labelling functions: [`drop_undeclare`](drop_undeclare.md),
-[`labels`](labels.md)
+Other labelling functions:
+[`drop_undeclare`](https://dusadrian.github.io/declared/reference/drop_undeclare.md),
+[`labels`](https://dusadrian.github.io/declared/reference/labels.md)
 
 ## Examples
 

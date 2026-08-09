@@ -11,12 +11,12 @@ Source:
 [`DESCRIPTION`](https://github.com/dusadrian/declared/blob/HEAD/DESCRIPTION)
 
 Dusa A (2026). *declared: Functions for Declared Missing Values*. R
-package version 0.27, <https://github.com/dusadrian/declared>.
+package version 0.27, <https://dusadrian.github.io/declared/>.
 
     @Manual{,
       title = {declared: Functions for Declared Missing Values},
       author = {Adrian Dusa},
       year = {2026},
       note = {R package version 0.27},
-      url = {https://github.com/dusadrian/declared},
+      url = {https://dusadrian.github.io/declared/},
     }

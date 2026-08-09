@@ -25,13 +25,13 @@ A labelled vector of class "haven_labelled_spss".
 ## Details
 
 This is a function that reverses the process of
-[`as.declared()`](declared.md), making a round trip between `declared`
-and `haven_labelled_spss` classes.
+[`as.declared()`](https://dusadrian.github.io/declared/reference/declared.md),
+making a round trip between `declared` and `haven_labelled_spss`
+classes.
 
 ## Examples
 
 ``` r
-
 x <- declared(
     c(1:5, -1),
     labels = c(Good = 1, Bad = 5, DK = -1),

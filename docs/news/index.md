@@ -7,6 +7,7 @@ o Moved missing values frequencies in the attributes, for functions
   wsummary() and wtable()
 o Fixed bug interpreting a multi-byte character value as missing
 o New function wmeasures() to allow for multiple summaries
+o New function valid_na_index() to validate the na_index correctness
 o New optional argument "decimals" in function declared(), to assist
   in values display
 ```

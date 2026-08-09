@@ -11,11 +11,14 @@ dependency footprint. Easy interoperability with the
 interface to the [DataTables](https://datatables.net/) JavaScript
 library–is a development intention.
 
-- [a. Motivation for the declared package](a_Declared_solution.md):
-- [b. Added value](b_Added_value.md):
+- [a. Motivation for the declared
+  package](https://dusadrian.github.io/declared/articles/a_Declared_solution.md):
+- [b. Added
+  value](https://dusadrian.github.io/declared/articles/b_Added_value.md):
 
 ### Working with declared
 
 Case studies with arithmetic methods
 
-- [c. Weighting (declared) values](c_Weighting.md):
+- [c. Weighting (declared)
+  values](https://dusadrian.github.io/declared/articles/c_Weighting.md):

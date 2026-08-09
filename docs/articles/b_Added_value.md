@@ -1,7 +1,6 @@
 # b. Added value
 
 ``` r
-
 library(declared)
 
 x2 <- declared(
@@ -20,7 +19,6 @@ For instance, the declared missing values can be compared against both
 the original values and their labels:
 
 ``` r
-
 x2 == -91
 #> [1] FALSE FALSE FALSE FALSE FALSE  TRUE
 x2 == "Missing"
@@ -34,7 +32,6 @@ possibilities.
 Combining on this type of vector creates an object of the same class:
 
 ``` r
-
 x2 <- c(x2, -91)
 x2
 #> <declared<numeric>[7]>
@@ -50,7 +47,6 @@ Most functions are designed to be as similar as possible, for instance,
 `labels``()` to retrieve or add/change value labels:
 
 ``` r
-
 labels(x2) <- c("Does not know" = -92, "Not responded" = -91)
 x2
 #> <declared<numeric>[7]>
@@ -69,7 +65,6 @@ function `declared``()`, due to the separate functions
 `missing_values``()` and `missing_range``()`:
 
 ``` r
-
 missing_values(x2) <- c(-91, -92)
 missing_range(x2) <- c(-91, -95)
 x2
@@ -97,7 +92,6 @@ accordingly. Activating the argument `drop` eliminates all classes and
 attributes, returning a regular R object:
 
 ``` r
-
 undeclare(x2, drop = TRUE)
 #> [1]   1   2   3   4   5 -91 -91
 ```
@@ -107,7 +101,6 @@ The function `as.haven``()` coerces the resulting object to the class
 process:
 
 ``` r
-
 xh <- as.haven(x2)
 xh
 #> <labelled_spss<double>[7]>
@@ -136,7 +129,6 @@ The missing values are properly formatted, even inside the base data
 frame:
 
 ``` r
-
 dfm <- data.frame(x1 = letters[1:7], x2)
 dfm
 #>   x1      x2
@@ -154,7 +146,6 @@ If users prefer a tibble instead of a data frame, the objects of class
 package **haven**:
 
 ``` r
-
 tibble::as_tibble(dfm)
 #> # A tibble: 7 × 2
 #>   x1    x2
@@ -172,7 +163,6 @@ Special challenges are associated with sorting and ordering the declared
 objects, where not all missing values are treated the same.
 
 ``` r
-
 x3 <- declared(
   x = c(1:5, -91, NA, -92, -91),
   na_value = c(-92, -91)
@@ -187,7 +177,6 @@ Sorting in decreasing order applies the same order to the missing
 values:
 
 ``` r
-
 sort(x3, na.last = TRUE, decreasing = TRUE)
 #> <declared<numeric>[9]>
 #> [1]       5       4       3       2       1 NA(-91) NA(-91) NA(-92)      NA
@@ -199,7 +188,6 @@ This custom function benefits from an additional argument `empty.last`
 the missing values:
 
 ``` r
-
 sort(x3, na.last = TRUE, decreasing = TRUE, empty.last = FALSE)
 #> <declared<numeric>[9]>
 #> [1]       5       4       3       2       1      NA NA(-91) NA(-91) NA(-92)
@@ -219,7 +207,6 @@ variables. For the latter, R provides a special type of object called
 for instance political orientation:
 
 ``` r
-
 x4 <- declared(
   x = c(1:3, -91),
   labels = c("Left" = 1, "Middle" = 2, "Right" = 3, "Apolitic" = -91),
@@ -243,7 +230,6 @@ x4
 Such a variable could in principle be constructed directly as a factor:
 
 ``` r
-
 x5 <- factor(
   c("Left", "Middle", "Right", "Apolitic"),
   levels = c("Left", "Middle", "Right", "Apolitic")
@@ -262,7 +248,6 @@ coercing to factors defaults to dropping the declared missing values
 because of the default value of the argument `drop_na`:
 
 ``` r
-
 as.factor(x4)
 #> [1] Left   Middle Right  <NA>
 #> Levels: Left Middle Right
@@ -279,7 +264,6 @@ factors and declared objects, preserving the declared missing values, is
 now straightforward:
 
 ``` r
-
 as.factor(undeclare(x4))
 #> [1] Left     Middle   Right    Apolitic
 #> Levels: Apolitic Left Middle Right
@@ -295,7 +279,6 @@ If the original order is important, the argument `drop_na` can be
 deactivated:
 
 ``` r
-
 as.factor(x4, drop_na = FALSE)
 #> [1] Left     Middle   Right    Apolitic
 #> Levels: Left Middle Right Apolitic
@@ -305,7 +288,6 @@ The reverse process is also possible, to convert / coerce factors to
 declared labelled objects:
 
 ``` r
-
 as.declared(x5, na_values = 4)
 #> <declared<numeric>[4]>
 #> [1]     1     2     3 NA(4)
@@ -325,7 +307,6 @@ categories in a similar way to factors, via a dedicated class method for
 declared objects:
 
 ``` r
-
 as.character(x4)
 #> [1] "Left"   "Middle" "Right"  NA
 ```
@@ -335,7 +316,6 @@ values by default, something that can be prevented by either of the
 following two commands:
 
 ``` r
-
 as.character(undeclare(x4))
 #> [1] "Left"     "Middle"   "Right"    "Apolitic"
 
@@ -349,7 +329,6 @@ at all mandatory, as the declared objects are also able to ingest
 character vectors:
 
 ``` r
-
 x6 <- declared(
   x = sample(
     c("a", "b", "c", "z"),
