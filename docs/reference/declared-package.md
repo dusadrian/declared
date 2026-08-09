@@ -15,6 +15,8 @@ these packages, while offering an alternative in the objects of class
 
 Useful links:
 
+- <https://dusadrian.github.io/declared/>
+
 - <https://github.com/dusadrian/declared>
 
 - Report bugs at <https://github.com/dusadrian/declared/issues>

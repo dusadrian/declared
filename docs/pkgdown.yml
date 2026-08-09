@@ -1,11 +1,11 @@
-pandoc: 3.6.2
+pandoc: 3.8.3
 pkgdown: 2.2.1
 pkgdown_sha: ~
 articles:
   a_Declared_solution: a_Declared_solution.html
   b_Added_value: b_Added_value.html
   c_Weighting: c_Weighting.html
-last_built: 2026-08-09T07:45Z
+last_built: 2026-08-09T08:18Z
 urls:
   reference: https://dusadrian.github.io/declared/reference
   article: https://dusadrian.github.io/declared/articles

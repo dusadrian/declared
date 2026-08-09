@@ -3,6 +3,7 @@
 For the examples in this vignette, the following data frame is created:
 
 ``` r
+
 library(declared)
 
 n <- 1234
@@ -35,6 +36,7 @@ missing values are the tables of frequencies. The base function
 by using the `useNA` argument:
 
 ``` r
+
 table(dfm$Opinion, useNA = "ifany")
 #>
 #>  Very bad       Bad   Neither      Good Very good      <NA>
@@ -47,6 +49,7 @@ this can be improved through a custom built coercion to the base
 `factor` class:
 
 ``` r
+
 table(as.factor(undeclare(dfm$Opinion)), useNA = "ifany")
 #>
 #> Don't know   Very bad        Bad    Neither       Good  Very good       <NA>
@@ -58,6 +61,7 @@ recognizing objects of class `"declared"`, additionally printing more
 detailed information:
 
 ``` r
+
 wtable(dfm$Opinion)
 #>
 #>                 fre    rel   per   vld   cpd
@@ -95,6 +99,7 @@ theoretical distribution by residential areas differentiating between
 urban and rural settlements.
 
 ``` r
+
 # Observed proportions
 op <- with(dfm, proportions(table(Gender, Area)))
 
@@ -113,6 +118,7 @@ The updated frequency table, this time using the frequency weights, can
 be constructed by passing the weights to the argument `wt`:
 
 ``` r
+
 with(dfm, wtable(Opinion, wt = fweight))
 #>
 #>                 fre    rel   per   vld   cpd
@@ -144,6 +150,7 @@ measures for one or more variables can be requested together with
 `wmeasures``()`:
 
 ``` r
+
 wmeasures(
   dfm[c("Age", "Children")],
   what = c("n", "mean", "sd"),

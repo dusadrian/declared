@@ -8,6 +8,8 @@ o Moved missing values frequencies in the attributes, for functions
 o Fixed bug interpreting a multi-byte character value as missing
 o New function wmeasures() to allow for multiple summaries
 o New function valid_na_index() to validate the na_index correctness
+o Discard inconsistent declared missing metadata before it can affect
+  formatting, summaries, conversions or data-frame operations
 o New optional argument "decimals" in function declared(), to assist
   in values display
 ```

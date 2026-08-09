@@ -1,6 +1,7 @@
 # a. Motivation for the declared package
 
 ``` r
+
 library(declared)
 ```
 
@@ -18,6 +19,7 @@ The following minimal example (adapted from the vignette in package
 **haven**) illustrates the situation:
 
 ``` r
+
 library(haven)
 x1 <- labelled_spss(
   x = c(1:5, -91),
@@ -29,6 +31,7 @@ x1 <- labelled_spss(
 The printed objects from this package nicely display some properties:
 
 ``` r
+
 x1
 #> <labelled_spss<double>[6]>
 #> [1]   1   2   3   4   5 -91
@@ -51,6 +54,7 @@ household, but for instance, it could have meant the respondent did not
 want to respond. It is properly identified as missing with:
 
 ``` r
+
 is.na(x1)
 #> [1] FALSE FALSE FALSE FALSE FALSE  TRUE
 ```
@@ -60,6 +64,7 @@ that value `-91` would not play any role in the calculations (since it
 should be *missing*). However:
 
 ``` r
+
 mean(x1)
 #> [1] -12.66667
 ```
@@ -73,6 +78,7 @@ A solution to this problem is offered by package **labelled**, which has
 a function called `user_na_to_na``()`:
 
 ``` r
+
 library(labelled)
 mean(
   user_na_to_na(x1),
@@ -85,6 +91,7 @@ A similar behavior is observed into another package **memisc**, that
 also deals with labels and missing values:
 
 ``` r
+
 library(memisc)
 memx <- c(1:5, -91)
 labels(memx) <- c("Missing" = -91)
@@ -99,6 +106,7 @@ a role in calculating the mean. It has to be coerced to numeric to
 really convert that value to `NA`:
 
 ``` r
+
 mean(
   as.numeric(memx),
   na.rm = TRUE
@@ -127,6 +135,7 @@ object, where declared missing values are stored (hence interpreted as)
 regular `NA` missing values in R.
 
 ``` r
+
 library(declared)
 x2 <- declared(
   x = c(1:5, -91),
@@ -150,6 +159,7 @@ regular `NA` values since they are already stored as regular `NA`
 values. The average value is calculated simply as follows:
 
 ``` r
+
 mean(x2)
 #> [1] 3
 ```
@@ -177,6 +187,7 @@ The genuinely problematic values are the empty `NA` values, and the
 custom class method still allows identifying such values if they exist:
 
 ``` r
+
 mean(c(x2, NA))
 #> [1] NA
 mean(c(x2, NA), na.rm = TRUE)
@@ -189,6 +200,7 @@ function `is.na``()`, as well as all related functions such as
 and declared missing values:
 
 ``` r
+
 is.na(c(x2, NA))
 #> [1] FALSE FALSE FALSE FALSE FALSE  TRUE  TRUE
 ```
@@ -197,6 +209,7 @@ To overcome this situation, package **declared** complementary provides
 an additional function to account for the difference:
 
 ``` r
+
 is.empty(c(x2, NA))
 #> [1] FALSE FALSE FALSE FALSE FALSE FALSE  TRUE
 ```
@@ -205,6 +218,7 @@ All missing values, empty and declared, play well with the NA oriented,
 base functions such as `na.omit``()` or `na.exclude``()`:
 
 ``` r
+
 na.omit(x2)
 #> <declared<numeric>[5]>
 #> [1] 1 2 3 4 5
