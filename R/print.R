@@ -587,17 +587,7 @@
     ndec <- numdec_ (x, each = TRUE, maxdec = digits)
     maxdec <- max (ndec, na.rm = TRUE)
 
-    result[ok] <- vapply (
-        seq_along (x),
-        function (i) {
-            value <- sprintf (paste0 ("%.", ndec[i], "f"), x[i])
-            if (maxdec > ndec[i]) {
-                value <- paste0 (value, paste (rep (" ", maxdec - ndec[i]), collapse = ""))
-            }
-            value
-        },
-        character (1)
-    )
+    result[ok] <- sprintf (paste0 ("%.", maxdec, "f"), x)
 
     return (result)
 }

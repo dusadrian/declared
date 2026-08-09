@@ -115,7 +115,7 @@ test_that("wmeasures() works with custom functions", {
 })
 
 
-test_that("wmeasures() prints each value with its own decimals", {
+test_that("wmeasures() uses consistent decimals within each column", {
   y <- declared (
     c(1, 1, 2, 3, -1),
     labels = c(Good = 1, Bad = 3, DK = -1),
@@ -138,6 +138,31 @@ test_that("wmeasures() prints each value with its own decimals", {
 
   expect_true (any (grepl ("A", output)))
   expect_false (any (grepl ("5\\.000", output)))
+  expect_true (any (grepl ("6\\.00", output)))
+
+  summaries <- matrix (
+    c(
+      235.14, 136.259, 97.604, 72.271,
+      206.971, 108.771, 78.695, 112.077,
+      50, 147, 250, 284,
+      0, 0, 4, 5
+    ),
+    nrow = 4,
+    dimnames = list (
+      c(
+        "Very interested",
+        "Quite interested",
+        "Hardly interested",
+        "Not at all interested"
+      ),
+      c("mean", "sd", "n", "NA")
+    )
+  )
+  class (summaries) <- c("wmeasures", class (summaries))
+  output <- capture.output (print (summaries, startend = FALSE))
+
+  expect_true (any (grepl ("235\\.140", output)))
+  expect_false (any (grepl ("50\\.000", output)))
 })
 
 
