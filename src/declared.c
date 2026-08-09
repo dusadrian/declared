@@ -54,6 +54,69 @@ SEXP _directDeclared(SEXP x, SEXP na_index, SEXP na_values, SEXP na_range,
 
 
 
+static Rboolean isNAAt(SEXP x, R_xlen_t index) {
+    switch (TYPEOF(x)) {
+        case LGLSXP:
+            return LOGICAL(x)[index] == NA_LOGICAL;
+        case INTSXP:
+            return INTEGER(x)[index] == NA_INTEGER;
+        case REALSXP:
+            return ISNAN(REAL(x)[index]);
+        case CPLXSXP:
+            return ISNAN(COMPLEX(x)[index].r) || ISNAN(COMPLEX(x)[index].i);
+        case STRSXP:
+            return STRING_ELT(x, index) == NA_STRING;
+        default:
+            return FALSE;
+    }
+}
+
+
+
+SEXP _allIndexedNA(SEXP x, SEXP na_index) {
+    R_xlen_t length_x = XLENGTH(x);
+    R_xlen_t length_index = XLENGTH(na_index);
+
+    if (TYPEOF(na_index) == INTSXP) {
+        for (R_xlen_t i = 0; i < length_index; ++i) {
+            int position = INTEGER(na_index)[i];
+
+            if (
+                position == NA_INTEGER || position < 1 ||
+                position > length_x || !isNAAt(x, position - 1)
+            ) {
+                return Rf_ScalarLogical(FALSE);
+            }
+        }
+    }
+    else if (TYPEOF(na_index) == REALSXP) {
+        for (R_xlen_t i = 0; i < length_index; ++i) {
+            double position = REAL(na_index)[i];
+
+            if (
+                !R_FINITE(position) || position < 1 || position > length_x
+            ) {
+                return Rf_ScalarLogical(FALSE);
+            }
+
+            R_xlen_t index = (R_xlen_t) position - 1;
+
+            if (
+                position != (double) (index + 1) || !isNAAt(x, index)
+            ) {
+                return Rf_ScalarLogical(FALSE);
+            }
+        }
+    }
+    else {
+        return Rf_ScalarLogical(FALSE);
+    }
+
+    return Rf_ScalarLogical(TRUE);
+}
+
+
+
 #ifdef WORDS_BIGENDIAN
 // First two bytes are sign & exponent
 // Last four bytes (that is, 32 bits) are 1954
