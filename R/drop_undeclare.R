@@ -60,6 +60,12 @@
   na_index <- attr (x, "na_index")
   attrx <- attributes (x)
 
+  if (!valid_na_index (x)) {
+    # A positional index is either wholly trustworthy or not. Restoring only
+    # some of its values could turn ordinary NAs into declared missing values.
+    na_index <- NULL
+  }
+
   # this is necessary to replace those values
   # (because of the "[<-.declared" method)
   attributes (x) <- NULL # or x <- unclass (x), but I find this cleaner
