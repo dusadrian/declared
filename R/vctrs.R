@@ -26,6 +26,7 @@
 }
 
 `vec_restore.declared` <- function(x, to, ...) {
+    to <- sanitize_na_index_ (to)
     attrs <- attributes(to)
     todate <- isTRUE(attrs$date)
 

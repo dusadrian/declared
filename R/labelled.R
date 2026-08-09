@@ -3,6 +3,7 @@
 }
 
 `na_values<-.declared` <- function (x, value) {
+    x <- sanitize_na_index_ (x)
     declared (
         x = undeclare (x),
         labels = attr (x, "labels", exact = TRUE),
@@ -18,6 +19,7 @@
 }
 
 `na_range<-.declared` <- function (x, value) {
+    x <- sanitize_na_index_ (x)
     declared (
         x = undeclare (x),
         labels = attr (x, "labels", exact = TRUE),
@@ -221,6 +223,7 @@
 }
 
 `copy_labels.declared` <- function (from, to, .strict = TRUE) {
+    from <- sanitize_na_index_ (from)
     if (mode (from) != mode (to) & .strict) {
         stop (
             "`from` and `to` should be of same type",

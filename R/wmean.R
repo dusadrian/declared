@@ -25,6 +25,7 @@
     }
 
     if (inherits (x, "declared")) {
+        x <- sanitize_na_index_ (x)
         na_index <- attr (x, "na_index")
         if (!is.null (na_index)) {
             wt <- wt[-na_index]

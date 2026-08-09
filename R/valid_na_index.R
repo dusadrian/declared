@@ -33,3 +33,15 @@
     "_allIndexedNA", x, index, PACKAGE = "declared"
   ))
 }
+
+
+`sanitize_na_index_` <- function (x) {
+  if (is.atomic (x) && !valid_na_index (x)) {
+    # The positional map cannot be repaired selectively once it is stale.
+    attr (x, "na_index") <- NULL
+    attr (x, "na_values") <- NULL
+    attr (x, "na_range") <- NULL
+  }
+
+  return (x)
+}

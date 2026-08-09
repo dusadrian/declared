@@ -8,6 +8,7 @@
     show_labels = getOption ("declared.show_pillar_labels", TRUE),
     ...) {
 
+    x <- sanitize_na_index_ (x)
     dots <- list (...)
 
     if (!isFALSE (dots$use_haven) && is.null (attr (x, "decimals"))) {
@@ -121,6 +122,7 @@
 }
 
 `lbl_pillar_info` <- function (x) {
+    x <- sanitize_na_index_ (x)
     MIN_LBL_DISPLAY <- 6
     labels <- attr (x, "labels")
     if (length (labels) > 0) {

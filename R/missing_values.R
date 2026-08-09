@@ -51,6 +51,7 @@
 
 #' @export
 `missing_values.declared` <- function (x) {
+  x <- sanitize_na_index_ (x)
   attr (x, "na_values", exact = TRUE)
 }
 
@@ -78,6 +79,7 @@
 
 #' @export
 `missing_values<-.declared` <- function (x, value) {
+  x <- sanitize_na_index_ (x)
   declared (undeclare (x),
            labels = attr (x, "labels", exact = TRUE),
            na_values = value,

@@ -12,6 +12,8 @@ NULL
         stopError_ ("`x` has to be a vector.")
     }
 
+    x <- sanitize_na_index_ (x)
+
     if (inherits (x, "Date") || isTRUE (attr (x, "date"))) {
         class (x) <- "Date"
         out <- as.character (x)
@@ -51,6 +53,8 @@ NULL
     if (!is.declared (x)) {
         stopError_ ("`x` has to be a vector of class `declared`.")
     }
+
+    x <- sanitize_na_index_ (x)
 
     if (!identical (empty.last, NA)) {
         if (!(isTRUE (empty.last) | isFALSE (empty.last))) {
@@ -268,6 +272,10 @@ NULL
 
 `likely_measurement` <- function (x) {
 
+    if (inherits (x, "declared")) {
+        x <- sanitize_na_index_ (x)
+    }
+
     labels <- attr (x, "labels", exact = TRUE)
     na_values <- attr (x, "na_values", exact = TRUE)
     na_range <- attr (x, "na_range", exact = TRUE)
@@ -319,6 +327,10 @@ NULL
 `all_missing_values` <- function (
     x, na_values = NULL, na_range = NULL, labels = NULL
 ) {
+
+    if (inherits (x, "declared")) {
+        x <- sanitize_na_index_ (x)
+    }
 
     ##########
     # Arguments na_values, na_range and labels can either be provided
@@ -382,6 +394,10 @@ NULL
         stopError_ (
             "The input should be a declared / haven_labelled_spss vector."
         )
+    }
+
+    if (inherits (x, "declared")) {
+        x <- sanitize_na_index_ (x)
     }
 
     attrx <- attributes (x)
@@ -618,6 +634,7 @@ NULL
 
 `asNumeric_` <- function (x, levels = TRUE) {
     if (inherits (x, "declared")) {
+        x <- sanitize_na_index_ (x)
         na_index <- attr (x, "na_index")
         attributes (x) <- NULL
 
@@ -1030,6 +1047,7 @@ check_date <- function (x) {
 
 
 `xtfrm_declared` <- function (x, decreasing = FALSE, na.last = TRUE, empty.last = na.last) {
+    x <- sanitize_na_index_ (x)
     na_index <- attr (x, "na_index")
     na_declared <- logical (length (x))
     na_declared[na_index] <- TRUE
@@ -1122,4 +1140,3 @@ check_date <- function (x) {
 
     return (z)
 }
-

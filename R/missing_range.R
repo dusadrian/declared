@@ -23,6 +23,7 @@
 
 #' @export
 `missing_range.declared` <- function (x) {
+  x <- sanitize_na_index_ (x)
   attr (x, "na_range", exact = TRUE)
 }
 
@@ -51,6 +52,7 @@
 
 #' @export
 `missing_range<-.declared` <- function (x, value) {
+  x <- sanitize_na_index_ (x)
   if (!is.null (value) && (length (value) != 2 || !is.numeric (value))) {
     stopError_ ("`value` should be a numeric vector of length 2.")
   }

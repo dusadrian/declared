@@ -45,6 +45,10 @@
     stopError_ ("'x' should be an atomic vector.")
   }
 
+  if (is.declared (x)) {
+    x <- sanitize_na_index_ (x)
+  }
+
   empty <- is.na (x)
 
   if (is.declared (x)) {

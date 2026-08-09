@@ -8,6 +8,7 @@
 
 #' @export
 `as.declared.default` <- function (x, ...) {
+  x <- sanitize_na_index_ (x)
   dots <- list (...)
   interactive <- isTRUE (dots$interactive)
   labels <- attr (x, "labels", exact = TRUE)
@@ -26,10 +27,7 @@
   ))
 
   if (metadata_present && (is.atomic (x) || inherits (x, "Date"))) {
-    normalized_na_index <- !is.null (na_index) &&
-      length (na_index) > 0 &&
-      all (na_index %in% seq_along (x)) &&
-      all (is.na (x[unname (na_index)]))
+    normalized_na_index <- !is.null (na_index) && length (na_index) > 0
 
     if (normalized_na_index) {
       return (direct_declared(

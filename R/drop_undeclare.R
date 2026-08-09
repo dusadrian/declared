@@ -57,14 +57,9 @@
 
 #' @export
 `undeclare.declared` <- function (x, drop = FALSE, ...) {
+  x <- sanitize_na_index_ (x)
   na_index <- attr (x, "na_index")
   attrx <- attributes (x)
-
-  if (!valid_na_index (x)) {
-    # A positional index is either wholly trustworthy or not. Restoring only
-    # some of its values could turn ordinary NAs into declared missing values.
-    na_index <- NULL
-  }
 
   # this is necessary to replace those values
   # (because of the "[<-.declared" method)
@@ -139,6 +134,7 @@
 
 #' @export
 `drop_na.declared` <- function (x, drop_labels = TRUE) {
+  x <- sanitize_na_index_ (x)
   attrx <- attributes (x)
   if (isTRUE (drop_labels)) {
     attrx$labels <- attrx$labels[!is.element (attrx$labels, attrx$na_values)]

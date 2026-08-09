@@ -114,6 +114,13 @@
                 if (is.matrix(xi)) allargs[[i]] <- xi <-
                     as.data.frame(xi, stringsAsFactors = stringsAsFactors)
                 if (inherits (xi, "data.frame")) {
+                    declared_columns <- vapply (xi, is.declared, TRUE)
+                    if (any (declared_columns)) {
+                        xi[declared_columns] <- lapply (
+                            xi[declared_columns], sanitize_na_index_
+                        )
+                        allargs[[i]] <- xi
+                    }
                     if (is.null (cl))
                     cl <- oldClass (xi)
                     ri <- attr (xi, "row.names")
@@ -513,6 +520,7 @@
             ...
         ) {
             if (is.declared (x)) {
+                x <- sanitize_na_index_ (x)
                 levels <- match.arg (levels)
                 labels <- attr (x, "labels", exact = TRUE)
                 nv <- names_values (x, drop_na = drop_na)
@@ -622,6 +630,7 @@
 
         env$sd <- function (x, na.rm = FALSE) {
             if (is.declared (x)) {
+                x <- sanitize_na_index_ (x)
                 na_index <- attr (x, "na_index")
                 if (!is.null (na_index)) {
                     x <- x[-na_index]
@@ -641,6 +650,7 @@
 
         env$var <- function (x, y = NULL, na.rm = FALSE, use) {
             if (is.declared (x)) {
+                x <- sanitize_na_index_ (x)
                 na_index <- attr (x, "na_index")
                 if (!is.null (na_index)) {
                     x <- x[-na_index]
@@ -692,6 +702,7 @@
 
         env$fivenum <- function (x, na.rm = FALSE) {
             if (is.declared (x)) {
+                x <- sanitize_na_index_ (x)
                 na_index <- attr (x, "na_index")
                 if (!is.null (na_index)) {
                     x <- x[-na_index]

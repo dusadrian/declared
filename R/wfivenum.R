@@ -18,6 +18,7 @@
     }
 
     if (inherits (x, "declared")) {
+        x <- sanitize_na_index_ (x)
         na_index <- attr (x, "na_index")
         if (length (na_index)) {
             x <- x[-na_index]

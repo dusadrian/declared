@@ -65,6 +65,7 @@
 
 #' @export
 `as.haven.declared` <- function (x, ...) {
+    x <- sanitize_na_index_ (x)
     attrx <- attributes (x)
     attrx$class <- c ("haven_labelled", "vctrs_vctr")
 

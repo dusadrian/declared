@@ -1,5 +1,6 @@
 #' @export
 `print.declared` <- function (x, ...) {
+    x <- sanitize_na_index_ (x)
     label <- label (x)
     if (!is.null (label)) {
         label <- paste ("", label)
