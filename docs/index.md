@@ -1,0 +1,76 @@
+# declared
+
+The goal of `declared` is to improve the functionality of imported
+social science microdata, particularly labelled data. While there are
+excellent packages available for these purposes, such as
+[haven](https://haven.tidyverse.org/) and
+[labelled](http://larmarange.github.io/labelled/), they have some
+fundamental design features that run, in some situations, against users’
+expectations. This has a lot to do with the treatment of declared
+missing values, that are instrumental for the social sciences. The aim
+of `declared` is to offer an alternative class called `"declared"`,
+whilst ensuring as much compatibility as possible with these popular
+packages.
+
+## Installation
+
+The development version of package `declared` can be installed using
+this command:
+
+``` r
+
+install.packages("declared", repos = "dusadrian.r-universe.dev")
+```
+
+## Example
+
+``` r
+
+library(haven)
+x1 <- labelled_spss(
+  x = c(1:5, -91),
+  labels = c("Missing" = -91),
+  na_value = -91
+)
+
+print(x1)
+#> <labelled_spss<double>[6]>
+#> [1]   1   2   3   4   5 -91
+#> Missing values: -91
+#> 
+#> Labels:
+#>  value   label
+#>    -91 Missing
+
+mean(x1)
+#> [1] -12.66667
+```
+
+Instead of using the
+[`labelled::labelled()`](https://haven.tidyverse.org/reference/labelled.html)
+class or its inherited version in `haven`, the `declared` package offers
+a similar class that behaves more as it is expected–because it
+interprets certain “missing” values `NA` codes as existing, declared
+missing values.
+
+``` r
+
+library(declared)
+x2 <- declared(
+  x = c(1:5, -91),
+  labels = c("Missing" = -91),
+  na_value = -91
+)
+
+print(x2)
+#> <declared<numeric>[6]>
+#> [1]       1       2       3       4       5 NA(-91)
+#> Missing values: -91
+#> 
+#> Labels:
+#>  value   label
+#>    -91 Missing
+
+mean(x2)
+#> [1] 3
+```

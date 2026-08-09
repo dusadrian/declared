@@ -1,0 +1,387 @@
+# b. Added value
+
+``` r
+
+library(declared)
+
+x2 <- declared(
+  x = c(1:5, -91),
+  labels = c("Missing" = -91),
+  na_value = -91
+)
+```
+
+The proposed method to declare missing values is unique in the R
+ecosystem. Differentiating between empty and declared missing values
+opens the door to a new set of challenges for which base R does not have
+built-in functionality.
+
+For instance, the declared missing values can be compared against both
+the original values and their labels:
+
+``` r
+
+x2 == -91
+#> [1] FALSE FALSE FALSE FALSE FALSE  TRUE
+x2 == "Missing"
+#> [1] FALSE FALSE FALSE FALSE FALSE  TRUE
+```
+
+Similar methods have been added to the primitive functions `"<"`, `">"`
+and `"!="` etc., to allow a fully functional collection of subsetting
+possibilities.
+
+Combining on this type of vector creates an object of the same class:
+
+``` r
+
+x2 <- c(x2, -91)
+x2
+#> <declared<numeric>[7]>
+#> [1]       1       2       3       4       5 NA(-91) NA(-91)
+#> Missing values: -91
+#>
+#> Labels:
+#>  value   label
+#>    -91 Missing
+```
+
+Most functions are designed to be as similar as possible, for instance,
+`labels``()` to retrieve or add/change value labels:
+
+``` r
+
+labels(x2) <- c("Does not know" = -92, "Not responded" = -91)
+x2
+#> <declared<numeric>[7]>
+#> [1]       1       2       3       4       5 NA(-91) NA(-91)
+#> Missing values: -91
+#>
+#> Labels:
+#>  value         label
+#>    -92 Does not know
+#>    -91 Not responded
+```
+
+The value `-92` is now properly labelled, and can further be declared
+missing. Such declarations do not necessarily have to use the main
+function `declared``()`, due to the separate functions
+`missing_values``()` and `missing_range``()`:
+
+``` r
+
+missing_values(x2) <- c(-91, -92)
+missing_range(x2) <- c(-91, -95)
+x2
+#> <declared<numeric>[7]>
+#> [1]       1       2       3       4       5 NA(-91) NA(-91)
+#> Missing values: -91, -92
+#> Missing range:  [-95, -91]
+#>
+#> Labels:
+#>  value         label
+#>    -92 Does not know
+#>    -91 Not responded
+```
+
+To ease the smooth inter-operation with packages **haven** and
+**labelled**, the following functions are of interest: `undeclare``()`,
+`as.haven``()` and `as.declared``()`.
+
+The function `undeclare``()` replaces the NAs with their declared
+missing values. The result is still an object of class `"declared"`, but
+all missing values (and missing range) are stripped off the vector, and
+values are presented as they have been collected. All other attributes
+of interest (variable and value labels) are retained and printed
+accordingly. Activating the argument `drop` eliminates all classes and
+attributes, returning a regular R object:
+
+``` r
+
+undeclare(x2, drop = TRUE)
+#> [1]   1   2   3   4   5 -91 -91
+```
+
+The function `as.haven``()` coerces the resulting object to the class
+`"haven_labelled_spss"`, and the function `as.declared``()` reverses the
+process:
+
+``` r
+
+xh <- as.haven(x2)
+xh
+#> <labelled_spss<double>[7]>
+#> [1]   1   2   3   4   5 -91 -91
+#> Missing values: -91, -92
+#> Missing range:  [-95, -91]
+#>
+#> Labels:
+#>  value         label
+#>    -92 Does not know
+#>    -91 Not responded
+
+as.declared(xh)
+#> <declared<numeric>[7]>
+#> [1]       1       2       3       4       5 NA(-91) NA(-91)
+#> Missing values: -91, -92
+#> Missing range:  [-95, -91]
+#>
+#> Labels:
+#>  value         label
+#>    -92 Does not know
+#>    -91 Not responded
+```
+
+The missing values are properly formatted, even inside the base data
+frame:
+
+``` r
+
+dfm <- data.frame(x1 = letters[1:7], x2)
+dfm
+#>   x1      x2
+#> 1  a       1
+#> 2  b       2
+#> 3  c       3
+#> 4  d       4
+#> 5  e       5
+#> 6  f NA(-91)
+#> 7  g NA(-91)
+```
+
+If users prefer a tibble instead of a data frame, the objects of class
+“`declared``"` are properly formatted in a similar way to those from
+package **haven**:
+
+``` r
+
+tibble::as_tibble(dfm)
+#> # A tibble: 7 × 2
+#>   x1    x2
+#>   <chr> <dbl+lbl>
+#> 1 a       1
+#> 2 b       2
+#> 3 c       3
+#> 4 d       4
+#> 5 e       5
+#> 6 f     -91 (NA) [Not responded]
+#> 7 g     -91 (NA) [Not responded]
+```
+
+Special challenges are associated with sorting and ordering the declared
+objects, where not all missing values are treated the same.
+
+``` r
+
+x3 <- declared(
+  x = c(1:5, -91, NA, -92, -91),
+  na_value = c(-92, -91)
+)
+sort(x3, na.last = TRUE)
+#> <declared<numeric>[9]>
+#> [1]       1       2       3       4       5 NA(-92) NA(-91) NA(-91)      NA
+#> Missing values: -92, -91
+```
+
+Sorting in decreasing order applies the same order to the missing
+values:
+
+``` r
+
+sort(x3, na.last = TRUE, decreasing = TRUE)
+#> <declared<numeric>[9]>
+#> [1]       5       4       3       2       1 NA(-91) NA(-91) NA(-92)      NA
+#> Missing values: -92, -91
+```
+
+This custom function benefits from an additional argument `empty.last`
+(internally passed to the ordering function), to allow sorting within
+the missing values:
+
+``` r
+
+sort(x3, na.last = TRUE, decreasing = TRUE, empty.last = FALSE)
+#> <declared<numeric>[9]>
+#> [1]       5       4       3       2       1      NA NA(-91) NA(-91) NA(-92)
+#> Missing values: -92, -91
+```
+
+All types of variables (categorical and numerical) can have declared
+missing values. There are situations when values are not missing
+randomly but with a specific reason. In social research, respondents
+often can not or do not want to provide an answer for a certain
+question, be it categories of opinions or pure numerical answers like
+age, income, etc.
+
+Base R has a clear distinction between numerical and categorical
+variables. For the latter, R provides a special type of object called
+`factor`. The following object simulates such a categorical variable,
+for instance political orientation:
+
+``` r
+
+x4 <- declared(
+  x = c(1:3, -91),
+  labels = c("Left" = 1, "Middle" = 2, "Right" = 3, "Apolitic" = -91),
+  na_value = -91,
+  label = "Respondent's political orientation"
+)
+
+x4
+#> <declared<numeric>[4]> Respondent's political orientation
+#> [1]       1       2       3 NA(-91)
+#> Missing values: -91
+#>
+#> Labels:
+#>  value    label
+#>      1     Left
+#>      2   Middle
+#>      3    Right
+#>    -91 Apolitic
+```
+
+Such a variable could in principle be constructed directly as a factor:
+
+``` r
+
+x5 <- factor(
+  c("Left", "Middle", "Right", "Apolitic"),
+  levels = c("Left", "Middle", "Right", "Apolitic")
+)
+
+x5
+#> [1] Left     Middle   Right    Apolitic
+#> Levels: Left Middle Right Apolitic
+```
+
+The base factors provide no possibility to assign specific values for
+the specific categories, and most importantly, they do not differentiate
+between valid values and (declared) missing values. To make the
+functionality consistent with the base treatment of `NA` values,
+coercing to factors defaults to dropping the declared missing values
+because of the default value of the argument `drop_na`:
+
+``` r
+
+as.factor(x4)
+#> [1] Left   Middle Right  <NA>
+#> Levels: Left Middle Right
+
+# essentially acting as:
+as.factor(drop_na(x4))
+#> [1] Left   Middle Right  <NA>
+#> Levels: Left Middle Right
+```
+
+Converting the declared missing values to factor levels is something for
+which the function `undeclare``()` proves useful, and switching between
+factors and declared objects, preserving the declared missing values, is
+now straightforward:
+
+``` r
+
+as.factor(undeclare(x4))
+#> [1] Left     Middle   Right    Apolitic
+#> Levels: Apolitic Left Middle Right
+```
+
+This is almost identical, but differs from `x5` with respect to the
+level orders. It happens because the missing value -91, coerced to a
+valid value, becomes the first in the order of the categories while
+normally, a categorical variable displays the valid values first, and
+the missing values last.
+
+If the original order is important, the argument `drop_na` can be
+deactivated:
+
+``` r
+
+as.factor(x4, drop_na = FALSE)
+#> [1] Left     Middle   Right    Apolitic
+#> Levels: Left Middle Right Apolitic
+```
+
+The reverse process is also possible, to convert / coerce factors to
+declared labelled objects:
+
+``` r
+
+as.declared(x5, na_values = 4)
+#> <declared<numeric>[4]>
+#> [1]     1     2     3 NA(4)
+#> Missing values: 4
+#>
+#> Labels:
+#>  value    label
+#>      1     Left
+#>      2   Middle
+#>      3    Right
+#>      4 Apolitic
+```
+
+When the declared objects are constructed as categorical variables to
+replace the base factors, the function `as.character``()` extracts the
+categories in a similar way to factors, via a dedicated class method for
+declared objects:
+
+``` r
+
+as.character(x4)
+#> [1] "Left"   "Middle" "Right"  NA
+```
+
+Similarly, the function `as.character``()` drops the declared missing
+values by default, something that can be prevented by either of the
+following two commands:
+
+``` r
+
+as.character(undeclare(x4))
+#> [1] "Left"     "Middle"   "Right"    "Apolitic"
+
+as.character(x4, drop_na = FALSE)
+#> [1] "Left"     "Middle"   "Right"    "Apolitic"
+```
+
+The base factors store the categories using numeric values, which is
+also the most often scenario for the declared objects. But this is not
+at all mandatory, as the declared objects are also able to ingest
+character vectors:
+
+``` r
+
+x6 <- declared(
+  x = sample(
+    c("a", "b", "c", "z"),
+    20,
+    replace = TRUE
+  ),
+  labels = c("Left" = "a", "Middle" = "b", "Right" = "c", "Apolitic" = "z"),
+  na_values = "z"
+)
+
+x6
+#> <declared<character>[20]>
+#>  [1]    b     c  NA(z)    b  NA(z) NA(z)    b     a     c  NA(z) NA(z)    b
+#> [13]    b     c     b     c     b     b     a  NA(z)
+#> Missing values: z
+#>
+#> Labels:
+#>  value    label
+#>      a     Left
+#>      b   Middle
+#>      c    Right
+#>      z Apolitic
+```
+
+Either as a character, numeric, categorical, or even a Date variable, it
+is possible to declare and use special types of missing values,
+employing this new object type of class `"declared"`.
+
+Factors and `haven` objects have default coercion methods, but not all
+types of objects can be automatically coerced to this class. To meet
+this possibility, the main functions `declared``()`, `as.declared``()`,
+`undeclare``()` and `drop_na``()` are all generic, allowing full
+flexibility for any other packages to create custom (coercion) methods
+for different object classes, thus facilitating and encouraging a
+widespread use.

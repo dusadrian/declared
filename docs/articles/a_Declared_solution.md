@@ -1,0 +1,242 @@
+# a. Motivation for the declared package
+
+``` r
+
+library(declared)
+```
+
+The R ecosystem already has some very good packages that deal with
+labelled objects. In particular, the inter-connected packages **haven**
+and **labelled** provide all the functionality most users would ever
+need.
+
+As nice and useful as these packages are, it has become apparent they
+have some fundamental design features that run, in some situations,
+against users’ expectations. This often relates to the treatment of
+declared missing values that are instrumental for the social sciences.
+
+The following minimal example (adapted from the vignette in package
+**haven**) illustrates the situation:
+
+``` r
+
+library(haven)
+x1 <- labelled_spss(
+  x = c(1:5, -91),
+  labels = c("Missing" = -91),
+  na_value = -91
+)
+```
+
+The printed objects from this package nicely display some properties:
+
+``` r
+
+x1
+#> <labelled_spss<double>[6]>
+#> [1]   1   2   3   4   5 -91
+#> Missing values: -91
+#>
+#> Labels:
+#>  value   label
+#>    -91 Missing
+```
+
+There are 5 normal (non-missing) values (supposedly, they represent the
+number of children), and one declared missing value coded `-91`. This
+value *acts* as a missing value, but it is different from a regular
+missing value in R, coded `NA`. The latter stands for any missing
+information (something like an empty cell) regardless of the reason.
+
+On the other hand, the cell is *not* empty, but the value `-91` is not a
+valid value either. It cannot possibly represent -91 children in the
+household, but for instance, it could have meant the respondent did not
+want to respond. It is properly identified as missing with:
+
+``` r
+
+is.na(x1)
+#> [1] FALSE FALSE FALSE FALSE FALSE  TRUE
+```
+
+But when calculating a mean, for instance, the normal expectation is
+that value `-91` would not play any role in the calculations (since it
+should be *missing*). However:
+
+``` r
+
+mean(x1)
+#> [1] -12.66667
+```
+
+This means the value `-91` did play an active role despite being
+identified as “missing”. In an ideal world, the expected mean would be
+3, or at best, employ the argument `na.rm ``=`` ``TRUE` if the result is
+`NA` because of the declared missing value.
+
+A solution to this problem is offered by package **labelled**, which has
+a function called `user_na_to_na``()`:
+
+``` r
+
+library(labelled)
+mean(
+  user_na_to_na(x1),
+  na.rm = TRUE
+)
+#> [1] 3
+```
+
+A similar behavior is observed into another package **memisc**, that
+also deals with labels and missing values:
+
+``` r
+
+library(memisc)
+memx <- c(1:5, -91)
+labels(memx) <- c("Missing" = -91)
+missing.values(memx) <- -91
+
+mean(memx)
+#> [1] -12.66667
+```
+
+Here too, despite being declared as missing, the value `-91` still plays
+a role in calculating the mean. It has to be coerced to numeric to
+really convert that value to `NA`:
+
+``` r
+
+mean(
+  as.numeric(memx),
+  na.rm = TRUE
+)
+#> [1] 3
+```
+
+## The declared solution
+
+While solving the problem, the above solutions force two additional
+operations:
+
+- converting the (already) declared user missing values, and
+
+- employing the `na.rm` argument.
+
+This should not be necessary, especially if (and it is extremely likely
+that) users may forget the declared missing values are not actually
+missing values. This scenario is quite possible, as many users
+previously using other software like SPSS or Stata where nothing else
+should be done after declaring the missing values may not realize more
+is needed.
+
+To solve this problem, the **declared** package creates a similar
+object, where declared missing values are stored (hence interpreted as)
+regular `NA` missing values in R.
+
+``` r
+
+library(declared)
+x2 <- declared(
+  x = c(1:5, -91),
+  labels = c("Missing" = -91),
+  na_value = -91
+)
+x2
+#> <declared<numeric>[6]>
+#> [1]       1       2       3       4       5 NA(-91)
+#> Missing values: -91
+#>
+#> Labels:
+#>  value   label
+#>    -91 Missing
+```
+
+The print method makes it obvious the value `-91` is not a regular
+number but an actual missing value. More importantly, this type of
+storage circumvents the need to convert user-defined missing values to
+regular `NA` values since they are already stored as regular `NA`
+values. The average value is calculated simply as follows:
+
+``` r
+
+mean(x2)
+#> [1] 3
+```
+
+Notice that neither `user_na_to_na``()`, nor employing
+`na.rm ``=`` ``TRUE` are necessary, and, despite being stored as an `NA`
+value, the value `-91` is not equivalent to an *empty cell*. The
+information still exists, but it is simply ignored in the calculations.
+
+At first glance, providing a class method for this function seems
+unnecessary because activating the argument `na.rm` will return the
+correct result. Explaining the importance of the class method requires a
+discussion about the base R decision to have this argument deactivated
+by default. This is most likely to alert users about possible problems
+in the data since a default value of `TRUE` would obscure such problems;
+the mean is calculated irrespective of potentially problematic `NA`
+values.
+
+This is where differentiating between empty and declared missing values
+proves valuable. The declared missing values are neither problematic nor
+signal potential problems in the data, given that once a reason is
+declared, it is already known why a particular value is missing.
+
+The genuinely problematic values are the empty `NA` values, and the
+custom class method still allows identifying such values if they exist:
+
+``` r
+
+mean(c(x2, NA))
+#> [1] NA
+mean(c(x2, NA), na.rm = TRUE)
+#> [1] 3
+```
+
+Since all declared values are stored as regular NA values, the base
+function `is.na``()`, as well as all related functions such as
+`anyNA``()` etc., are unaware and can not differentiate between empty
+and declared missing values:
+
+``` r
+
+is.na(c(x2, NA))
+#> [1] FALSE FALSE FALSE FALSE FALSE  TRUE  TRUE
+```
+
+To overcome this situation, package **declared** complementary provides
+an additional function to account for the difference:
+
+``` r
+
+is.empty(c(x2, NA))
+#> [1] FALSE FALSE FALSE FALSE FALSE FALSE  TRUE
+```
+
+All missing values, empty and declared, play well with the NA oriented,
+base functions such as `na.omit``()` or `na.exclude``()`:
+
+``` r
+
+na.omit(x2)
+#> <declared<numeric>[5]>
+#> [1] 1 2 3 4 5
+#> Missing values: -91
+#>
+#> Labels:
+#>  value   label
+#>    -91 Missing
+```
+
+It should be made obvious the excellent packages **memisc**, **haven**
+and **labelled** are not inherently doing a bad thing: the very same
+result is obtained, just via a different route. Package **declared** was
+created as an alternative to the design philosophy of these packages,
+with a fundamental difference: instead of interpreting existing values
+as missing, the missing values are interpreted as existing.
+
+It does so by storing an additional attribute containing the positions
+(indexes) of the regular `NA` values in the object, which should be
+treated as missing, and, even more so, to be interpreted as a particular
+missing response category, as specified in the value labels attribute.

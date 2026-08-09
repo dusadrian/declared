@@ -1,0 +1,179 @@
+# c. Weighting (declared) values
+
+For the examples in this vignette, the following data frame is created:
+
+``` r
+
+library(declared)
+
+n <- 1234
+set.seed(n)
+dfm <- data.frame(
+  Area = declared(
+    sample(1:2, n, replace = TRUE, prob = c(0.45, 0.55)),
+    labels = c("Rural" = 1, "Urban" = 2)
+  ),
+  Gender = declared(
+    sample(1:2, n, replace = TRUE, prob = c(0.55, 0.45)),
+    labels = c("Males" = 1, "Females" = 2)
+  ),
+  Opinion = declared(
+    sample(c(1:5, NA, -91), n, replace = TRUE),
+    labels = c(
+      "Very bad" = 1, "Bad" = 2, "Neither" = 3,
+      "Good" = 4, "Very good" = 5, "Don't know" = -91
+    ),
+    na_values = -91
+  ),
+  Age = sample(18:90, n, replace = TRUE),
+  Children = sample(0:5, n, replace = TRUE)
+)
+```
+
+One of the most interesting applications to make use of the declared
+missing values are the tables of frequencies. The base function
+`table``()` ignores missing values by default, but they can be revealed
+by using the `useNA` argument:
+
+``` r
+
+table(dfm$Opinion, useNA = "ifany")
+#>
+#>  Very bad       Bad   Neither      Good Very good      <NA>
+#>       180       170       188       171       162       363
+```
+
+However, it does not differentiate between empty and declared missing
+values. Since “Opinion” is the equivalent of a categorical variable,
+this can be improved through a custom built coercion to the base
+`factor` class:
+
+``` r
+
+table(as.factor(undeclare(dfm$Opinion)), useNA = "ifany")
+#>
+#> Don't know   Very bad        Bad    Neither       Good  Very good       <NA>
+#>        180        180        170        188        171        162        183
+```
+
+The dedicated function `wtable``()` does the same thing by automatically
+recognizing objects of class `"declared"`, additionally printing more
+detailed information:
+
+``` r
+
+wtable(dfm$Opinion)
+#>
+#>                 fre    rel   per   vld   cpd
+#>                -----------------------------
+#>   1 Very bad    180  0.146  14.6  20.7  20.7
+#>   2 Bad         170  0.138  13.8  19.5  40.2
+#>   3 Neither     188  0.152  15.2  21.6  61.8
+#>   4 Good        171  0.139  13.9  19.6  81.4
+#>   5 Very good   162  0.131  13.1  18.6 100.0
+#> ------
+#> -91 Don't know  180  0.146  14.6
+#>  NA             183  0.148  14.8
+#>                -----------------------------
+#>                1234  1.000 100.0
+```
+
+Values are printed by default for declared objects, so the underlying
+codes remain visible alongside their labels.
+
+The prefix `w` from the function name stands for “weighted”, this being
+another example of functionality where the declared missing values play
+a different role than the empty, base NA missing values.
+
+It is important to differentiate between frequency weights, on one hand,
+and other probability based, post-stratification weights on one other,
+the later being thoroughly treated by the specialized package
+**survey**. The `w` family of functions are solely dealing with
+frequency weights, to allow corrections in descriptive statistics, such
+as the tables of frequencies and other similar descriptive measures for
+both categorical and numeric variables.
+
+To exemplify, a frequency weight variable is constructed, to correct for
+the distributions of gender by males and females, as well as the
+theoretical distribution by residential areas differentiating between
+urban and rural settlements.
+
+``` r
+
+# Observed proportions
+op <- with(dfm, proportions(table(Gender, Area)))
+
+# Theoretical / population proportions:
+# 53% Rural, and 50% Females
+tp <- rep(c(0.53, 0.47), each = 2) * rep(0.5, 4)
+
+weights <- tp / op
+
+dfm$fweight <- weights[
+  match(10 * dfm$Area + dfm$Gender, c(11, 12, 21, 22))
+]
+```
+
+The updated frequency table, this time using the frequency weights, can
+be constructed by passing the weights to the argument `wt`:
+
+``` r
+
+with(dfm, wtable(Opinion, wt = fweight))
+#>
+#>                 fre    rel   per   vld   cpd
+#>                -----------------------------
+#>   1 Very bad    179  0.145  14.5  20.5  20.5
+#>   2 Bad         167  0.135  13.5  19.2  39.7
+#>   3 Neither     187  0.152  15.2  21.4  61.1
+#>   4 Good        171  0.139  13.9  19.6  80.7
+#>   5 Very good   168  0.136  13.6  19.3 100.0
+#> ------
+#> -91 Don't know  179  0.145  14.5
+#>  NA             183  0.148  14.8
+#>                -----------------------------
+#>                1234  1.000 100.0
+```
+
+Except for the empty NA values, for which the weights cannot be applied,
+almost all other frequencies (including the one for the declared missing
+value -91) are now updated by applying the weights. This shows that,
+despite being interpreted as “missing” values, the declared ones can and
+should also be weighted, with a very useful result. Other versions of
+weighted frequencies do exist in R, but a custom one was needed to
+identify (and weight) the declared missing values.
+
+In the same spirit, the package provides `wmean``()`, `wmedian``()`,
+`wmode``()`, `wvar``()`, `wsd``()`, `wquantile``()`, `wIQR``()`,
+`wfivenum``()`, `wstandardize``()`, and `wsummary``()`. Multiple
+measures for one or more variables can be requested together with
+`wmeasures``()`:
+
+``` r
+
+wmeasures(
+  dfm[c("Age", "Children")],
+  what = c("n", "mean", "sd"),
+  wt = dfm$fweight
+)
+#>
+#>            n    mean     sd
+#> Age      1234  54.687  20.775
+#> Children 1234   2.426   1.67
+```
+
+These functions are adapted to declared objects. For the functions that
+have an `na.rm` argument, declared missing values are automatically
+excluded and `na.rm` controls the treatment of empty missing values; see
+the individual help pages for their defaults.
+
+The package **declared** was built with the specific intention to
+provide a lightweight, zero dependency resource in the R ecosystem. It
+contains an already extensive, robust and ready to use functionality
+that duly takes into account the difference between empty and declared
+missing values.
+
+It extends base R and opens up new data analysis possibilities. Its
+generic constructors and coercion helpers allow other packages to add
+methods for new object types, both for creation and coercion to class
+`"declared"`.
