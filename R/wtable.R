@@ -1,5 +1,6 @@
 #' Weighted summaries
 #' @name weighted
+#' @order 1
 #'
 #' @title Compute weighted summaries for declared objects
 #'
@@ -46,12 +47,6 @@
 #' be actually observed. When activated, this argument restricts the printed
 #' frequency table to the subset of observed values only.
 #'
-#' The argument `method` can be one of `"unbiased"` or `"ML"`.
-#'
-#' When this is set to `"unbiased"`, the result is an unbiased estimate
-#' using Bessel's correction. When this is set to `"ML"`, the result is the
-#' maximum likelihood estimate for a Gaussian distribution.
-#'
 #' The argument `wt` refers only to frequency weights. Users should be
 #' aware of the differences between frequency weights, analytic weights,
 #' probability weights, design weights, post-stratification weights etc. For
@@ -61,23 +56,9 @@
 #' If no frequency weights are provided, the result is identical to the
 #' corresponding base functions.
 #'
-#' The function `wquantile()` extensively borrowed ideas from packages
-#' **`stats`** and **`Hmisc`**, to ensure a constant interpolation that would
-#' produce the same quantiles if no weights are provided or if all
-#' weights are equal to 1.
-#'
-#' Other arguments can be passed to the stats function `quantile()` via the
-#' three dots `...` argument, and their extensive explanation is found in the
-#' corresponding stats function's help page.
-#'
 #' For all functions, the argument `na.rm` refers to the empty missing values
 #' and its default is set to TRUE. The declared missing values are automatically
 #' eliminated from the summary statistics, even if this argument is deactivated.
-#'
-#' The function `wmode()` returns the weighted mode of a variable. Unlike the
-#' other functions where the prefix `w` signals a weighted version of the
-#' base function with the same name, this has nothing to do with the base
-#' function `mode()` which refers to the storage mode / type of an R object.
 #'
 #' @examples
 #' set.seed(215)

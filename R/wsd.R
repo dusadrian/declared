@@ -1,4 +1,5 @@
 #' @rdname weighted
+#' @order 6
 #' @export
 `wsd` <- function (
     x, wt = NULL, method = NULL, na.rm = TRUE

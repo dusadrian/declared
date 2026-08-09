@@ -1,4 +1,5 @@
 #' @rdname weighted
+#' @order 3
 #' @param ... Further arguments passed to or from other methods.
 #' @export
 `wmedian` <- function (x, wt = NULL, na.rm = TRUE, ...)

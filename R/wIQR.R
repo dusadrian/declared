@@ -1,4 +1,5 @@
 #' @rdname weighted
+#' @order 8
 #' @export
 `wIQR` <- function (
     x, wt = NULL, na.rm = FALSE, ...

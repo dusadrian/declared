@@ -1,4 +1,5 @@
 #' @rdname weighted
+#' @order 11
 #' @export
 `wsummary` <- function (x, wt = NULL, ...) {
 

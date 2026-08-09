@@ -1,4 +1,5 @@
 #' @rdname weighted
+#' @order 9
 #' @export
 `wfivenum` <- function (
     x, wt = NULL, na.rm = FALSE

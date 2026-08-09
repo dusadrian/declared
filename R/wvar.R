@@ -1,6 +1,12 @@
 #' @rdname weighted
+#' @order 5
 #' @param method Character, specifying how the result is scaled, see 'Details'
 #' below.
+#' @details
+#' For `wvar()` and `wsd()`, the argument `method` can be one of `"unbiased"`
+#' or `"ML"`. The former produces an unbiased estimate using Bessel's
+#' correction, while the latter produces the maximum likelihood estimate for a
+#' Gaussian distribution.
 #' @export
 `wvar` <- function (
     x, wt = NULL, method = NULL, na.rm = TRUE

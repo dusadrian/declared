@@ -1,7 +1,14 @@
 #' @rdname weighted
+#' @order 12
 #' @param what A character vector or a named list of functions, identifying
-#' what to compute.
-#' @details In an expression evaluated in the context of a data frame, such as
+#' what to compute. Available character values are `"n"`, `"NA"`, `"mode"`,
+#' `"mean"`, `"median"`, `"range"`, `"var"`, `"sd"`, `"iqr"`, `"min"`, and
+#' `"max"`.
+#' @details
+#' For `wmeasures()`, the `"n"` measure counts valid values, while `"NA"` counts
+#' all missing values, both declared and empty.
+#'
+#' When `wmeasures()` is evaluated in the context of a data frame, such as with
 #' `admisc::using()`, `.` can be used as a placeholder for all variables in the
 #' current dataset.
 #' @export
@@ -68,7 +75,8 @@
 `parseWhat_` <- function (what) {
 
     builtin <- list (
-        n = function (x, wt = NULL, na.rm = TRUE, ...) sum (!is.empty (x)),
+        n = function (x, wt = NULL, na.rm = TRUE, ...) sum (!is.na (x)),
+        "NA" = function (x, wt = NULL, na.rm = TRUE, ...) sum (is.na (x)),
         mean = wmean,
         sd = wsd,
         median = wmedian,
@@ -89,6 +97,7 @@
         key <- tolower (what)
         choices <- list (
             n = "n",
+            na = "NA",
             mean = "mean",
             average = "mean",
             sd = "sd",

@@ -1,4 +1,10 @@
 #' @rdname weighted
+#' @order 4
+#' @details
+#' The function `wmode()` returns the weighted mode of a variable. Unlike the
+#' other functions where the prefix `w` signals a weighted version of the
+#' base function with the same name, this has nothing to do with the base
+#' function `mode()` which refers to the storage mode or type of an R object.
 #' @export
 `wmode` <- function (x, wt = NULL) {
 

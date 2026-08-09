@@ -1,4 +1,5 @@
 #' @rdname weighted
+#' @order 2
 #'
 #' @param trim A fraction (0 to 0.5) of observations to be trimmed from each end
 #' of x before the mean is computed. Values of trim outside that range are

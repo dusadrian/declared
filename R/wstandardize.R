@@ -1,4 +1,5 @@
 #' @rdname weighted
+#' @order 10
 #' @export
 `wstandardize` <- function (x, wt = NULL, na.rm = TRUE) {
 

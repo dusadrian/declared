@@ -15,7 +15,7 @@ test_that("wmeasures() works with vectors", {
   expect_equal(
     unclass (wmeasures(y)),
     c(
-      n = 5,
+      n = 4,
       mode = wmode(y),
       mean = wmean(y),
       median = wmedian(y),
@@ -28,7 +28,12 @@ test_that("wmeasures() works with vectors", {
 
   expect_equal(
     unclass (wmeasures(x, what = c("n", "median"))),
-    c(n = 6, median = 3)
+    c(n = 5, median = 3)
+  )
+
+  expect_equal(
+    unclass (wmeasures(c (x, NA), what = c ("n", "NA"))),
+    c (n = 5, "NA" = 2)
   )
 
   expect_equal(
@@ -66,7 +71,12 @@ test_that("wmeasures() works with data frames", {
 
   expect_equal(
     unclass (wmeasures(DF, what = "n"))[, "n"],
-    c(A = 6, B = 5)
+    c(A = 5, B = 5)
+  )
+
+  expect_equal(
+    unclass (wmeasures(DF, what = "NA"))[, "NA"],
+    c (A = 1, B = 1)
   )
 
   expect_equal(
@@ -86,7 +96,7 @@ test_that("wmeasures() works with data frames", {
 
   expect_equal(
     unclass (admisc::using (DF, wmeasures (., what = "n")))[, "n"],
-    c(A = 6, B = 5)
+    c(A = 5, B = 5)
   )
 })
 

@@ -1,5 +1,15 @@
 #' @rdname weighted
+#' @order 7
 #' @param probs Numeric vector of probabilities with values in \[0,1\]
+#' @details
+#' The function `wquantile()` extensively borrowed ideas from packages
+#' **`stats`** and **`Hmisc`**, to ensure a constant interpolation that would
+#' produce the same quantiles if no weights are provided or if all weights are
+#' equal to 1.
+#'
+#' Other arguments can be passed to the stats function `quantile()` via the
+#' three dots `...` argument, and their extensive explanation is found in the
+#' corresponding stats function's help page.
 #' @export
 `wquantile` <- function (
     x, wt = NULL, probs = seq (0, 1, 0.25), na.rm = TRUE, ...
