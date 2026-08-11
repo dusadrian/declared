@@ -10,6 +10,7 @@ A zero dependency package containing functions to declare labels and missing val
 \seealso{
 Useful links:
 \itemize{
+  \item \url{https://dusadrian.github.io/declared/}
   \item \url{https://github.com/dusadrian/declared}
   \item Report bugs at \url{https://github.com/dusadrian/declared/issues}
 }
