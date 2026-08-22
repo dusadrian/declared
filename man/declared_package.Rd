@@ -19,8 +19,8 @@ of class "declared".
 \tabular{ll}{
 Package: \tab declared\cr
 Type: \tab Package\cr
-Version: \tab 0.26.12\cr
-Date: \tab 2026-08-11\cr
+Version: \tab 0.27\cr
+Date: \tab 2026-08-22\cr
 License: \tab GPL-v3\cr
 }
 }
