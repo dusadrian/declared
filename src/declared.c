@@ -2,6 +2,8 @@
 #include <Rinternals.h>
 #include <R_ext/Rdynload.h>
 #include <R_ext/Boolean.h>
+#include <R_ext/Utils.h>
+#include <stdint.h>
 
 /*
 // copied from: https://github.com/wch/r-source/blob/trunk/src/main/envir.c
@@ -27,9 +29,11 @@ typedef union {
     char byte[16];
 } ieee_double;
 
-SEXP _directDeclared(SEXP x, SEXP na_index, SEXP na_values, SEXP na_range,
-                     SEXP labels, SEXP label, SEXP measurement, SEXP decimals,
-                     SEXP date, SEXP class_) {
+SEXP _directDeclared(
+    SEXP x, SEXP na_index, SEXP na_values, SEXP na_range,
+    SEXP labels, SEXP label, SEXP measurement, SEXP decimals,
+    SEXP date, SEXP class_
+) {
     int nprotect = 1;
     x = PROTECT(x);
 
@@ -46,7 +50,7 @@ SEXP _directDeclared(SEXP x, SEXP na_index, SEXP na_values, SEXP na_range,
     Rf_setAttrib(x, Rf_install("measurement"), measurement);
     Rf_setAttrib(x, Rf_install("decimals"), decimals);
     Rf_setAttrib(x, Rf_install("date"), date);
-    Rf_classgets(x, class_);
+    Rf_setAttrib(x, Rf_install("class"), class_);
 
     UNPROTECT(nprotect);
     return x;
@@ -181,7 +185,7 @@ SEXP _hasTag(SEXP x, SEXP tag_) {
         for (int i = 0; i < n; ++i) {
             double xi = REAL(x)[i];
 
-            if (!isnan(xi)) {
+            if (!ISNAN(xi)) {
                 LOGICAL(out)[i] = FALSE;
             } else {
                 ieee_double y;
@@ -240,7 +244,7 @@ SEXP _getTag(SEXP x) {
     for (int i = 0; i < n; ++i) {
         double xi = REAL(x)[i];
 
-        if (!isnan(xi)) {
+        if (!ISNAN(xi)) {
             SET_STRING_ELT(out, i, NA_STRING);
         }
         else {
@@ -287,7 +291,7 @@ SEXP _anyTagged(SEXP x) {
     while (!LOGICAL(out)[0] && i < n) {
         if (TYPEOF(x) == REALSXP) {
             double xi = REAL(x)[i];
-            if (isnan(xi)) {
+            if (ISNAN(xi)) {
                 ieee_double y;
                 y.value = xi;
 
@@ -304,6 +308,60 @@ SEXP _anyTagged(SEXP x) {
         }
         i += 1;
     }
+
+    UNPROTECT(1);
+    return out;
+}
+
+
+/* Prepared category codes are zero based. R retains factor levels, labels,
+   missing-value policy, rounding and the output class. */
+SEXP _wtable(SEXP x, SEXP y, SEXP wt, SEXP dims) {
+    if (TYPEOF(x) != INTSXP || TYPEOF(wt) != REALSXP ||
+        XLENGTH(x) != XLENGTH(wt) || TYPEOF(dims) != INTSXP || LENGTH(dims) != 2 ||
+        INTEGER(dims)[0] < 0 || INTEGER(dims)[1] < 0 ||
+        (
+            y != R_NilValue && (TYPEOF(y) != INTSXP || XLENGTH(y) != XLENGTH(x))
+        )
+    ) {
+        Rf_error("Invalid frequency buffers.");
+    }
+
+    size_t nx = (size_t)INTEGER(dims)[0], ny = (size_t)INTEGER(dims)[1];
+
+    if (
+        (ny && nx > (size_t)R_XLEN_T_MAX / ny) ||
+        (ny && nx > SIZE_MAX / sizeof(long double) / ny) ||
+        (y == R_NilValue && ny != 1)
+    ) {
+        Rf_error("Invalid frequency dimensions.");
+    }
+
+    size_t cells = nx * ny;
+    SEXP out = PROTECT(Rf_allocVector(REALSXP, (R_xlen_t)cells));
+
+    if (cells) {
+        /* R-managed storage is reclaimed even if an interrupt is raised. */
+        long double *counts = R_allocLD(cells);
+        Memzero(counts, cells);
+        const int *ix = INTEGER(x), *iy = y == R_NilValue ? NULL : INTEGER(y);
+        const double *weights = REAL(wt);
+        R_xlen_t n = XLENGTH(x);
+
+        for (R_xlen_t i = 0; i < n; i++) {
+            if (i % 65536 == 0) R_CheckUserInterrupt();
+            int cx = ix[i], cy = iy ? iy[i] : 0;
+            double w = weights[i];
+            if (cx >= 0 && cy >= 0 && (size_t)cx < nx &&
+                (size_t)cy < ny && !ISNAN(w)) {
+                counts[(size_t)cx + nx * (size_t)cy] += w;
+            }
+        }
+
+        for (size_t i = 0; i < cells; i++) REAL(out)[i] = (double)counts[i];
+    }
+
+    R_CheckUserInterrupt();
 
     UNPROTECT(1);
     return out;

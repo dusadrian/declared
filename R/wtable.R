@@ -312,7 +312,31 @@
     }
 
 
-    orig <- round (tapply (wt, xy, sum, na.rm = TRUE), 0)
+    factors <- lapply (xy, as.factor)
+    lvls <- lapply (factors, levels)
+    dims <- unname (lengths (lvls))
+
+    if (
+        any (dims == 0L) || is.complex (wt) ||
+        (!is.numeric (wt) && !is.logical (wt))
+    ) {
+        orig <- tapply (wt, xy, sum, na.rm = TRUE)
+    } else {
+        codes <- lapply (factors, function (x) as.integer (x) - 1L)
+
+        orig <- .Call (
+            "_wtable",
+            codes[[1]],
+            if (crosstab) codes[[2]] else NULL,
+            as.double (wt),
+            as.integer (if (crosstab) dims else c (dims, 1L)),
+            PACKAGE = "declared"
+        )
+
+        orig <- array (orig, dim = dims, dimnames = lvls)
+    }
+
+    orig <- round (orig, 0)
     orig[is.na (orig)] <- 0
     tbl <- as.matrix(orig)
     dimnames (tbl) <- unname (dimnames (tbl))
