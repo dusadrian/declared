@@ -40,6 +40,34 @@ test_that("wmean() works", {
   expect_error(wmean(as.complex(1:6), wt = rep(1/6, 6), trim = 0.1))
 })
 
+test_that("wmean() trims observations without weights", {
+  y <- c(100, 3, 7, 1, 9, 2, 5, 8, 4, 6)
+
+  expect_equal(wmean(y, trim = 0.1), mean(y, trim = 0.1))
+  expect_equal(wmean(y, trim = 0.1), 5.5)
+
+  expect_equal(wmean(x, trim = 0.2), mean(1:5, trim = 0.2))
+})
+
+test_that("wmean() trims by the values of x, not by the weighted values", {
+  y <- c(10, 20, 30, 40, 50)
+
+  # wt * y would rank 50 below 40, keeping it instead of 40
+  expect_equal(wmean(y, wt = c(1, 1, 1, 1, 0.7), trim = 0.2), 30)
+
+  y <- c(100, 3, 7, 1, 9, 2, 5, 8, 4, 6)
+  expect_equal(wmean(y, wt = rep(2, 10), trim = 0.1), mean(y, trim = 0.1))
+})
+
+test_that("trimmed wmean() shifts with the location of x", {
+  y <- c(10, 20, 30, 40, 50)
+  wt <- c(1, 1, 1, 1, 0.7)
+  m <- wmean(y, wt = wt, trim = 0.2)
+
+  expect_equal(wmean(y + 100, wt = wt, trim = 0.2), m + 100)
+  expect_equal(wmean(y - 100, wt = wt, trim = 0.2), m - 100)
+})
+
 set.seed(215)
 
 fx <- factor(sample(letters[1:5], 215, replace = TRUE))

@@ -35,7 +35,7 @@
     }
 
     if (is.null (wt)) {
-        return (mean (x, na.rm = na.rm))
+        return (mean (x, trim = trim, na.rm = na.rm))
     }
 
     if (
@@ -82,7 +82,7 @@
 
         # when this will be implemented in the base package:
         # ox <- sort.list (x, partial = unique (c (lo, hi)))
-        lohi <- order (wt * x)[lo:hi]
+        lohi <- order (x)[lo:hi]
 
         x <- x[lohi]
         wt <- wt[lohi]
