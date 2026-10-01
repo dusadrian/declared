@@ -78,6 +78,20 @@ test_that("declared() works", {
 })
 
 
+test_that("decimals accepts numeric character input", {
+  expect_identical(attr(declared(1:2, decimals = "2"), "decimals"), 2L)
+  expect_identical(attr(declared(1:2, decimals = "0"), "decimals"), 0L)
+
+  for (decimals in list("1.5", "-1", "abc", NA_character_, c("1", "2"))) {
+    expect_error(
+      declared(1:2, decimals = decimals),
+      "`decimals` should be a single non-negative integer.",
+      fixed = TRUE
+    )
+  }
+})
+
+
 test_that("direct_declared() trusts already normalized vectors", {
   xdirect <- direct_declared(
     c(1, 2, NA_real_),

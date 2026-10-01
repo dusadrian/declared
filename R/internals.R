@@ -256,6 +256,10 @@ NULL
         return (x)
     }
 
+    if (is.character (x) && possibleNumeric_ (x)) {
+        x <- as.numeric (x)
+    }
+
     if (
         !is.numeric (x) ||
         length (x) != 1 ||
