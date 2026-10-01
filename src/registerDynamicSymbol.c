@@ -2,9 +2,28 @@
 #include <Rinternals.h>
 #include <R_ext/Rdynload.h>
 
+extern SEXP _directDeclared(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
+extern SEXP _allIndexedNA(SEXP, SEXP);
+extern SEXP _tag(SEXP);
+extern SEXP _hasTag(SEXP, SEXP);
+extern SEXP _getTag(SEXP);
+extern SEXP _anyTagged(SEXP);
+extern SEXP _wtable(SEXP, SEXP, SEXP, SEXP);
+
+static const R_CallMethodDef callMethods[] = {
+    {"_directDeclared", (DL_FUNC) &_directDeclared, 10},
+    {"_allIndexedNA", (DL_FUNC) &_allIndexedNA, 2},
+    {"_tag", (DL_FUNC) &_tag, 1},
+    {"_hasTag", (DL_FUNC) &_hasTag, 2},
+    {"_getTag", (DL_FUNC) &_getTag, 1},
+    {"_anyTagged", (DL_FUNC) &_anyTagged, 1},
+    {"_wtable", (DL_FUNC) &_wtable, 4},
+    {NULL, NULL, 0}
+};
+
 void R_init_declared(DllInfo* info) {
-  R_registerRoutines(info, NULL, NULL, NULL, NULL);
-  R_useDynamicSymbols(info, TRUE);
+    R_registerRoutines(info, NULL, callMethods, NULL, NULL);
+    R_useDynamicSymbols(info, FALSE);
 }
 
 
