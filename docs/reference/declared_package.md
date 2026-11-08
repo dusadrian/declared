@@ -16,8 +16,8 @@ alternative in the objects of class "declared".
 |----------|------------|
 | Package: | declared   |
 | Type:    | Package    |
-| Version: | 0.27       |
-| Date:    | 2026-08-08 |
+| Version: | 0.28       |
+| Date:    | 2026-11-08 |
 | License: | GPL-v3     |
 
 ## Author

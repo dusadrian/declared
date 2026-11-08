@@ -16,6 +16,7 @@
 ^codemeta\.json$
 instructiuni.txt
 ^\.github
+^\.vscode
 ^\.positai$
 ^\.claude$
 ^tests/testthat/test-admisc-sync\.R$

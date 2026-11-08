@@ -21,7 +21,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">declared</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.27</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.28</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -89,8 +89,8 @@ created:</p>
 <span>  Children <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">5</span>, <span class="va">n</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>One of the most interesting applications to make use of the declared
-missing values are the tables of frequencies. The base function <code class="sourceCode r"><span class="fu">table</span>()</code> ignores
-missing values by default, but they can be revealed by using the <code class="sourceCode r">useNA</code> argument:</p>
+missing values are the tables of frequencies. The base function <code class="sourceCode r R"><span class="fu">table</span>()</code> ignores
+missing values by default, but they can be revealed by using the <code class="sourceCode r R">useNA</code> argument:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">dfm</span><span class="op">$</span><span class="va">Opinion</span>, useNA <span class="op">=</span> <span class="st">"ifany"</span><span class="op">)</span></span>
 <span><span class="co">#&gt;</span></span>
@@ -98,14 +98,14 @@ missing values by default, but they can be revealed by using the <code class="so
 <span><span class="co">#&gt;       180       170       188       171       162       363</span></span></code></pre></div>
 <p>However, it does not differentiate between empty and declared missing
 values. Since “Opinion” is the equivalent of a categorical variable,
-this can be improved through a custom built coercion to the base <code class="sourceCode r">factor</code> class:</p>
+this can be improved through a custom built coercion to the base <code class="sourceCode r R">factor</code> class:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="fu"><a href="../reference/drop_undeclare.html">undeclare</a></span><span class="op">(</span><span class="va">dfm</span><span class="op">$</span><span class="va">Opinion</span><span class="op">)</span><span class="op">)</span>, useNA <span class="op">=</span> <span class="st">"ifany"</span><span class="op">)</span></span>
 <span><span class="co">#&gt;</span></span>
 <span><span class="co">#&gt; Don't know   Very bad        Bad    Neither       Good  Very good       &lt;NA&gt;</span></span>
 <span><span class="co">#&gt;        180        180        170        188        171        162        183</span></span></code></pre></div>
-<p>The dedicated function <code class="sourceCode r"><span class="fu">wtable</span>()</code> does the
-same thing by automatically recognizing objects of class <code class="sourceCode r"><span class="st">"declared"</span></code>,
+<p>The dedicated function <code class="sourceCode r R"><span class="fu">wtable</span>()</code> does the
+same thing by automatically recognizing objects of class <code class="sourceCode r R"><span class="st">"declared"</span></code>,
 additionally printing more detailed information:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/weighted.html">wtable</a></span><span class="op">(</span><span class="va">dfm</span><span class="op">$</span><span class="va">Opinion</span><span class="op">)</span></span>
@@ -124,15 +124,15 @@ additionally printing more detailed information:</p>
 <span><span class="co">#&gt;                1234  1.000 100.0</span></span></code></pre></div>
 <p>Values are printed by default for declared objects, so the underlying
 codes remain visible alongside their labels.</p>
-<p>The prefix <code class="sourceCode r">w</code> from the function name
-stands for “weighted”, this being another example of functionality where
-the declared missing values play a different role than the empty, base
-NA missing values.</p>
+<p>The prefix <code class="sourceCode r R">w</code> from the function
+name stands for “weighted”, this being another example of functionality
+where the declared missing values play a different role than the empty,
+base NA missing values.</p>
 <p>It is important to differentiate between frequency weights, on one
 hand, and other probability based, post-stratification weights on one
 other, the later being thoroughly treated by the specialized package
-<strong>survey</strong>. The <code class="sourceCode r">w</code> family
-of functions are solely dealing with frequency weights, to allow
+<strong>survey</strong>. The <code class="sourceCode r R">w</code>
+family of functions are solely dealing with frequency weights, to allow
 corrections in descriptive statistics, such as the tables of frequencies
 and other similar descriptive measures for both categorical and numeric
 variables.</p>
@@ -154,7 +154,7 @@ urban and rural settlements.</p>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/match.html" class="external-link">match</a></span><span class="op">(</span><span class="fl">10</span> <span class="op">*</span> <span class="va">dfm</span><span class="op">$</span><span class="va">Area</span> <span class="op">+</span> <span class="va">dfm</span><span class="op">$</span><span class="va">Gender</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11</span>, <span class="fl">12</span>, <span class="fl">21</span>, <span class="fl">22</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">]</span></span></code></pre></div>
 <p>The updated frequency table, this time using the frequency weights,
-can be constructed by passing the weights to the argument <code class="sourceCode r">wt</code>:</p>
+can be constructed by passing the weights to the argument <code class="sourceCode r R">wt</code>:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">dfm</span>, <span class="fu"><a href="../reference/weighted.html">wtable</a></span><span class="op">(</span><span class="va">Opinion</span>, wt <span class="op">=</span> <span class="va">fweight</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;</span></span>
@@ -178,10 +178,10 @@ declared ones can and should also be weighted, with a very useful
 result. Other versions of weighted frequencies do exist in R, but a
 custom one was needed to identify (and weight) the declared missing
 values.</p>
-<p>In the same spirit, the package provides <code class="sourceCode r"><span class="fu">wmean</span>()</code>, <code class="sourceCode r"><span class="fu">wmedian</span>()</code>, <code class="sourceCode r"><span class="fu">wmode</span>()</code>, <code class="sourceCode r"><span class="fu">wvar</span>()</code>, <code class="sourceCode r"><span class="fu">wsd</span>()</code>, <code class="sourceCode r"><span class="fu">wquantile</span>()</code>, <code class="sourceCode r"><span class="fu">wIQR</span>()</code>, <code class="sourceCode r"><span class="fu">wfivenum</span>()</code>, <code class="sourceCode r"><span class="fu">wstandardize</span>()</code>, and
-<code class="sourceCode r"><span class="fu">wsummary</span>()</code>.
+<p>In the same spirit, the package provides <code class="sourceCode r R"><span class="fu">wmean</span>()</code>, <code class="sourceCode r R"><span class="fu">wmedian</span>()</code>, <code class="sourceCode r R"><span class="fu">wmode</span>()</code>, <code class="sourceCode r R"><span class="fu">wvar</span>()</code>, <code class="sourceCode r R"><span class="fu">wsd</span>()</code>, <code class="sourceCode r R"><span class="fu">wquantile</span>()</code>, <code class="sourceCode r R"><span class="fu">wIQR</span>()</code>, <code class="sourceCode r R"><span class="fu">wfivenum</span>()</code>, <code class="sourceCode r R"><span class="fu">wstandardize</span>()</code>,
+and <code class="sourceCode r R"><span class="fu">wsummary</span>()</code>.
 Multiple measures for one or more variables can be requested together
-with <code class="sourceCode r"><span class="fu">wmeasures</span>()</code>:</p>
+with <code class="sourceCode r R"><span class="fu">wmeasures</span>()</code>:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/weighted.html">wmeasures</a></span><span class="op">(</span></span>
 <span>  <span class="va">dfm</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Age"</span>, <span class="st">"Children"</span><span class="op">)</span><span class="op">]</span>,</span>
@@ -191,7 +191,7 @@ with <code class="sourceCode r"><span class="fu">wmeasures</span>()</code>:</p>
 <span><span class="co">#&gt;</span></span>
 <span><span class="co">#&gt;            n    mean     sd</span></span>
 <span><span class="co">#&gt; Age      1234  54.687  20.775</span></span>
-<span><span class="co">#&gt; Children 1234   2.426   1.67</span></span></code></pre></div>
+<span><span class="co">#&gt; Children 1234   2.426   1.670</span></span></code></pre></div>
 <p>These functions are adapted to declared objects. For the functions
 that have an <code>na.rm</code> argument, declared missing values are
 automatically excluded and <code>na.rm</code> controls the treatment of
@@ -205,7 +205,7 @@ and declared missing values.</p>
 <p>It extends base R and opens up new data analysis possibilities. Its
 generic constructors and coercion helpers allow other packages to add
 methods for new object types, both for creation and coercion to class
-<code class="sourceCode r"><span class="st">"declared"</span></code>.</p>
+<code class="sourceCode r R"><span class="st">"declared"</span></code>.</p>
   </main>
 </div>
 

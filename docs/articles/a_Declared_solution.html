@@ -21,7 +21,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">declared</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.27</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.28</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -114,11 +114,11 @@ that value <code>-91</code> would not play any role in the calculations
 <span><span class="co">#&gt; [1] -12.66667</span></span></code></pre></div>
 <p>This means the value <code>-91</code> did play an active role despite
 being identified as “missing”. In an ideal world, the expected mean
-would be 3, or at best, employ the argument <code class="sourceCode r">na.rm <span class="ot">=</span> <span class="cn">TRUE</span></code>
+would be 3, or at best, employ the argument <code class="sourceCode r R">na.rm <span class="ot">=</span> <span class="cn">TRUE</span></code>
 if the result is <code>NA</code> because of the declared missing
 value.</p>
 <p>A solution to this problem is offered by package
-<strong>labelled</strong>, which has a function called <code class="sourceCode r"><span class="fu">user_na_to_na</span>()</code>:</p>
+<strong>labelled</strong>, which has a function called <code class="sourceCode r R"><span class="fu">user_na_to_na</span>()</code>:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://larmarange.github.io/labelled/" class="external-link">labelled</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span></span>
@@ -190,8 +190,8 @@ as follows:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">x2</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 3</span></span></code></pre></div>
-<p>Notice that neither <code class="sourceCode r"><span class="fu">user_na_to_na</span>()</code>, nor
-employing <code class="sourceCode r">na.rm <span class="ot">=</span> <span class="cn">TRUE</span></code>
+<p>Notice that neither <code class="sourceCode r R"><span class="fu">user_na_to_na</span>()</code>,
+nor employing <code class="sourceCode r R">na.rm <span class="ot">=</span> <span class="cn">TRUE</span></code>
 are necessary, and, despite being stored as an <code>NA</code> value,
 the value <code>-91</code> is not equivalent to an <em>empty cell</em>.
 The information still exists, but it is simply ignored in the
@@ -218,8 +218,8 @@ if they exist:</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">x2</span>, <span class="cn">NA</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 3</span></span></code></pre></div>
 <p>Since all declared values are stored as regular NA values, the base
-function <code class="sourceCode r"><span class="fu">is.na</span>()</code>, as well as
-all related functions such as <code class="sourceCode r"><span class="fu">anyNA</span>()</code> etc., are
+function <code class="sourceCode r R"><span class="fu">is.na</span>()</code>, as well
+as all related functions such as <code class="sourceCode r R"><span class="fu">anyNA</span>()</code> etc., are
 unaware and can not differentiate between empty and declared missing
 values:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
@@ -232,7 +232,7 @@ difference:</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/is.empty.html">is.empty</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">x2</span>, <span class="cn">NA</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] FALSE FALSE FALSE FALSE FALSE FALSE  TRUE</span></span></code></pre></div>
 <p>All missing values, empty and declared, play well with the NA
-oriented, base functions such as <code class="sourceCode r"><span class="fu">na.omit</span>()</code> or <code class="sourceCode r"><span class="fu">na.exclude</span>()</code>:</p>
+oriented, base functions such as <code class="sourceCode r R"><span class="fu">na.omit</span>()</code> or <code class="sourceCode r R"><span class="fu">na.exclude</span>()</code>:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/na.fail.html" class="external-link">na.omit</a></span><span class="op">(</span><span class="va">x2</span><span class="op">)</span></span>
 <span><span class="co">#&gt; &lt;declared&lt;numeric&gt;[5]&gt;</span></span>

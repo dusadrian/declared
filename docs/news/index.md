@@ -1,6 +1,19 @@
 # Changelog
 
+## Version 0.28
+
+``` R
+o Argument "decimals" from function declared() is now tested, and if
+  possibly numeric is it coerced to numeric (e.g. "2")
+o Trimmed mean is now corrected when using weights
+o Function wtable() now aligns printed frequencies for crosstables
+o Frequencies are now calculated in C for speed in relation to all
+  variables sweeping (useful in package DDIwR)
+```
+
 ## Version 0.27
+
+CRAN release: 2026-08-22
 
 ``` R
 o Moved missing values frequencies in the attributes, for functions

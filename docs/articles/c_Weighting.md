@@ -159,7 +159,7 @@ wmeasures(
 #>
 #>            n    mean     sd
 #> Age      1234  54.687  20.775
-#> Children 1234   2.426   1.67
+#> Children 1234   2.426   1.670
 ```
 
 These functions are adapted to declared objects. For the functions that

@@ -7,32 +7,6 @@ functions, adapted to objects of class `"declared"` (see Details below)
 ## Usage
 
 ``` r
-wIQR(x, wt = NULL, na.rm = FALSE, ...)
-
-wfivenum(x, wt = NULL, na.rm = FALSE)
-
-wmean(x, wt = NULL, trim = 0, na.rm = TRUE)
-
-wmeasures(
-  x,
-  what = c("n", "mode", "mean", "median", "range", "var", "sd"),
-  wt = NULL,
-  na.rm = TRUE,
-  ...
-)
-
-wmedian(x, wt = NULL, na.rm = TRUE, ...)
-
-wmode(x, wt = NULL)
-
-wquantile(x, wt = NULL, probs = seq(0, 1, 0.25), na.rm = TRUE, ...)
-
-wsd(x, wt = NULL, method = NULL, na.rm = TRUE)
-
-wstandardize(x, wt = NULL, na.rm = TRUE)
-
-wsummary(x, wt = NULL, ...)
-
 wtable(
   x,
   y = NULL,
@@ -43,7 +17,33 @@ wtable(
   vlabel = FALSE
 )
 
+wmean(x, wt = NULL, trim = 0, na.rm = TRUE)
+
+wmedian(x, wt = NULL, na.rm = TRUE, ...)
+
+wmode(x, wt = NULL)
+
 wvar(x, wt = NULL, method = NULL, na.rm = TRUE)
+
+wsd(x, wt = NULL, method = NULL, na.rm = TRUE)
+
+wquantile(x, wt = NULL, probs = seq(0, 1, 0.25), na.rm = TRUE, ...)
+
+wIQR(x, wt = NULL, na.rm = FALSE, ...)
+
+wfivenum(x, wt = NULL, na.rm = FALSE)
+
+wstandardize(x, wt = NULL, na.rm = TRUE)
+
+wsummary(x, wt = NULL, ...)
+
+wmeasures(
+  x,
+  what = c("n", "mode", "mean", "median", "range", "var", "sd"),
+  wt = NULL,
+  na.rm = TRUE,
+  ...
+)
 ```
 
 ## Arguments
@@ -53,41 +53,14 @@ wvar(x, wt = NULL, method = NULL, na.rm = TRUE)
   A numeric vector for summaries, or declared / factor for frequency
   tables
 
-- wt:
-
-  A numeric vector of frequency weights
-
-- na.rm:
-
-  Logical, should the empty missing values be removed?
-
-- ...:
-
-  Further arguments passed to or from other methods.
-
-- trim:
-
-  A fraction (0 to 0.5) of observations to be trimmed from each end of x
-  before the mean is computed. Values of trim outside that range are
-  taken as the nearest endpoint.
-
-- what:
-
-  A character vector or a named list of functions, identifying what to
-  compute.
-
-- probs:
-
-  Numeric vector of probabilities with values in \[0,1\]
-
-- method:
-
-  Character, specifying how the result is scaled, see 'Details' below.
-
 - y:
 
   An optional variable, to create crosstabs; must have the same length
   as x
+
+- wt:
+
+  A numeric vector of frequency weights
 
 - values:
 
@@ -106,15 +79,40 @@ wvar(x, wt = NULL, method = NULL, na.rm = TRUE)
 
   Logical, print the variable label, if existing
 
+- trim:
+
+  A fraction (0 to 0.5) of observations to be trimmed from each end of x
+  before the mean is computed. Values of trim outside that range are
+  taken as the nearest endpoint.
+
+- na.rm:
+
+  Logical, should the empty missing values be removed?
+
+- ...:
+
+  Further arguments passed to or from other methods.
+
+- method:
+
+  Character, specifying how the result is scaled, see 'Details' below.
+
+- probs:
+
+  Numeric vector of probabilities with values in \[0,1\]
+
+- what:
+
+  A character vector or a named list of functions, identifying what to
+  compute. Available character values are `"n"`, `"NA"`, `"mode"`,
+  `"mean"`, `"median"`, `"range"`, `"var"`, `"sd"`, `"iqr"`, `"min"`,
+  and `"max"`.
+
 ## Value
 
 A vector of (weighted) values.
 
 ## Details
-
-In an expression evaluated in the context of a data frame, such as
-[`admisc::using()`](https://rdrr.io/pkg/admisc/man/using.html), `.` can
-be used as a placeholder for all variables in the current dataset.
 
 Weighted summaries
 
@@ -157,12 +155,6 @@ not all of them might be actually observed. When activated, this
 argument restricts the printed frequency table to the subset of observed
 values only.
 
-The argument `method` can be one of `"unbiased"` or `"ML"`.
-
-When this is set to `"unbiased"`, the result is an unbiased estimate
-using Bessel's correction. When this is set to `"ML"`, the result is the
-maximum likelihood estimate for a Gaussian distribution.
-
 The argument `wt` refers only to frequency weights. Users should be
 aware of the differences between frequency weights, analytic weights,
 probability weights, design weights, post-stratification weights etc.
@@ -171,6 +163,22 @@ For purposes of inferential testing, Thomas Lumley's package
 
 If no frequency weights are provided, the result is identical to the
 corresponding base functions.
+
+For all functions, the argument `na.rm` refers to the empty missing
+values and its default is set to TRUE. The declared missing values are
+automatically eliminated from the summary statistics, even if this
+argument is deactivated.
+
+The function `wmode()` returns the weighted mode of a variable. Unlike
+the other functions where the prefix `w` signals a weighted version of
+the base function with the same name, this has nothing to do with the
+base function [`mode()`](https://rdrr.io/r/base/mode.html) which refers
+to the storage mode or type of an R object.
+
+For `wvar()` and `wsd()`, the argument `method` can be one of
+`"unbiased"` or `"ML"`. The former produces an unbiased estimate using
+Bessel's correction, while the latter produces the maximum likelihood
+estimate for a Gaussian distribution.
 
 The function `wquantile()` extensively borrowed ideas from packages
 **`stats`** and **`Hmisc`**, to ensure a constant interpolation that
@@ -182,16 +190,12 @@ Other arguments can be passed to the stats function
 `...` argument, and their extensive explanation is found in the
 corresponding stats function's help page.
 
-For all functions, the argument `na.rm` refers to the empty missing
-values and its default is set to TRUE. The declared missing values are
-automatically eliminated from the summary statistics, even if this
-argument is deactivated.
+For `wmeasures()`, the `"n"` measure counts valid values, while `"NA"`
+counts all missing values, both declared and empty.
 
-The function `wmode()` returns the weighted mode of a variable. Unlike
-the other functions where the prefix `w` signals a weighted version of
-the base function with the same name, this has nothing to do with the
-base function [`mode()`](https://rdrr.io/r/base/mode.html) which refers
-to the storage mode / type of an R object.
+When `wmeasures()` is evaluated in the context of a data frame, such as
+with [`admisc::using()`](https://rdrr.io/pkg/admisc/man/using.html), `.`
+can be used as a placeholder for all variables in the current dataset.
 
 ## Author
 
