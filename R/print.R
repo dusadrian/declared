@@ -223,7 +223,7 @@
 
             for (i in seq (length (x))) {
                 if (nchar (x[i]) < max.nchar.cols) {
-                    x[i] <- padBoth_ (x[i], max.nchar.cols - nchar (x[i]))
+                    x[i] <- padLeft_ (x[i], max.nchar.cols - nchar (x[i]))
                 }
             }
 

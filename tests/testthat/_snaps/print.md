@@ -71,9 +71,9 @@
     Output
       
                 1 Rural 2 Urban  Total 
-      1 Males      50      69     119  
-      2 Females    39      57      96  
-        Total      89     126     215  
+      1 Males        50      69     119
+      2 Females      39      57      96
+        Total        89     126     215
       
 
 ---
@@ -104,12 +104,12 @@
     Output
       
                 1 Rural 2 Urban  Total 
-        1 Good     12      15      27  
-        2          13      25      38  
-        3          14      20      34  
-        4          18      16      34  
-      500 Bad      19      34      53  
-          Total    76     110     186  
+        1 Good       12      15      27
+        2            13      25      38
+        3            14      20      34
+        4            18      16      34
+      500 Bad        19      34      53
+          Total      76     110     186
       
 
 ---
@@ -119,9 +119,9 @@
     Output
       
                 1 Rural 2 Urban  Total 
-      1 Males      50      69     119  
-      2 Females    39      57      96  
-        Total      89     126     215  
+      1 Males        50      69     119
+      2 Females      39      57      96
+        Total        89     126     215
       
 
 ---
@@ -133,9 +133,9 @@
         Area: Respodent's area 
       
                 1 Rural 2 Urban  Total 
-      1 Males      50      69     119  
-      2 Females    39      57      96  
-        Total      89     126     215  
+      1 Males        50      69     119
+      2 Females      39      57      96
+        Total        89     126     215
       
 
 ---

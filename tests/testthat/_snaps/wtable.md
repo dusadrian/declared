@@ -270,9 +270,9 @@
     Output
       
                 1 Rural 2 Urban  Total 
-      1 Males      50      69     119  
-      2 Females    39      57      96  
-        Total      89     126     215  
+      1 Males        50      69     119
+      2 Females      39      57      96
+        Total        89     126     215
       
 
 ---
@@ -282,9 +282,9 @@
     Output
       
                 1 Rural 2 Urban  Total 
-      1 Males      57      50     107  
-      2 Females    57      51     108  
-        Total     114     101     215  
+      1 Males        57      50     107
+      2 Females      57      51     108
+        Total       114     101     215
       
 
 ---
@@ -311,9 +311,9 @@
         Area: Respodent's area 
       
                 1 Rural 2 Urban  Total 
-      1 Males      50      69     119  
-      2 Females    39      57      96  
-        Total      89     126     215  
+      1 Males        50      69     119
+      2 Females      39      57      96
+        Total        89     126     215
       
 
 # wtable works with a variable having all values NA
