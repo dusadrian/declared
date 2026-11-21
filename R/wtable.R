@@ -176,7 +176,7 @@
     }
 
     xvallab <- yvallab <- NULL
-    xna_values <- yna_values <- NULL
+    xna_values <- NULL
     xvalues <- yvalues <- TRUE
     missing_table <- NULL
     crosstab <- !is.null (y)
@@ -190,7 +190,7 @@
 
     if (inherits (x, "declared")) {
         allnax <- all (is.empty (x))
-        if (!allnax) {
+        if (!allnax || !observed) {
             # names_values () arranges missing values at the end
             xvallab <- names_values (
                 x,
@@ -199,20 +199,8 @@
             )
 
             xna_values <- attr (xvallab, "missing")
-            # x <- factor (as.character (x), levels = names (xvallab))
-            # sometimes (e.g. ISCO codifications in ESS) there are identical labels
-            # with different values, and factor () complains with overlapping levels
-
             xvalues <- !identical (names (xvallab), as.character (xvallab))
-            # print (head(paste (as.character (x), undeclare (x), sep = "_-_")))
-            x <- factor (
-                paste (
-                    undeclare (x, drop = TRUE),
-                    as.character (undeclare (x)),
-                    sep = "_-_"
-                ),
-                levels = paste (xvallab, names (xvallab), sep = "_-_")
-            )
+            x <- table_factor_ (x, xvallab)
         }
         else {
             xvalues <- FALSE
@@ -221,7 +209,7 @@
     }
     else {
         xvalues <- FALSE
-        if (!allnax) {
+        if (!allnax || !observed) {
             lvls <- levels (as.factor (x))
             xvallab <- seq (length (lvls))
             names (xvallab) <- lvls
@@ -230,6 +218,9 @@
 
     xy <- list (x = x)
     if (crosstab) {
+        if (inherits (y, "haven_labelled")) {
+            y <- as.declared (y)
+        }
         if (!is.atomic (y)) {
             stopError_ ("'y' should be an atomic vector.")
         }
@@ -260,22 +251,13 @@
 
         if (inherits (y, "declared")) {
             allnay <- all (is.empty (y))
-            if (!allnay) {
+            if (!allnay || !observed) {
                 yvallab <- names_values (
                     y,
                     drop_na = crosstab && isTRUE (valid),
                     observed = observed
                 )
-                yna_values <- attr (yvallab, "missing")
-
-                y <- factor (
-                    paste (
-                        undeclare (y, drop = TRUE),
-                        as.character (undeclare (y)),
-                        sep = "_-_"
-                    ),
-                    levels = paste (yvallab, names (yvallab), sep = "_-_")
-                )
+                y <- table_factor_ (y, yvallab)
             }
             else {
                 yvalues <- FALSE
@@ -284,7 +266,7 @@
         }
         else {
             yvalues <- FALSE
-            if (!allnay) {
+            if (!allnay || !observed) {
                 lvls <- levels (as.factor (y))
                 yvallab <- seq (length (lvls))
                 names (yvallab) <- lvls
@@ -381,23 +363,21 @@
         attr (toprint, "xvalues") <- isTRUE (values) & xvalues
         attr (toprint, "yvalues") <- isTRUE (values) & yvalues
 
-        # class (toprint) <- c ("wtable", "matrix")
+        attr (toprint, "categories") <- list (xvallab, yvallab)
     }
     else {
-        only_na <- length (x) > 0 && isTRUE (allnax)
-        labels <- NULL
-        if (nrow(tbl) > 0) {
+        labels <- names (xvallab)
+        if (is.null (labels)) {
             labels <- rownames (tbl)
-            labels <- sapply (strsplit (labels, split = "_-_"), tail, 1)
         }
 
-        if (any (is.na (x))) {
-            tbl <- c (tbl, sum (is.na (x)))
-            labels <- c (labels, NA)
-        }
-
-        if (isTRUE (observed)) {
-            tbl <- tbl[tbl > 0]
+        empty <- is.na (x)
+        if (any (empty)) {
+            empty_count <- round (sum (wt[empty], na.rm = TRUE))
+            if (!isTRUE (observed) || empty_count != 0) {
+                tbl <- c (tbl, empty_count)
+                labels <- c (labels, NA)
+            }
         }
 
         missing <- rep (FALSE, length (tbl))
@@ -418,20 +398,11 @@
 
         if (valid & (length (missing) > 0 | any (is.na (labels)))) {
             vld <- toprint$fre
-            nalabels <- is.element (xvallab, xna_values)
-            vld[nalabels] <- NA
-            vld[is.na (labels)] <- NA
-
-            lna <- seq (length (nalabels))
-
-            vld[seq (sum (!nalabels))] <- 100 * proportions (
-                vld[seq (sum (!nalabels))]
-            )
-
-            toprint$vld <- NA
-            toprint$vld[seq (length (vld))] <- vld
-            toprint$cpd <- NA
-            toprint$cpd[seq (length (vld))] <- cumsum (vld)
+            vld[missing] <- NA
+            vld[!missing] <- 100 * proportions (vld[!missing])
+            toprint$vld <- vld
+            toprint$cpd <- vld
+            toprint$cpd[!missing] <- cumsum (vld[!missing])
         }
         else {
             valid <- FALSE
@@ -452,9 +423,6 @@
             xvallab <- xvallab[!is.element (xvallab, xna_values)]
         }
 
-        if (only_na) {
-            orig <- array (numeric (0), dim = c (0))
-        }
     }
 
     if (is.matrix(orig)) {

@@ -450,86 +450,48 @@ NULL
     na_values <- getElement(attrx, "na_values")
     labels <- getElement(attrx, "labels")
 
-    if (drop_na) {
-        attrx$na_index <- NULL
-        attrx$na_values <- NULL
-
-        if (!is.null (labels)) {
-            labels <- labels[!is.element (labels, na_values)]
-            attrx$labels <- labels
-        }
-        attributes (x) <- NULL
-    }
-    else {
+    na_range <- attrx$na_range
+    if (inherits (x, "declared")) {
         x <- undeclare (x, drop = TRUE)
     }
-
-    x <- c (x, unname (labels))
-    x <- x[!duplicated (x)]
-    xmis <- logical (length (x))
-
-    na_values <- getElement(attrx, "na_values")
-    na_range <- getElement(attrx, "na_range")
-
-
-    if (!is.null (na_values)) {
-        xmis <- xmis | is.element (x, na_values)
+    else {
+        attributes (x) <- NULL
     }
 
-    if (!is.null (na_range)) {
-        xmis <- xmis | (x >= na_range[1] & x <= na_range[2])
+    x <- sort (unique (c (x, unname (labels))))
+    missing <- is.element (x, na_values)
+    if (length (na_range)) {
+        missing <- missing | (x >= na_range[1] & x <= na_range[2])
     }
-
-
-    xnotmis <- sort (x[!xmis])
-    xmis <- sort (x[xmis])
-    if (all (is.element (xmis, na_values))) {
+    xnotmis <- x[!missing]
+    xmis <- x[missing]
+    if (drop_na) {
+        xmis <- NULL
+    }
+    else if (all (is.element (xmis, na_values))) {
         xmis <- na_values
     }
 
-    if (isFALSE (observed) && is.numeric (labels)) {
-        lnotmis <- length(xnotmis)
-        labels_notmis <- labels[!is.element(labels, na_values)]
-        if (labels_notmis[2] < 16) {
-            # there should be an upper limit for tables of frequencies
-            if (
-                length (labels_notmis) == 2 &&
-                xnotmis[1] == labels_notmis[1] &&
-                xnotmis[lnotmis] == labels_notmis[2] &&
-                lnotmis != (labels_notmis[2] + labels_notmis[1] == 0)
-            ) {
-                # Likert type response scale, with labels only for the
-                # first and last values
-                xnotmis <- seq(labels_notmis[1], labels_notmis[2])
-            }
+    if (isFALSE (observed) && is.numeric (labels) && is.numeric (xnotmis)) {
+        endpoints <- sort (labels[is.element (labels, xnotmis)])
+        # Fill a short integer response scale labelled only at its endpoints.
+        if (length (endpoints) == 2 && all (is.finite (endpoints)) &&
+            all (xnotmis == trunc (xnotmis)) && diff (endpoints) < 16 &&
+            endpoints[2] < 16 && all (endpoints == range (xnotmis))) {
+            xnotmis <- seq (endpoints[1], endpoints[2])
         }
     }
-
-    wd <- which(duplicated(labels))
-    if (length(wd) > 0) {
-        labels <- labels[-wd]
-    }
-
-    if (length (xmis) > 0) {
-        names (xmis) <- xmis
-        for (i in seq (length (xmis))) {
-            if (any (isel <- labels == xmis[i])) {
-                names (xmis)[i] <- names (labels)[isel]
-            }
-        }
-    }
-
 
     names (xnotmis) <- xnotmis
-    if (length (xnotmis) > 0) {
-        nms <- names (labels)
-        for (i in seq (length (xnotmis))) {
-            if (any (isel <- labels == xnotmis[i])) {
-                names (xnotmis)[i] <- ifelse (
-                    nzchar(nms[isel]), nms[isel], xnotmis[i]
-                )
-            }
-        }
+    pos <- match (xnotmis, labels)
+    named <- !is.na (pos) & nzchar (names (labels)[pos])
+    names (xnotmis)[named] <- names (labels)[pos[named]]
+
+    if (length (xmis)) {
+        names (xmis) <- xmis
+        pos <- match (xmis, labels)
+        named <- !is.na (pos)
+        names (xmis)[named] <- names (labels)[pos[named]]
     }
 
     result <- c (xnotmis, xmis)
@@ -601,6 +563,14 @@ NULL
   }
 
   return (x)
+}
+
+`table_factor_` <- function (x, categories) {
+    # Group by the original codes, including codes with identical labels.
+    codes <- match (undeclare (x, drop = TRUE), categories)
+    return (structure (
+        codes, levels = as.character (seq_along (categories)), class = "factor"
+    ))
 }
 
 `frequency_weights_` <- function (x, wt) {
@@ -839,6 +809,24 @@ NULL
     }
 
     return (do.call (fun, arguments))
+}
+
+`format_wmeasure_column_` <- function (x, digits = 3) {
+
+    result <- rep ("", length (x))
+    ok <- !is.na (x)
+
+    if (!any (ok)) {
+        return (result)
+    }
+
+    x <- round (as.numeric (x[ok]), digits)
+    ndec <- numdec_ (x, each = TRUE, maxdec = digits)
+    maxdec <- max (ndec, na.rm = TRUE)
+
+    result[ok] <- sprintf (paste0 ("%.", maxdec, "f"), x)
+
+    return (result)
 }
 
 

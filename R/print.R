@@ -146,7 +146,23 @@
 
         if (is.matrix (x)) { # crosstab
 
-            rnms <- strsplit (rownames (x), split = "_-_")
+            categories <- attr (x, "categories")
+            if (is.null (categories)) {
+                # Tables saved by earlier versions encode codes in the dimnames.
+                rnms <- strsplit (rownames (x), split = "_-_")
+                columns <- strsplit (colnames (x), split = "_-_")
+            }
+            else {
+                parts <- function (categories, labels) {
+                    if (!length (categories)) {
+                        return (as.list (labels))
+                    }
+                    return (c (Map (c, as.character (categories), names (categories)), "Total"))
+                }
+                rnms <- parts (categories[[1]], rownames (x))
+                columns <- parts (categories[[2]], colnames (x))
+                attr (x, "categories") <- NULL
+            }
 
             xlabels <- sapply (rnms, tail, 1)
             # max.nchar.xlabels <- max (nchar (encodeString (xlabels)))
@@ -158,7 +174,7 @@
             #     }
             # }
 
-            if (attr (x, "xvalues")) {
+            if (attr (x, "xvalues") && length (rnms) > 1) {
                 # -length (rnms), because of "Total" which does not have a value
                 xvalues <- unlist (lapply (rnms[-length (rnms)], "[[", 1))
 
@@ -170,7 +186,7 @@
 
                 max.nchar.xvalues <- max (nchar (encodeString (xvalues)))
 
-                for (i in seq (length (xvalues) - 1)) {
+                for (i in seq_along (xvalues)) {
                     if (nchar (xvalues[i]) < max.nchar.xvalues) {
                         xvalues[i] <- padLeft_ (
                             xvalues[i], max.nchar.xvalues - nchar (xvalues[i])
@@ -190,7 +206,7 @@
             cnms <- colnames (x)
             if (attr (x, "yvalues")) {
                 cnms <- vapply (
-                    strsplit (cnms, split = "_-_"),
+                    columns,
                     function(v) {
                         if ( length(v) < 2) return(v)
                         val <- v[1]
@@ -205,7 +221,7 @@
                 )
             } else {
                 cnms <- sapply (
-                    strsplit (cnms, split = "_-_"),
+                    columns,
                     tail,
                     1
                 )
@@ -241,6 +257,10 @@
             cat (ifelse (startend, "\n", ""))
         }
         else {
+            if (!nrow (x)) {
+                cat ("<table of extent 0>\n")
+                return (invisible (NULL))
+            }
             show_values <- attr (x, "show_values")
             valid <- attr (x, "valid")
             dots <- list (...)
@@ -520,6 +540,10 @@
         x <- matrix (x, nrow = 1, dimnames = list ("", names (x)))
     }
 
+    if (!length (x)) {
+        print (x)
+        return (invisible (result))
+    }
     nms <- colnames (x)
     x <- matrix (
         apply (x, 2, format_wmeasure_column_, digits = digits),
@@ -571,23 +595,4 @@
     cat (ifelse (startend, "\n", ""))
 
     return (invisible (result))
-}
-
-
-`format_wmeasure_column_` <- function (x, digits = 3) {
-
-    result <- rep ("", length (x))
-    ok <- !is.na (x)
-
-    if (!any (ok)) {
-        return (result)
-    }
-
-    x <- round (as.numeric (x[ok]), digits)
-    ndec <- numdec_ (x, each = TRUE, maxdec = digits)
-    maxdec <- max (ndec, na.rm = TRUE)
-
-    result[ok] <- sprintf (paste0 ("%.", maxdec, "f"), x)
-
-    return (result)
 }
