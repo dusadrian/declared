@@ -120,9 +120,11 @@
 #' @export
 `drop_na.haven_labelled_spss` <- function (x, drop_labels = TRUE) {
   attrx <- attributes (x)
-  x[is.element (x, attrx$na_values)] <- NA
+  attributes (x) <- NULL
+  missing <- all_missing_values (x, attrx$na_values, attrx$na_range, attrx$labels)
+  x[is.element (x, missing)] <- NA
   if (isTRUE (drop_labels)) {
-    attrx$labels <- attrx$labels[!is.element (attrx$labels, attrx$na_values)]
+    attrx$labels <- attrx$labels[!is.element (attrx$labels, missing)]
   }
   attrx$na_index <- NULL
   attrx$na_values <- NULL
@@ -137,7 +139,10 @@
   x <- sanitize_na_index_ (x)
   attrx <- attributes (x)
   if (isTRUE (drop_labels)) {
-    attrx$labels <- attrx$labels[!is.element (attrx$labels, attrx$na_values)]
+    missing <- all_missing_values (
+      unname (attrx$labels), attrx$na_values, attrx$na_range
+    )
+    attrx$labels <- attrx$labels[!is.element (attrx$labels, missing)]
   }
   attrx$na_index <- NULL
   attrx$na_values <- NULL
@@ -149,7 +154,7 @@
 
 #' @export
 `drop_na.data.frame` <- function (x, drop_labels = TRUE) {
-  declared <- vapply (x, is.declared, logical (1))
+  declared <- vapply (x, inherits, TRUE, what = c ("declared", "haven_labelled_spss"))
   x[declared] <- lapply (x[declared], drop_na, drop_labels = drop_labels)
   return (x)
 }

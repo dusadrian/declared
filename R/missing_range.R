@@ -57,13 +57,12 @@
     stopError_ ("`value` should be a numeric vector of length 2.")
   }
 
-  value <- sort (value)
-
   declared (undeclare (x),
            labels = attr (x, "labels", exact = TRUE),
            na_values = attr (x, "na_values", exact = TRUE),
            na_range = value,
            label = attr (x, "label", exact = TRUE),
+           measurement = attr (x, "measurement", exact = TRUE),
            decimals = attr (x, "decimals", exact = TRUE)
   )
 }

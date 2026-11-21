@@ -146,7 +146,7 @@ test_that("head.declared and tail.declared work", {
 
   expect_false(identical(tail(x7), tail(x8)))
 
-  expect_equal(tail(x), tail(x, n = -1))
+  expect_identical(tail(x, n = -1), x[-1])
 })
 
 x9 <- x
@@ -213,7 +213,7 @@ test_that("labels are indexed", {
   expect_length(head(lx1), 6)
   expect_length(tail(lx1), 6)
   expect_length(head(lx1, n = -1), 5)
-  expect_length(tail(lx1, n = -1), 6)
+  expect_identical(tail(lx1, n = -1), lx1[-1])
   expect_length(head(lx2), 0)
 })
 

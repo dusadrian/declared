@@ -22,12 +22,15 @@
 }
 
 `vec_proxy.declared` <- function (x, ...) {
-    return (undeclare (x, drop = TRUE))
+    values <- undeclare (x, drop = TRUE)
+    names (values) <- names (x)
+    return (values)
 }
 
 `vec_restore.declared` <- function(x, to, ...) {
     to <- sanitize_na_index_ (to)
     attrs <- attributes(to)
+    attrs$names <- names (x)
     todate <- isTRUE(attrs$date)
 
     misvals <- all_missing_values (

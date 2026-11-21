@@ -127,7 +127,8 @@ declared.default <- function (
     measurement = NULL, decimals = NULL, llevels = FALSE, ...
 ) {
 
-  xdate <- inherits(x, "Date")
+  nms_x <- names (x)
+  xdate <- inherits (x, "Date") || isTRUE (attr (x, "date", exact = TRUE))
   if (is.factor (x)) {
     nms <- levels (x)
     if (is.null (labels)) {
@@ -209,21 +210,19 @@ declared.default <- function (
     }
   }
 
-  na_range <- sort (na_range)
-  if (!is.null (na_range)) {
-    if (xdate && !possibleNumeric_ (na_range)) {
+  if (xdate) {
+    if (!is.null (na_range) && !possibleNumeric_ (na_range)) {
       stopError_ ("For date objects, the declared NA range should be numeric.")
     }
+    if (!is.null (na_range)) {
+      na_range <- asNumeric_ (na_range)
+    }
   }
-  if (!xdate) {
-    attributes (x) <- NULL
-    validate_declared (x, labels, label, na_values, na_range)
-  }
-
+  attributes (x) <- NULL
+  validate_declared (x, labels, label, na_values, na_range)
+  na_range <- sort (na_range)
   misvals <- all_missing_values (x, na_values, na_range, labels)
-
-  # attr (x, "xdate") <- xdate
-  na_index <- which(is.element(x, misvals))
+  na_index <- if (length (misvals)) which (is.element (x, misvals))
 
   if (length(na_index) > 0) {
     declared_nas <- x[na_index]
@@ -245,6 +244,10 @@ declared.default <- function (
     x <- as.character (x, values = TRUE)
   }
 
+  if (xdate) {
+    class (x) <- "Date"
+  }
+  names (x) <- nms_x
   attr (x, "na_index") <- na_index
   attr (x, "na_values") <- na_values
   attr (x, "na_range") <- na_range

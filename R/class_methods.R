@@ -50,11 +50,14 @@
   attrx <- attributes (x)
   x <- undeclare (x)
   x <- NextMethod()
+  if (isTRUE (attrx$date)) {
+    x <- as.Date (x)
+  }
   # attrx$label, if not existing, takes from attrx$labels
   # attrx[["label"]] is something like attr (x, "label", exact = TRUE)
   declared (
     x, attrx[["labels"]], attrx$na_values, attrx$na_range, attrx[["label"]],
-    decimals = attrx$decimals
+    measurement = attrx$measurement, decimals = attrx$decimals
   )
 }
 
@@ -62,17 +65,17 @@
 `[<-.declared` <- function (x, i, value) {
   x <- sanitize_na_index_ (x)
   attrx <- attributes (x)
-  value <- undeclare (value)
-  x <- undeclare (x)
+  value <- undeclare (value, drop = TRUE)
+  x <- undeclare (x, drop = TRUE)
   xdate <- isTRUE (attrx$date)
-  attributes (x) <- NULL
+  names (x) <- attrx$names
   x <- NextMethod()
   if (xdate) {
     x <- as.Date (x)
   }
   declared (
     x, attrx[["labels"]], attrx$na_values, attrx$na_range, attrx[["label"]],
-    decimals = attrx$decimals
+    measurement = attrx$measurement, decimals = attrx$decimals
   )
 }
 
@@ -87,98 +90,37 @@
 #' @export
 `c.declared` <- function (...) {
   dots <- lapply (list (...), sanitize_na_index_)
-  declared <- unlist (lapply (dots, is.declared))
-  na_values <- sort (unique (unlist (
-    lapply (dots, function (x) attr (x, "na_values"))
-  )))
+  values <- unlist (lapply (dots, function (x) {
+    nms <- names (x)
 
-  labels <- unlist (lapply (dots, function (x) {
-    attr (x, "labels", exact = TRUE)
-  }))
-
-  duplicates <- duplicated (labels)
-
-  if (length (wduplicates <- which (duplicates)) > 0) {
-    for (i in wduplicates) {
-      if (length (unique (names (labels[labels == labels[i]]))) > 1) {
-        stopError_ ("Labels must be unique.")
-      }
+    if (is.declared (x)) {
+      x <- undeclare (x, drop = TRUE)
     }
-  }
 
-  labels <- sort (labels[!duplicates])
-
-  na_range <- lapply (dots, function (x) attr (x, "na_range", exact = TRUE))
-  nulls <- unlist (lapply (na_range, is.null))
-
-  decimals <- unique (unlist (lapply (dots, function (x) {
-    attr (x, "decimals", exact = TRUE)
-  })))
-  if (length (decimals) == 0) {
-    decimals <- NULL
-  }
-  else {
-    decimals <- max (decimals)
-  }
-
-  if (all (nulls)) {
-    na_range <- NULL
-  }
-  else {
-    if (sum (nulls) == length (na_range) - 1) {
-      na_range <- unlist (na_range)
-    }
-    else {
-      compatible <- logical (length (na_range))
-      if (!is.null (na_range)) {
-        for (i in seq (1, length (na_range) - 1)) {
-          nai <- na_range[[i]]
-          if (is.null (nai)) {
-            compatible[i] <- TRUE
-          }
-          else {
-            for (j in seq (2, length (na_range))) {
-              naj <- na_range[[j]]
-              if (is.null (naj)) {
-                compatible[j] <- TRUE
-              }
-              else {
-                if (
-                  any (
-                    is.element (seq (nai[1], nai[2]), seq (naj[1], naj[2]))
-                  ) > 0
-                ) {
-                  compatible[i] <- TRUE
-                  compatible[j] <- TRUE
-                }
-              }
-            }
-          }
-        }
-      }
-
-      if (any (!compatible)) {
-        stopError_ ("Incompatible NA ranges.")
-      }
-
-      na_range <- range(unlist (na_range))
-    }
-  }
-
-  dots <- unlist (lapply (dots, function (x) {
-    if (is.declared (x)) x <- undeclare (x)
     attributes (x) <- NULL
+    names (x) <- nms
     return (x)
   }))
 
-  return (declared (
+  dates <- vapply (
     dots,
-    labels = labels,
-    na_values = na_values,
-    na_range = na_range,
-    label = attr (dots[[which (declared)[1]]], "label", exact = TRUE),
-    decimals = decimals
-  ))
+    function (x) {
+      return (inherits (x, "Date") || isTRUE (attr (x, "date")))
+    },
+    TRUE
+  )
+
+  if (all (dates)) values <- as.Date (values)
+
+  return (
+    do.call (
+      declared,
+      c (
+        list (x = values),
+        combined_metadata_ (unname (dots))
+      )
+    )
+  )
 }
 
 #' @export
@@ -200,7 +142,7 @@
 
 #' @export
 `unique.declared` <- function (x, incomparables = FALSE, ...) {
-  x[!duplicated (x)]
+  return (x[!duplicated (x, incomparables = incomparables, ...)])
 }
 
 #' @export
@@ -235,26 +177,12 @@
 
 #' @export
 `tail.declared` <- function (x, n = 6L, ...) {
-  if (n < 1) {
-    n <- 6L
-  }
-  lx <- length (x)
-  n <- min (n, lx)
-  x[seq (lx - n + 1, lx)]
+  return (x[tail (seq_along (x), n, ...)])
 }
 
 #' @export
 `tail.labels_df` <- function (x, n = 6L, ...) {
-  if (n < 1) {
-    n <- 6L
-  }
-  lx <- length (x)
-  n <- min (n, lx)
-  result <- x[seq (lx - n + 1, lx)]
-
-  attr(result, "print_as_df") <- attr(x, "print_as_df")
-  class(result) <- class(x)
-  return(result)
+  return (x[tail (seq_along (x), n, ...)])
 }
 
 #' @export
@@ -379,18 +307,18 @@ weighted.mean.declared <- function (x, w, ..., na.rm = FALSE) {
   allna <- TRUE
 
   if (!is.null (na_index)) {
-    allna <- all.equal(target[na_index], current[na_index])
+    allna <- all.equal (target[na_index], current[na_index], ...)
     target <- target[-na_index]
     current <- current[-na_index]
   }
 
-  allv <- all.equal(target, current)
+  allv <- all.equal (target, current, ...)
 
   if (isTRUE (allv)) {
     if (isTRUE (allna)) {
       return (TRUE)
     }
-    return (paste ("Declared mising values", tolower(allna)))
+    return (paste ("Declared missing values", tolower(allna)))
   }
 
   return (allv)
@@ -603,23 +531,31 @@ weighted.mean.declared <- function (x, w, ..., na.rm = FALSE) {
 #' @export
 `+.declared` <- function (e1, e2) {
   e1 <- check_date (e1)
-  if (!missing(e2)) {
-    if (is.declared (e2)) {
-      e2 <- check_date (e2)
-    }
+
+  if (missing (e2)) {
+    return (+e1)
   }
-  .Primitive ("+")(e1, e2)
+
+  if (is.declared (e2)) {
+    e2 <- check_date (e2)
+  }
+
+  return (e1 + e2)
 }
 
 #' @export
 `-.declared` <- function (e1, e2) {
   e1 <- check_date (e1)
-  if (!missing(e2)) {
-    if (is.declared (e2)) {
-      e2 <- check_date (e2)
-    }
+
+  if (missing (e2)) {
+    return (-e1)
   }
-  .Primitive ("-")(e1, e2)
+
+  if (is.declared (e2)) {
+    e2 <- check_date (e2)
+  }
+
+  return (e1 - e2)
 }
 
 #' @export
@@ -726,26 +662,8 @@ weighted.mean.declared <- function (x, w, ..., na.rm = FALSE) {
 }
 
 #' @export
-`!=.declared` <- function (e1, e2) {e1 <- unclass (undeclare (e1))
-le1 <- attr (e1, "labels", exact = TRUE)
-e1 <- undeclare (e1)
-attributes (e1) <- NULL
-
-if (!missing(e2)) {
-  if (is.declared (e2)) {
-    e2 <- undeclare (e2)
-    attributes (e2) <- NULL
-  }
-
-  if (
-    length (e2) == 1 && is.element (e2, names (le1)) && !is.element (e2, e1)
-  ) {
-    e2 <- le1[names (le1) == e2]
-  }
-}
-
-
-.Primitive ("!=")(e1, e2)
+`!=.declared` <- function (e1, e2) {
+  return (!(e1 == e2))
 }
 
 #' @export
@@ -882,7 +800,14 @@ if (!missing(e2)) {
 `rep.declared` <- function (x, ...) {
   x <- sanitize_na_index_ (x)
   attrx <- attributes (x)
-  rep_val <- rep (undeclare (x, drop = TRUE), ...)
+  values <- undeclare (x, drop = TRUE)
+  names (values) <- attrx$names
+  rep_val <- rep (values, ...)
+
+  if (isTRUE (attrx$date)) {
+    rep_val <- as.Date (rep_val)
+  }
+
   return (
     declared (
       rep_val,
@@ -890,6 +815,7 @@ if (!missing(e2)) {
       na_values = attrx$na_values,
       na_range = attrx$na_range,
       label = attrx[["label"]],
+      measurement = attrx$measurement,
       decimals = attrx$decimals
     )
   )
@@ -907,9 +833,16 @@ if (!missing(e2)) {
       na_values = attrx$na_values,
       na_range = attrx$na_range,
       label = attrx[["label"]],
+      measurement = attrx$measurement,
       decimals = attrx$decimals
     )
   )
+}
+
+#' @exportS3Method NULL
+#' @rawNamespace if (exists("mtfrm", baseenv(), inherits = FALSE)) S3method(mtfrm,declared)
+`mtfrm.declared` <- function (x) {
+  return (undeclare (x, drop = TRUE))
 }
 
 #' @export

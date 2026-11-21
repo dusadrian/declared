@@ -160,6 +160,59 @@ NULL
 }
 
 
+`validate_declared` <- function (x = double(), labels = NULL, label = NULL,
+                                na_values = NULL, na_range = NULL, ...) {
+
+  if (
+    !is.numeric (x) &&
+    !is.character (x) &&
+    !inherits (x, "Date") &&
+    !all (is.na (x))
+  ) {
+    stopError_ ("`x` must be a numeric, character or a Date vector.")
+  }
+
+  if (!is.null (labels)) {
+    if (is.null (names (labels))) {
+      stopError_ ("`labels` must have names.")
+    }
+
+    if (any (duplicated (stats::na.omit (labels)))) {
+      stopError_ ("Value `labels` must be unique.")
+    }
+  }
+
+  if (
+    !is.null (label) && !(
+      is.atomic (label) && is.character (label) && length (label) == 1
+    )
+  ) {
+    stopError_ ("`label` must be a character vector of length one.")
+  }
+
+  if (!is.null (na_values)) {
+    if (any (is.na (na_values))) {
+      stopError_ ("`na_values` should not contain NA values.")
+    }
+  }
+
+  if (!is.null (na_range)) {
+    type_ok <-  all (is.na (x)) ||
+      (is.character (x) && is.character (na_range)) ||
+      (is.numeric (x) && is.numeric (na_range))
+
+    if (!type_ok || length (na_range) != 2 || anyDuplicated (na_range)) {
+      stopError_ (
+        "`na_range` must have two unique values of the same type as `x`."
+      )
+    }
+
+    if (any (is.na (na_range))) {
+      stopError_ ("`na_range` can not contain missing values.")
+    }
+  }
+}
+
 `check_measurement` <- function (x) {
 
     if (is.null (x)) {
@@ -364,26 +417,15 @@ NULL
         misvals <- sort (na_values)
     }
 
-    if (is.numeric (x)) {
-        if (!is.null (labels)) {
-            x <- c (x, unname (unclass (labels)))
+    if (!is.null (na_range)) {
+        if (is.declared (x)) x <- undeclare (x, drop = TRUE)
+        x <- c (x, unname (unclass (labels)))
+        na_range <- range (na_range)
+        if (na_range[1] == na_range[2]) {
+            stopError_ ("`na_range` must have two unique values.")
         }
-
-        if (!is.null (na_range)) {
-            na_range <- range (na_range)
-            if (length (unique (na_range)) != 2) {
-                stopError_ ("`na_range` must have two unique values.")
-            }
-
-            uniques <- sort (unique (x[x >= na_range[1] & x <= na_range[2]]))
-            if (length (uniques) == 0) {
-                uniques <- na_range
-            } else {
-                uniques <- sort (unique (c (uniques, na_range)))
-            }
-
-            misvals <- sort (unique (c (misvals, uniques)))
-        }
+        inside <- x >= na_range[1] & x <= na_range[2]
+        misvals <- sort (unique (c (misvals, x[inside], na_range)))
     }
 
     return (misvals)
@@ -494,6 +536,71 @@ NULL
     attr (result, 'missing') <- unname (xmis)
 
     return (result)
+}
+
+`combined_metadata_` <- function (dots) {
+  na_values <- sort (unique (unlist (
+    lapply (dots, function (x) attr (x, "na_values"))
+  )))
+
+  labels <- unlist (lapply (dots, function (x) {
+    attr (x, "labels", exact = TRUE)
+  }))
+
+  duplicates <- duplicated (labels)
+  if (any (duplicates) && any (
+    names (labels)[duplicates] != names (labels)[match (labels[duplicates], labels)]
+  )) {
+    stopError_ ("Labels must be unique.")
+  }
+  labels <- sort (labels[!duplicates])
+  ranges <- lapply (dots, attr, "na_range", exact = TRUE)
+
+  decimals <- unique (unlist (lapply (dots, function (x) {
+    attr (x, "decimals", exact = TRUE)
+  })))
+  if (length (decimals) == 0) {
+    decimals <- NULL
+  }
+  else {
+    decimals <- max (decimals)
+  }
+
+  measures <- unique (unlist (lapply (dots, attr, "measurement", exact = TRUE)))
+  first <- which (vapply (dots, is.declared, TRUE))[1]
+  return (list (
+    labels = labels, na_values = na_values, na_range = combine_ranges_ (ranges),
+    label = attr (dots[[first]], "label", exact = TRUE),
+    measurement = if (length (measures) == 1) measures,
+    decimals = decimals
+  ))
+}
+
+`combine_ranges_` <- function (ranges) {
+  ranges <- Filter (Negate (is.null), ranges)
+  if (!length (ranges)) return (NULL)
+  lower <- unname (unlist (lapply (ranges, min)))
+  upper <- unname (unlist (lapply (ranges, max)))
+  by_lower <- order (lower)
+  end <- upper[by_lower[1]]
+  for (i in by_lower[-1]) {
+    if (lower[i] > end) {
+      stopError_ ("Incompatible NA ranges.")
+    }
+    end <- max (end, upper[i])
+  }
+  return (c (lower[by_lower[1]], end))
+}
+
+`sanitize_na_index_` <- function (x) {
+  if (is.atomic (x) && !valid_na_index (x)) {
+    # The positional map cannot be repaired selectively once it is stale.
+    attr (x, "na_index") <- NULL
+    attr (x, "na_values") <- NULL
+    attr (x, "na_range") <- NULL
+  }
+
+  return (x)
 }
 
 `frequency_weights_` <- function (x, wt) {
