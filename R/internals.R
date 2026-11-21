@@ -74,7 +74,6 @@ NULL
     declared_indexes <- c ()
 
     if (any (na_declared)) {
-        x <- undeclare (x)
         nms <- names (na_index)
         if (possibleNumeric_ (nms)) {
         nms <- asNumeric_ (nms)
@@ -829,6 +828,20 @@ NULL
     return (result)
 }
 
+`install_binding_` <- function (env, name, fun) {
+    original <- env[[name]]
+    locked <- bindingIsLocked (name, env)
+    package_bindings_[[name]] <- list (
+        env = env, original = original, replacement = fun, locked = locked
+    )
+    if (locked) {
+        unlockBinding (name, env)
+        on.exit (lockBinding (name, env))
+    }
+    env[[name]] <- fun
+    return (invisible (NULL))
+}
+
 
 # The following functions are copied from package admisc
 # to achieve zero dependency.
@@ -1390,24 +1403,14 @@ check_date <- function (x) {
     na_empty <- is.empty (x)
     valid <- !is.na (x)
 
-    z <- numeric (length (x))
-
-    if (is.na (na.last)) {
-        z[na_declared | na_empty] <- NA
-        if (any (valid)) {
-            val <- undeclare (x, drop = TRUE)
-            r_v <- xtfrm (val)
-            r_v <- r_v - min (r_v[valid]) + 1
-            z[valid] <- r_v[valid]
-        }
-        return (z)
+    attributes (x) <- NULL
+    if (!any (na_declared) && !any (na_empty)) {
+        return (xtfrm (x))
     }
-
-    if (any (valid)) {
-        val <- undeclare (x, drop = TRUE)
-        r_v <- xtfrm (val)
-        r_v <- r_v - min (r_v[valid]) + 1
-        z[valid] <- r_v[valid]
+    z <- rep (NA_real_, length (x))
+    z[valid] <- match (x[valid], sort (unique (x[valid])))
+    if (is.na (na.last)) {
+        return (z)
     }
 
     if (any (na_declared)) {
@@ -1415,9 +1418,7 @@ check_date <- function (x) {
         if (possibleNumeric_ (nms)) {
             nms <- asNumeric_ (nms)
         }
-        r_m_vals <- xtfrm (nms)
-        r_m_vals <- r_m_vals - min (r_m_vals) + 1
-        z[na_index] <- r_m_vals
+        z[na_index] <- match (nms, sort (unique (nms)))
     }
 
     if (any (na_empty)) {
