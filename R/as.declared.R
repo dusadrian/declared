@@ -88,16 +88,17 @@
   #---------------------------------------
 
   declared_nas <- NULL
+  nms_x <- names (x)
+  spss <- inherits (x, "haven_labelled_spss")
+  attributes (x) <- NULL
 
-  if (!inherits (x, "haven_labelled_spss")) {
+  if (!spss) {
     na_index <- which (hasTag_ (x))
     if (length (na_index) > 0) {
       declared_nas <- getTag_ (x[na_index])
       x[na_index] <- NA
       names(na_index) <- declared_nas
     }
-
-    attributes (x) <- NULL
 
     if (!is.null (labels)) {
       nms <- names (labels)
@@ -112,9 +113,9 @@
       names (labels) <- nms
     }
 
-    misvals <- unique (sort (c (na_values, declared_nas)))
+    na_values <- sort (unique (c (na_values, declared_nas)))
   } else {
-    misvals <- all_missing_values (unclass (x))
+    misvals <- all_missing_values (x, na_values, na_range, labels)
     na_index <- which (is.element (x, misvals))
     if (length (na_index) > 0) {
       names (na_index) <- x[na_index]
@@ -122,16 +123,7 @@
     }
   }
 
-  attributes (x) <- NULL
-  pnx <- possibleNumeric_ (x) | all (is.na (x))
-
-  charlabels <- FALSE
-  if (!is.null (labels)) {
-    if (length (setdiff (labels, na_values)) > 0) {
-      charlabels <- !possibleNumeric_ (setdiff(labels, na_values))
-    }
-  }
-
+  names (x) <- nms_x
   if (length (na_index) > 0) {
     attr (x, "na_index") <- na_index
   }

@@ -26,7 +26,7 @@ SEXP _unlockEnvironment(SEXP env) {
 
 typedef union {
     double value;
-    char byte[16];
+    unsigned char byte[sizeof(double)];
 } ieee_double;
 
 SEXP _directDeclared(
@@ -131,186 +131,95 @@ const int TAG_BYTE = 4;
 
 
 SEXP _tag(SEXP x) {
-    int n = Rf_length(x);
+    R_xlen_t n = XLENGTH(x);
     SEXP out = PROTECT(Rf_allocVector(REALSXP, n));
-
-    for (int i = 0; i < n; ++i) {
-
-        int nchars = Rf_length(STRING_ELT(x, i));
-        Rboolean firstminus = CHAR(STRING_ELT(x, i))[0] == CHAR(mkChar("-"))[0];
-
-        if (nchars > 2 + firstminus) {
-            nchars = 2 + firstminus;
-        }
-
+    for (R_xlen_t i = 0; i < n; ++i) {
+        SEXP value = STRING_ELT(x, i);
         ieee_double y;
         y.value = NA_REAL;
-
-        if (firstminus) {
-            y.value = -1 * NA_REAL;
-        }
-
-        int bytepos = TAG_BYTE;
-
-        for (int c = firstminus; c < nchars; c++) {
-            y.byte[bytepos] = CHAR(STRING_ELT(x, i))[c];
-            if (TAG_BYTE == 3) {
-                bytepos -= 1;
+        if (value != NA_STRING) {
+            const unsigned char *tag = (const unsigned char *)CHAR(value);
+            if (*tag == '-') {
+                ++tag;
+                y.value = copysign(NA_REAL, -1.0);
             }
-            else {
-                bytepos += 1;
+            if (*tag) {
+                y.byte[TAG_BYTE] = tag[0];
+                y.byte[TAG_BYTE == 4 ? 5 : 2] = tag[1];
             }
         }
-
         REAL(out)[i] = y.value;
     }
-
     UNPROTECT(1);
-    return(out);
+    return out;
 }
-
 
 
 SEXP _hasTag(SEXP x, SEXP tag_) {
-    int n = Rf_length(x);
+    R_xlen_t n = XLENGTH(x);
     SEXP out = PROTECT(Rf_allocVector(LGLSXP, n));
-
     if (TYPEOF(x) != REALSXP) {
-        for (int i = 0; i < n; ++i) {
-            LOGICAL(out)[i] = 0;
-        }
+        Memzero(LOGICAL(out), n);
+        UNPROTECT(1);
+        return out;
     }
-    else {
-
-        for (int i = 0; i < n; ++i) {
-            double xi = REAL(x)[i];
-
-            if (!ISNAN(xi)) {
-                LOGICAL(out)[i] = FALSE;
-            } else {
-                ieee_double y;
-                y.value = xi;
-                char tag = y.byte[TAG_BYTE];
-
-                Rboolean test = TRUE;
-
-                if (tag == '\0') {
-                    LOGICAL(out)[i] = FALSE;
-                }
-                else {
-                    if (TYPEOF(tag_) != NILSXP) {
-
-                        int nchars = Rf_length(STRING_ELT(tag_, 0));
-                        Rboolean firstminus = CHAR(STRING_ELT(tag_, 0))[0] == CHAR(mkChar("-"))[0];
-
-                        if ((firstminus && !signbit(xi)) || (!firstminus && signbit(xi))) {
-                            LOGICAL(out)[i] = FALSE;
-                        }
-                        else {
-
-                            if (nchars > 2 + firstminus) {
-                                nchars = 2 + firstminus;
-                            }
-
-                            test = test && tag == CHAR(STRING_ELT(tag_, 0))[firstminus];
-                            char tag = y.byte[(TAG_BYTE == 4) ? 5 : 2];
-
-                            if (Rf_length(STRING_ELT(tag_, 0)) > 1 && tag != '\0') {
-                                test = test && tag == CHAR(STRING_ELT(tag_, 0))[firstminus + 1];
-                            }
-
-                            LOGICAL(out)[i] = test;
-                        }
-                    }
-                    else {
-                        LOGICAL(out)[i] = TRUE;
-                    }
-                }
-            }
-        }
+    if (tag_ != R_NilValue && (TYPEOF(tag_) != STRSXP || XLENGTH(tag_) != 1)) {
+        Rf_error("Expected one tag.");
     }
+    const unsigned char *tag = tag_ == R_NilValue ? NULL :
+        (const unsigned char *)CHAR(STRING_ELT(tag_, 0));
+    int negative = tag && *tag == '-';
+    if (negative) ++tag;
 
+    for (R_xlen_t i = 0; i < n; ++i) {
+        ieee_double y;
+        y.value = REAL(x)[i];
+        int tagged = ISNAN(y.value) && y.byte[TAG_BYTE] != 0;
+        if (tagged && tag) {
+            tagged = (!!signbit(y.value) == negative &&
+                      y.byte[TAG_BYTE] == tag[0] &&
+                      y.byte[TAG_BYTE == 4 ? 5 : 2] == tag[1]);
+        }
+        LOGICAL(out)[i] = tagged;
+    }
     UNPROTECT(1);
     return out;
 }
-
 
 
 SEXP _getTag(SEXP x) {
-
-    int n = Rf_length(x);
+    R_xlen_t n = XLENGTH(x);
     SEXP out = PROTECT(Rf_allocVector(STRSXP, n));
-
-    for (int i = 0; i < n; ++i) {
-        double xi = REAL(x)[i];
-
-        if (!ISNAN(xi)) {
+    for (R_xlen_t i = 0; i < n; ++i) {
+        ieee_double y;
+        y.value = REAL(x)[i];
+        if (!ISNAN(y.value) || !y.byte[TAG_BYTE]) {
             SET_STRING_ELT(out, i, NA_STRING);
         }
         else {
-
-            ieee_double y;
-            y.value = xi;
-
-            Rboolean firstminus = signbit(xi);
-
-            char test[16 + 8 * firstminus];
-            if (firstminus) {
-                test[0] = CHAR(mkChar("-"))[0];
-            }
-
-            test[firstminus] = y.byte[TAG_BYTE];
-
-            if (test[0] == '\0') {
-                SET_STRING_ELT(out, i, NA_STRING);
-            }
-            else {
-                char tag2 = y.byte[(TAG_BYTE == 4) ? 5 : 2];
-                int nchars = 1 + (strlen(&tag2) > 0) + firstminus;
-
-                test[firstminus + 1] = tag2;
-                SET_STRING_ELT(out, i, Rf_mkCharLenCE(test, nchars, CE_UTF8));
-            }
+            char tag[3];
+            int length = 0;
+            if (signbit(y.value)) tag[length++] = '-';
+            tag[length++] = y.byte[TAG_BYTE];
+            char second = y.byte[TAG_BYTE == 4 ? 5 : 2];
+            if (second) tag[length++] = second;
+            SET_STRING_ELT(out, i, Rf_mkCharLenCE(tag, length, CE_UTF8));
         }
     }
-
-
     UNPROTECT(1);
     return out;
 }
 
 
-
 SEXP _anyTagged(SEXP x) {
-    int n = Rf_length(x);
-    SEXP out = PROTECT(Rf_allocVector(LGLSXP, 1));
-    LOGICAL(out)[0] = 0;
-
-    int i = 0;
-
-    while (!LOGICAL(out)[0] && i < n) {
-        if (TYPEOF(x) == REALSXP) {
-            double xi = REAL(x)[i];
-            if (ISNAN(xi)) {
-                ieee_double y;
-                y.value = xi;
-
-                Rboolean firstminus = signbit(xi);
-
-                char test[16 + 8 * firstminus];
-                if (firstminus) {
-                    test[0] = CHAR(mkChar("-"))[0];
-                }
-
-                test[firstminus] = y.byte[TAG_BYTE];
-                LOGICAL(out)[0] = test[0] != '\0';
-            }
-        }
-        i += 1;
+    if (TYPEOF(x) != REALSXP) return Rf_ScalarLogical(FALSE);
+    R_xlen_t n = XLENGTH(x);
+    for (R_xlen_t i = 0; i < n; ++i) {
+        ieee_double y;
+        y.value = REAL(x)[i];
+        if (ISNAN(y.value) && y.byte[TAG_BYTE]) return Rf_ScalarLogical(TRUE);
     }
-
-    UNPROTECT(1);
-    return out;
+    return Rf_ScalarLogical(FALSE);
 }
 
 
