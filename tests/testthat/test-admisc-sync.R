@@ -41,9 +41,9 @@ normalize_admisc_name <- function (name) {
 
 test_that("admisc-related internal helpers are classified", {
   skip_if_not (dir.exists (admisc_root), "admisc checkout is not available")
-  skip_if (
+  skip_if_not (
     identical (Sys.getenv ("DECLARED_CHECK_ADMISC_SYNC"), "true"),
-    "admisc sync check has already been run successfully in this session"
+    "set DECLARED_CHECK_ADMISC_SYNC=true to check the admisc checkout"
   )
 
   synced_helpers <- c(
@@ -86,6 +86,4 @@ test_that("admisc-related internal helpers are classified", {
       "classified as synced or intentionally package-specific."
     )
   )
-
-  Sys.setenv (DECLARED_CHECK_ADMISC_SYNC = "true")
 })

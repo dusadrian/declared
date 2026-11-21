@@ -21,3 +21,4 @@ instructiuni.txt
 ^\.claude$
 ^tests/testthat/test-admisc-sync\.R$
 ^vignettes/precompile\.R$
+^internal$
