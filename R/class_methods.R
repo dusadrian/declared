@@ -326,18 +326,18 @@
 #' @importFrom stats weighted.mean
 #' @export
 weighted.mean.declared <- function (x, w, ..., na.rm = FALSE) {
-  x <- sanitize_na_index_ (x)
   xdate <- isTRUE (attr (x, "date"))
-  na_index <- attr (x, "na_index")
-  if (!is.null (na_index)) {
-    x <- x[-na_index]
-  }
-  x <- unclass (x)
+  data <- drop_declared_missing_ (x, if (!missing (w)) w)
+  x <- data$x
   if (xdate) {
-    attributes (x) <- NULL
     x <- as.Date (x)
   }
-  NextMethod()
+
+  if (missing (w)) {
+    return (weighted.mean (x, ..., na.rm = na.rm))
+  }
+
+  return (weighted.mean (x, data$wt, ..., na.rm = na.rm))
 }
 
 #' @export

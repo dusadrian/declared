@@ -169,6 +169,11 @@ Other arguments can be passed to the stats function \code{quantile()} via the
 three dots \code{...} argument, and their extensive explanation is found in the
 corresponding stats function's help page.
 
+For whole-number frequency weights, \code{wfivenum()} returns the minimum,
+lower hinge, median, upper hinge and maximum of the repeated observations.
+It locates these observations using cumulative weights. Zero-weight
+observations are excluded.
+
 For \code{wmeasures()}, the \code{"n"} measure counts valid values, while \code{"NA"} counts
 all missing values, both declared and empty.
 

@@ -1,11 +1,14 @@
 #' @rdname weighted
 #' @order 9
+#' @details
+#' For whole-number frequency weights, `wfivenum()` returns the minimum,
+#' lower hinge, median, upper hinge and maximum of the repeated observations.
+#' It locates these observations using cumulative weights. Zero-weight
+#' observations are excluded.
 #' @export
 `wfivenum` <- function (
     x, wt = NULL, na.rm = FALSE
 ) {
-    metacall <- as.list (match.call ())
-
     if (inherits (x, "haven_labelled")) {
         x <- as.declared (x)
     }
@@ -19,13 +22,9 @@
     }
 
     if (inherits (x, "declared")) {
-        x <- sanitize_na_index_ (x)
-        na_index <- attr (x, "na_index")
-        if (length (na_index)) {
-            x <- x[-na_index]
-            wt <- wt[-na_index] # if wt is NULL, the result is still NULL
-        }
-        attributes (x) <- NULL
+        data <- drop_declared_missing_ (x, wt)
+        x <- data$x
+        wt <- data$wt
     }
 
     if (is.null(wt)) {
@@ -35,19 +34,8 @@
         return (fvn)
     }
 
-    if (
-        !is.null (wt) && !(
-            is.atomic (wt) && all (is.finite (na.omit (wt)))
-        )
-    ) {
-        stopError_ ("'wt' should be an atomic vector with finite values.")
-    }
-
-    if (length (x) != length (wt)) {
-        stopError_ ("Lengths of 'x' and 'wt' differ.")
-    }
-
-    ok <- !is.na (x + wt)
+    wt <- frequency_weights_ (x, wt)
+    ok <- !is.na (x) & !is.na (wt)
 
     if (na.rm) {
         x <- x[ok]
@@ -59,11 +47,15 @@
 
     sumwt <- sum (wt)
 
-    if (any (wt < 0) || sumwt == 0) {
+    if (sumwt == 0) {
         stopError_ ("'wt' must be non-negative and not all zero")
     }
 
-    fvn <- fivenum (x * wt, na.rm = na.rm)
+    hinge <- floor ((sumwt + 3) / 2) / 2
+    ranks <- c (1, hinge, (sumwt + 1) / 2, sumwt + 1 - hinge, sumwt)
+    ends <- frequency_order_stats_ (x, wt, c (floor (ranks), ceiling (ranks)))
+    fvn <- 0.5 * ends[1:5] + 0.5 * ends[6:10]
+    fvn[c (1, 5)] <- range (x[wt > 0])
     names (fvn) <- c ("Min", "Q1", "Q2", "Q3", "Max")
     class (fvn) <- c ("fobject", class (fvn))
     return (fvn)

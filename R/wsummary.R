@@ -11,19 +11,11 @@
         x <- as.declared (x)
     }
 
-    nas <- wtable (is.empty (x), wt = wt)
-    rnms <- rownames (nas)
-    if (is.null (rnms)) {
-        rnms <- names (nas)
-    }
-
+    empty <- is.empty (x)
     names (wsum) <- c ("Min.", "1st Qu.", "Median", "Mean", "3rd Qu.", "Max.")
-
-    if (any (rnms == "TRUE")) {
-        wsum <- c (
-            wsum,
-            "NA's" = attr (nas, "toprint")$fre[which (rnms == "TRUE")[1]]
-        )
+    if (any (empty)) {
+        count <- if (is.null (wt)) sum (empty) else round (sum (wt[empty], na.rm = TRUE))
+        if (count > 0) wsum <- c (wsum, "NA's" = count)
     }
 
     class (wsum) <- c ("fobject", class (wsum))

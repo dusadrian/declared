@@ -25,31 +25,17 @@
     }
 
     if (inherits (x, "declared")) {
-        x <- sanitize_na_index_ (x)
-        na_index <- attr (x, "na_index")
-        if (length (na_index)) {
-            x <- x[-na_index]
-            wt <- wt[-na_index] # if wt is NULL, the result is still NULL
-        }
+        data <- drop_declared_missing_ (x, wt)
+        x <- data$x
+        wt <- data$wt
     }
 
     if (is.null (wt)) {
         return (var (x, na.rm = na.rm))
     }
 
-    if (
-        !is.null (wt) && !(
-            is.atomic (wt) && all (is.finite (na.omit (wt)))
-        )
-    ) {
-        stopError_ ("'wt' should be an atomic vector with finite values.")
-    }
-
-    if (length (x) != length (wt)) {
-        stopError_ ("Lengths of 'x' and 'wt' differ.")
-    }
-
-    ok <- !is.na (x + wt)
+    wt <- frequency_weights_ (x, wt)
+    ok <- !is.na (x) & !is.na (wt)
 
     if (na.rm) {
         x <- x[ok]
@@ -61,11 +47,14 @@
 
     sumwt <- sum (wt)
 
-    if (any (wt < 0) || sumwt == 0) {
+    if (sumwt == 0) {
         stopError_ ("'wt' must be non-negative and not all zero")
     }
 
-    wmean <- sum (wt * x/sumwt)
+    keep <- wt > 0
+    x <- x[keep]
+    wt <- wt[keep]
+    wmean <- weighted.mean (x, wt)
 
     if (!is.null (method)) {
         if (!is.element (method, c ("unbiased", "ML"))) {
@@ -75,12 +64,14 @@
         result <- sum ((sqrt (wt / sumwt) * (x - wmean)) ^ 2)
 
         if (method == "unbiased") {
+            if (length (wt) == 1) return (NA_real_)
             return (result / (1 - sum ((wt/sumwt)^2)))
         }
 
         return (result)
     }
 
+    if (sumwt <= 1) return (NA_real_)
     return (sum (wt * (x - wmean)^2)/(sumwt - 1))
 }
 

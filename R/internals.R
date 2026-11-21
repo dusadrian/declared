@@ -496,6 +496,243 @@ NULL
     return (result)
 }
 
+`frequency_weights_` <- function (x, wt) {
+    if (!(is.numeric (wt) || is.logical (wt)) || any (is.infinite (wt))) {
+        stopError_ ("'wt' should be an atomic vector with finite values.")
+    }
+
+    if (length (wt) != length (x)) {
+        stopError_ ("Lengths of 'x' and 'wt' differ.")
+    }
+
+    if (any (wt < 0, na.rm = TRUE)) {
+        stopError_ ("'wt' must be non-negative and not all zero")
+    }
+
+    return (as.double (wt))
+}
+
+`frequency_order_stats_` <- function (x, wt, ranks) {
+    keep <- which (wt > 0)
+    if (!length (keep)) {
+        stopError_ ("'wt' must be non-negative and not all zero")
+    }
+
+    sorted <- keep[order (x[keep])]
+    totals <- cumsum (wt[sorted])
+    # A rank on a boundary belongs to the observation ending at that rank.
+    i <- findInterval (ranks, totals, left.open = TRUE) + 1
+
+    return (unname (x[sorted[pmin (i, length (sorted))]]))
+}
+
+`frequency_quantile_` <- function (
+    x, wt, probs, type = 7L, names = TRUE, digits = 7,
+    fuzz = if (type == 7L) 0 else 4 * .Machine$double.eps, ...
+) {
+    if (length (type) != 1L || !is.numeric (type) || !(type %in% 1:9)) {
+        stopError_ ("'type' must be an integer in 1..9")
+    }
+
+    stopifnot (length (fuzz) == 1L, is.finite (fuzz), fuzz >= 0)
+    total <- sum (wt)
+
+    if (!is.finite (total)) stopError_ ("The sum of the weights must be finite.")
+
+    # Use the same ranks and interpolation rules as stats::quantile().
+    if (type <= 3) {
+        index <- total * probs - if (type == 3) 0.5 else 0
+        left <- floor (index * (1 + fuzz))
+        fraction <- switch (as.integer (type),
+            as.numeric (index > left),
+            (1 + (index > left)) / 2,
+            as.numeric (index != left | left %% 2 == 1)
+        )
+    }
+    else {
+        a <- c (0, 0.5, 0, 1, 1/3, 3/8)[type - 3]
+        b <- if (type == 4) 1 else a
+        index <- a + probs * (total - a + (1 - b))
+        left <- floor (index * (1 + fuzz))
+        fraction <- index - left
+        fraction[abs (fraction) < fuzz] <- 0
+    }
+
+    right <- pmin (left + 1, total)
+    both <- frequency_order_stats_ (x, wt, c (pmax (left, 1), pmax (right, 1)))
+    i <- seq_along (probs)
+    qs <- both[i]
+    upper <- both[length (probs) + i]
+    qs[fraction == 1] <- upper[fraction == 1]
+    mix <- fraction > 0 & fraction < 1 & qs != upper
+    qs[mix] <- (1 - fraction[mix]) * qs[mix] + fraction[mix] * upper[mix]
+
+    if (length (qs) && all (is.finite (qs)) &&
+        all (abs (qs) <= .Machine$integer.max & qs == trunc (qs))) {
+        qs <- as.integer (qs)
+    }
+
+    if (names && length (qs)) {
+        stopifnot (is.numeric (digits), digits >= 1)
+        pct <- 100 * probs
+        text <- if (length (pct) < 100) {
+            formatC (pct, format = "fg", width = 1, digits = digits)
+        }
+        else {
+            format (pct, trim = TRUE, digits = digits)
+        }
+        names (qs) <- paste0 (text, "%")
+    }
+
+    return (qs)
+}
+
+`currentDataset_` <- function (envir) {
+
+    objects <- as.list (envir, all.names = FALSE)
+    is_column <- vapply (
+        objects,
+        function (x) {
+            !is.function (x) && !is.environment (x)
+        },
+        TRUE
+    )
+
+    objects <- objects[is_column]
+
+    if (!length (objects)) {
+        stopError_ ("Could not find a current dataset.")
+    }
+
+    lengths <- vapply (objects, NROW, integer (1))
+
+    if (length (unique (lengths)) != 1 || lengths[1] == 0) {
+        stopError_ ("Could not find a current dataset.")
+    }
+
+    return (as.data.frame (objects, optional = TRUE))
+}
+
+`parseWhat_` <- function (what) {
+
+    builtin <- list (
+        n = function (x, wt = NULL, na.rm = TRUE, ...) sum (!is.na (x)),
+        "NA" = function (x, wt = NULL, na.rm = TRUE, ...) sum (is.na (x)),
+        mean = wmean,
+        sd = wsd,
+        median = wmedian,
+        iqr = wIQR,
+        var = wvar,
+        mode = wmode,
+        min = function (x, wt = NULL, na.rm = TRUE, ...) {
+            x <- drop_declared_missing_ (x, wt = wt)
+            min (x$x, na.rm = na.rm)
+        },
+        max = function (x, wt = NULL, na.rm = TRUE, ...) {
+            x <- drop_declared_missing_ (x, wt = wt)
+            max (x$x, na.rm = na.rm)
+        }
+    )
+
+    if (is.character (what)) {
+        key <- tolower (what)
+        choices <- list (
+            n = "n",
+            na = "NA",
+            mean = "mean",
+            average = "mean",
+            sd = "sd",
+            stdev = "sd",
+            median = "median",
+            iqr = "iqr",
+            var = "var",
+            variance = "var",
+            mode = "mode",
+            min = "min",
+            max = "max",
+            range = c ("min", "max")
+        )
+
+        if (!all (key %in% names (choices))) {
+            stopError_ ("Unknown measure name.")
+        }
+
+        what <- builtin[unlist (choices[key], use.names = FALSE)]
+    }
+    else if (is.function (what)) {
+        what <- list (what)
+    }
+
+    if (!is.list (what) || !all (vapply (what, is.function, TRUE))) {
+        stopError_ (
+            "Argument `what` should be a character vector or a list of functions."
+        )
+    }
+
+    nms <- names (what)
+
+    if (is.null (nms)) {
+        nms <- rep ("", length (what))
+    }
+
+    missing_names <- !nzchar (nms)
+
+    if (any (missing_names)) {
+        nms[missing_names] <- paste0 ("Measure", which (missing_names))
+    }
+
+    names (what) <- nms
+
+    return (what)
+}
+
+`drop_declared_missing_` <- function (x, wt = NULL) {
+
+    if (inherits (x, "haven_labelled")) {
+        x <- as.declared (x)
+    }
+
+    if (!is.null (wt) && length (wt) != length (x)) {
+        stopError_ ("Lengths of 'x' and 'wt' differ.")
+    }
+
+    x <- sanitize_na_index_ (x)
+    na_index <- if (is.declared (x)) attr (x, "na_index")
+    attributes (x) <- NULL
+    if (length (na_index)) {
+        x <- x[-na_index]
+        wt <- wt[-na_index]
+    }
+
+    return (list (x = x, wt = wt))
+}
+
+`calculateMeasures_` <- function (
+    x, what, wt = NULL, na.rm = TRUE, ...
+) {
+
+    result <- vapply (
+        what,
+        function (fun) {
+            callMeasure_ (fun, x = x, wt = wt, na.rm = na.rm, ... = ...)
+        },
+        numeric (1)
+    )
+
+    return (result)
+}
+
+`callMeasure_` <- function (fun, ...) {
+
+    arguments <- list (...)
+    fmls <- names (formals (fun))
+
+    if (!is.null (fmls) && !("..." %in% fmls)) {
+        arguments <- arguments[names (arguments) %in% fmls]
+    }
+
+    return (do.call (fun, arguments))
+}
 
 
 # The following functions are copied from package admisc

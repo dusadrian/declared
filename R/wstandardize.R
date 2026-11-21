@@ -17,25 +17,9 @@
     }
 
     if (inherits (x, "declared")) {
-        x <- sanitize_na_index_ (x)
-        na_index <- attr (x, "na_index")
-        if (length (na_index)) {
-            x <- x[-na_index]
-            wt <- wt[-na_index] # if wt is NULL, the result is still NULL
-        }
-        attributes (x) <- NULL
-    }
-
-    if (is.null (wt)) {
-        wt <- rep (1, length (x))
-    }
-
-    if (
-        !is.null (wt) && !(
-            is.atomic (wt) && all (is.finite (na.omit (wt)))
-        )
-    ) {
-        stopError_ ("'wt' should be an atomic vector with finite values.")
+        data <- drop_declared_missing_ (x, wt)
+        x <- data$x
+        wt <- data$wt
     }
 
     return (

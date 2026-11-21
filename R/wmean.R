@@ -26,31 +26,17 @@
     }
 
     if (inherits (x, "declared")) {
-        x <- sanitize_na_index_ (x)
-        na_index <- attr (x, "na_index")
-        if (!is.null (na_index)) {
-            wt <- wt[-na_index]
-            x <- x[-na_index]
-        }
+        data <- drop_declared_missing_ (x, wt)
+        x <- data$x
+        wt <- data$wt
     }
 
     if (is.null (wt)) {
         return (mean (x, trim = trim, na.rm = na.rm))
     }
 
-    if (
-        !is.null (wt) && !(
-            is.atomic (wt) && all (is.finite (na.omit (wt)))
-        )
-    ) {
-        stopError_ ("'wt' should be an atomic vector with finite values.")
-    }
-
-    if (length (x) != length (wt)) {
-        stopError_ ("Lengths of 'x' and 'wt' differ.")
-    }
-
-    ok <- !is.na (x + wt)
+    wt <- frequency_weights_ (x, wt)
+    ok <- !is.na (x) & !is.na (wt)
 
     if (na.rm) {
         x <- x[ok]
@@ -62,7 +48,7 @@
 
     sumwt <- sum (wt)
 
-    if (any (wt < 0) || sumwt == 0) {
+    if (sumwt == 0) {
         stopError_ ("'wt' must be non-negative and not all zero")
     }
 
@@ -86,10 +72,9 @@
 
         x <- x[lohi]
         wt <- wt[lohi]
-        sumwt <- sum (wt)
     }
 
-    return (sum (wt * x)/sumwt)
+    return (weighted.mean (x, wt))
 }
 
 #' @rdname declared_internal

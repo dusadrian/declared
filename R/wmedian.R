@@ -4,20 +4,14 @@
 #' @export
 `wmedian` <- function (x, wt = NULL, na.rm = TRUE, ...)
 {
-    metacall <- as.list (match.call ())
-
     if (inherits (x, "haven_labelled")) {
         x <- as.declared (x)
     }
 
     if (inherits (x, "declared")) {
-        x <- sanitize_na_index_ (x)
-        na_index <- attr (x, "na_index")
-        if (length (na_index)) {
-            x <- x[-na_index]
-            wt <- wt[-na_index] # if wt is NULL, the result is still NULL
-        }
-        attributes (x) <- NULL # if passed to wquantile, to bypass this process
+        data <- drop_declared_missing_ (x, wt)
+        x <- data$x
+        wt <- data$wt
     }
 
     if (is.null (wt)) {
