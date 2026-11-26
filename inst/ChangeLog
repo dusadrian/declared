@@ -1,3 +1,15 @@
+Version 0.29
+    o Improved conversion from haven objects, preserving tagged and
+      unlabelled missing values
+    o Preserved names, dates and missing ranges in declared vector operations
+    o Corrected alignment of frequency weights and improved weighted summaries,
+      including five-number summaries based on cumulative weights
+    o Frequency tables now group by value, include weighted counts for empty
+      values and preserve quoted names
+    o Improved row binding and ordering of declared objects, and restored
+      session bindings when the package is unloaded
+    o Aligned internal numeric conversion and condition handling with admisc
+
 Version 0.28
     o Argument "decimals" from function declared() is now tested, and if
       possibly numeric is it coerced to numeric (e.g. "2")
