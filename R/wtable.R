@@ -158,12 +158,9 @@
     vlabel = FALSE
 ) {
 
-    funargs <- lapply(
-        lapply(
-            match.call(), deparse)[-1],
-            function(x) gsub("'|\"|[[:space:]]", "", x
-        )
-    )
+    funargs <- lapply (match.call ()[-1L], function (arg) {
+        return (paste (deparse (arg), collapse = ""))
+    })
 
     nmx <- getName_ (funargs$x)
 
