@@ -1,6 +1,6 @@
 local_edition (3)
 
-admisc_root <- "/Users/dusadrian/Lucru/_R/admisc"
+admisc_root <- Sys.getenv ("ADMISC_SOURCE", unset = file.path ("..", "..", "..", "admisc"))
 declared_root <- normalizePath (file.path ("..", ".."), mustWork = TRUE)
 
 top_level_function_names <- function (files) {
@@ -47,24 +47,24 @@ test_that("admisc-related internal helpers are classified", {
   )
 
   synced_helpers <- c(
-    "asNumeric_",
-    "numdec_",
-    "possibleNumeric_",
-    "trimstr_",
-    "wholeNumeric_"
-  )
-  known_unsynced_candidates <- c(
     "anyTagged_",
-    "coerceMode_",
-    "getName_",
     "getTag_",
     "hasTag_",
     "makeTag_",
+    "numdec_",
     "padBoth_",
     "padLeft_",
     "padRight_",
+    "possibleNumeric_",
     "stopError_",
-    "tryCatchWEM_"
+    "trimstr_",
+    "tryCatchWEM_",
+    "wholeNumeric_"
+  )
+  known_unsynced_candidates <- c(
+    "asNumeric_", # Local implementation of admisc's generic and its methods
+    "coerceMode_", # Explicitly rejects NULL across R versions
+    "getName_" # Also normalizes names used in printed frequency tables
   )
 
   declared_names <- declared_internal_function_names()
