@@ -28,7 +28,7 @@ Imports:
     stats,
     utils
 Suggests:
-    admisc (> 0.31),
+    admisc (>= 0.39),
     covr,
     dplyr,
     haven,
