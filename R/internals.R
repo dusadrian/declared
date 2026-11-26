@@ -845,14 +845,10 @@ NULL
 
 # The following functions are copied from package admisc
 # to achieve zero dependency.
-`stopError_` <- function (message, enter = "\n") {
-
-    message <- paste0 (
-        "Error: ",
-        unlist (
-            strsplit (message, split = "\\n")
-        )
-    )
+`stopError_` <- function (message, enter = "\n", ...) {
+    dots <- list (...)
+    message <- unlist (strsplit (trimws (message), split = "\\n"))
+    message <- paste0 ("Error: ", message[nzchar (message)])
 
     for (i in seq (length (message))) {
         message[i] <- gsub (
@@ -865,7 +861,9 @@ NULL
         )
     }
 
-    cat (enter)
+    if (!isFALSE (dots$prenter)) {
+        cat (enter)
+    }
 
     stop (
         simpleError(
@@ -908,12 +906,11 @@ NULL
 
 `possibleNumeric_` <- function (x, each = FALSE) {
 
-    result <- rep (NA, length (x))
     nax <- is.na (x)
 
     if (all (nax)) {
         if (each) {
-            return (result)
+            return (rep (NA, length (x)))
         }
 
         return (FALSE)
@@ -942,6 +939,7 @@ NULL
 
     if (is.numeric (x)) {
         if (each) {
+            result <- rep (NA, length (x))
             result[!nax] <- TRUE
             return (result)
         }
@@ -964,6 +962,7 @@ NULL
     )
     multibyte <- grepl ("[^!-~ ]", x)
 
+    result <- rep (NA, length (x))
     if (any (multibyte)) {
         result[multibyte] <- FALSE
     }
@@ -981,22 +980,19 @@ NULL
 }
 
 
-`asNumeric_` <- function (x, levels = TRUE) {
+`asNumeric_` <- function (x, levels = TRUE, na_values = TRUE) {
     if (inherits (x, "declared")) {
         x <- sanitize_na_index_ (x)
-        na_index <- attr (x, "na_index")
+        na_index <- attr (x, "na_index", exact = TRUE)
         attributes (x) <- NULL
 
-        if (!is.null (na_index)) {
-            # Non-numeric missing codes naturally become NA after coercion.
-            x[na_index] <- suppressWarnings (as.numeric (names (na_index)))
+        codes <- names (na_index)
+        if (isTRUE (na_values) && !is.null (codes)) {
+            attributes (na_index) <- NULL
+            x[na_index] <- suppressWarnings (as.numeric (codes))
         }
 
         return (Recall (x, levels = levels))
-    }
-
-    if (is.numeric (x)) {
-        return (x)
     }
 
     if (is.factor (x)) {
@@ -1006,17 +1002,14 @@ NULL
         return (as.numeric (x))
     }
 
-    if (!all (is.na (x))) {
-        x <- gsub ("\u00a0", " ", x) # multibyte space
-    }
-
-    result <- rep (NA, length (x))
-    multibyte <- logical (length (x))
-    if (!all (is.na (x))) {
-        multibyte <- grepl ("[^!-~ ]", x)
-    }
-
     attributes (x) <- NULL
+    if (is.numeric (x)) {
+        return (x)
+    }
+
+    x <- gsub ("\u00a0", " ", x)
+    multibyte <- grepl ("[^!-~ ]", x)
+    result <- rep (NA, length (x))
 
     result[!multibyte] <- suppressWarnings (as.numeric (x[!multibyte]))
 
@@ -1029,7 +1022,7 @@ NULL
         return (Recall (unclass (x), each = each))
     }
 
-    if (!possibleNumeric_ (x) & !each) {
+    if (!each && !possibleNumeric_ (x)) {
         return (FALSE)
     }
 
@@ -1063,35 +1056,59 @@ NULL
 
 
 `tryCatchWEM_` <- function (expr, capture = FALSE) {
-    env <- new.env()
-    env$toreturn <- list ()
-    output <- withVisible (withCallingHandlers (
-        tryCatch (expr, error = function (e) {
-            env$toreturn$error <- e$message
-            NULL
-        }),
-        warning = function (w) {
-            env$toreturn$warning <- c (env$toreturn$warning, w$message)
-            invokeRestart ("muffleWarning")
-        },
-        message = function (m) {
-            env$toreturn$message <- paste (
-                env$toreturn$message,
-                m$message,
-                sep = ""
-            )
-            invokeRestart ("muffleMessage")
+    result <- list ()
+
+    evaluate <- function () {
+        return (withVisible (withCallingHandlers (
+            tryCatch (expr,
+                error = function (e) {
+                    result$error <<- e$message
+                    NULL
+                },
+                interrupt = function (e) {
+                    result$interrupted <<- TRUE
+                    NULL
+                }
+            ),
+            warning = function (w) {
+                result$warning <<- c (result$warning, w$message)
+                restart <- findRestart ("muffleWarning")
+                if (!is.null (restart)) {
+                    invokeRestart (restart)
+                }
+            },
+            message = function (m) {
+                result$message <<- paste0 (result$message, m$message)
+                restart <- findRestart ("muffleMessage")
+                if (!is.null (restart)) {
+                    invokeRestart (restart)
+                }
+            }
+        )))
+    }
+
+    if (capture) {
+        printed <- capture.output ({
+            output <- evaluate ()
+            if (output$visible && !is.null (output$value)) {
+                print (output$value)
+            }
+        })
+        if (length (printed)) {
+            result$output <- printed
         }
-    ))
-
-    if (capture && output$visible && !is.null (output$value)) {
-        env$toreturn$output <- capture.output (output$value)
-        env$toreturn$value <- output$value
+        if (!is.null (output$value)) {
+            result$value <- output$value
+        }
+    }
+    else {
+        evaluate ()
     }
 
-    if (length (env$toreturn) > 0) {
-        return (env$toreturn)
+    if (length (result)) {
+        return (result)
     }
+    return (invisible (NULL))
 }
 
 
@@ -1354,12 +1371,17 @@ NULL
             ptn <- substring (ptn, 3, nchar(ptn) - 1)
         }
 
+        quoted <- grepl ("'|\"", ptn)
         ptn <- gsub ("'|\"|]|\ ", "", ptn)
 
         ptn <- unlist (strsplit (ptn, split = ","))
         if (length (ptn) == 1) {
             # try for something like [, 1:2]
             ptn <- unlist (strsplit (ptn, split = ":"))
+        }
+
+        if (quoted) {
+            return (ptn)
         }
 
         # determine if what remains is a number or a name
